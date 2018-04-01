@@ -1,0 +1,2791 @@
+﻿1
+00:00:11,329 --> 00:00:13,496
+- Okay, let's get started.
+
+2
+00:00:16,981 --> 00:00:19,212
+Okay, so today we're going to get into some of the details
+
+3
+00:00:19,212 --> 00:00:22,129
+about how we train neural networks.
+
+4
+00:00:23,766 --> 00:00:26,508
+So, some administrative details first.
+
+5
+00:00:26,508 --> 00:00:29,385
+Assignment 1 is due today, Thursday,
+
+6
+00:00:29,385 --> 00:00:32,052
+so 11:59 p.m. tonight on Canvas.
+
+7
+00:00:33,793 --> 00:00:37,121
+We're also going to be releasing Assignment 2 today,
+
+8
+00:00:37,121 --> 00:00:38,487
+and then your project proposals
+
+9
+00:00:38,487 --> 00:00:40,682
+are due Tuesday, April 25th.
+
+10
+00:00:40,682 --> 00:00:43,177
+So you should be really starting to think
+
+11
+00:00:43,177 --> 00:00:47,191
+about your projects now if you haven't already.
+
+12
+00:00:47,191 --> 00:00:48,844
+How many people have decided
+
+13
+00:00:48,844 --> 00:00:53,071
+what they want to do for their project so far?
+
+14
+00:00:53,071 --> 00:00:55,404
+Okay, so some, some people,
+
+15
+00:00:55,404 --> 00:00:59,452
+so yeah, everyone else, you can go to TA office hours
+
+16
+00:00:59,452 --> 00:01:02,204
+if you want suggestions
+
+17
+00:01:02,204 --> 00:01:04,537
+and bounce ideas off of TAs.
+
+18
+00:01:06,257 --> 00:01:09,471
+We also have a list of projects
+
+19
+00:01:09,471 --> 00:01:11,497
+that other people have proposed.
+
+20
+00:01:11,497 --> 00:01:14,389
+Some people usually affiliated with Stanford,
+
+21
+00:01:14,389 --> 00:01:16,971
+so on Piazza, so you can take a look at those
+
+22
+00:01:16,971 --> 00:01:18,721
+for additional ideas.
+
+23
+00:01:20,204 --> 00:01:23,496
+And we also have some notes on backprop
+
+24
+00:01:23,496 --> 00:01:26,751
+for a linear layer and a vector and tensor derivatives
+
+25
+00:01:26,751 --> 00:01:28,604
+that Justin's written up,
+
+26
+00:01:28,604 --> 00:01:30,511
+so that should help with understanding
+
+27
+00:01:30,511 --> 00:01:32,191
+how exactly backprop works
+
+28
+00:01:32,191 --> 00:01:34,564
+and for vectors and matrices.
+
+29
+00:01:34,564 --> 00:01:37,751
+So these are linked to lecture four on the syllabus
+
+30
+00:01:37,751 --> 00:01:41,084
+and you can go and take a look at those.
+
+31
+00:01:45,710 --> 00:01:48,271
+Okay, so where we are now.
+
+32
+00:01:48,271 --> 00:01:50,377
+We've talked about how to express a function
+
+33
+00:01:50,377 --> 00:01:53,004
+in terms of a computational graph,
+
+34
+00:01:53,004 --> 00:01:54,751
+that we can represent any function
+
+35
+00:01:54,751 --> 00:01:57,724
+in terms of a computational graph.
+
+36
+00:01:57,724 --> 00:02:00,551
+And we've talked more explicitly about neural networks,
+
+37
+00:02:00,551 --> 00:02:02,524
+which is a type of graph
+
+38
+00:02:02,524 --> 00:02:04,351
+where we have these linear layers
+
+39
+00:02:04,351 --> 00:02:06,377
+that we stack on top of each other
+
+40
+00:02:06,377 --> 00:02:08,960
+with nonlinearities in between.
+
+41
+00:02:10,057 --> 00:02:11,577
+And we've also talked last lecture
+
+42
+00:02:11,577 --> 00:02:13,960
+about convolutional neural networks,
+
+43
+00:02:13,960 --> 00:02:16,122
+which are a particular type of network
+
+44
+00:02:16,122 --> 00:02:18,749
+that uses convolutional layers
+
+45
+00:02:18,749 --> 00:02:21,280
+to preserve the spatial structure
+
+46
+00:02:21,280 --> 00:02:25,536
+throughout all the the hierarchy of the network.
+
+47
+00:02:25,536 --> 00:02:28,256
+And so we saw exactly how a convolution layer looked,
+
+48
+00:02:28,256 --> 00:02:29,974
+where each activation map
+
+49
+00:02:29,974 --> 00:02:31,856
+in the convolutional layer output
+
+50
+00:02:31,856 --> 00:02:33,963
+is produced by sliding a filter of weights
+
+51
+00:02:33,963 --> 00:02:38,656
+over all of the spatial locations in the input.
+
+52
+00:02:38,656 --> 00:02:39,816
+And we also saw that usually
+
+53
+00:02:39,816 --> 00:02:42,483
+we can have many filters per layer,
+
+54
+00:02:42,483 --> 00:02:46,056
+each of which produces a separate activation map.
+
+55
+00:02:46,056 --> 00:02:48,068
+And so what we can get is from an input right,
+
+56
+00:02:48,068 --> 00:02:51,255
+with a certain depth, we'll get an activation map output,
+
+57
+00:02:51,255 --> 00:02:54,466
+which has some spatial dimension that's preserved,
+
+58
+00:02:54,466 --> 00:02:57,121
+as well as the depth is the total number of filters
+
+59
+00:02:57,121 --> 00:02:59,371
+that we have in that layer.
+
+60
+00:03:00,295 --> 00:03:01,481
+And so what we want to do
+
+61
+00:03:01,481 --> 00:03:02,841
+is we want to learn the values
+
+62
+00:03:02,841 --> 00:03:06,495
+of all of these weights or parameters,
+
+63
+00:03:06,495 --> 00:03:07,828
+and we saw that we can learn
+
+64
+00:03:07,828 --> 00:03:10,121
+our network parameters through optimization,
+
+65
+00:03:10,121 --> 00:03:11,828
+which we talked about little bit earlier
+
+66
+00:03:11,828 --> 00:03:13,107
+in the course, right?
+
+67
+00:03:13,107 --> 00:03:16,095
+And so we want to get to a point in the loss landscape
+
+68
+00:03:16,095 --> 00:03:17,854
+that produces a low loss,
+
+69
+00:03:17,854 --> 00:03:19,327
+and we can do this by taking steps
+
+70
+00:03:19,327 --> 00:03:23,653
+in the direction of the negative gradient.
+
+71
+00:03:23,653 --> 00:03:25,628
+And so the whole process we actually call
+
+72
+00:03:25,628 --> 00:03:28,214
+a Mini-batch Stochastic Gradient Descent
+
+73
+00:03:28,214 --> 00:03:31,188
+where the steps are that we continuously,
+
+74
+00:03:31,188 --> 00:03:33,148
+we sample a batch of data.
+
+75
+00:03:33,148 --> 00:03:34,681
+We forward prop it through
+
+76
+00:03:34,681 --> 00:03:37,454
+our computational graph or our neural network.
+
+77
+00:03:37,454 --> 00:03:39,185
+We get the loss at the end.
+
+78
+00:03:39,185 --> 00:03:40,787
+We backprop through our network
+
+79
+00:03:40,787 --> 00:03:42,560
+to calculate the gradients.
+
+80
+00:03:42,560 --> 00:03:44,419
+And then we update the parameters
+
+81
+00:03:44,419 --> 00:03:48,586
+or the weights in our network using this gradient.
+
+82
+00:03:50,580 --> 00:03:53,348
+Okay, so now for the next couple of lectures
+
+83
+00:03:53,348 --> 00:03:55,212
+we're going to talk about some of the details
+
+84
+00:03:55,212 --> 00:03:58,921
+involved in training neural networks.
+
+85
+00:03:58,921 --> 00:04:00,588
+And so this involves things like
+
+86
+00:04:00,588 --> 00:04:03,041
+how do we set up our neural network at the beginning,
+
+87
+00:04:03,041 --> 00:04:05,602
+which activation functions that we choose,
+
+88
+00:04:05,602 --> 00:04:07,455
+how do we preprocess the data,
+
+89
+00:04:07,455 --> 00:04:11,615
+weight initialization, regularization, gradient checking.
+
+90
+00:04:11,615 --> 00:04:14,027
+We'll also talk about training dynamics.
+
+91
+00:04:14,027 --> 00:04:16,718
+So, how do we babysit the learning process?
+
+92
+00:04:16,718 --> 00:04:19,855
+How do we choose how we do parameter updates,
+
+93
+00:04:19,855 --> 00:04:21,895
+specific perimeter update rules,
+
+94
+00:04:21,895 --> 00:04:24,468
+and how do we do hyperparameter optimization
+
+95
+00:04:24,468 --> 00:04:26,841
+to choose the best hyperparameters?
+
+96
+00:04:26,841 --> 00:04:28,881
+And then we'll also talk about evaluation
+
+97
+00:04:28,881 --> 00:04:30,548
+and model ensembles.
+
+98
+00:04:33,600 --> 00:04:35,175
+So today in the first part,
+
+99
+00:04:35,175 --> 00:04:38,175
+I will talk about activation functions, data preprocessing,
+
+100
+00:04:38,175 --> 00:04:41,615
+weight initialization, batch normalization,
+
+101
+00:04:41,615 --> 00:04:43,345
+babysitting the learning process,
+
+102
+00:04:43,345 --> 00:04:46,012
+and hyperparameter optimization.
+
+103
+00:04:47,948 --> 00:04:50,948
+Okay, so first activation functions.
+
+104
+00:04:52,308 --> 00:04:55,695
+So, we saw earlier how out of any particular layer,
+
+105
+00:04:55,695 --> 00:04:57,627
+we have the data coming in.
+
+106
+00:04:57,627 --> 00:04:59,881
+We multiply by our weight in you know,
+
+107
+00:04:59,881 --> 00:05:02,081
+fully connected or a convolutional layer.
+
+108
+00:05:02,081 --> 00:05:03,148
+And then we'll pass this through
+
+109
+00:05:03,148 --> 00:05:06,988
+an activation function or nonlinearity.
+
+110
+00:05:06,988 --> 00:05:08,627
+And we saw some examples of this.
+
+111
+00:05:08,627 --> 00:05:11,601
+We used sigmoid previously in some of our examples.
+
+112
+00:05:11,601 --> 00:05:13,895
+We also saw the ReLU nonlinearity.
+
+113
+00:05:13,895 --> 00:05:16,800
+And so today we'll talk more about different choices
+
+114
+00:05:16,800 --> 00:05:18,746
+for these different nonlinearities
+
+115
+00:05:18,746 --> 00:05:21,079
+and trade-offs between them.
+
+116
+00:05:22,828 --> 00:05:25,508
+So first, the sigmoid, which we've seen before,
+
+117
+00:05:25,508 --> 00:05:27,841
+and probably the one we're most comfortable with, right?
+
+118
+00:05:27,841 --> 00:05:30,681
+So the sigmoid function is as we have up here,
+
+119
+00:05:30,681 --> 00:05:33,172
+one over one plus e to the negative x.
+
+120
+00:05:33,172 --> 00:05:35,761
+And what this does is it takes each number
+
+121
+00:05:35,761 --> 00:05:39,161
+that's input into the sigmoid nonlinearity, so each element,
+
+122
+00:05:39,161 --> 00:05:41,215
+and the elementwise squashes these
+
+123
+00:05:41,215 --> 00:05:45,801
+into this range [0,1] right, using this function here.
+
+124
+00:05:45,801 --> 00:05:48,498
+And so, if you get very high values as input,
+
+125
+00:05:48,498 --> 00:05:51,027
+then output is going to be something near one.
+
+126
+00:05:51,027 --> 00:05:53,076
+If you get very low values,
+
+127
+00:05:53,076 --> 00:05:54,455
+or, I'm sorry, very negative values,
+
+128
+00:05:54,455 --> 00:05:55,921
+it's going to be near zero.
+
+129
+00:05:55,921 --> 00:05:58,335
+And then we have this regime near zero
+
+130
+00:05:58,335 --> 00:06:00,454
+that it's in a linear regime.
+
+131
+00:06:00,454 --> 00:06:03,081
+It looks a bit like a linear function.
+
+132
+00:06:03,081 --> 00:06:05,974
+And so this is been historically popular,
+
+133
+00:06:05,974 --> 00:06:07,481
+because sigmoids, in a sense,
+
+134
+00:06:07,481 --> 00:06:10,081
+you can interpret them as a kind of
+
+135
+00:06:10,081 --> 00:06:12,130
+a saturating firing rate of a neuron, right?
+
+136
+00:06:12,130 --> 00:06:14,015
+So if it's something between zero and one,
+
+137
+00:06:14,015 --> 00:06:16,055
+you could think of it as a firing rate.
+
+138
+00:06:16,055 --> 00:06:18,561
+And we'll talk later about other nonlinearities,
+
+139
+00:06:18,561 --> 00:06:21,948
+like ReLUs that, in practice, actually turned out to be
+
+140
+00:06:21,948 --> 00:06:24,188
+more biologically plausible,
+
+141
+00:06:24,188 --> 00:06:26,335
+but this does have a kind of interpretation
+
+142
+00:06:26,335 --> 00:06:28,002
+that you could make.
+
+143
+00:06:30,615 --> 00:06:34,081
+So if we look at this nonlinearity more carefully,
+
+144
+00:06:34,081 --> 00:06:37,092
+there's several problems that there actually are with this.
+
+145
+00:06:37,092 --> 00:06:39,654
+So the first is that saturated neurons
+
+146
+00:06:39,654 --> 00:06:41,748
+can kill off the gradient.
+
+147
+00:06:41,748 --> 00:06:44,665
+And so what exactly does this mean?
+
+148
+00:06:45,588 --> 00:06:47,346
+So if we look at a sigmoid gate right,
+
+149
+00:06:47,346 --> 00:06:49,401
+a node in our computational graph,
+
+150
+00:06:49,401 --> 00:06:51,881
+and we have our data X as input into it,
+
+151
+00:06:51,881 --> 00:06:53,028
+and then we have the output
+
+152
+00:06:53,028 --> 00:06:55,166
+of the sigmoid gate coming out of it,
+
+153
+00:06:55,166 --> 00:06:58,161
+what does the gradient flow look like
+
+154
+00:06:58,161 --> 00:06:59,836
+as we're coming back?
+
+155
+00:06:59,836 --> 00:07:02,081
+We have dL over d sigma right?
+
+156
+00:07:02,081 --> 00:07:04,332
+The upstream gradient coming down,
+
+157
+00:07:04,332 --> 00:07:09,041
+and then we're going to multiply this by dSigma over dX.
+
+158
+00:07:09,041 --> 00:07:11,681
+This will be the gradient of a local sigmoid function.
+
+159
+00:07:11,681 --> 00:07:13,241
+And we're going to chain these together
+
+160
+00:07:13,241 --> 00:07:17,095
+for our downstream gradient that we pass back.
+
+161
+00:07:17,095 --> 00:07:19,348
+So who can tell me what happens
+
+162
+00:07:19,348 --> 00:07:21,373
+when X is equal to -10?
+
+163
+00:07:21,373 --> 00:07:22,548
+It's very negative.
+
+164
+00:07:22,548 --> 00:07:25,308
+What does is gradient look like?
+
+165
+00:07:25,308 --> 00:07:27,468
+Zero, yeah, so that's right.
+
+166
+00:07:27,468 --> 00:07:29,468
+So the gradient become zero
+
+167
+00:07:29,468 --> 00:07:32,218
+and that's because in this negative,
+
+168
+00:07:32,218 --> 00:07:35,033
+very negative region of the sigmoid,
+
+169
+00:07:35,033 --> 00:07:37,948
+it's essentially flat, so the gradient is zero,
+
+170
+00:07:37,948 --> 00:07:40,601
+and we chain any upstream gradient coming down.
+
+171
+00:07:40,601 --> 00:07:43,348
+We multiply by basically something near zero,
+
+172
+00:07:43,348 --> 00:07:45,146
+and we're going to get a very small gradient
+
+173
+00:07:45,146 --> 00:07:47,101
+that's flowing back downwards, right?
+
+174
+00:07:47,101 --> 00:07:49,390
+So, in a sense, after the chain rule,
+
+175
+00:07:49,390 --> 00:07:52,148
+this kills the gradient flow and you're going to have
+
+176
+00:07:52,148 --> 00:07:55,981
+a zero gradient passed down to downstream nodes.
+
+177
+00:07:59,469 --> 00:08:03,136
+And so what happens when X is equal to zero?
+
+178
+00:08:05,046 --> 00:08:08,240
+So there it's, yeah, it's fine in this regime.
+
+179
+00:08:08,240 --> 00:08:10,615
+So, in this regime near zero,
+
+180
+00:08:10,615 --> 00:08:13,454
+you're going to get a reasonable gradient here,
+
+181
+00:08:13,454 --> 00:08:15,735
+and then it'll be fine for backprop.
+
+182
+00:08:15,735 --> 00:08:18,402
+And then what about X equals 10?
+
+183
+00:08:19,441 --> 00:08:20,655
+Zero, right.
+
+184
+00:08:20,655 --> 00:08:24,215
+So again, so when X is equal to a very negative
+
+185
+00:08:24,215 --> 00:08:27,095
+or X is equal to large positive numbers,
+
+186
+00:08:27,095 --> 00:08:28,655
+then these are all regions where
+
+187
+00:08:28,655 --> 00:08:30,081
+the sigmoid function is flat,
+
+188
+00:08:30,081 --> 00:08:31,708
+and it's going to kill off the gradient
+
+189
+00:08:31,708 --> 00:08:35,875
+and you're not going to get a gradient flow coming back.
+
+190
+00:08:37,655 --> 00:08:39,815
+Okay, so a second problem is that
+
+191
+00:08:39,815 --> 00:08:43,055
+the sigmoid outputs are not zero centered.
+
+192
+00:08:43,055 --> 00:08:47,015
+And so let's take a look at why this is a problem.
+
+193
+00:08:47,015 --> 00:08:49,348
+So, consider what happens when
+
+194
+00:08:49,348 --> 00:08:52,492
+the input to a neuron is always positive.
+
+195
+00:08:52,492 --> 00:08:55,548
+So in this case, all of our Xs we're going to say is positive.
+
+196
+00:08:55,548 --> 00:08:59,455
+It's going to be multiplied by some weight, W,
+
+197
+00:08:59,455 --> 00:09:02,038
+and then we're going to run it
+
+198
+00:09:02,935 --> 00:09:04,948
+through our activation function.
+
+199
+00:09:04,948 --> 00:09:08,615
+So what can we say about the gradients on W?
+
+200
+00:09:12,975 --> 00:09:16,836
+So think about what the local gradient is going to be,
+
+201
+00:09:16,836 --> 00:09:18,735
+right, for this linear layer.
+
+202
+00:09:18,735 --> 00:09:23,361
+We have DL over whatever the activation function,
+
+203
+00:09:23,361 --> 00:09:24,814
+the loss coming down,
+
+204
+00:09:24,814 --> 00:09:26,841
+and then we have our local gradient,
+
+205
+00:09:26,841 --> 00:09:30,434
+which is going to be basically X, right?
+
+206
+00:09:30,434 --> 00:09:34,601
+And so what does this mean, if all of X is positive?
+
+207
+00:09:36,853 --> 00:09:39,161
+Okay, so I heard it's always going to be positive.
+
+208
+00:09:39,161 --> 00:09:40,841
+So that's almost right.
+
+209
+00:09:40,841 --> 00:09:42,401
+It's always going to be either positive,
+
+210
+00:09:42,401 --> 00:09:45,001
+or all positive or all negative, right?
+
+211
+00:09:45,001 --> 00:09:47,158
+So, our upstream gradient coming down
+
+212
+00:09:47,158 --> 00:09:48,825
+is DL over our loss.
+
+213
+00:09:50,001 --> 00:09:52,068
+L is going to be DL over DF.
+
+214
+00:09:52,068 --> 00:09:54,188
+and this is going to be either positive or negative.
+
+215
+00:09:54,188 --> 00:09:56,415
+It's some arbitrary gradient coming down.
+
+216
+00:09:56,415 --> 00:10:00,480
+And then our local gradient that we multiply this by is,
+
+217
+00:10:00,480 --> 00:10:03,052
+if we're going to find the gradients on W,
+
+218
+00:10:03,052 --> 00:10:07,219
+is going to be DF over DW, which is going to be X.
+
+219
+00:10:08,480 --> 00:10:13,400
+And if X is always positive then the gradients on W,
+
+220
+00:10:13,400 --> 00:10:14,840
+which is multiplying these two together,
+
+221
+00:10:14,840 --> 00:10:16,673
+are going to always be
+
+222
+00:10:18,480 --> 00:10:21,400
+the sign of the upstream gradient coming down.
+
+223
+00:10:21,400 --> 00:10:24,959
+And so what this means is that all the gradients of W,
+
+224
+00:10:24,959 --> 00:10:26,827
+since they're always either positive or negative,
+
+225
+00:10:26,827 --> 00:10:29,120
+they're always going to move in the same direction.
+
+226
+00:10:29,120 --> 00:10:32,027
+You're either going to increase all of the,
+
+227
+00:10:32,027 --> 00:10:33,414
+when you do a parameter update,
+
+228
+00:10:33,414 --> 00:10:36,947
+you're going to either increase all of the values of W
+
+229
+00:10:36,947 --> 00:10:40,827
+by a positive amount, or differing positive amounts,
+
+230
+00:10:40,827 --> 00:10:43,067
+or you will decrease them all.
+
+231
+00:10:43,067 --> 00:10:46,412
+And so the problem with this is that,
+
+232
+00:10:46,412 --> 00:10:49,467
+this gives very inefficient gradient updates.
+
+233
+00:10:49,467 --> 00:10:51,680
+So, if you look at on the right here,
+
+234
+00:10:51,680 --> 00:10:55,200
+we have an example of a case where,
+
+235
+00:10:55,200 --> 00:10:57,440
+let's say W is two-dimensional,
+
+236
+00:10:57,440 --> 00:11:00,107
+so we have our two axes for W,
+
+237
+00:11:00,107 --> 00:11:02,774
+and if we say that we can only have
+
+238
+00:11:02,774 --> 00:11:05,396
+all positive or all negative updates,
+
+239
+00:11:05,396 --> 00:11:08,107
+then we have these two quadrants,
+
+240
+00:11:08,107 --> 00:11:10,934
+and, are the two places where the axis
+
+241
+00:11:10,934 --> 00:11:13,000
+are either all positive or negative,
+
+242
+00:11:13,000 --> 00:11:15,359
+and these are the only directions in which
+
+243
+00:11:15,359 --> 00:11:17,813
+we're allowed to make a gradient update.
+
+244
+00:11:17,813 --> 00:11:19,733
+And so in the case where,
+
+245
+00:11:19,733 --> 00:11:22,919
+let's say our hypothetical optimal W
+
+246
+00:11:22,919 --> 00:11:25,999
+is actually this blue vector here, right,
+
+247
+00:11:25,999 --> 00:11:28,213
+and we're starting off at you know some point,
+
+248
+00:11:28,213 --> 00:11:31,373
+or at the top of the the the beginning of the red arrows,
+
+249
+00:11:31,373 --> 00:11:32,905
+we can't just directly take
+
+250
+00:11:32,905 --> 00:11:35,373
+a gradient update in this direction,
+
+251
+00:11:35,373 --> 00:11:37,399
+because this is not in one of those
+
+252
+00:11:37,399 --> 00:11:39,546
+two allowed gradient directions.
+
+253
+00:11:39,546 --> 00:11:40,786
+And so what we're going to have to do,
+
+254
+00:11:40,786 --> 00:11:44,079
+is we'll have to take a sequence of gradient updates.
+
+255
+00:11:44,079 --> 00:11:47,291
+For example, in these red arrow directions
+
+256
+00:11:47,291 --> 00:11:49,053
+that are each in allowed directions,
+
+257
+00:11:49,053 --> 00:11:52,553
+in order to finally get to this optimal W.
+
+258
+00:11:53,639 --> 00:11:56,679
+And so this is why also, in general,
+
+259
+00:11:56,679 --> 00:11:59,079
+we want a zero mean data.
+
+260
+00:11:59,079 --> 00:12:01,359
+So, we want our input X to be zero meaned,
+
+261
+00:12:01,359 --> 00:12:05,390
+so that we actually have positive and negative values
+
+262
+00:12:05,390 --> 00:12:07,093
+and we don't get into this problem
+
+263
+00:12:07,093 --> 00:12:09,198
+of the gradient updates.
+
+264
+00:12:09,198 --> 00:12:12,493
+They'll be all moving in the same direction.
+
+265
+00:12:12,493 --> 00:12:13,866
+So is this clear?
+
+266
+00:12:13,866 --> 00:12:16,199
+Any questions on this point?
+
+267
+00:12:17,586 --> 00:12:18,419
+Okay.
+
+268
+00:12:22,053 --> 00:12:23,866
+Okay, so we've talked about these two
+
+269
+00:12:23,866 --> 00:12:25,530
+main problems of the sigmoid.
+
+270
+00:12:25,530 --> 00:12:28,239
+The saturated neurons can kill the gradients
+
+271
+00:12:28,239 --> 00:12:31,186
+if we're too positive or too negative of an input.
+
+272
+00:12:31,186 --> 00:12:33,012
+They're also not zero-centered
+
+273
+00:12:33,012 --> 00:12:34,439
+and so we get these,
+
+274
+00:12:34,439 --> 00:12:37,186
+this inefficient kind of gradient update.
+
+275
+00:12:37,186 --> 00:12:39,586
+And then a third problem,
+
+276
+00:12:39,586 --> 00:12:41,373
+we have an exponential function in here,
+
+277
+00:12:41,373 --> 00:12:43,746
+so this is a little bit computationally expensive.
+
+278
+00:12:43,746 --> 00:12:45,946
+In the grand scheme of your network,
+
+279
+00:12:45,946 --> 00:12:47,437
+this is usually not the main problem,
+
+280
+00:12:47,437 --> 00:12:49,133
+because we have all these convolutions
+
+281
+00:12:49,133 --> 00:12:51,786
+and dot products that are a lot more expensive,
+
+282
+00:12:51,786 --> 00:12:55,703
+but this is just a minor point also to observe.
+
+283
+00:12:59,586 --> 00:13:01,116
+So now we can look at a second
+
+284
+00:13:01,116 --> 00:13:03,766
+activation function here at tanh.
+
+285
+00:13:03,766 --> 00:13:07,052
+And so this looks very similar to the sigmoid,
+
+286
+00:13:07,052 --> 00:13:08,453
+but the difference is that now
+
+287
+00:13:08,453 --> 00:13:11,599
+it's squashing to the range [-1, 1].
+
+288
+00:13:11,599 --> 00:13:13,066
+So here, the main difference
+
+289
+00:13:13,066 --> 00:13:16,173
+is that it's now zero-centered,
+
+290
+00:13:16,173 --> 00:13:18,853
+so we've gotten rid of the second problem that we had.
+
+291
+00:13:18,853 --> 00:13:21,906
+It still kills the gradients, however, when it's saturated.
+
+292
+00:13:21,906 --> 00:13:24,052
+So, you still have these regimes
+
+293
+00:13:24,052 --> 00:13:26,986
+where the gradient is essentially flat
+
+294
+00:13:26,986 --> 00:13:29,864
+and you're going to kill the gradient flow.
+
+295
+00:13:29,864 --> 00:13:32,026
+So this is a bit better than the sigmoid,
+
+296
+00:13:32,026 --> 00:13:34,609
+but it still has some problems.
+
+297
+00:13:37,186 --> 00:13:40,704
+Okay, so now let's look at the ReLU activation function.
+
+298
+00:13:40,704 --> 00:13:44,626
+And this is one that we saw in our examples last lecture
+
+299
+00:13:44,626 --> 00:13:46,026
+when we were talking about
+
+300
+00:13:46,026 --> 00:13:48,173
+the convolutional neural network.
+
+301
+00:13:48,173 --> 00:13:51,546
+And we saw that we interspersed ReLU nonlinearities
+
+302
+00:13:51,546 --> 00:13:53,879
+between many of the convolutional layers.
+
+303
+00:13:53,879 --> 00:13:58,853
+And so, this function is f of x equals max of zero and x.
+
+304
+00:13:58,853 --> 00:14:03,226
+So it takes an elementwise operation on your input
+
+305
+00:14:03,226 --> 00:14:05,453
+and basically if your input is negative,
+
+306
+00:14:05,453 --> 00:14:07,173
+it's going to put it to zero.
+
+307
+00:14:07,173 --> 00:14:09,653
+And then if it's positive,
+
+308
+00:14:09,653 --> 00:14:11,946
+it's going to be just passed through.
+
+309
+00:14:11,946 --> 00:14:13,864
+It's the identity.
+
+310
+00:14:13,864 --> 00:14:16,866
+And so this is one that's pretty commonly used,
+
+311
+00:14:16,866 --> 00:14:19,306
+and if we look at this one
+
+312
+00:14:19,306 --> 00:14:20,799
+and look at and think about the problems
+
+313
+00:14:20,799 --> 00:14:23,492
+that we saw earlier with the sigmoid and the tanh,
+
+314
+00:14:23,492 --> 00:14:25,653
+we can see that it doesn't saturate
+
+315
+00:14:25,653 --> 00:14:27,346
+in the positive region.
+
+316
+00:14:27,346 --> 00:14:29,853
+So there's whole half of our input space
+
+317
+00:14:29,853 --> 00:14:32,493
+where it's not going to saturate,
+
+318
+00:14:32,493 --> 00:14:35,065
+so this is a big advantage.
+
+319
+00:14:35,065 --> 00:14:37,559
+So this is also computationally very efficient.
+
+320
+00:14:37,559 --> 00:14:40,075
+We saw earlier that the sigmoid
+
+321
+00:14:40,075 --> 00:14:43,066
+has this E exponential in it.
+
+322
+00:14:43,066 --> 00:14:46,586
+And so the ReLU is just this simple max
+
+323
+00:14:46,586 --> 00:14:49,568
+and there's, it's extremely fast.
+
+324
+00:14:49,568 --> 00:14:51,798
+And in practice, using this ReLU,
+
+325
+00:14:51,798 --> 00:14:54,943
+it converges much faster than the sigmoid and the tanh,
+
+326
+00:14:54,943 --> 00:14:57,663
+so about six times faster.
+
+327
+00:14:57,663 --> 00:14:59,678
+And it's also turned out to be more
+
+328
+00:14:59,678 --> 00:15:01,690
+biologically plausible than the sigmoid.
+
+329
+00:15:01,690 --> 00:15:03,341
+So if you look at a neuron
+
+330
+00:15:03,341 --> 00:15:04,930
+and you look at what the inputs look like,
+
+331
+00:15:04,930 --> 00:15:07,423
+and you look at what the outputs look like,
+
+332
+00:15:07,423 --> 00:15:12,050
+and you try to measure this in neuroscience experiments,
+
+333
+00:15:12,050 --> 00:15:13,014
+you'll see that this one
+
+334
+00:15:13,014 --> 00:15:16,010
+is actually a closer approximation
+
+335
+00:15:16,010 --> 00:15:18,903
+to what's happening than sigmoids.
+
+336
+00:15:18,903 --> 00:15:21,736
+And so ReLUs were starting to be used
+
+337
+00:15:21,736 --> 00:15:25,535
+a lot around 2012 when we had AlexNet,
+
+338
+00:15:25,535 --> 00:15:27,788
+the first major convolutional neural network
+
+339
+00:15:27,788 --> 00:15:28,945
+that was able to do well
+
+340
+00:15:28,945 --> 00:15:31,148
+on ImageNet and large-scale data.
+
+341
+00:15:31,148 --> 00:15:34,398
+They used the ReLU in their experiments.
+
+342
+00:15:37,375 --> 00:15:39,228
+So a problem however, with the ReLU,
+
+343
+00:15:39,228 --> 00:15:42,682
+is that it's still, it's not not zero-centered anymore.
+
+344
+00:15:42,682 --> 00:15:45,186
+So we saw that the sigmoid was not zero-centered.
+
+345
+00:15:45,186 --> 00:15:49,828
+Tanh fixed this and now ReLU has this problem again.
+
+346
+00:15:49,828 --> 00:15:52,722
+And so that's one of the issues of the ReLU.
+
+347
+00:15:52,722 --> 00:15:55,957
+And then we also have this further annoyance of,
+
+348
+00:15:55,957 --> 00:15:59,282
+again we saw that in the positive half of the inputs,
+
+349
+00:15:59,282 --> 00:16:00,934
+we don't have saturation,
+
+350
+00:16:00,934 --> 00:16:04,822
+but this is not the case of the negative half.
+
+351
+00:16:04,822 --> 00:16:05,882
+Right, so just thinking about this
+
+352
+00:16:05,882 --> 00:16:07,482
+a little bit more precisely.
+
+353
+00:16:07,482 --> 00:16:11,855
+So what's happening here when X equals negative 10?
+
+354
+00:16:11,855 --> 00:16:13,455
+So zero gradient, that's right.
+
+355
+00:16:13,455 --> 00:16:17,122
+What happens when X is equal to positive 10?
+
+356
+00:16:18,055 --> 00:16:18,895
+It's good, right.
+
+357
+00:16:18,895 --> 00:16:20,775
+So, we're in the linear regime.
+
+358
+00:16:20,775 --> 00:16:24,608
+And then what happens when X is equal to zero?
+
+359
+00:16:26,575 --> 00:16:27,962
+Yes, it undefined here,
+
+360
+00:16:27,962 --> 00:16:31,042
+but in practice, we'll say, you know, zero, right.
+
+361
+00:16:31,042 --> 00:16:33,841
+And so basically, it's killing the gradient
+
+362
+00:16:33,841 --> 00:16:35,674
+in half of the regime.
+
+363
+00:16:38,548 --> 00:16:40,828
+And so we can get this phenomenon
+
+364
+00:16:40,828 --> 00:16:42,922
+of basically dead ReLUs,
+
+365
+00:16:42,922 --> 00:16:46,308
+when we're in this bad part of the regime.
+
+366
+00:16:46,308 --> 00:16:49,268
+And so there's, you can look at this in,
+
+367
+00:16:49,268 --> 00:16:51,812
+as coming from several potential reasons.
+
+368
+00:16:51,812 --> 00:16:55,042
+And so if we look at our data cloud here,
+
+369
+00:16:55,042 --> 00:16:57,792
+this is all of our training data,
+
+370
+00:16:59,633 --> 00:17:02,473
+then if we look at where the ReLUs can fall,
+
+371
+00:17:02,473 --> 00:17:06,640
+so the ReLUs can be, each of these is basically
+
+372
+00:17:09,496 --> 00:17:12,548
+the half of the plane where it's going to activate.
+
+373
+00:17:12,548 --> 00:17:13,892
+And so each of these is the plane
+
+374
+00:17:13,892 --> 00:17:16,240
+that defines each of these ReLUs,
+
+375
+00:17:16,240 --> 00:17:19,442
+and we can see that you can have these dead ReLUs
+
+376
+00:17:19,442 --> 00:17:21,802
+that are basically off of the data cloud.
+
+377
+00:17:21,802 --> 00:17:25,642
+And in this case, it will never activate and never update,
+
+378
+00:17:25,642 --> 00:17:27,188
+as compared to an active ReLU
+
+379
+00:17:27,188 --> 00:17:28,228
+where some of the data
+
+380
+00:17:28,228 --> 00:17:30,721
+is going to be positive and passed through
+
+381
+00:17:30,721 --> 00:17:32,332
+and some won't be.
+
+382
+00:17:32,332 --> 00:17:34,080
+And so there's several reasons for this.
+
+383
+00:17:34,080 --> 00:17:35,548
+The first is that it can happen
+
+384
+00:17:35,548 --> 00:17:37,801
+when you have bad initialization.
+
+385
+00:17:37,801 --> 00:17:40,546
+So if you have weights that happen to be unlucky
+
+386
+00:17:40,546 --> 00:17:42,468
+and they happen to be off the data cloud,
+
+387
+00:17:42,468 --> 00:17:45,615
+so they happen to specify this bad ReLU over here.
+
+388
+00:17:45,615 --> 00:17:48,173
+Then they're never going to get
+
+389
+00:17:48,173 --> 00:17:51,134
+a data input that causes it to activate,
+
+390
+00:17:51,134 --> 00:17:53,967
+and so they're never going to get
+
+391
+00:17:55,006 --> 00:17:56,708
+good gradient flow coming back.
+
+392
+00:17:56,708 --> 00:17:59,921
+And so it'll just never update and never activate.
+
+393
+00:17:59,921 --> 00:18:01,828
+What's the more common case is
+
+394
+00:18:01,828 --> 00:18:04,480
+when your learning rate is too high.
+
+395
+00:18:04,480 --> 00:18:07,228
+And so this case you started off with an okay ReLU,
+
+396
+00:18:07,228 --> 00:18:09,840
+but because you're making these huge updates,
+
+397
+00:18:09,840 --> 00:18:12,161
+the weights jump around
+
+398
+00:18:12,161 --> 00:18:13,748
+and then your ReLU unit in a sense,
+
+399
+00:18:13,748 --> 00:18:16,001
+gets knocked off of the data manifold.
+
+400
+00:18:16,001 --> 00:18:18,628
+And so this happens through training.
+
+401
+00:18:18,628 --> 00:18:19,988
+So it was fine at the beginning
+
+402
+00:18:19,988 --> 00:18:23,575
+and then at some point, it became bad and it died.
+
+403
+00:18:23,575 --> 00:18:24,708
+And so if in practice,
+
+404
+00:18:24,708 --> 00:18:27,428
+if you freeze a network that you've trained
+
+405
+00:18:27,428 --> 00:18:28,561
+and you pass the data through,
+
+406
+00:18:28,561 --> 00:18:31,481
+you can see it actually is much as 10 to 20%
+
+407
+00:18:31,481 --> 00:18:33,961
+of the network is these dead ReLUs.
+
+408
+00:18:33,961 --> 00:18:36,441
+And so you know that's a problem,
+
+409
+00:18:36,441 --> 00:18:39,135
+but also most networks do have
+
+410
+00:18:39,135 --> 00:18:40,601
+this type of problem when you use ReLUs.
+
+411
+00:18:40,601 --> 00:18:42,013
+Some of them will be dead,
+
+412
+00:18:42,013 --> 00:18:45,281
+and in practice, people look into this,
+
+413
+00:18:45,281 --> 00:18:46,855
+and it's a research problem,
+
+414
+00:18:46,855 --> 00:18:50,067
+but it's still doing okay for training networks.
+
+415
+00:18:50,067 --> 00:18:51,868
+Yeah, is there a question?
+
+416
+00:18:51,868 --> 00:18:55,451
+[student speaking off mic]
+
+417
+00:19:02,508 --> 00:19:03,341
+Right.
+
+418
+00:19:03,341 --> 00:19:04,174
+So the question is, yeah,
+
+419
+00:19:04,174 --> 00:19:05,935
+so the data cloud is just your training data.
+
+420
+00:19:05,935 --> 00:19:09,518
+[student speaking off mic]
+
+421
+00:19:18,241 --> 00:19:20,727
+Okay, so the question is when,
+
+422
+00:19:20,727 --> 00:19:24,028
+how do you tell when the ReLU is going to be dead or not,
+
+423
+00:19:24,028 --> 00:19:26,308
+with respect to the data cloud?
+
+424
+00:19:26,308 --> 00:19:28,441
+And so if you look at,
+
+425
+00:19:28,441 --> 00:19:31,588
+this is an example of like a simple two-dimensional case.
+
+426
+00:19:31,588 --> 00:19:35,371
+And so our ReLU, we're going to get our input to the ReLU,
+
+427
+00:19:35,371 --> 00:19:38,866
+which is going to be a basically you know,
+
+428
+00:19:38,866 --> 00:19:42,878
+W1 X1 plus W2 X2, and it we apply this,
+
+429
+00:19:42,878 --> 00:19:46,680
+so that that defines this this separating hyperplane here,
+
+430
+00:19:46,680 --> 00:19:48,373
+and then we're going to take half of it
+
+431
+00:19:48,373 --> 00:19:50,066
+that's going to be positive,
+
+432
+00:19:50,066 --> 00:19:52,053
+and half of it's going to be killed off,
+
+433
+00:19:52,053 --> 00:19:55,651
+and so yes, so you, you know you just,
+
+434
+00:19:55,651 --> 00:19:57,717
+it's whatever the weights happened to be,
+
+435
+00:19:57,717 --> 00:20:01,306
+and where the data happens to be is where these,
+
+436
+00:20:01,306 --> 00:20:04,389
+where these hyperplanes fall, and so,
+
+437
+00:20:06,160 --> 00:20:08,893
+so yeah so just throughout the course of training,
+
+438
+00:20:08,893 --> 00:20:12,346
+some of your ReLUs will be in different places,
+
+439
+00:20:12,346 --> 00:20:14,929
+with respect to the data cloud.
+
+440
+00:20:17,080 --> 00:20:18,650
+Oh, question.
+
+441
+00:20:18,650 --> 00:20:22,233
+[student speaking off mic]
+
+442
+00:20:23,980 --> 00:20:24,813
+Yeah.
+
+443
+00:20:28,380 --> 00:20:30,380
+So okay, so the question is
+
+444
+00:20:30,380 --> 00:20:32,847
+for the sigmoid we talked about two drawbacks,
+
+445
+00:20:32,847 --> 00:20:37,645
+and one of them was that the neurons can get saturated,
+
+446
+00:20:37,645 --> 00:20:41,100
+so let's go back to the sigmoid here,
+
+447
+00:20:41,100 --> 00:20:43,740
+and the question was this is not the case,
+
+448
+00:20:43,740 --> 00:20:46,420
+when all of your inputs are positive.
+
+449
+00:20:46,420 --> 00:20:48,780
+So when all of your inputs are positive,
+
+450
+00:20:48,780 --> 00:20:50,327
+they're all going to be coming in
+
+451
+00:20:50,327 --> 00:20:52,571
+in this zero plus region here,
+
+452
+00:20:52,571 --> 00:20:55,064
+and so you can still get a saturating neuron,
+
+453
+00:20:55,064 --> 00:20:59,224
+because you see up in this positive region,
+
+454
+00:20:59,224 --> 00:21:01,144
+it also plateaus at one,
+
+455
+00:21:01,144 --> 00:21:03,222
+and so when it's when you have large positive values
+
+456
+00:21:03,222 --> 00:21:05,779
+as input you're also going to get the zero gradient,
+
+457
+00:21:05,779 --> 00:21:09,446
+because you have you have a flat slope here.
+
+458
+00:21:11,315 --> 00:21:12,148
+Okay.
+
+459
+00:21:16,955 --> 00:21:21,122
+Okay, so in practice people also like to initialize ReLUs
+
+460
+00:21:22,422 --> 00:21:25,128
+with slightly positive biases,
+
+461
+00:21:25,128 --> 00:21:27,702
+in order to increase the likelihood of it being
+
+462
+00:21:27,702 --> 00:21:31,321
+active at initialization and to get some updates.
+
+463
+00:21:31,321 --> 00:21:34,795
+Right and so this basically just biases towards more ReLUs
+
+464
+00:21:34,795 --> 00:21:36,355
+firing at the beginning,
+
+465
+00:21:36,355 --> 00:21:38,408
+and in practice some say that it helps.
+
+466
+00:21:38,408 --> 00:21:41,030
+Some say that it doesn't.
+
+467
+00:21:41,030 --> 00:21:43,487
+Generally people don't always use this.
+
+468
+00:21:43,487 --> 00:21:46,755
+It's yeah, a lot of times people just initialize it
+
+469
+00:21:46,755 --> 00:21:48,672
+with zero biases still.
+
+470
+00:21:50,083 --> 00:21:52,526
+Okay, so now we can look at some modifications
+
+471
+00:21:52,526 --> 00:21:55,377
+on the ReLU that have come out since then,
+
+472
+00:21:55,377 --> 00:21:58,368
+and so one example is this leaky ReLU.
+
+473
+00:21:58,368 --> 00:22:00,635
+And so this looks very similar to the original ReLU,
+
+474
+00:22:00,635 --> 00:22:03,688
+and the only difference is that now instead of being flat
+
+475
+00:22:03,688 --> 00:22:05,029
+in the negative regime,
+
+476
+00:22:05,029 --> 00:22:08,008
+we're going to give a slight negative slope here
+
+477
+00:22:08,008 --> 00:22:11,195
+And so this solves a lot of the problems
+
+478
+00:22:11,195 --> 00:22:12,555
+that we mentioned earlier.
+
+479
+00:22:12,555 --> 00:22:15,248
+Right here we don't have any saturating regime,
+
+480
+00:22:15,248 --> 00:22:17,742
+even in the negative space.
+
+481
+00:22:17,742 --> 00:22:20,382
+It's still very computationally efficient.
+
+482
+00:22:20,382 --> 00:22:22,688
+It still converges faster than sigmoid and tanh,
+
+483
+00:22:22,688 --> 00:22:24,568
+very similar to a ReLU.
+
+484
+00:22:24,568 --> 00:22:27,818
+And it doesn't have this dying problem.
+
+485
+00:22:29,523 --> 00:22:32,566
+And there's also another example
+
+486
+00:22:32,566 --> 00:22:35,980
+is the parametric rectifier, so PReLU.
+
+487
+00:22:35,980 --> 00:22:38,462
+And so in this case it's just like a leaky ReLU
+
+488
+00:22:38,462 --> 00:22:41,193
+where we again have this sloped region
+
+489
+00:22:41,193 --> 00:22:42,795
+in the negative space,
+
+490
+00:22:42,795 --> 00:22:44,795
+but now this slope in the negative regime
+
+491
+00:22:44,795 --> 00:22:47,688
+is determined through this alpha parameter,
+
+492
+00:22:47,688 --> 00:22:49,448
+so we don't specify, we don't hard-code it.
+
+493
+00:22:49,448 --> 00:22:51,422
+but we treat it as now a parameter
+
+494
+00:22:51,422 --> 00:22:53,582
+that we can backprop into and learn.
+
+495
+00:22:53,582 --> 00:22:58,155
+And so this gives it a little bit more flexibility.
+
+496
+00:22:58,155 --> 00:22:59,862
+And we also have something called
+
+497
+00:22:59,862 --> 00:23:02,942
+an Exponential Linear Unit, an ELU,
+
+498
+00:23:02,942 --> 00:23:06,687
+so we have all these different LUs, basically.
+
+499
+00:23:06,687 --> 00:23:08,895
+and this one again, you know,
+
+500
+00:23:08,895 --> 00:23:10,941
+it has all the benefits of the ReLu,
+
+501
+00:23:10,941 --> 00:23:15,108
+but now you're, it is also closer to zero mean outputs.
+
+502
+00:23:16,781 --> 00:23:20,064
+So, that's actually an advantage that the leaky ReLU,
+
+503
+00:23:20,064 --> 00:23:22,751
+parametric ReLU, a lot of these they allow you
+
+504
+00:23:22,751 --> 00:23:25,501
+to have your mean closer to zero,
+
+505
+00:23:27,299 --> 00:23:29,206
+but compared with the leaky ReLU,
+
+506
+00:23:29,206 --> 00:23:33,232
+instead of it being sloped in the negative regime,
+
+507
+00:23:33,232 --> 00:23:34,827
+here you actually are building back
+
+508
+00:23:34,827 --> 00:23:37,138
+in a negative saturation regime,
+
+509
+00:23:37,138 --> 00:23:41,006
+and there's arguments that basically this allows you
+
+510
+00:23:41,006 --> 00:23:43,629
+to have some more robustness to noise,
+
+511
+00:23:43,629 --> 00:23:46,899
+and you basically get these deactivation states
+
+512
+00:23:46,899 --> 00:23:49,166
+that can be more robust.
+
+513
+00:23:49,166 --> 00:23:52,267
+And you can look at this paper for,
+
+514
+00:23:52,267 --> 00:23:54,311
+there's a lot of kind of more justification
+
+515
+00:23:54,311 --> 00:23:56,485
+for why this is the case.
+
+516
+00:23:56,485 --> 00:23:58,777
+And in a sense this is kind of something
+
+517
+00:23:58,777 --> 00:24:01,711
+in between the ReLUs and the leaky ReLUs,
+
+518
+00:24:01,711 --> 00:24:03,544
+where has some of this shape,
+
+519
+00:24:03,544 --> 00:24:06,005
+which the Leaky ReLU does,
+
+520
+00:24:06,005 --> 00:24:08,272
+which gives it closer to zero mean output,
+
+521
+00:24:08,272 --> 00:24:10,525
+but then it also still has some of this
+
+522
+00:24:10,525 --> 00:24:13,867
+more saturating behavior that ReLUs have.
+
+523
+00:24:13,867 --> 00:24:14,950
+A question?
+
+524
+00:24:14,950 --> 00:24:18,533
+[student speaking off mic]
+
+525
+00:24:20,552 --> 00:24:22,458
+So, whether this parameter alpha
+
+526
+00:24:22,458 --> 00:24:24,965
+is going to be specific for each neuron.
+
+527
+00:24:24,965 --> 00:24:28,112
+So, I believe it is often specified,
+
+528
+00:24:28,112 --> 00:24:29,992
+but I actually can't remember exactly,
+
+529
+00:24:29,992 --> 00:24:32,523
+so you can look in the paper for exactly,
+
+530
+00:24:32,523 --> 00:24:34,690
+yeah, how this is defined,
+
+531
+00:24:36,178 --> 00:24:39,925
+but yeah, so I believe this function is basically
+
+532
+00:24:39,925 --> 00:24:42,831
+very carefully designed in order to have
+
+533
+00:24:42,831 --> 00:24:45,650
+nice desirable properties.
+
+534
+00:24:45,650 --> 00:24:47,365
+Okay, so there's basically all of these
+
+535
+00:24:47,365 --> 00:24:50,592
+kinds of variants on the ReLU.
+
+536
+00:24:50,592 --> 00:24:53,765
+And so you can see that, all of these it's kind of,
+
+537
+00:24:53,765 --> 00:24:56,365
+you can argue that each one may have certain benefits,
+
+538
+00:24:56,365 --> 00:24:58,792
+certain drawbacks in practice.
+
+539
+00:24:58,792 --> 00:25:00,832
+People just want to run experiments all of them,
+
+540
+00:25:00,832 --> 00:25:02,818
+and see empirically what works better,
+
+541
+00:25:02,818 --> 00:25:05,550
+try and justify it, and come up with new ones,
+
+542
+00:25:05,550 --> 00:25:06,462
+but they're all different things
+
+543
+00:25:06,462 --> 00:25:09,212
+that are being experimented with.
+
+544
+00:25:10,735 --> 00:25:13,455
+And so let's just mention one more.
+
+545
+00:25:13,455 --> 00:25:15,344
+This is Maxout Neuron.
+
+546
+00:25:15,344 --> 00:25:17,117
+So, this one looks a little bit different
+
+547
+00:25:17,117 --> 00:25:20,814
+in that it doesn't have the same form as the others did
+
+548
+00:25:20,814 --> 00:25:23,362
+of taking your basic dot product,
+
+549
+00:25:23,362 --> 00:25:24,623
+and then putting this element-wise
+
+550
+00:25:24,623 --> 00:25:26,569
+nonlinearity in front of it.
+
+551
+00:25:26,569 --> 00:25:28,023
+Instead, it looks like this,
+
+552
+00:25:28,023 --> 00:25:31,190
+this max of W dot product of X plus B,
+
+553
+00:25:32,590 --> 00:25:34,170
+and a second set of weights,
+
+554
+00:25:34,170 --> 00:25:36,670
+W2 dot product with X plus B2.
+
+555
+00:25:38,830 --> 00:25:40,952
+And so what does this, is this is taking the max
+
+556
+00:25:40,952 --> 00:25:43,785
+of these two functions in a sense.
+
+557
+00:25:45,470 --> 00:25:48,509
+And so what it does is it generalizes the ReLU
+
+558
+00:25:48,509 --> 00:25:49,549
+and the leaky ReLu,
+
+559
+00:25:49,549 --> 00:25:52,962
+because you're just you're taking the max over these two,
+
+560
+00:25:52,962 --> 00:25:54,712
+two linear functions.
+
+561
+00:25:55,623 --> 00:25:57,245
+And so what this give us,
+
+562
+00:25:57,245 --> 00:26:01,058
+it's again you're operating in a linear regime.
+
+563
+00:26:01,058 --> 00:26:03,527
+It doesn't saturate and it doesn't die.
+
+564
+00:26:03,527 --> 00:26:05,080
+The problem is that here,
+
+565
+00:26:05,080 --> 00:26:07,493
+you are doubling the number of parameters per neuron.
+
+566
+00:26:07,493 --> 00:26:12,417
+So, each neuron now has this original set of weights, W,
+
+567
+00:26:12,417 --> 00:26:16,584
+but it now has W1 and W2, so you have twice these.
+
+568
+00:26:18,365 --> 00:26:19,555
+So in practice,
+
+569
+00:26:19,555 --> 00:26:21,790
+when we look at all of these activation functions,
+
+570
+00:26:21,790 --> 00:26:25,160
+kind of a good general rule of thumb is use ReLU.
+
+571
+00:26:25,160 --> 00:26:27,406
+This is the most standard one
+
+572
+00:26:27,406 --> 00:26:29,989
+that generally just works well.
+
+573
+00:26:30,831 --> 00:26:33,563
+And you know you do want to be careful in general
+
+574
+00:26:33,563 --> 00:26:36,211
+with your learning rates to adjust them based,
+
+575
+00:26:36,211 --> 00:26:37,097
+see how things do.
+
+576
+00:26:37,097 --> 00:26:38,552
+We'll talk more about adjusting learning rates
+
+577
+00:26:38,552 --> 00:26:40,691
+later in this lecture,
+
+578
+00:26:40,691 --> 00:26:43,132
+but you can also try out some of these
+
+579
+00:26:43,132 --> 00:26:45,947
+fancier activation functions,
+
+580
+00:26:45,947 --> 00:26:48,280
+the leaky ReLU, Maxout, ELU,
+
+581
+00:26:49,790 --> 00:26:52,173
+but these are generally,
+
+582
+00:26:52,173 --> 00:26:54,428
+they're still kind of more experimental.
+
+583
+00:26:54,428 --> 00:26:57,243
+So, you can see how they work for your problem.
+
+584
+00:26:57,243 --> 00:26:59,948
+You can also try out tanh,
+
+585
+00:26:59,948 --> 00:27:02,306
+but probably some of these ReLU
+
+586
+00:27:02,306 --> 00:27:04,635
+and ReLU variants are going to be better.
+
+587
+00:27:04,635 --> 00:27:07,312
+And in general don't use sigmoid.
+
+588
+00:27:07,312 --> 00:27:10,528
+This is one of the earliest original activation functions,
+
+589
+00:27:10,528 --> 00:27:12,510
+and ReLU and these other variants
+
+590
+00:27:12,510 --> 00:27:15,843
+have generally worked better since then.
+
+591
+00:27:17,961 --> 00:27:20,634
+Okay, so now let's talk a little bit
+
+592
+00:27:20,634 --> 00:27:22,117
+about data preprocessing.
+
+593
+00:27:22,117 --> 00:27:23,544
+Right, so the activation function,
+
+594
+00:27:23,544 --> 00:27:25,202
+we design this is part of our network.
+
+595
+00:27:25,202 --> 00:27:26,561
+Now we want to train the network,
+
+596
+00:27:26,561 --> 00:27:27,961
+and we have our input data
+
+597
+00:27:27,961 --> 00:27:30,961
+that we want to start training from.
+
+598
+00:27:32,024 --> 00:27:34,492
+So, generally we want to always preprocess the data,
+
+599
+00:27:34,492 --> 00:27:36,975
+and this is something that you've probably seen before
+
+600
+00:27:36,975 --> 00:27:40,095
+in machine learning classes if you taken those.
+
+601
+00:27:40,095 --> 00:27:42,949
+And some standard types of preprocessing are,
+
+602
+00:27:42,949 --> 00:27:44,698
+you take your original data
+
+603
+00:27:44,698 --> 00:27:46,654
+and you want to zero mean them,
+
+604
+00:27:46,654 --> 00:27:49,966
+and then you probably want to also normalize that,
+
+605
+00:27:49,966 --> 00:27:53,299
+so normalized by the standard deviation,
+
+606
+00:27:56,000 --> 00:27:57,967
+And so why do we want to do this?
+
+607
+00:27:57,967 --> 00:28:01,269
+For zero centering, you can remember earlier
+
+608
+00:28:01,269 --> 00:28:03,832
+that we talked about when all the inputs
+
+609
+00:28:03,832 --> 00:28:05,579
+are positive, for example,
+
+610
+00:28:05,579 --> 00:28:07,310
+then we get all of our gradients
+
+611
+00:28:07,310 --> 00:28:08,765
+on the weights to be positive,
+
+612
+00:28:08,765 --> 00:28:13,372
+and we get this basically suboptimal optimization.
+
+613
+00:28:13,372 --> 00:28:18,143
+And in general even if it's not all zero or all negative,
+
+614
+00:28:18,143 --> 00:28:22,310
+any sort of bias will still cause this type of problem.
+
+615
+00:28:24,370 --> 00:28:27,794
+And so then in terms of normalizing the data,
+
+616
+00:28:27,794 --> 00:28:30,179
+this is basically you want to normalize data
+
+617
+00:28:30,179 --> 00:28:31,868
+typically in the machine learning problems,
+
+618
+00:28:31,868 --> 00:28:34,266
+so that all features are in the same range,
+
+619
+00:28:34,266 --> 00:28:37,040
+and so that they contribute equally.
+
+620
+00:28:37,040 --> 00:28:39,632
+In practice, since for images, which is what
+
+621
+00:28:39,632 --> 00:28:44,390
+we're dealing with in this course here for the most part,
+
+622
+00:28:44,390 --> 00:28:46,466
+we do do the zero centering,
+
+623
+00:28:46,466 --> 00:28:48,826
+but in practice we don't actually normalize
+
+624
+00:28:48,826 --> 00:28:52,016
+the pixel value so much, because generally for images
+
+625
+00:28:52,016 --> 00:28:54,428
+right at each location you already have
+
+626
+00:28:54,428 --> 00:28:57,216
+relatively comparable scale and distribution,
+
+627
+00:28:57,216 --> 00:28:59,753
+and so we don't really need to normalize so much,
+
+628
+00:28:59,753 --> 00:29:03,620
+compared to more general machine learning problems,
+
+629
+00:29:03,620 --> 00:29:05,772
+where you might have different features
+
+630
+00:29:05,772 --> 00:29:09,939
+that are very different and of very different scales.
+
+631
+00:29:11,637 --> 00:29:13,140
+And in machine learning,
+
+632
+00:29:13,140 --> 00:29:16,286
+you might also see a more complicated things,
+
+633
+00:29:16,286 --> 00:29:20,583
+like PCA or whitening, but again with images,
+
+634
+00:29:20,583 --> 00:29:23,477
+we typically just stick with the zero mean,
+
+635
+00:29:23,477 --> 00:29:25,099
+and we don't do the normalization,
+
+636
+00:29:25,099 --> 00:29:26,611
+and we also don't do some of these
+
+637
+00:29:26,611 --> 00:29:29,278
+more complicated pre-processing.
+
+638
+00:29:30,119 --> 00:29:32,489
+And one reason for this is generally with images
+
+639
+00:29:32,489 --> 00:29:35,095
+we don't really want to take all of our input,
+
+640
+00:29:35,095 --> 00:29:37,136
+let's say pixel values and project this
+
+641
+00:29:37,136 --> 00:29:38,853
+onto a lower dimensional space
+
+642
+00:29:38,853 --> 00:29:41,476
+of new kinds of features that we're dealing with.
+
+643
+00:29:41,476 --> 00:29:42,793
+We typically just want to apply
+
+644
+00:29:42,793 --> 00:29:45,165
+convolutional networks spatially
+
+645
+00:29:45,165 --> 00:29:48,784
+and have our spatial structure over the original image.
+
+646
+00:29:48,784 --> 00:29:50,195
+Yeah, question.
+
+647
+00:29:50,195 --> 00:29:53,778
+[student speaking off mic]
+
+648
+00:29:59,458 --> 00:30:01,274
+So the question is we do this pre-processing
+
+649
+00:30:01,274 --> 00:30:02,675
+in a training phase,
+
+650
+00:30:02,675 --> 00:30:05,781
+do we also do the same kind of thing in the test phase,
+
+651
+00:30:05,781 --> 00:30:07,568
+and the answer is yes.
+
+652
+00:30:07,568 --> 00:30:10,838
+So, let me just move to the next slide here.
+
+653
+00:30:10,838 --> 00:30:12,460
+So, in general on the training phase
+
+654
+00:30:12,460 --> 00:30:15,330
+is where we determine our let's say, mean,
+
+655
+00:30:15,330 --> 00:30:19,497
+and then we apply this exact same mean to the test data.
+
+656
+00:30:20,486 --> 00:30:23,123
+So, we'll normalize by the same
+
+657
+00:30:23,123 --> 00:30:25,439
+empirical mean from the training data.
+
+658
+00:30:25,439 --> 00:30:29,022
+Okay, so to summarize basically for images,
+
+659
+00:30:30,457 --> 00:30:33,774
+we typically just do the zero mean pre-processing
+
+660
+00:30:33,774 --> 00:30:37,857
+and we can subtract either the entire mean image.
+
+661
+00:30:38,751 --> 00:30:40,166
+So, from the training data,
+
+662
+00:30:40,166 --> 00:30:41,954
+you compute the mean image,
+
+663
+00:30:41,954 --> 00:30:45,198
+which will be the same size as your, as each image.
+
+664
+00:30:45,198 --> 00:30:47,626
+So, for example 32 by 32 by three,
+
+665
+00:30:47,626 --> 00:30:49,511
+you'll get this array of numbers,
+
+666
+00:30:49,511 --> 00:30:53,686
+and then you subtract that from each image
+
+667
+00:30:53,686 --> 00:30:55,377
+that you're about to pass through the network,
+
+668
+00:30:55,377 --> 00:30:57,624
+and you'll do the same thing at test time
+
+669
+00:30:57,624 --> 00:31:01,132
+for this array that you determined at training time.
+
+670
+00:31:01,132 --> 00:31:05,391
+In practice, we can also for some networks,
+
+671
+00:31:05,391 --> 00:31:07,174
+we also do this by just of subtracting
+
+672
+00:31:07,174 --> 00:31:08,485
+a per-channel mean,
+
+673
+00:31:08,485 --> 00:31:10,732
+and so instead of having an entire mean image
+
+674
+00:31:10,732 --> 00:31:13,699
+that were going to zero-center by,
+
+675
+00:31:13,699 --> 00:31:15,516
+we just take the mean by channel,
+
+676
+00:31:15,516 --> 00:31:18,567
+and this is just because it turns out that
+
+677
+00:31:18,567 --> 00:31:21,493
+it was similar enough across the whole image,
+
+678
+00:31:21,493 --> 00:31:23,059
+it didn't make such a big difference
+
+679
+00:31:23,059 --> 00:31:24,515
+to subtract the mean image
+
+680
+00:31:24,515 --> 00:31:26,318
+versus just a per-channel value.
+
+681
+00:31:26,318 --> 00:31:29,022
+And this is easier to just pass around and deal with.
+
+682
+00:31:29,022 --> 00:31:32,779
+So, you'll see this as well for example, in a VGG Network,
+
+683
+00:31:32,779 --> 00:31:35,498
+which is a network that came after AlexNet,
+
+684
+00:31:35,498 --> 00:31:37,536
+and we'll talk about that later.
+
+685
+00:31:37,536 --> 00:31:39,145
+Question.
+
+686
+00:31:39,145 --> 00:31:42,728
+[student speaking off mic]
+
+687
+00:31:45,815 --> 00:31:47,312
+Okay, so there are two questions.
+
+688
+00:31:47,312 --> 00:31:49,765
+The first is what's a channel, in this case,
+
+689
+00:31:49,765 --> 00:31:52,649
+when we are subtracting a per-channel mean?
+
+690
+00:31:52,649 --> 00:31:55,965
+And this is RGB, so our array,
+
+691
+00:31:55,965 --> 00:32:00,055
+our images are typically for example, 32 by 32 by three.
+
+692
+00:32:00,055 --> 00:32:02,147
+So, width, height, each are 32,
+
+693
+00:32:02,147 --> 00:32:04,798
+and our depth, we have three channels RGB,
+
+694
+00:32:04,798 --> 00:32:07,696
+and so we'll have one mean for the red channel,
+
+695
+00:32:07,696 --> 00:32:10,386
+one mean for a green, one for blue.
+
+696
+00:32:10,386 --> 00:32:15,129
+And then the second, what was your second question?
+
+697
+00:32:15,129 --> 00:32:18,712
+[student speaking off mic]
+
+698
+00:32:21,949 --> 00:32:22,782
+Oh

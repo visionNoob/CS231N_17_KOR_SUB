@@ -1,0 +1,2653 @@
+﻿1
+00:00:09,739 --> 00:00:10,898
+- Hello?
+
+2
+00:00:10,898 --> 00:00:13,891
+Okay, it's after 12, so I want to get started.
+
+3
+00:00:13,891 --> 00:00:16,151
+So today, lecture eight, we're going to talk about
+
+4
+00:00:16,151 --> 00:00:17,822
+deep learning software.
+
+5
+00:00:17,822 --> 00:00:19,593
+This is a super exciting topic because it changes
+
+6
+00:00:19,593 --> 00:00:21,283
+a lot every year.
+
+7
+00:00:21,283 --> 00:00:23,156
+But also means it's a lot of work to give this lecture
+
+8
+00:00:23,156 --> 00:00:25,621
+'cause it changes a lot every year.
+
+9
+00:00:25,621 --> 00:00:28,302
+But as usual, a couple administrative notes
+
+10
+00:00:28,302 --> 00:00:30,024
+before we dive into the material.
+
+11
+00:00:30,024 --> 00:00:32,323
+So as a reminder the project proposals for your
+
+12
+00:00:32,323 --> 00:00:34,563
+course projects were due on Tuesday.
+
+13
+00:00:34,563 --> 00:00:37,405
+So hopefully you all turned that in,
+
+14
+00:00:37,405 --> 00:00:39,704
+and hopefully you all have a somewhat good idea
+
+15
+00:00:39,704 --> 00:00:41,566
+of what kind of projects you want to work on
+
+16
+00:00:41,566 --> 00:00:42,766
+for the class.
+
+17
+00:00:42,766 --> 00:00:45,852
+So we're in the process of assigning TA's to projects
+
+18
+00:00:45,852 --> 00:00:47,979
+based on what the project area is
+
+19
+00:00:47,979 --> 00:00:50,217
+and the expertise of the TA's.
+
+20
+00:00:50,217 --> 00:00:52,546
+So we'll have some more information about that
+
+21
+00:00:52,546 --> 00:00:54,264
+in the next couple days I think.
+
+22
+00:00:54,264 --> 00:00:56,563
+We're also in the process of grading assignment one,
+
+23
+00:00:56,563 --> 00:00:59,724
+so stay tuned and we'll get those grades back to you
+
+24
+00:00:59,724 --> 00:01:00,942
+as soon as we can.
+
+25
+00:01:00,942 --> 00:01:03,464
+Another reminder is that assignment two has been out
+
+26
+00:01:03,464 --> 00:01:04,449
+for a while.
+
+27
+00:01:04,449 --> 00:01:08,680
+That's going to be due next week, a week from today, Thursday.
+
+28
+00:01:08,680 --> 00:01:10,848
+And again, when working on assignment two,
+
+29
+00:01:10,848 --> 00:01:12,846
+remember to stop your Google Cloud instances
+
+30
+00:01:12,846 --> 00:01:16,231
+when you're not working to try to preserve your credits.
+
+31
+00:01:16,231 --> 00:01:18,264
+And another bit of confusion, I just wanted to
+
+32
+00:01:18,264 --> 00:01:21,326
+re-emphasize is that for assignment two you really
+
+33
+00:01:21,326 --> 00:01:24,812
+only need to use GPU instances for the last notebook.
+
+34
+00:01:24,812 --> 00:01:29,021
+For all of the several notebooks it's just in Python
+
+35
+00:01:29,021 --> 00:01:32,250
+and Numpy so you don't need any GPUs for those questions.
+
+36
+00:01:32,250 --> 00:01:34,414
+So again, conserve your credits,
+
+37
+00:01:34,414 --> 00:01:36,701
+only use GPUs when you need them.
+
+38
+00:01:36,701 --> 00:01:39,973
+And the final reminder is that the midterm is coming up.
+
+39
+00:01:39,973 --> 00:01:41,516
+It's kind of hard to believe we're there already,
+
+40
+00:01:41,516 --> 00:01:45,683
+but the midterm will be in class on Tuesday, five nine.
+
+41
+00:01:45,683 --> 00:01:47,901
+So the midterm will be more theoretical.
+
+42
+00:01:47,901 --> 00:01:51,018
+It'll be sort of pen and paper working through different
+
+43
+00:01:51,018 --> 00:01:54,137
+kinds of, slightly more theoretical questions
+
+44
+00:01:54,137 --> 00:01:55,450
+to check your understanding of the material that we've
+
+45
+00:01:55,450 --> 00:01:57,071
+covered so far.
+
+46
+00:01:57,071 --> 00:01:59,652
+And I think we'll probably post at least a short sort of
+
+47
+00:01:59,652 --> 00:02:02,506
+sample of the types of questions to expect.
+
+48
+00:02:02,506 --> 00:02:03,695
+Question?
+
+49
+00:02:03,695 --> 00:02:05,310
+[student's words obscured due to lack of microphone]
+
+50
+00:02:05,310 --> 00:02:08,233
+Oh yeah, question is whether it's open-book,
+
+51
+00:02:08,233 --> 00:02:10,676
+so we're going to say closed note, closed book.
+
+52
+00:02:10,676 --> 00:02:12,037
+So just,
+
+53
+00:02:12,037 --> 00:02:13,757
+Yeah, yeah, so that's what we've done in the past
+
+54
+00:02:13,757 --> 00:02:15,671
+is just closed note, closed book, relatively
+
+55
+00:02:15,671 --> 00:02:17,568
+just like want to check that you understand
+
+56
+00:02:17,568 --> 00:02:21,735
+the intuition behind most of the stuff we've presented.
+
+57
+00:02:23,618 --> 00:02:26,015
+So, a quick recap as a reminder of what we were talking
+
+58
+00:02:26,015 --> 00:02:27,577
+about last time.
+
+59
+00:02:27,577 --> 00:02:29,737
+Last time we talked about fancier optimization algorithms
+
+60
+00:02:29,737 --> 00:02:33,162
+for deep learning models including SGD Momentum,
+
+61
+00:02:33,162 --> 00:02:34,975
+Nesterov, RMSProp and Adam.
+
+62
+00:02:34,975 --> 00:02:37,257
+And we saw that these relatively small tweaks
+
+63
+00:02:37,257 --> 00:02:42,139
+on top of vanilla SGD, are relatively easy to implement
+
+64
+00:02:42,139 --> 00:02:45,492
+but can make your networks converge a bit faster.
+
+65
+00:02:45,492 --> 00:02:46,955
+We also talked about regularization,
+
+66
+00:02:46,955 --> 00:02:48,529
+especially dropout.
+
+67
+00:02:48,529 --> 00:02:50,666
+So remember dropout, you're kind of randomly setting
+
+68
+00:02:50,666 --> 00:02:52,586
+parts of the network to zero during the forward pass,
+
+69
+00:02:52,586 --> 00:02:54,959
+and then you kind of marginalize out over that noise
+
+70
+00:02:54,959 --> 00:02:56,975
+in the back at test time.
+
+71
+00:02:56,975 --> 00:02:58,575
+And we saw that this was kind of a general pattern
+
+72
+00:02:58,575 --> 00:03:00,676
+across many different types of regularization
+
+73
+00:03:00,676 --> 00:03:02,805
+in deep learning, where you might add some kind
+
+74
+00:03:02,805 --> 00:03:05,132
+of noise during training, but then marginalize out
+
+75
+00:03:05,132 --> 00:03:07,037
+that noise at test time so it's not stochastic
+
+76
+00:03:07,037 --> 00:03:08,415
+at test time.
+
+77
+00:03:08,415 --> 00:03:10,156
+We also talked about transfer learning where you
+
+78
+00:03:10,156 --> 00:03:12,533
+can maybe download big networks that were pre-trained
+
+79
+00:03:12,533 --> 00:03:14,354
+on some dataset and then fine tune them for your
+
+80
+00:03:14,354 --> 00:03:15,376
+own problem.
+
+81
+00:03:15,376 --> 00:03:17,577
+And this is one way that you can attack a lot of problems
+
+82
+00:03:17,577 --> 00:03:19,647
+in deep learning, even if you don't have a huge
+
+83
+00:03:19,647 --> 00:03:21,314
+dataset of your own.
+
+84
+00:03:22,781 --> 00:03:24,239
+So today we're going to shift gears a little bit
+
+85
+00:03:24,239 --> 00:03:25,947
+and talk about some of the nuts and bolts
+
+86
+00:03:25,947 --> 00:03:29,615
+about writing software and how the hardware works.
+
+87
+00:03:29,615 --> 00:03:31,956
+And a little bit, diving into a lot of details
+
+88
+00:03:31,956 --> 00:03:33,973
+about what the software looks like that you actually
+
+89
+00:03:33,973 --> 00:03:36,276
+use to train these things in practice.
+
+90
+00:03:36,276 --> 00:03:39,203
+So we'll talk a little bit about CPUs and GPUs
+
+91
+00:03:39,203 --> 00:03:41,476
+and then we'll talk about several of the major
+
+92
+00:03:41,476 --> 00:03:43,050
+deep learning frameworks that are out there in use
+
+93
+00:03:43,050 --> 00:03:43,967
+these days.
+
+94
+00:03:45,471 --> 00:03:48,174
+So first, we've sort of mentioned this off hand
+
+95
+00:03:48,174 --> 00:03:49,890
+a bunch of different times,
+
+96
+00:03:49,890 --> 00:03:52,961
+that computers have CPUs, computers have GPUs.
+
+97
+00:03:52,961 --> 00:03:55,257
+Deep learning uses GPUs, but we weren't really
+
+98
+00:03:55,257 --> 00:03:57,455
+too explicit up to this point about what exactly
+
+99
+00:03:57,455 --> 00:03:59,726
+these things are and why one might be better
+
+100
+00:03:59,726 --> 00:04:02,655
+than another for different tasks.
+
+101
+00:04:02,655 --> 00:04:04,655
+So, who's built a computer before?
+
+102
+00:04:04,655 --> 00:04:06,472
+Just kind of show of hands.
+
+103
+00:04:06,472 --> 00:04:09,039
+So, maybe about a third of you, half of you,
+
+104
+00:04:09,039 --> 00:04:10,965
+somewhere around that ballpark.
+
+105
+00:04:10,965 --> 00:04:14,119
+So this is a shot of my computer at home
+
+106
+00:04:14,119 --> 00:04:15,174
+that I built.
+
+107
+00:04:15,174 --> 00:04:17,839
+And you can see that there's a lot of stuff going on
+
+108
+00:04:17,839 --> 00:04:20,095
+inside the computer, maybe, hopefully you know
+
+109
+00:04:20,095 --> 00:04:22,261
+what most of these parts are.
+
+110
+00:04:22,261 --> 00:04:25,594
+And the CPU is the Central Processing Unit.
+
+111
+00:04:25,594 --> 00:04:28,419
+That's this little chip hidden under this cooling fan
+
+112
+00:04:28,419 --> 00:04:31,391
+right here near the top of the case.
+
+113
+00:04:31,391 --> 00:04:34,217
+And the CPU is actually relatively small piece.
+
+114
+00:04:34,217 --> 00:04:36,617
+It's a relatively small thing inside the case.
+
+115
+00:04:36,617 --> 00:04:39,555
+It's not taking up a lot of space.
+
+116
+00:04:39,555 --> 00:04:42,204
+And the GPUs are these two big monster things
+
+117
+00:04:42,204 --> 00:04:44,845
+that are taking up a gigantic amount of space
+
+118
+00:04:44,845 --> 00:04:46,221
+in the case.
+
+119
+00:04:46,221 --> 00:04:47,411
+They have their own cooling,
+
+120
+00:04:47,411 --> 00:04:48,760
+they're taking a lot of power.
+
+121
+00:04:48,760 --> 00:04:50,296
+They're quite large.
+
+122
+00:04:50,296 --> 00:04:53,539
+So, just in terms of how much power they're using,
+
+123
+00:04:53,539 --> 00:04:55,906
+in terms of how big they are, the GPUs are kind of
+
+124
+00:04:55,906 --> 00:04:57,455
+physically imposing and taking up a lot of space
+
+125
+00:04:57,455 --> 00:04:59,139
+in the case.
+
+126
+00:04:59,139 --> 00:05:00,927
+So the question is what are these things
+
+127
+00:05:00,927 --> 00:05:04,516
+and why are they so important for deep learning?
+
+128
+00:05:04,516 --> 00:05:07,402
+Well, the GPU is called a graphics card,
+
+129
+00:05:07,402 --> 00:05:08,937
+or Graphics Processing Unit.
+
+130
+00:05:08,937 --> 00:05:12,430
+And these were really developed, originally for rendering
+
+131
+00:05:12,430 --> 00:05:14,457
+computer graphics, and especially around games
+
+132
+00:05:14,457 --> 00:05:16,166
+and that sort of thing.
+
+133
+00:05:16,166 --> 00:05:20,225
+So another show of hands, who plays video games at home
+
+134
+00:05:20,225 --> 00:05:23,247
+sometimes, from time to time on their computer?
+
+135
+00:05:23,247 --> 00:05:25,693
+Yeah, so again, maybe about half, good fraction.
+
+136
+00:05:25,693 --> 00:05:28,159
+So for those of you who've played video games before
+
+137
+00:05:28,159 --> 00:05:29,717
+and who've built your own computers,
+
+138
+00:05:29,717 --> 00:05:32,196
+you probably have your own opinions on this debate.
+
+139
+00:05:32,196 --> 00:05:34,095
+[laughs]
+
+140
+00:05:34,095 --> 00:05:37,666
+So this is one of those big debates in computer science.
+
+141
+00:05:37,666 --> 00:05:40,349
+You know, there's like Intel versus AMD,
+
+142
+00:05:40,349 --> 00:05:42,620
+NVIDIA versus AMD for graphics cards.
+
+143
+00:05:42,620 --> 00:05:45,394
+It's up there with Vim versus Emacs for text editor.
+
+144
+00:05:45,394 --> 00:05:47,660
+And pretty much any gamer has their own opinions
+
+145
+00:05:47,660 --> 00:05:50,768
+on which of these two sides they prefer
+
+146
+00:05:50,768 --> 00:05:51,945
+for their own cards.
+
+147
+00:05:51,945 --> 00:05:54,895
+And in deep learning we kind of have mostly picked
+
+148
+00:05:54,895 --> 00:05:59,116
+one side of this fight, and that's NVIDIA.
+
+149
+00:05:59,116 --> 00:06:00,816
+So if you guys have AMD cards,
+
+150
+00:06:00,816 --> 00:06:03,026
+you might be in a little bit more trouble if you want
+
+151
+00:06:03,026 --> 00:06:05,117
+to use those for deep learning.
+
+152
+00:06:05,117 --> 00:06:07,729
+And really, NVIDIA's been pushing a lot for deep learning
+
+153
+00:06:07,729 --> 00:06:08,812
+in the last several years.
+
+154
+00:06:08,812 --> 00:06:11,997
+It's been kind of a large focus of some of their strategy.
+
+155
+00:06:11,997 --> 00:06:14,017
+And they put in a lot effort into engineering
+
+156
+00:06:14,017 --> 00:06:17,647
+sort of good solutions to make their hardware
+
+157
+00:06:17,647 --> 00:06:19,354
+better suited for deep learning.
+
+158
+00:06:19,354 --> 00:06:23,855
+So most people in deep learning when we talk about GPUs,
+
+159
+00:06:23,855 --> 00:06:27,718
+we're pretty much exclusively talking about NVIDIA GPUs.
+
+160
+00:06:27,718 --> 00:06:29,607
+Maybe in the future this'll change a little bit,
+
+161
+00:06:29,607 --> 00:06:31,465
+and there might be new players coming up,
+
+162
+00:06:31,465 --> 00:06:35,268
+but at least for now NVIDIA is pretty dominant.
+
+163
+00:06:35,268 --> 00:06:37,225
+So to give you an idea of like what is the difference
+
+164
+00:06:37,225 --> 00:06:40,163
+between a CPU and a GPU, I've kind of made a little
+
+165
+00:06:40,163 --> 00:06:41,705
+spread sheet here.
+
+166
+00:06:41,705 --> 00:06:44,759
+On the top we have two of the kind of top end Intel
+
+167
+00:06:44,759 --> 00:06:47,364
+consumer CPUs, and on the bottom we have two of
+
+168
+00:06:47,364 --> 00:06:52,079
+NVIDIA's sort of current top end consumer GPUs.
+
+169
+00:06:52,079 --> 00:06:55,975
+And there's a couple general trends to notice here.
+
+170
+00:06:55,975 --> 00:06:58,445
+Both GPUs and CPUs are kind of a general purpose
+
+171
+00:06:58,445 --> 00:07:01,359
+computing machine where they can execute programs
+
+172
+00:07:01,359 --> 00:07:03,284
+and do sort of arbitrary instructions,
+
+173
+00:07:03,284 --> 00:07:05,987
+but they're qualitatively pretty different.
+
+174
+00:07:05,987 --> 00:07:09,298
+So CPUs tend to have just a few cores,
+
+175
+00:07:09,298 --> 00:07:12,700
+for consumer desktop CPUs these days,
+
+176
+00:07:12,700 --> 00:07:14,941
+they might have something like four or six
+
+177
+00:07:14,941 --> 00:07:16,714
+or maybe up to 10 cores.
+
+178
+00:07:16,714 --> 00:07:20,393
+With hyperthreading technology that means they can run,
+
+179
+00:07:20,393 --> 00:07:22,726
+the hardware can physically run, like maybe eight
+
+180
+00:07:22,726 --> 00:07:24,893
+or up to 20 threads concurrently.
+
+181
+00:07:24,893 --> 00:07:29,700
+So the CPU can maybe do 20 things in parallel at once.
+
+182
+00:07:29,700 --> 00:07:31,691
+So that's just not a gigantic number,
+
+183
+00:07:31,691 --> 00:07:34,527
+but those threads for a CPU are pretty powerful.
+
+184
+00:07:34,527 --> 00:07:36,084
+They can actually do a lot of things,
+
+185
+00:07:36,084 --> 00:07:37,223
+they're very fast.
+
+186
+00:07:37,223 --> 00:07:39,066
+Every CPU instruction can actually do quite a lot
+
+187
+00:07:39,066 --> 00:07:39,899
+of stuff.
+
+188
+00:07:39,899 --> 00:07:43,011
+And they can all work pretty independently.
+
+189
+00:07:43,011 --> 00:07:45,303
+For GPUs it's a little bit different.
+
+190
+00:07:45,303 --> 00:07:48,672
+So for GPUs we see that these sort of common top end
+
+191
+00:07:48,672 --> 00:07:51,909
+consumer GPUs have thousands of cores.
+
+192
+00:07:51,909 --> 00:07:55,340
+So the NVIDIA Titan XP which is the current
+
+193
+00:07:55,340 --> 00:07:59,007
+top of the line consumer GPU has 3840 cores.
+
+194
+00:08:00,818 --> 00:08:02,223
+So that's a crazy number.
+
+195
+00:08:02,223 --> 00:08:04,615
+That's like way more than the 10 cores that you'll get
+
+196
+00:08:04,615 --> 00:08:06,357
+for a similarly priced CPU.
+
+197
+00:08:06,357 --> 00:08:09,574
+The downside of a GPU is that each of those cores,
+
+198
+00:08:09,574 --> 00:08:12,207
+one, it runs at a much slower clock speed.
+
+199
+00:08:12,207 --> 00:08:14,439
+And two they really can't do quite as much.
+
+200
+00:08:14,439 --> 00:08:17,441
+You can't really compare CPU cores and GPU cores
+
+201
+00:08:17,441 --> 00:08:19,680
+apples to apples.
+
+202
+00:08:19,680 --> 00:08:22,510
+The GPU cores can't really operate very independently.
+
+203
+00:08:22,510 --> 00:08:24,460
+They all kind of need to work together
+
+204
+00:08:24,460 --> 00:08:26,589
+and sort of paralyze one task across many cores
+
+205
+00:08:26,589 --> 00:08:29,297
+rather than each core totally doing its own thing.
+
+206
+00:08:29,297 --> 00:08:32,406
+So you can't really compare these numbers directly.
+
+207
+00:08:32,406 --> 00:08:34,709
+But it should give you the sense that due
+
+208
+00:08:34,709 --> 00:08:37,019
+to the large number of cores GPUs can sort of,
+
+209
+00:08:37,019 --> 00:08:39,044
+are really good for parallel things where you
+
+210
+00:08:39,044 --> 00:08:41,370
+need to do a lot of things all at the same time,
+
+211
+00:08:41,370 --> 00:08:44,742
+but those things are all pretty much the same flavor.
+
+212
+00:08:44,742 --> 00:08:48,014
+Another thing to point out between CPUs and GPUs
+
+213
+00:08:48,014 --> 00:08:49,387
+is this idea of memory.
+
+214
+00:08:49,387 --> 00:08:52,887
+Right, so CPUs have some cache on the CPU,
+
+215
+00:08:53,770 --> 00:08:56,151
+but that's relatively small and the majority
+
+216
+00:08:56,151 --> 00:08:58,523
+of the memory for your CPU is pulling from your
+
+217
+00:08:58,523 --> 00:09:00,969
+system memory, the RAM, which will maybe be like
+
+218
+00:09:00,969 --> 00:09:04,538
+eight, 12, 16, 32 gigabytes of RAM on a typical
+
+219
+00:09:04,538 --> 00:09:06,589
+consumer desktop these days.
+
+220
+00:09:06,589 --> 00:09:09,479
+Whereas GPUs actually have their own RAM built
+
+221
+00:09:09,479 --> 00:09:10,646
+into the chip.
+
+222
+00:09:12,055 --> 00:09:13,627
+There's a pretty large bottleneck communicating
+
+223
+00:09:13,627 --> 00:09:16,434
+between the RAM in your system and the GPU,
+
+224
+00:09:16,434 --> 00:09:18,508
+so the GPUs typically have their own
+
+225
+00:09:18,508 --> 00:09:22,675
+relatively large block of memory within the card itself.
+
+226
+00:09:23,955 --> 00:09:27,172
+And for the Titan XP, which again is maybe the current
+
+227
+00:09:27,172 --> 00:09:29,092
+top of the line consumer card,
+
+228
+00:09:29,092 --> 00:09:33,481
+this thing has 12 gigabytes of memory local to the GPU.
+
+229
+00:09:33,481 --> 00:09:35,462
+GPUs also have their own caching system
+
+230
+00:09:35,462 --> 00:09:37,755
+where there are sort of multiple hierarchies of caching
+
+231
+00:09:37,755 --> 00:09:40,067
+between the 12 gigabytes of GPU memory
+
+232
+00:09:40,067 --> 00:09:41,790
+and the actual GPU cores.
+
+233
+00:09:41,790 --> 00:09:44,575
+And that's somewhat similar to the caching hierarchy
+
+234
+00:09:44,575 --> 00:09:46,908
+that you might see in a CPU.
+
+235
+00:09:47,985 --> 00:09:50,652
+So, CPUs are kind of good for general purpose processing.
+
+236
+00:09:50,652 --> 00:09:52,583
+They can do a lot of different things.
+
+237
+00:09:52,583 --> 00:09:54,572
+And GPUs are maybe more specialized for these highly
+
+238
+00:09:54,572 --> 00:09:57,089
+paralyzable algorithms.
+
+239
+00:09:57,089 --> 00:09:59,167
+So the prototypical algorithm of something that works
+
+240
+00:09:59,167 --> 00:10:01,969
+really really well and is like perfectly suited
+
+241
+00:10:01,969 --> 00:10:04,106
+to a GPU is matrix multiplication.
+
+242
+00:10:04,106 --> 00:10:06,733
+So remember in matrix multiplication on the left
+
+243
+00:10:06,733 --> 00:10:09,687
+we've got like a matrix composed of a bunch of rows.
+
+244
+00:10:09,687 --> 00:10:12,482
+We multiply that on the right by another matrix composed
+
+245
+00:10:12,482 --> 00:10:14,348
+of a bunch of columns and then this produces
+
+246
+00:10:14,348 --> 00:10:17,498
+another, a final matrix where each element in the
+
+247
+00:10:17,498 --> 00:10:20,718
+output matrix is a dot product between one of the rows
+
+248
+00:10:20,718 --> 00:10:22,780
+and one of the columns of the two input matrices.
+
+249
+00:10:22,780 --> 00:10:25,009
+And these dot products are all independent.
+
+250
+00:10:25,009 --> 00:10:27,548
+Like you could imagine, for this output matrix
+
+251
+00:10:27,548 --> 00:10:29,202
+you could split it up completely
+
+252
+00:10:29,202 --> 00:10:31,110
+and have each of those different elements
+
+253
+00:10:31,110 --> 00:10:33,653
+of the output matrix all being computed in parallel
+
+254
+00:10:33,653 --> 00:10:35,646
+and they all sort of are running the same computation
+
+255
+00:10:35,646 --> 00:10:38,289
+which is taking a dot product of these two vectors.
+
+256
+00:10:38,289 --> 00:10:40,754
+But exactly where they're reading that data from
+
+257
+00:10:40,754 --> 00:10:44,177
+is from different places in the two input matrices.
+
+258
+00:10:44,177 --> 00:10:46,092
+So you could imagine that for a GPU you can just
+
+259
+00:10:46,092 --> 00:10:48,797
+like blast this out and have all of this elements
+
+260
+00:10:48,797 --> 00:10:50,390
+of the output matrix all computed in parallel
+
+261
+00:10:50,390 --> 00:10:53,909
+and that could make this thing computer super super fast
+
+262
+00:10:53,909 --> 00:10:55,166
+on GPU.
+
+263
+00:10:55,166 --> 00:10:57,985
+So that's kind of the prototypical type of problem
+
+264
+00:10:57,985 --> 00:11:00,431
+that like where a GPU is really well suited,
+
+265
+00:11:00,431 --> 00:11:02,293
+where a CPU might have to go in and step through
+
+266
+00:11:02,293 --> 00:11:04,023
+sequentially and compute each of these elements
+
+267
+00:11:04,023 --> 00:11:04,940
+one by one.
+
+268
+00:11:06,337 --> 00:11:09,473
+That picture is a little bit of a caricature because
+
+269
+00:11:09,473 --> 00:11:11,648
+CPUs these days have multiple cores,
+
+270
+00:11:11,648 --> 00:11:13,829
+they can do vectorized instructions as well,
+
+271
+00:11:13,829 --> 00:11:16,652
+but still, for these like massively parallel problems
+
+272
+00:11:16,652 --> 00:11:19,568
+GPUs tend to have much better throughput.
+
+273
+00:11:19,568 --> 00:11:21,350
+Especially when these matrices get really really big.
+
+274
+00:11:21,350 --> 00:11:24,265
+And by the way, convolution is kind of the same
+
+275
+00:11:24,265 --> 00:11:25,404
+kind of story.
+
+276
+00:11:25,404 --> 00:11:27,827
+Where you know in convolution we have this input tensor,
+
+277
+00:11:27,827 --> 00:11:30,128
+we have this weight tensor and then every point in the
+
+278
+00:11:30,128 --> 00:11:33,026
+output tensor after a convolution is again some inner
+
+279
+00:11:33,026 --> 00:11:35,081
+product between some part of the weights
+
+280
+00:11:35,081 --> 00:11:36,359
+and some part of the input.
+
+281
+00:11:36,359 --> 00:11:38,326
+And you can imagine that a GPU could really paralyze
+
+282
+00:11:38,326 --> 00:11:41,693
+this computation, split it all up across the many cores
+
+283
+00:11:41,693 --> 00:11:43,354
+and compute it very quickly.
+
+284
+00:11:43,354 --> 00:11:45,746
+So that's kind of the general flavor of the types
+
+285
+00:11:45,746 --> 00:11:48,677
+of problems where GPUs give you a huge speed advantage
+
+286
+00:11:48,677 --> 00:11:49,510
+over CPUs.
+
+287
+00:11:51,695 --> 00:11:54,023
+So you can actually write programs that run directly
+
+288
+00:11:54,023 --> 00:11:55,498
+on GPUs.
+
+289
+00:11:55,498 --> 00:11:58,136
+So NVIDIA has this CUDA abstraction that lets you write
+
+290
+00:11:58,136 --> 00:12:00,378
+code that kind of looks like C,
+
+291
+00:12:00,378 --> 00:12:03,614
+but executes directly on the GPUs.
+
+292
+00:12:03,614 --> 00:12:05,484
+But CUDA code is really really tricky.
+
+293
+00:12:05,484 --> 00:12:08,023
+It's actually really tough to write CUDA code that's
+
+294
+00:12:08,023 --> 00:12:10,056
+performant and actually squeezes all the juice out
+
+295
+00:12:10,056 --> 00:12:12,002
+of these GPUs.
+
+296
+00:12:12,002 --> 00:12:13,842
+You have to be very careful managing the memory hierarchy
+
+297
+00:12:13,842 --> 00:12:16,140
+and making sure you don't have cache misses
+
+298
+00:12:16,140 --> 00:12:19,163
+and branch mispredictions and all that sort of stuff.
+
+299
+00:12:19,163 --> 00:12:21,373
+So it's actually really really hard to write performant
+
+300
+00:12:21,373 --> 00:12:22,930
+CUDA code on your own.
+
+301
+00:12:22,930 --> 00:12:25,885
+So as a result NVIDIA has released a lot of libraries
+
+302
+00:12:25,885 --> 00:12:29,152
+that implement common computational primitives
+
+303
+00:12:29,152 --> 00:12:32,537
+that are very very highly optimized for GPUs.
+
+304
+00:12:32,537 --> 00:12:35,938
+So for example NVIDIA has a cuBLAS library that implements
+
+305
+00:12:35,938 --> 00:12:38,152
+different kinds of matrix multiplications
+
+306
+00:12:38,152 --> 00:12:40,610
+and different matrix operations that are super optimized,
+
+307
+00:12:40,610 --> 00:12:43,517
+run really well on GPU, get very close to sort of
+
+308
+00:12:43,517 --> 00:12:46,438
+theoretical peak hardware utilization.
+
+309
+00:12:46,438 --> 00:12:48,817
+Similarly they have a cuDNN library which implements
+
+310
+00:12:48,817 --> 00:12:51,964
+things like convolution, forward and backward passes,
+
+311
+00:12:51,964 --> 00:12:54,499
+batch normalization, recurrent networks,
+
+312
+00:12:54,499 --> 00:12:56,116
+all these kinds of computational primitives
+
+313
+00:12:56,116 --> 00:12:57,454
+that we need in deep learning.
+
+314
+00:12:57,454 --> 00:13:00,053
+NVIDIA has gone in there and released their own binaries
+
+315
+00:13:00,053 --> 00:13:02,060
+that compute these primitives very efficiently
+
+316
+00:13:02,060 --> 00:13:03,842
+on NVIDIA hardware.
+
+317
+00:13:03,842 --> 00:13:07,777
+So in practice, you tend not to end up writing your own
+
+318
+00:13:07,777 --> 00:13:09,624
+CUDA code for deep learning.
+
+319
+00:13:09,624 --> 00:13:12,642
+You typically are just mostly calling into existing
+
+320
+00:13:12,642 --> 00:13:14,173
+code that other people have written.
+
+321
+00:13:14,173 --> 00:13:16,493
+Much of which is the stuff which has been heavily
+
+322
+00:13:16,493 --> 00:13:19,573
+optimized by NVIDIA already.
+
+323
+00:13:19,573 --> 00:13:22,457
+There's another sort of language called OpenCL
+
+324
+00:13:22,457 --> 00:13:23,693
+which is a bit more general.
+
+325
+00:13:23,693 --> 00:13:25,850
+Runs on more than just NVIDIA GPUs,
+
+326
+00:13:25,850 --> 00:13:29,185
+can run on AMD hardware, can run on CPUs,
+
+327
+00:13:29,185 --> 00:13:33,524
+but OpenCL, nobody's really spent a really large amount
+
+328
+00:13:33,524 --> 00:13:36,742
+of effort and energy trying to get optimized deep learning
+
+329
+00:13:36,742 --> 00:13:39,934
+primitives for OpenCL, so it tends to be a lot less
+
+330
+00:13:39,934 --> 00:13:43,938
+performant the super optimized versions in CUDA.
+
+331
+00:13:43,938 --> 00:13:46,262
+So maybe in the future we might see a bit of a more open
+
+332
+00:13:46,262 --> 00:13:49,008
+standard and we might see this across many different
+
+333
+00:13:49,008 --> 00:13:51,839
+more types of platforms, but at least for now,
+
+334
+00:13:51,839 --> 00:13:55,488
+NVIDIA's kind of the main game in town for deep learning.
+
+335
+00:13:55,488 --> 00:13:58,159
+So you can check, there's a lot of different resources
+
+336
+00:13:58,159 --> 00:14:00,853
+for learning about how you can do GPU programming yourself.
+
+337
+00:14:00,853 --> 00:14:01,686
+It's kind of fun.
+
+338
+00:14:01,686 --> 00:14:03,919
+It's sort of a different paradigm of writing code
+
+339
+00:14:03,919 --> 00:14:05,900
+because it's this massively parallel architecture,
+
+340
+00:14:05,900 --> 00:14:08,023
+but that's a bit beyond the scope of this course.
+
+341
+00:14:08,023 --> 00:14:10,424
+And again, you don't really need to write your own
+
+342
+00:14:10,424 --> 00:14:12,263
+CUDA code much in practice for deep learning.
+
+343
+00:14:12,263 --> 00:14:14,872
+And in fact, I've never written my own CUDA code
+
+344
+00:14:14,872 --> 00:14:16,600
+for any research project, so,
+
+345
+00:14:16,600 --> 00:14:18,856
+but it is kind of useful to know like how it works
+
+346
+00:14:18,856 --> 00:14:20,552
+and what are the basic ideas even if you're not
+
+347
+00:14:20,552 --> 00:14:22,219
+writing it yourself.
+
+348
+00:14:23,488 --> 00:14:26,060
+So if you want to look at kind of CPU GPU performance
+
+349
+00:14:26,060 --> 00:14:29,168
+in practice, I did some benchmarks last summer
+
+350
+00:14:29,168 --> 00:14:31,501
+comparing a decent Intel CPU
+
+351
+00:14:34,183 --> 00:14:36,766
+against a bunch of different GPUs that were sort
+
+352
+00:14:36,766 --> 00:14:38,747
+of near top of the line at that time.
+
+353
+00:14:38,747 --> 00:14:41,098
+And these were my own benchmarks that you can find
+
+354
+00:14:41,098 --> 00:14:44,787
+more details on GitHub, but my findings were that
+
+355
+00:14:44,787 --> 00:14:48,954
+for things like VGG 16 and 19, ResNets, various ResNets,
+
+356
+00:14:49,830 --> 00:14:53,186
+then you typically see something like a 65 to 75 times
+
+357
+00:14:53,186 --> 00:14:57,114
+speed up when running the exact same computation
+
+358
+00:14:57,114 --> 00:15:00,984
+on a top of the line GPU, in this case a Pascal Titan X,
+
+359
+00:15:00,984 --> 00:15:04,183
+versus a top of the line, well, not quite top of the line
+
+360
+00:15:04,183 --> 00:15:08,604
+CPU, which in this case was an Intel E5 processor.
+
+361
+00:15:08,604 --> 00:15:12,388
+Although, I'd like to make one sort of caveat here
+
+362
+00:15:12,388 --> 00:15:14,194
+is that you always need to be super careful
+
+363
+00:15:14,194 --> 00:15:15,550
+whenever you're reading any kind of benchmarks
+
+364
+00:15:15,550 --> 00:15:18,040
+about deep learning, because it's super easy to be
+
+365
+00:15:18,040 --> 00:15:20,103
+unfair between different things.
+
+366
+00:15:20,103 --> 00:15:22,103
+And you kind of need to know a lot of the details about
+
+367
+00:15:22,103 --> 00:15:24,374
+what exactly is being benchmarked in order to know
+
+368
+00:15:24,374 --> 00:15:26,339
+whether or not the comparison is fair.
+
+369
+00:15:26,339 --> 00:15:29,068
+So in this case I'll come right out and tell you
+
+370
+00:15:29,068 --> 00:15:31,473
+that probably this comparison is a little bit unfair
+
+371
+00:15:31,473 --> 00:15:35,855
+to CPU because I didn't spend a lot of effort
+
+372
+00:15:35,855 --> 00:15:37,638
+trying to squeeze the maximal performance
+
+373
+00:15:37,638 --> 00:15:38,721
+out of CPUs.
+
+374
+00:15:38,721 --> 00:15:41,065
+I probably could have tuned the blast libraries better
+
+375
+00:15:41,065 --> 00:15:42,483
+for the CPU performance.
+
+376
+00:15:42,483 --> 00:15:43,707
+And I probably could have gotten these numbers
+
+377
+00:15:43,707 --> 00:15:44,540
+a bit better.
+
+378
+00:15:44,540 --> 00:15:46,540
+This was sort of out of the box performance
+
+379
+00:15:46,540 --> 00:15:49,180
+between just installing Torch, running it on a CPU,
+
+380
+00:15:49,180 --> 00:15:51,964
+just installing Torch running it on a GPU.
+
+381
+00:15:51,964 --> 00:15:53,884
+So this is kind of out of the box performance,
+
+382
+00:15:53,884 --> 00:15:56,277
+but it's not really like peak, possible, theoretical
+
+383
+00:15:56,277 --> 00:15:57,872
+throughput on the CPU.
+
+384
+00:15:57,872 --> 00:16:00,263
+But that being said, I think there are still pretty
+
+385
+00:16:00,263 --> 00:16:02,422
+substantial speed ups to be had here.
+
+386
+00:16:02,422 --> 00:16:05,660
+Another kind of interesting outcome from this benchmarking
+
+387
+00:16:05,660 --> 00:16:09,602
+was comparing these optimized cuDNN libraries
+
+388
+00:16:09,602 --> 00:16:12,478
+from NVIDIA for convolution and whatnot versus
+
+389
+00:16:12,478 --> 00:16:15,543
+sort of more naive CUDA that had been hand written
+
+390
+00:16:15,543 --> 00:16:17,623
+out in the open source community.
+
+391
+00:16:17,623 --> 00:16:19,815
+And you can see that if you compare the same networks
+
+392
+00:16:19,815 --> 00:16:22,278
+on the same hardware with the same deep learning
+
+393
+00:16:22,278 --> 00:16:24,653
+framework and the only difference is swapping out
+
+394
+00:16:24,653 --> 00:16:27,340
+these cuDNN versus sort of hand written, less optimized
+
+395
+00:16:27,340 --> 00:16:30,312
+CUDA you can see something like nearly a three X speed up
+
+396
+00:16:30,312 --> 00:16:33,714
+across the board when you switch from the relatively
+
+397
+00:16:33,714 --> 00:16:35,777
+simple CUDA to these like super optimized cuDNN
+
+398
+00:16:35,777 --> 00:16:37,442
+implementations.
+
+399
+00:16:37,442 --> 00:16:40,044
+So in general, whenever you're writing code on GPU,
+
+400
+00:16:40,044 --> 00:16:43,143
+you should probably almost always like just make sure
+
+401
+00:16:43,143 --> 00:16:45,202
+you're using cuDNN because you're leaving probably
+
+402
+00:16:45,202 --> 00:16:47,703
+a three X performance boost on the table if you're
+
+403
+00:16:47,703 --> 00:16:51,602
+not calling into cuDNN for your stuff.
+
+404
+00:16:51,602 --> 00:16:53,362
+So another problem that comes up in practice,
+
+405
+00:16:53,362 --> 00:16:55,383
+when you're training these things is that
+
+406
+00:16:55,383 --> 00:16:57,564
+you know, your model is maybe sitting on the GPU,
+
+407
+00:16:57,564 --> 00:16:59,922
+the weights of the model are in that 12 gigabytes
+
+408
+00:16:59,922 --> 00:17:02,882
+of local storage on the GPU, but your big dataset
+
+409
+00:17:02,882 --> 00:17:05,202
+is sitting over on the right on a hard drive
+
+410
+00:17:05,202 --> 00:17:07,244
+or an SSD or something like that.
+
+411
+00:17:07,244 --> 00:17:10,204
+So if you're not careful you can actually bottleneck
+
+412
+00:17:10,204 --> 00:17:12,122
+your training by just trying to read the data
+
+413
+00:17:12,122 --> 00:17:13,205
+off the disk.
+
+414
+00:17:14,322 --> 00:17:16,114
+'Cause the GPU is super fast, it can compute
+
+415
+00:17:16,114 --> 00:17:18,642
+forward and backward quite fast, but if you're reading
+
+416
+00:17:18,642 --> 00:17:20,974
+sequentially off a spinning disk, you can actually
+
+417
+00:17:20,974 --> 00:17:23,003
+bottleneck your training quite,
+
+418
+00:17:23,003 --> 00:17:25,700
+and that can be really bad and slow you down.
+
+419
+00:17:25,700 --> 00:17:27,180
+So some solutions here are that like you know
+
+420
+00:17:27,180 --> 00:17:29,848
+if your dataset's really small, sometimes you might just
+
+421
+00:17:29,848 --> 00:17:31,459
+read the whole dataset into RAM.
+
+422
+00:17:31,459 --> 00:17:33,484
+Or even if your dataset isn't so small,
+
+423
+00:17:33,484 --> 00:17:35,005
+but you have a giant server with a ton of RAM,
+
+424
+00:17:35,005 --> 00:17:36,479
+you might do that anyway.
+
+425
+00:17:36,479 --> 00:17:38,663
+You can also make sure you're using an SSD instead
+
+426
+00:17:38,663 --> 00:17:42,917
+of a hard drive, that can help a lot with read throughput.
+
+427
+00:17:42,917 --> 00:17:45,495
+Another common strategy is to use multiple threads
+
+428
+00:17:45,495 --> 00:17:49,162
+on the CPU that are pre-fetching data off RAM
+
+429
+00:17:49,162 --> 00:17:52,152
+or off disk, buffering it in memory, in RAM so that
+
+430
+00:17:52,152 --> 00:17:54,705
+then you can continue feeding that buffer data down
+
+431
+00:17:54,705 --> 00:17:57,724
+to the GPU with good performance.
+
+432
+00:17:57,724 --> 00:17:59,107
+This is a little bit painful to set up,
+
+433
+00:17:59,107 --> 00:18:01,826
+but again like, these GPU's are so fast that
+
+434
+00:18:01,826 --> 00:18:03,682
+if you're not really careful with trying to feed
+
+435
+00:18:03,682 --> 00:18:05,543
+them data as quickly as possible,
+
+436
+00:18:05,543 --> 00:18:07,164
+just reading the data can sometimes bottleneck
+
+437
+00:18:07,164 --> 00:18:08,804
+the whole training process.
+
+438
+00:18:08,804 --> 00:18:11,657
+So that's something to be aware of.
+
+439
+00:18:11,657 --> 00:18:13,528
+So that's kind of the brief introduction to like
+
+440
+00:18:13,528 --> 00:18:15,900
+sort of GPU CPU hardware in practice when it comes
+
+441
+00:18:15,900 --> 00:18:17,432
+to deep learning.
+
+442
+00:18:17,432 --> 00:18:19,215
+And then I wanted to switch gears a little bit
+
+443
+00:18:19,215 --> 00:18:21,616
+and talk about the software side of things.
+
+444
+00:18:21,616 --> 00:18:23,923
+The various deep learning frameworks that people are using
+
+445
+00:18:23,923 --> 00:18:25,006
+in practice.
+
+446
+00:18:25,006 --> 00:18:26,190
+But I guess before I move on,
+
+447
+00:18:26,190 --> 00:18:28,819
+is there any sort of questions about CPU GPU?
+
+448
+00:18:28,819 --> 00:18:30,519
+Yeah, question?
+
+449
+00:18:30,519 --> 00:18:34,686
+[student's words obscured due to lack of microphone]
+
+450
+00:18:40,961 --> 00:18:42,689
+Yeah, so the question is what can you sort of,
+
+451
+00:18:42,689 --> 00:18:44,289
+what can you do mechanically when you're coding
+
+452
+00:18:44,289 --> 00:18:45,854
+to avoid these problems?
+
+453
+00:18:45,854 --> 00:18:47,872
+Probably the biggest thing you can do in software
+
+454
+00:18:47,872 --> 00:18:50,833
+is set up sort of pre-fetching on the CPU.
+
+455
+00:18:50,833 --> 00:18:53,097
+Like you couldn't like, sort of a naive thing
+
+456
+00:18:53,097 --> 00:18:55,054
+would be you have this sequential process where you
+
+457
+00:18:55,054 --> 00:18:57,441
+first read data off disk, wait for the data,
+
+458
+00:18:57,441 --> 00:18:58,791
+wait for the minibatch to be read,
+
+459
+00:18:58,791 --> 00:19:00,697
+then feed the minibatch to the GPU,
+
+460
+00:19:00,697 --> 00:19:02,458
+then go forward and backward on the GPU,
+
+461
+00:19:02,458 --> 00:19:04,442
+then read another minibatch and sort of do this all
+
+462
+00:19:04,442 --> 00:19:05,442
+in sequence.
+
+463
+00:19:06,714 --> 00:19:08,217
+And if you actually have multiple,
+
+464
+00:19:08,217 --> 00:19:10,533
+like instead you might have CPU threads running in the
+
+465
+00:19:10,533 --> 00:19:13,277
+background that are fetching data off the disk
+
+466
+00:19:13,277 --> 00:19:15,469
+such that while the,
+
+467
+00:19:15,469 --> 00:19:17,076
+you can sort of interleave all of these things.
+
+468
+00:19:17,076 --> 00:19:18,794
+Like the GPU is computing,
+
+469
+00:19:18,794 --> 00:19:21,506
+the CPU background threads are feeding data off disk
+
+470
+00:19:21,506 --> 00:19:23,499
+and your main thread is kind of waiting for these things to,
+
+471
+00:19:23,499 --> 00:19:25,792
+just doing a bit of synchronization between these things
+
+472
+00:19:25,792 --> 00:19:28,534
+so they're all happening in parallel.
+
+473
+00:19:28,534 --> 00:19:30,937
+And thankfully if you're using some of these deep learning
+
+474
+00:19:30,937 --> 00:19:32,851
+frameworks that we're about to talk about,
+
+475
+00:19:32,851 --> 00:19:34,709
+then some of this work has already been done for you
+
+476
+00:19:34,709 --> 00:19:38,016
+'cause it's a little bit painful.
+
+477
+00:19:38,016 --> 00:19:40,110
+So the landscape of deep learning frameworks
+
+478
+00:19:40,110 --> 00:19:41,738
+is super fast moving.
+
+479
+00:19:41,738 --> 00:19:44,789
+So last year when I gave this lecture I talked mostly
+
+480
+00:19:44,789 --> 00:19:47,915
+about Caffe, Torch, Theano and TensorFlow.
+
+481
+00:19:47,915 --> 00:19:51,449
+And when I last gave this talk, again more than a year ago,
+
+482
+00:19:51,449 --> 00:19:53,753
+TensorFlow was relatively new.
+
+483
+00:19:53,753 --> 00:19:57,814
+It had not seen super widespread adoption yet at that time.
+
+484
+00:19:57,814 --> 00:20:00,232
+But now I think in the last year TensorFlow
+
+485
+00:20:00,232 --> 00:20:01,903
+has gotten much more popular.
+
+486
+00:20:01,903 --> 00:20:04,393
+It's probably the main framework of choice for many people.
+
+487
+00:20:04,393 --> 00:20:06,310
+So that's a big change.
+
+488
+00:20:07,342 --> 00:20:09,833
+We've also seen a ton of new frameworks
+
+489
+00:20:09,833 --> 00:20:12,282
+sort of popping up like mushrooms in the last year.
+
+490
+00:20:12,282 --> 00:20:15,732
+So in particular Caffe2 and PyTorch are new frameworks
+
+491
+00:20:15,732 --> 00:20:18,052
+from Facebook that I think are pretty interesting.
+
+492
+00:20:18,052 --> 00:20:20,409
+There's also a ton of other frameworks.
+
+493
+00:20:20,409 --> 00:20:24,089
+Paddle, Baidu has Paddle, Microsoft has CNTK,
+
+494
+00:20:24,089 --> 00:20:28,592
+Amazon is mostly using MXNet and there's a ton
+
+495
+00:20:28,592 --> 00:20:30,337
+of other frameworks as well, but I'm less familiar with,
+
+496
+00:20:30,337 --> 00:20:33,449
+and really don't have time to get into.
+
+497
+00:20:33,449 --> 00:20:37,110
+But one interesting thing to point out from this picture
+
+498
+00:20:37,110 --> 00:20:39,757
+is that kind of the first generation of deep learning
+
+499
+00:20:39,757 --> 00:20:41,839
+frameworks that really saw wide adoption
+
+500
+00:20:41,839 --> 00:20:43,572
+were built in academia.
+
+501
+00:20:43,572 --> 00:20:45,572
+So Caffe was from Berkeley, Torch was developed
+
+502
+00:20:45,572 --> 00:20:49,388
+originally NYU and also in collaboration with Facebook.
+
+503
+00:20:49,388 --> 00:20:52,077
+And Theana was mostly build at the University of Montreal.
+
+504
+00:20:52,077 --> 00:20:54,491
+But these kind of next generation deep learning
+
+505
+00:20:54,491 --> 00:20:56,491
+frameworks all originated in industry.
+
+506
+00:20:56,491 --> 00:20:58,989
+So Caffe2 is from Facebook, PyTorch is from Facebook.
+
+507
+00:20:58,989 --> 00:21:00,659
+TensorFlow is from Google.
+
+508
+00:21:00,659 --> 00:21:02,557
+So it's kind of an interesting shift that we've seen
+
+509
+00:21:02,557 --> 00:21:04,727
+in the landscape over the last couple of years
+
+510
+00:21:04,727 --> 00:21:06,866
+is that these ideas have really moved a lot
+
+511
+00:21:06,866 --> 00:21:08,925
+from academia into industry.
+
+512
+00:21:08,925 --> 00:21:10,770
+And now industry is kind of giving us these big powerful
+
+513
+00:21:10,770 --> 00:21:13,187
+nice frameworks to work with.
+
+514
+00:21:14,147 --> 00:21:17,092
+So today I wanted to mostly talk about PyTorch
+
+515
+00:21:17,092 --> 00:21:19,988
+and TensorFlow 'cause I personally think that those
+
+516
+00:21:19,988 --> 00:21:22,601
+are probably the ones you should be focusing on for
+
+517
+00:21:22,601 --> 00:21:24,850
+a lot of research type problems these days.
+
+518
+00:21:24,850 --> 00:21:28,470
+I'll also talk a bit about Caffe and Caffe2.
+
+519
+00:21:28,470 --> 00:21:32,192
+But probably a little bit less emphasis on those.
+
+520
+00:21:32,192 --> 00:21:34,341
+And before we move any farther, I thought I should make
+
+521
+00:21:34,341 --> 00:21:36,705
+my own biases a little bit more explicit.
+
+522
+00:21:36,705 --> 00:21:39,058
+So I have mostly, I've worked with Torch mostly
+
+523
+00:21:39,058 --> 00:21:40,315
+for the last several years.
+
+524
+00:21:40,315 --> 00:21:43,501
+And I've used it quite a lot, I like it a lot.
+
+525
+00:21:43,501 --> 00:21:46,306
+And then in the last year I've mostly switched to PyTorch
+
+526
+00:21:46,306 --> 00:21:48,568
+as my main research framework.
+
+527
+00:21:48,568 --> 00:21:50,487
+So I have a little bit less experience with some
+
+528
+00:21:50,487 --> 00:21:52,306
+of these others, especially TensorFlow,
+
+529
+00:21:52,306 --> 00:21:54,087
+but I'll still try to do my best to give you a fair
+
+530
+00:21:54,087 --> 00:21:58,382
+picture and a decent overview of these things.
+
+531
+00:21:58,382 --> 00:22:02,507
+So, remember that in the last several lectures
+
+532
+00:22:02,507 --> 00:22:04,725
+we've hammered this idea of computational graphs in
+
+533
+00:22:04,725 --> 00:22:06,807
+sort of over and over.
+
+534
+00:22:06,807 --> 00:22:08,217
+That whenever you're doing deep learning,
+
+535
+00:22:08,217 --> 00:22:09,970
+you want to think about building some computational graph
+
+536
+00:22:09,970 --> 00:22:13,176
+that computes whatever function that you want to compute.
+
+537
+00:22:13,176 --> 00:22:15,090
+So in the case of a linear classifier you'll combine
+
+538
+00:22:15,090 --> 00:22:18,778
+your data X and your weights W with a matrix multiply.
+
+539
+00:22:18,778 --> 00:22:21,554
+You'll do some kind of hinge loss to maybe have,
+
+540
+00:22:21,554 --> 00:22:22,832
+compute your loss.
+
+541
+00:22:22,832 --> 00:22:24,386
+You'll have some regularization term
+
+542
+00:22:24,386 --> 00:22:26,397
+and you imagine stitching together all these different
+
+543
+00:22:26,397 --> 00:22:28,909
+operations into some graph structure.
+
+544
+00:22:28,909 --> 00:22:31,069
+Remember that these graph structures can get pretty
+
+545
+00:22:31,069 --> 00:22:33,191
+complex in the case of a big neural net,
+
+546
+00:22:33,191 --> 00:22:34,680
+now there's many different layers,
+
+547
+00:22:34,680 --> 00:22:36,167
+many different activations.
+
+548
+00:22:36,167 --> 00:22:38,087
+Many different weights spread all around in a pretty
+
+549
+00:22:38,087 --> 00:22:39,687
+complex graph.
+
+550
+00:22:39,687 --> 00:22:41,490
+And as you move to things like neural turing machines
+
+551
+00:22:41,490 --> 00:22:44,130
+then you can get these really crazy computational graphs
+
+552
+00:22:44,130 --> 00:22:45,911
+that you can't even really draw because they're
+
+553
+00:22:45,911 --> 00:22:47,328
+so big and messy.
+
+554
+00:22:48,349 --> 00:22:52,127
+So the point of deep learning frameworks is really,
+
+555
+00:22:52,127 --> 00:22:54,392
+there's really kind of three main reasons why you might
+
+556
+00:22:54,392 --> 00:22:56,425
+want to use one of these deep learning frameworks
+
+557
+00:22:56,425 --> 00:22:58,727
+rather than just writing your own code.
+
+558
+00:22:58,727 --> 00:23:01,414
+So the first would be that these frameworks enable
+
+559
+00:23:01,414 --> 00:23:03,255
+you to easily build and work with these big hairy
+
+560
+00:23:03,255 --> 00:23:05,950
+computational graphs without kind of worrying
+
+561
+00:23:05,950 --> 00:23:08,610
+about a lot of those bookkeeping details yourself.
+
+562
+00:23:08,610 --> 00:23:10,860
+Another major idea is that,
+
+563
+00:23:11,716 --> 00:23:13,479
+whenever we're working in deep learning
+
+564
+00:23:13,479 --> 00:23:14,812
+we always need to compute gradients.
+
+565
+00:23:14,812 --> 00:23:16,211
+We're always computing some loss,
+
+566
+00:23:16,211 --> 00:23:17,629
+we're always computer gradient of our weight
+
+567
+00:23:17,629 --> 00:23:18,900
+with respect to the loss.
+
+568
+00:23:18,900 --> 00:23:22,973
+And we'd like to make this automatically computing gradient,
+
+569
+00:23:22,973 --> 00:23:26,115
+you don't want to have to write that code yourself.
+
+570
+00:23:26,115 --> 00:23:28,287
+You want that framework to handle all these back propagation
+
+571
+00:23:28,287 --> 00:23:30,485
+details for you so you can just think about
+
+572
+00:23:30,485 --> 00:23:32,526
+writing down the forward pass of your network
+
+573
+00:23:32,526 --> 00:23:34,725
+and have the backward pass sort of come out for free
+
+574
+00:23:34,725 --> 00:23:36,539
+without any additional work.
+
+575
+00:23:36,539 --> 00:23:38,905
+And finally you want all this stuff to run efficiently
+
+576
+00:23:38,905 --> 00:23:42,000
+on GPUs so you don't have to worry too much about these
+
+577
+00:23:42,000 --> 00:23:44,973
+low level hardware details about cuBLAS and cuDNN
+
+578
+00:23:44,973 --> 00:23:48,389
+and CUDA and moving data between the CPU and GPU memory.
+
+579
+00:23:48,389 --> 00:23:51,030
+You kind of want all those messy details to be taken care of
+
+580
+00:23:51,030 --> 00:23:52,439
+for you.
+
+581
+00:23:52,439 --> 00:23:54,483
+So those are kind of some of the major reasons
+
+582
+00:23:54,483 --> 00:23:56,930
+why you might choose to use frameworks rather than
+
+583
+00:23:56,930 --> 00:23:59,450
+writing your own stuff from scratch.
+
+584
+00:23:59,450 --> 00:24:02,969
+So as kind of a concrete example of a computational graph
+
+585
+00:24:02,969 --> 00:24:05,231
+we can maybe write down this super simple thing.
+
+586
+00:24:05,231 --> 00:24:08,367
+Where we have three inputs, X, Y, and Z.
+
+587
+00:24:08,367 --> 00:24:09,908
+We're going to combine X and Y to produce A.
+
+588
+00:24:09,908 --> 00:24:13,071
+Then we're going to combine A and Z to produce B
+
+589
+00:24:13,071 --> 00:24:15,406
+and then finally we're going to do some maybe summing out
+
+590
+00:24:15,406 --> 00:24:18,630
+operation on B to give some scaler final result C.
+
+591
+00:24:18,630 --> 00:24:21,638
+So you've probably written enough Numpy code at this point
+
+592
+00:24:21,638 --> 00:24:24,310
+to realize that it's super easy to write down,
+
+593
+00:24:24,310 --> 00:24:27,216
+to implement this computational graph,
+
+594
+00:24:27,216 --> 00:24:30,798
+or rather to implement this bit of computation in Numpy,
+
+595
+00:24:30,798 --> 00:24:31,631
+right?
+
+596
+00:24:31,631 --> 00:24:33,724
+You can just kind of write down in Numpy that you want to
+
+597
+00:24:33,724 --> 00:24:36,508
+generate some random data, you want to multiply two things,
+
+598
+00:24:36,508 --> 00:24:38,547
+you want to add two things, you want to sum out a couple things.
+
+599
+00:24:38,547 --> 00:24:41,923
+And it's really easy to do this in Numpy.
+
+600
+00:24:41,923 --> 00:24:44,360
+But then the question is like suppose that we want
+
+601
+00:24:44,360 --> 00:24:48,355
+to compute the gradient of C with respect to X, Y, and Z.
+
+602
+00:24:48,355 --> 00:24:51,149
+So, if you're working in Numpy, you kind of need to write out
+
+603
+00:24:51,149 --> 00:24:52,725
+this backward pass yourself.
+
+604
+00:24:52,725 --> 00:24:54,965
+And you've gotten a lot of practice with this on the
+
+605
+00:24:54,965 --> 00:24:58,127
+homeworks, but it can be kind of a pain
+
+606
+00:24:58,127 --> 00:25:00,306
+and a little bit annoying and messy once you get to
+
+607
+00:25:00,306 --> 00:25:02,859
+really big complicated things.
+
+608
+00:25:02,859 --> 00:25:04,487
+The other problem with Numpy is that it doesn't run
+
+609
+00:25:04,487 --> 00:25:05,675
+on the GPU.
+
+610
+00:25:05,675 --> 00:25:08,189
+So Numpy is definitely CPU only.
+
+611
+00:25:08,189 --> 00:25:10,514
+And you're never going to be able to experience
+
+612
+00:25:10,514 --> 00:25:13,112
+or take advantage of these GPU accelerated speedups
+
+613
+00:25:13,112 --> 00:25:14,920
+if you're stuck working in Numpy.
+
+614
+00:25:14,920 --> 00:25:17,011
+And it's, again, it's a pain to have to compute
+
+615
+00:25:17,011 --> 00:25:19,527
+your own gradients in all these situations.
+
+616
+00:25:19,527 --> 00:25:22,807
+So, kind of the goal of most deep learning frameworks
+
+617
+00:25:22,807 --> 00:25:26,829
+these days is to let you write code in the forward pass
+
+618
+00:25:26,829 --> 00:25:29,047
+that looks very similar to Numpy,
+
+619
+00:25:29,047 --> 00:25:31,170
+but lets you run it on the GPU
+
+620
+00:25:31,170 --> 00:25:33,069
+and lets you automatically compute gradients.
+
+621
+00:25:33,069 --> 00:25:34,967
+And that's kind of the big picture goal of most of these
+
+622
+00:25:34,967 --> 00:25:36,397
+frameworks.
+
+623
+00:25:36,397 --> 00:25:38,533
+So if you imagine looking at, if we look at an example
+
+624
+00:25:38,533 --> 00:25:42,226
+in TensorFlow of the exact same computational graph,
+
+625
+00:25:42,226 --> 00:25:44,314
+we now see that in this forward pass,
+
+626
+00:25:44,314 --> 00:25:47,241
+you write this code that ends up looking very very similar
+
+627
+00:25:47,241 --> 00:25:49,334
+to the Numpy forward pass where you're kind of doing
+
+628
+00:25:49,334 --> 00:25:52,687
+these multiplication and these addition operations.
+
+629
+00:25:52,687 --> 00:25:55,669
+But now TensorFlow has this magic line that just
+
+630
+00:25:55,669 --> 00:25:57,623
+computes all the gradients for you.
+
+631
+00:25:57,623 --> 00:25:59,686
+So now you don't have go in and write your own backward pass
+
+632
+00:25:59,686 --> 00:26:02,235
+and that's much more convenient.
+
+633
+00:26:02,235 --> 00:26:04,095
+The other nice thing about TensorFlow is you can really
+
+634
+00:26:04,095 --> 00:26:06,841
+just, like with one line you can switch all this computation
+
+635
+00:26:06,841 --> 00:26:08,926
+between CPU and GPU.
+
+636
+00:26:08,926 --> 00:26:11,016
+So here, if you just add this with statement
+
+637
+00:26:11,016 --> 00:26:13,037
+before you're doing this forward pass,
+
+638
+00:26:13,037 --> 00:26:14,866
+you just can explicitly tell the framework,
+
+639
+00:26:14,866 --> 00:26:16,668
+hey I want to run this code on the CPU.
+
+640
+00:26:16,668 --> 00:26:19,537
+But now if we just change that with statement a little bit
+
+641
+00:26:19,537 --> 00:26:21,527
+with just with a one character change in this case,
+
+642
+00:26:21,527 --> 00:26:24,866
+changing that C to a G, now the code runs on GPU.
+
+643
+00:26:24,866 --> 00:26:27,868
+And now in this little code snippet,
+
+644
+00:26:27,868 --> 00:26:29,539
+we've solved these two problems.
+
+645
+00:26:29,539 --> 00:26:31,388
+We're running our code on the GPU
+
+646
+00:26:31,388 --> 00:26:33,127
+and we're having the framework compute all the gradients
+
+647
+00:26:33,127 --> 00:26:35,685
+for us, so that's really nice.
+
+648
+00:26:35,685 --> 00:26:38,459
+And PyTorch kind looks almost exactly the same.
+
+649
+00:26:38,459 --> 00:26:40,349
+So again, in PyTorch you kind of write down,
+
+650
+00:26:40,349 --> 00:26:42,509
+you define some variables,
+
+651
+00:26:42,509 --> 00:26:45,149
+you have some forward pass and the forward pass again
+
+652
+00:26:45,149 --> 00:26:47,640
+looks very similar to like, in this case identical
+
+653
+00:26:47,640 --> 00:26:49,262
+to the Numpy code.
+
+654
+00:26:49,262 --> 00:26:52,146
+And then again, you can just use PyTorch to compute
+
+655
+00:26:52,146 --> 00:26:56,251
+gradients, all your gradients with just one line.
+
+656
+00:26:56,251 --> 00:26:58,084
+And now in PyTorch again, it's really easy to switch
+
+657
+00:26:58,084 --> 00:27:00,263
+to GPU, you just need to cast all your stuff to the
+
+658
+00:27:00,263 --> 00:27:03,210
+CUDA data type before you rung your computation
+
+659
+00:27:03,210 --> 00:27:06,781
+and now everything runs transparently on the GPU for you.
+
+660
+00:27:06,781 --> 00:27:09,091
+So if you kind of just look at these three examples,
+
+661
+00:27:09,091 --> 00:27:11,321
+these three snippets of code side by side,
+
+662
+00:27:11,321 --> 00:27:13,878
+the Numpy, the TensorFlow and the PyTorch
+
+663
+00:27:13,878 --> 00:27:17,579
+you see that the TensorFlow and the PyTorch code
+
+664%0

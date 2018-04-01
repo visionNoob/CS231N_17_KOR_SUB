@@ -1,0 +1,2630 @@
+﻿1
+00:00:08,691 --> 00:00:10,473
+- Hello, hi.
+
+2
+00:00:10,473 --> 00:00:12,238
+So I want to get started.
+
+3
+00:00:12,238 --> 00:00:15,430
+Welcome to CS 231N Lecture 11.
+
+4
+00:00:15,430 --> 00:00:17,859
+We're going to talk about today detection segmentation
+
+5
+00:00:17,859 --> 00:00:20,038
+and a whole bunch of other really exciting topics
+
+6
+00:00:20,038 --> 00:00:23,259
+around core computer vision tasks.
+
+7
+00:00:23,259 --> 00:00:25,590
+But as usual, a couple administrative notes.
+
+8
+00:00:25,590 --> 00:00:29,356
+So last time you obviously took the midterm,
+
+9
+00:00:29,356 --> 00:00:31,358
+we didn't have lecture, hopefully that went okay
+
+10
+00:00:31,358 --> 00:00:34,379
+for all of you but so we're going to work on grading
+
+11
+00:00:34,379 --> 00:00:37,059
+the midterm this week, but as a reminder
+
+12
+00:00:37,059 --> 00:00:39,369
+please don't make any public discussions
+
+13
+00:00:39,369 --> 00:00:42,270
+about the midterm questions or answers or whatever
+
+14
+00:00:42,270 --> 00:00:45,054
+until at least tomorrow because there are still
+
+15
+00:00:45,054 --> 00:00:47,059
+some people taking makeup midterms today
+
+16
+00:00:47,059 --> 00:00:48,518
+and throughout the rest of the week
+
+17
+00:00:48,518 --> 00:00:50,918
+so we just ask you that you refrain from talking
+
+18
+00:00:50,918 --> 00:00:53,668
+publicly about midterm questions.
+
+19
+00:00:56,329 --> 00:00:57,790
+Why don't you wait until Monday?
+
+20
+00:00:57,790 --> 00:01:00,040
+[laughing]
+
+21
+00:01:00,899 --> 00:01:02,921
+Okay, great.
+
+22
+00:01:02,921 --> 00:01:04,971
+So we're also starting to work on midterm grading.
+
+23
+00:01:04,971 --> 00:01:06,698
+We'll get those back to you as soon as you can,
+
+24
+00:01:06,698 --> 00:01:07,761
+as soon as we can.
+
+25
+00:01:07,761 --> 00:01:10,289
+We're also starting to work on grading assignment two
+
+26
+00:01:10,289 --> 00:01:11,980
+so there's a lot of grading being done this week.
+
+27
+00:01:11,980 --> 00:01:14,079
+The TA's are pretty busy.
+
+28
+00:01:14,079 --> 00:01:16,511
+Also a reminder for you guys, hopefully you've been working
+
+29
+00:01:16,511 --> 00:01:18,479
+hard on your projects now that most of you
+
+30
+00:01:18,479 --> 00:01:21,679
+are done with the midterm so your project milestones
+
+31
+00:01:21,679 --> 00:01:25,460
+will be due on Tuesday so any sort of last minute
+
+32
+00:01:25,460 --> 00:01:26,970
+changes that you had in your projects,
+
+33
+00:01:26,970 --> 00:01:28,650
+I know some people decided to switch projects
+
+34
+00:01:28,650 --> 00:01:31,650
+after the proposal, some teams reshuffled a little bit,
+
+35
+00:01:31,650 --> 00:01:34,499
+that's fine but your milestone should reflect
+
+36
+00:01:34,499 --> 00:01:35,739
+the project that you're actually doing
+
+37
+00:01:35,739 --> 00:01:37,220
+for the rest of the quarter.
+
+38
+00:01:37,220 --> 00:01:39,677
+So hopefully that's going out well.
+
+39
+00:01:39,677 --> 00:01:41,519
+I know there's been a lot of worry and stress
+
+40
+00:01:41,519 --> 00:01:43,900
+on Piazza, wondering about assignment three.
+
+41
+00:01:43,900 --> 00:01:46,900
+So we're working on that as hard as we can
+
+42
+00:01:46,900 --> 00:01:48,479
+but that's actually a bit of a new assignment,
+
+43
+00:01:48,479 --> 00:01:50,189
+it's changing a bit from last year
+
+44
+00:01:50,189 --> 00:01:51,940
+so it will be out as soon as possible,
+
+45
+00:01:51,940 --> 00:01:53,951
+hopefully today or tomorrow.
+
+46
+00:01:53,951 --> 00:01:56,351
+Although we promise that whenever it comes out
+
+47
+00:01:56,351 --> 00:01:57,580
+you'll have two weeks to finish it
+
+48
+00:01:57,580 --> 00:02:01,551
+so try not to stress out about that too much.
+
+49
+00:02:01,551 --> 00:02:03,170
+But I'm pretty excited, I think assignment three
+
+50
+00:02:03,170 --> 00:02:05,318
+will be really cool, has a lot of cool,
+
+51
+00:02:05,318 --> 00:02:09,079
+it'll cover a lot of really cool material.
+
+52
+00:02:09,079 --> 00:02:11,591
+So another thing, last time in lecture
+
+53
+00:02:11,591 --> 00:02:13,340
+we mentioned this thing called the Train Game
+
+54
+00:02:13,340 --> 00:02:15,380
+which is this really cool thing we've been working on
+
+55
+00:02:15,380 --> 00:02:17,780
+sort of as a side project a little bit.
+
+56
+00:02:17,780 --> 00:02:20,751
+So this is an interactive tool that you guys can go on
+
+57
+00:02:20,751 --> 00:02:24,391
+and use to explore a little bit the process
+
+58
+00:02:24,391 --> 00:02:27,340
+of tuning hyperparameters in practice so we hope that,
+
+59
+00:02:27,340 --> 00:02:30,250
+so this is again totally not required for the course.
+
+60
+00:02:30,250 --> 00:02:33,119
+Totally optional, but if you do we will offer
+
+61
+00:02:33,119 --> 00:02:35,072
+a small amount of extra credit for those of you
+
+62
+00:02:35,072 --> 00:02:37,963
+who want to do well and participate on this.
+
+63
+00:02:37,963 --> 00:02:39,894
+And we'll send out exactly some more details
+
+64
+00:02:39,894 --> 00:02:42,224
+later this afternoon on Piazza.
+
+65
+00:02:42,224 --> 00:02:45,123
+But just a bit of a demo for what exactly is this thing.
+
+66
+00:02:45,123 --> 00:02:48,362
+So you'll get to go in and we've changed the name
+
+67
+00:02:48,362 --> 00:02:51,752
+from Train Game to HyperQuest because you're questing
+
+68
+00:02:51,752 --> 00:02:54,464
+to solve, to find the best hyperparameters for your model
+
+69
+00:02:54,464 --> 00:02:56,523
+so this is really cool, it'll be an interactive tool
+
+70
+00:02:56,523 --> 00:02:59,344
+that you can use to explore the training of hyperparameters
+
+71
+00:02:59,344 --> 00:03:01,254
+interactively in your browser.
+
+72
+00:03:01,254 --> 00:03:04,871
+So you'll login with your student ID and name.
+
+73
+00:03:04,871 --> 00:03:06,693
+You'll fill out a little survey with some
+
+74
+00:03:06,693 --> 00:03:08,830
+of your experience on deep learning
+
+75
+00:03:08,830 --> 00:03:11,747
+then you'll read some instructions.
+
+76
+00:03:11,747 --> 00:03:14,934
+So in this game you'll be shown some random data set
+
+77
+00:03:14,934 --> 00:03:16,152
+on every trial.
+
+78
+00:03:16,152 --> 00:03:19,214
+This data set might be images or it might be vectors
+
+79
+00:03:19,214 --> 00:03:21,494
+and your goal is to train a model by picking
+
+80
+00:03:21,494 --> 00:03:23,792
+the right hyperparameters interactively to perform
+
+81
+00:03:23,792 --> 00:03:25,632
+as well as you can on the validation set
+
+82
+00:03:25,632 --> 00:03:28,077
+of this random data set.
+
+83
+00:03:28,077 --> 00:03:29,926
+And it'll sort of keep track of your performance
+
+84
+00:03:29,926 --> 00:03:31,382
+over time and there'll be a leaderboard,
+
+85
+00:03:31,382 --> 00:03:33,423
+it'll be really cool.
+
+86
+00:03:33,423 --> 00:03:36,054
+So every time you play the game,
+
+87
+00:03:36,054 --> 00:03:38,723
+you'll get some statistics about your data set.
+
+88
+00:03:38,723 --> 00:03:41,064
+In this case we're doing a classification problem
+
+89
+00:03:41,064 --> 00:03:42,397
+with 10 classes.
+
+90
+00:03:43,424 --> 00:03:45,323
+You can see down at the bottom you have these statistics
+
+91
+00:03:45,323 --> 00:03:47,774
+about random data set, we have 10 classes.
+
+92
+00:03:47,774 --> 00:03:50,094
+The input data size is three by 32 by 32
+
+93
+00:03:50,094 --> 00:03:52,987
+so this is some image data set and we can see
+
+94
+00:03:52,987 --> 00:03:55,854
+that in this case we have 8500 examples
+
+95
+00:03:55,854 --> 00:03:58,832
+in the training set and 1500 examples in the validation set.
+
+96
+00:03:58,832 --> 00:03:59,870
+These are all random, they'll change
+
+97
+00:03:59,870 --> 00:04:01,518
+a little bit every time.
+
+98
+00:04:01,518 --> 00:04:04,054
+Based on these data set statistics you'll make some choices
+
+99
+00:04:04,054 --> 00:04:06,912
+on your initial learning rate, your initial network size,
+
+100
+00:04:06,912 --> 00:04:08,931
+and your initial dropout rate.
+
+101
+00:04:08,931 --> 00:04:11,480
+Then you'll see a screen like this where it'll run
+
+102
+00:04:11,480 --> 00:04:13,811
+one epoch with those chosen hyperparameters,
+
+103
+00:04:13,811 --> 00:04:17,822
+show you on the right here you'll see two plots.
+
+104
+00:04:17,822 --> 00:04:19,712
+One is your training and validation loss
+
+105
+00:04:19,712 --> 00:04:21,040
+for that first epoch.
+
+106
+00:04:21,040 --> 00:04:23,409
+Then you'll see your training and validation accuracy
+
+107
+00:04:23,409 --> 00:04:26,280
+for that first epoch and based on the gaps that you see
+
+108
+00:04:26,280 --> 00:04:28,651
+in these two graphs you can make choices interactively
+
+109
+00:04:28,651 --> 00:04:30,759
+to change the learning rates and hyperparameters
+
+110
+00:04:30,759 --> 00:04:32,290
+for the next epoch.
+
+111
+00:04:32,290 --> 00:04:35,142
+So then you can either choose to continue training
+
+112
+00:04:35,142 --> 00:04:37,803
+with the current or changed hyperparameters,
+
+113
+00:04:37,803 --> 00:04:40,363
+you can also stop training, or you can revert to
+
+114
+00:04:40,363 --> 00:04:41,523
+go back to the previous checkpoint
+
+115
+00:04:41,523 --> 00:04:43,872
+in case things got really messed up.
+
+116
+00:04:43,872 --> 00:04:46,238
+So then you'll get to make some choice,
+
+117
+00:04:46,238 --> 00:04:48,691
+so here we'll decide to continue training
+
+118
+00:04:48,691 --> 00:04:51,347
+and in this case you could go and set new learning rates
+
+119
+00:04:51,347 --> 00:04:54,971
+and new hyperparameters for the next epoch of training.
+
+120
+00:04:54,971 --> 00:04:56,730
+You can also, kind of interesting here,
+
+121
+00:04:56,730 --> 00:04:59,808
+you can actually grow the network interactively
+
+122
+00:04:59,808 --> 00:05:01,899
+during training in this demo.
+
+123
+00:05:01,899 --> 00:05:05,592
+There's this cool trick from a couple recent papers
+
+124
+00:05:05,592 --> 00:05:07,562
+where you can either take existing layers
+
+125
+00:05:07,562 --> 00:05:09,902
+and make them wider or add new layers to the network
+
+126
+00:05:09,902 --> 00:05:12,083
+in the middle of training while still maintaining
+
+127
+00:05:12,083 --> 00:05:15,762
+the same function in the network so you can do that
+
+128
+00:05:15,762 --> 00:05:17,763
+to increase the size of your network in the middle
+
+129
+00:05:17,763 --> 00:05:20,131
+of training here which is kind of cool.
+
+130
+00:05:20,131 --> 00:05:22,371
+So then you'll make choices over several epochs
+
+131
+00:05:22,371 --> 00:05:24,430
+and eventually your final validation accuracy
+
+132
+00:05:24,430 --> 00:05:26,811
+will be recorded and we'll have some leaderboard
+
+133
+00:05:26,811 --> 00:05:29,912
+that compares your score on that data set
+
+134
+00:05:29,912 --> 00:05:33,072
+to some simple baseline models.
+
+135
+00:05:33,072 --> 00:05:35,380
+And depending on how well you do on this leaderboard
+
+136
+00:05:35,380 --> 00:05:37,534
+we'll again offer some small amounts of extra credit
+
+137
+00:05:37,534 --> 00:05:39,774
+for those of you who choose to participate.
+
+138
+00:05:39,774 --> 00:05:42,322
+So this is again, totally optional, but I think
+
+139
+00:05:42,322 --> 00:05:44,632
+it can be a really cool learning experience for you guys
+
+140
+00:05:44,632 --> 00:05:46,936
+to play around with and explore how hyperparameters
+
+141
+00:05:46,936 --> 00:05:49,243
+affect the learning process.
+
+142
+00:05:49,243 --> 00:05:50,742
+Also, it's really useful for us.
+
+143
+00:05:50,742 --> 00:05:54,872
+You'll help science out by participating in this experiment.
+
+144
+00:05:54,872 --> 00:05:57,662
+We're pretty interested in seeing how people behave
+
+145
+00:05:57,662 --> 00:06:02,101
+when they train neural networks so you'll be helping us out
+
+146
+00:06:02,101 --> 00:06:04,422
+as well if you decide to play this.
+
+147
+00:06:04,422 --> 00:06:08,462
+But again, totally optional, up to you.
+
+148
+00:06:08,462 --> 00:06:10,295
+Any questions on that?
+
+149
+00:06:15,080 --> 00:06:16,670
+Hopefully at some point but it's.
+
+150
+00:06:16,670 --> 00:06:18,680
+So the question was will this be a paper
+
+151
+00:06:18,680 --> 00:06:20,272
+or whatever eventually?
+
+152
+00:06:20,272 --> 00:06:22,800
+Hopefully but it's really early stages of this project
+
+153
+00:06:22,800 --> 00:06:26,760
+so I can't make any promises but I hope so.
+
+154
+00:06:26,760 --> 00:06:29,510
+But I think it'll be really cool.
+
+155
+00:06:33,240 --> 00:06:35,000
+[laughing]
+
+156
+00:06:35,000 --> 00:06:36,571
+Yeah, so the question is how can you add layers
+
+157
+00:06:36,571 --> 00:06:37,971
+during training?
+
+158
+00:06:37,971 --> 00:06:39,680
+I don't really want to get into that right now
+
+159
+00:06:39,680 --> 00:06:43,552
+but the paper to read is Net2Net by Ian Goodfellow's
+
+160
+00:06:43,552 --> 00:06:45,291
+one of the authors and there's another paper
+
+161
+00:06:45,291 --> 00:06:48,240
+from Microsoft called Network Morphism.
+
+162
+00:06:48,240 --> 00:06:52,407
+So if you read those two papers you can see how this works.
+
+163
+00:06:53,680 --> 00:06:56,232
+Okay, so last time, a bit of a reminder
+
+164
+00:06:56,232 --> 00:06:58,152
+before we had the midterm last time we talked
+
+165
+00:06:58,152 --> 00:06:59,792
+about recurrent neural networks.
+
+166
+00:06:59,792 --> 00:07:01,359
+We saw that recurrent neural networks can be used
+
+167
+00:07:01,359 --> 00:07:03,032
+for different types of problems.
+
+168
+00:07:03,032 --> 00:07:05,340
+In addition to one to one we can do one to many,
+
+169
+00:07:05,340 --> 00:07:07,192
+many to one, many to many.
+
+170
+00:07:07,192 --> 00:07:10,679
+We saw how this can apply to language modeling
+
+171
+00:07:10,679 --> 00:07:12,965
+and we saw some cool examples of applying neural networks
+
+172
+00:07:12,965 --> 00:07:15,460
+to model different sorts of languages at the character level
+
+173
+00:07:15,460 --> 00:07:18,912
+and we sampled these artificial math and Shakespeare
+
+174
+00:07:18,912 --> 00:07:20,571
+and C source code.
+
+175
+00:07:20,571 --> 00:07:22,752
+We also saw how similar things could be applied
+
+176
+00:07:22,752 --> 00:07:26,560
+to image captioning by connecting a CNN feature extractor
+
+177
+00:07:26,560 --> 00:07:28,491
+together with an RNN language model.
+
+178
+00:07:28,491 --> 00:07:31,011
+And we saw some really cool examples of that.
+
+179
+00:07:31,011 --> 00:07:33,680
+We also talked about the different types of RNN's.
+
+180
+00:07:33,680 --> 00:07:36,040
+We talked about this Vanilla RNN.
+
+181
+00:07:36,040 --> 00:07:37,872
+I also want to mention that this is sometimes called
+
+182
+00:07:37,872 --> 00:07:40,158
+a Simple RNN or an Elman RNN so you'll see
+
+183
+00:07:40,158 --> 00:07:42,331
+all of these different terms in literature.
+
+184
+00:07:42,331 --> 00:07:44,997
+We also talked about the Long Short Term Memory or LSTM.
+
+185
+00:07:44,997 --> 00:07:46,872
+And we talked about how the gradient,
+
+186
+00:07:46,872 --> 00:07:50,102
+the LSTM has this crazy set of equations
+
+187
+00:07:50,102 --> 00:07:53,021
+but it makes sense because it helps improve gradient flow
+
+188
+00:07:53,021 --> 00:07:56,022
+during back propagation and helps this thing model
+
+189
+00:07:56,022 --> 00:07:59,443
+more longer term dependencies in our sequences.
+
+190
+00:07:59,443 --> 00:08:01,403
+So today we're going to switch gears and talk about
+
+191
+00:08:01,403 --> 00:08:03,982
+a whole bunch of different exciting tasks.
+
+192
+00:08:03,982 --> 00:08:06,963
+We're going to talk about, so so far we've been talking about
+
+193
+00:08:06,963 --> 00:08:08,992
+mostly the image classification problem.
+
+194
+00:08:08,992 --> 00:08:10,883
+Today we're going to talk about various types of other
+
+195
+00:08:10,883 --> 00:08:13,262
+computer vision tasks where you actually want to go in
+
+196
+00:08:13,262 --> 00:08:17,162
+and say things about the spatial pixels inside your images
+
+197
+00:08:17,162 --> 00:08:19,542
+so we'll see segmentation, localization, detection,
+
+198
+00:08:19,542 --> 00:08:21,942
+a couple other different computer vision tasks
+
+199
+00:08:21,942 --> 00:08:22,912
+and how you can approach these
+
+200
+00:08:22,912 --> 00:08:25,494
+with convolutional neural networks.
+
+201
+00:08:25,494 --> 00:08:28,140
+So as a bit of refresher, so far the main thing
+
+202
+00:08:28,140 --> 00:08:29,552
+we've been talking about in this class
+
+203
+00:08:29,552 --> 00:08:32,163
+is image classification so here we're going to have
+
+204
+00:08:32,163 --> 00:08:33,771
+some input image come in.
+
+205
+00:08:33,771 --> 00:08:34,843
+That input image will go through
+
+206
+00:08:34,843 --> 00:08:36,584
+some deep convolutional network,
+
+207
+00:08:36,584 --> 00:08:39,014
+that network will give us some feature vector
+
+208
+00:08:39,014 --> 00:08:42,991
+of maybe 4096 dimensions in the case of AlexNet RGB
+
+209
+00:08:42,991 --> 00:08:44,798
+and then from that final feature vector
+
+210
+00:08:44,798 --> 00:08:46,222
+we'll have some fully-connected,
+
+211
+00:08:46,222 --> 00:08:47,750
+some final fully-connected layer
+
+212
+00:08:47,750 --> 00:08:50,568
+that gives us 1000 numbers for the different class scores
+
+213
+00:08:50,568 --> 00:08:52,861
+that we care about where 1000 is maybe the number
+
+214
+00:08:52,861 --> 00:08:55,660
+of classes in ImageNet in this example.
+
+215
+00:08:55,660 --> 00:08:57,143
+And then at the end of the day
+
+216
+00:08:57,143 --> 00:08:59,080
+what the network does is we input an image
+
+217
+00:08:59,080 --> 00:09:01,437
+and then we output a single category label
+
+218
+00:09:01,437 --> 00:09:05,083
+saying what is the content of this entire image as a whole.
+
+219
+00:09:05,083 --> 00:09:08,241
+But this is maybe the most basic possible task
+
+220
+00:09:08,241 --> 00:09:09,879
+in computer vision and there's a whole bunch
+
+221
+00:09:09,879 --> 00:09:11,686
+of other interesting types of tasks
+
+222
+00:09:11,686 --> 00:09:14,314
+that we might want to solve using deep learning.
+
+223
+00:09:14,314 --> 00:09:16,466
+So today we're going to talk about several
+
+224
+00:09:16,466 --> 00:09:18,609
+of these different tasks and step through each of these
+
+225
+00:09:18,609 --> 00:09:21,515
+and see how they all work with deep learning.
+
+226
+00:09:21,515 --> 00:09:25,017
+So we'll talk about these more in detail
+
+227
+00:09:25,017 --> 00:09:26,944
+about what each problem is as we get to it
+
+228
+00:09:26,944 --> 00:09:28,852
+but this is kind of a summary slide
+
+229
+00:09:28,852 --> 00:09:31,480
+that we'll talk first about semantic segmentation.
+
+230
+00:09:31,480 --> 00:09:33,847
+We'll talk about classification and localization,
+
+231
+00:09:33,847 --> 00:09:35,153
+then we'll talk about object detection,
+
+232
+00:09:35,153 --> 00:09:36,753
+and finally a couple brief words
+
+233
+00:09:36,753 --> 00:09:39,086
+about instance segmentation.
+
+234
+00:09:39,967 --> 00:09:44,035
+So first is the problem of semantic segmentation.
+
+235
+00:09:44,035 --> 00:09:46,348
+In the problem of semantic segmentation,
+
+236
+00:09:46,348 --> 00:09:49,847
+we want to input an image and then output a decision
+
+237
+00:09:49,847 --> 00:09:52,567
+of a category for every pixel in that image
+
+238
+00:09:52,567 --> 00:09:55,514
+so for every pixel in this, so this input image for example
+
+239
+00:09:55,514 --> 00:09:58,327
+is this cat walking through the field, he's very cute.
+
+240
+00:09:58,327 --> 00:10:00,333
+And in the output we want to say
+
+241
+00:10:00,333 --> 00:10:04,517
+for every pixel is that pixel a cat or grass or sky or trees
+
+242
+00:10:04,517 --> 00:10:07,701
+or background or some other set of categories.
+
+243
+00:10:07,701 --> 00:10:09,490
+So we're going to have some set of categories
+
+244
+00:10:09,490 --> 00:10:11,922
+just like we did in the image classification case
+
+245
+00:10:11,922 --> 00:10:13,829
+but now rather than assigning a single category
+
+246
+00:10:13,829 --> 00:10:15,820
+labeled to the entire image, we want to produce
+
+247
+00:10:15,820 --> 00:10:19,569
+a category label for each pixel of the input image.
+
+248
+00:10:19,569 --> 00:10:22,674
+And this is called semantic segmentation.
+
+249
+00:10:22,674 --> 00:10:25,086
+So one interesting thing about semantic segmentation
+
+250
+00:10:25,086 --> 00:10:27,340
+is that it does not differentiate instances
+
+251
+00:10:27,340 --> 00:10:29,769
+so in this example on the right we have this image
+
+252
+00:10:29,769 --> 00:10:31,523
+with two cows where they're standing right next
+
+253
+00:10:31,523 --> 00:10:34,031
+to each other and when we're talking about semantic
+
+254
+00:10:34,031 --> 00:10:36,859
+segmentation we're just labeling all the pixels
+
+255
+00:10:36,859 --> 00:10:39,741
+independently for what is the category of that pixel.
+
+256
+00:10:39,741 --> 00:10:41,747
+So in the case like this where we have two cows
+
+257
+00:10:41,747 --> 00:10:44,510
+right next to each other the output does not make
+
+258
+00:10:44,510 --> 00:10:46,840
+any distinguishing, does not distinguish
+
+259
+00:10:46,840 --> 00:10:48,309
+between these two cows.
+
+260
+00:10:48,309 --> 00:10:50,098
+Instead we just get a whole mass of pixels
+
+261
+00:10:50,098 --> 00:10:51,782
+that are all labeled as cow.
+
+262
+00:10:51,782 --> 00:10:54,868
+So this is a bit of a shortcoming of semantic segmentation
+
+263
+00:10:54,868 --> 00:10:56,625
+and we'll see how we can fix this later
+
+264
+00:10:56,625 --> 00:10:58,910
+when we move to instance segmentation.
+
+265
+00:10:58,910 --> 00:11:00,549
+But at least for now we'll just talk about
+
+266
+00:11:00,549 --> 00:11:02,882
+semantic segmentation first.
+
+267
+00:11:04,437 --> 00:11:07,595
+So you can imagine maybe using a class,
+
+268
+00:11:07,595 --> 00:11:09,340
+so one potential approach for attacking
+
+269
+00:11:09,340 --> 00:11:12,544
+semantic segmentation might be through classification.
+
+270
+00:11:12,544 --> 00:11:14,553
+So there's this, you could use this idea
+
+271
+00:11:14,553 --> 00:11:17,755
+of a sliding window approach to semantic segmentation.
+
+272
+00:11:17,755 --> 00:11:21,076
+So you might imagine that we take our input image
+
+273
+00:11:21,076 --> 00:11:24,315
+and we break it up into many many small, tiny local crops
+
+274
+00:11:24,315 --> 00:11:27,763
+of the image so in this example we've taken
+
+275
+00:11:27,763 --> 00:11:31,310
+maybe three crops from around the head of this cow
+
+276
+00:11:31,310 --> 00:11:33,705
+and then you could imagine taking each of those crops
+
+277
+00:11:33,705 --> 00:11:36,564
+and now treating this as a classification problem.
+
+278
+00:11:36,564 --> 00:11:39,086
+Saying for this crop, what is the category
+
+279
+00:11:39,086 --> 00:11:41,246
+of the central pixel of the crop?
+
+280
+00:11:41,246 --> 00:11:43,828
+And then we could use all the same machinery
+
+281
+00:11:43,828 --> 00:11:46,752
+that we've developed for classifying entire images
+
+282
+00:11:46,752 --> 00:11:48,760
+but now just apply it on crops rather than
+
+283
+00:11:48,760 --> 00:11:51,083
+on the entire image.
+
+284
+00:11:51,083 --> 00:11:54,412
+And this would probably work to some extent
+
+285
+00:11:54,412 --> 00:11:56,601
+but it's probably not a very good idea.
+
+286
+00:11:56,601 --> 00:11:58,422
+So this would end up being super super
+
+287
+00:11:58,422 --> 00:12:02,498
+computationally expensive because we want to label
+
+288
+00:12:02,498 --> 00:12:04,701
+every pixel in the image, we would need a separate
+
+289
+00:12:04,701 --> 00:12:07,319
+crop for every pixel in that image and this would be
+
+290
+00:12:07,319 --> 00:12:09,407
+super super expensive to run forward and backward
+
+291
+00:12:09,407 --> 00:12:10,910
+passes through.
+
+292
+00:12:10,910 --> 00:12:14,437
+And moreover, we're actually, if you think about this
+
+293
+00:12:14,437 --> 00:12:17,085
+we can actually share computation between different
+
+294
+00:12:17,085 --> 00:12:20,476
+patches so if you're trying to classify two patches
+
+295
+00:12:20,476 --> 00:12:22,950
+that are right next to each other and actually overlap
+
+296
+00:12:22,950 --> 00:12:25,509
+then the convolutional features of those patches
+
+297
+00:12:25,509 --> 00:12:28,242
+will end up going through the same convolutional layers
+
+298
+00:12:28,242 --> 00:12:30,611
+and we can actually share a lot of the computation
+
+299
+00:12:30,611 --> 00:12:32,644
+when applying this to separate passes
+
+300
+00:12:32,644 --> 00:12:34,742
+or when applying this type of approach
+
+301
+00:12:34,742 --> 00:12:37,194
+to separate patches in the image.
+
+302
+00:12:37,194 --> 00:12:39,801
+So this is actually a terrible idea and nobody does this
+
+303
+00:12:39,801 --> 00:12:41,896
+and you should probably not do this
+
+304
+00:12:41,896 --> 00:12:44,913
+but it's at least the first thing you might think of
+
+305
+00:12:44,913 --> 00:12:48,683
+if you were trying to think about semantic segmentation.
+
+306
+00:12:48,683 --> 00:12:50,598
+Then the next idea that works a bit better
+
+307
+00:12:50,598 --> 00:12:53,372
+is this idea of a fully convolutional network right.
+
+308
+00:12:53,372 --> 00:12:56,080
+So rather than extracting individual patches from the image
+
+309
+00:12:56,080 --> 00:12:58,305
+and classifying these patches independently,
+
+310
+00:12:58,305 --> 00:13:00,959
+we can imagine just having our network be a whole giant
+
+311
+00:13:00,959 --> 00:13:03,604
+stack of convolutional layers with no fully connected
+
+312
+00:13:03,604 --> 00:13:06,501
+layers or anything so in this case we just have a bunch
+
+313
+00:13:06,501 --> 00:13:10,631
+of convolutional layers that are all maybe three by three
+
+314
+00:13:10,631 --> 00:13:12,633
+with zero padding or something like that
+
+315
+00:13:12,633 --> 00:13:15,422
+so that each convolutional layer preserves the spatial size
+
+316
+00:13:15,422 --> 00:13:17,843
+of the input and now if we pass our image
+
+317
+00:13:17,843 --> 00:13:20,605
+through a whole stack of these convolutional layers,
+
+318
+00:13:20,605 --> 00:13:23,090
+then the final convolutional layer could just output
+
+319
+00:13:23,090 --> 00:13:27,184
+a tensor of something by C by H by W
+
+320
+00:13:27,184 --> 00:13:29,622
+where C is the number of categories that we care about
+
+321
+00:13:29,622 --> 00:13:32,491
+and you could see this tensor as just giving
+
+322
+00:13:32,491 --> 00:13:34,734
+our classification scores for every pixel
+
+323
+00:13:34,734 --> 00:13:38,127
+in the input image at every location in the input image.
+
+324
+00:13:38,127 --> 00:13:40,144
+And we could compute this all at once
+
+325
+00:13:40,144 --> 00:13:43,014
+with just some giant stack of convolutional layers.
+
+326
+00:13:43,014 --> 00:13:44,571
+And then you could imagine training this thing
+
+327
+00:13:44,571 --> 00:13:47,216
+by putting a classification loss at every pixel
+
+328
+00:13:47,216 --> 00:13:50,558
+of this output, taking an average over those pixels
+
+329
+00:13:50,558 --> 00:13:52,718
+in space, and just training this kind of network
+
+330
+00:13:52,718 --> 00:13:55,137
+through normal, regular back propagation.
+
+331
+00:13:55,137 --> 00:13:55,970
+Question?
+
+332
+00:13:58,430 --> 00:13:59,728
+Oh, the question is how do you develop
+
+333
+00:13:59,728 --> 00:14:01,179
+training data for this?
+
+334
+00:14:01,179 --> 00:14:02,687
+It's very expensive right.
+
+335
+00:14:02,687 --> 00:14:04,366
+So the training data for this would be
+
+336
+00:14:04,366 --> 00:14:06,899
+we need to label every pixel in those input images
+
+337
+00:14:06,899 --> 00:14:09,654
+so there's tools that people sometimes have online
+
+338
+00:14:09,654 --> 00:14:11,831
+where you can go in and sort of draw contours
+
+339
+00:14:11,831 --> 00:14:14,613
+around the objects and then fill in regions
+
+340
+00:14:14,613 --> 00:14:16,104
+but in general getting this kind of training data
+
+341
+00:14:16,104 --> 00:14:17,604
+is very expensive.
+
+342
+00:14:29,243 --> 00:14:31,357
+Yeah, the question is what is the loss function?
+
+343
+00:14:31,357 --> 00:14:34,328
+So here since we're making a classification decision
+
+344
+00:14:34,328 --> 00:14:37,009
+per pixel then we put a cross entropy loss
+
+345
+00:14:37,009 --> 00:14:39,025
+on every pixel of the output.
+
+346
+00:14:39,025 --> 00:14:40,739
+So we have the ground truth category label
+
+347
+00:14:40,739 --> 00:14:42,212
+for every pixel in the output,
+
+348
+00:14:42,212 --> 00:14:44,363
+then we compute across entropy loss
+
+349
+00:14:44,363 --> 00:14:45,793
+between every pixel in the output
+
+350
+00:14:45,793 --> 00:14:48,143
+and the ground truth pixels and then
+
+351
+00:14:48,143 --> 00:14:50,437
+take either a sum or an average over space
+
+352
+00:14:50,437 --> 00:14:52,739
+and then sum or average over the mini-batch.
+
+353
+00:14:52,739 --> 00:14:53,572
+Question?
+
+354
+00:15:18,548 --> 00:15:19,465
+Yeah, yeah.
+
+355
+00:15:24,804 --> 00:15:26,505
+Yeah, the question is do we assume
+
+356
+00:15:26,505 --> 00:15:28,008
+that we know the categories?
+
+357
+00:15:28,008 --> 00:15:31,258
+So yes, we do assume that we know the categories up front
+
+358
+00:15:31,258 --> 00:15:33,716
+so this is just like the image classification case.
+
+359
+00:15:33,716 --> 00:15:36,785
+So an image classification we know at the start of training
+
+360
+00:15:36,785 --> 00:15:39,466
+based on our data set that maybe there's 10 or 20
+
+361
+00:15:39,466 --> 00:15:41,357
+or 100 or 1000 classes that we care about
+
+362
+00:15:41,357 --> 00:15:45,024
+for this data set and then here we are fixed
+
+363
+00:15:45,910 --> 00:15:50,077
+to that set of classes that are fixed for the data set.
+
+364
+00:15:51,012 --> 00:15:53,927
+So this model is relatively simple
+
+365
+00:15:53,927 --> 00:15:56,206
+and you can imagine this working reasonably well
+
+366
+00:15:56,206 --> 00:15:58,853
+assuming that you tuned all the hyperparameters right
+
+367
+00:15:58,853 --> 00:16:00,562
+but it's kind of a problem right.
+
+368
+00:16:00,562 --> 00:16:02,346
+So in this setup, since we're applying a bunch
+
+369
+00:16:02,346 --> 00:16:05,120
+of convolutions that are all keeping the same
+
+370
+00:16:05,120 --> 00:16:07,479
+spatial size of the input image,
+
+371
+00:16:07,479 --> 00:16:09,574
+this would be super super expensive right.
+
+372
+00:16:09,574 --> 00:16:12,500
+If you wanted to do convolutions that maybe have
+
+373
+00:16:12,500 --> 00:16:16,435
+64 or 128 or 256 channels for those convolutional filters
+
+374
+00:16:16,435 --> 00:16:18,982
+which is pretty common in a lot of these networks,
+
+375
+00:16:18,982 --> 00:16:21,394
+then running those convolutions on this high resolution
+
+376
+00:16:21,394 --> 00:16:24,111
+input image over a sequence of layers would be
+
+377
+00:16:24,111 --> 00:16:25,849
+extremely computationally expensive
+
+378
+00:16:25,849 --> 00:16:27,361
+and would take a ton of memory.
+
+379
+00:16:27,361 --> 00:16:29,252
+So in practice, you don't usually see networks
+
+380
+00:16:29,252 --> 00:16:31,304
+with this architecture.
+
+381
+00:16:31,304 --> 00:16:33,526
+Instead you tend to see networks that look something
+
+382
+00:16:33,526 --> 00:16:37,512
+like this where we have some downsampling
+
+383
+00:16:37,512 --> 00:16:39,277
+and then some upsampling of the feature map
+
+384
+00:16:39,277 --> 00:16:40,592
+inside the image.
+
+385
+00:16:40,592 --> 00:16:42,490
+So rather than doing all the convolutions
+
+386
+00:16:42,490 --> 00:16:44,614
+of the full spatial resolution of the image,
+
+387
+00:16:44,614 --> 00:16:46,304
+we'll maybe go through a small number
+
+388
+00:16:46,304 --> 00:16:48,997
+of convolutional layers at the original resolution
+
+389
+00:16:48,997 --> 00:16:50,858
+then downsample that feature map using something
+
+390
+00:16:50,858 --> 00:16:53,991
+like max pooling or strided convolutions
+
+391
+00:16:53,991 --> 00:16:55,719
+and sort of downsample, downsample,
+
+392
+00:16:55,719 --> 00:16:57,656
+so we have convolutions in downsampling
+
+393
+00:16:57,656 --> 00:16:59,338
+and convolutions in downsampling
+
+394
+00:16:59,338 --> 00:17:02,199
+that look much like a lot of the classification networks
+
+395
+00:17:02,199 --> 00:17:04,640
+that you see but now the difference is that
+
+396
+00:17:04,640 --> 00:17:06,800
+rather than transitioning to a fully connected layer
+
+397
+00:17:06,800 --> 00:17:09,346
+like you might do in an image classification setup,
+
+398
+00:17:09,346 --> 00:17:12,072
+instead we want to increase the spatial resolution
+
+399
+00:17:12,072 --> 00:17:15,214
+of our predictions in the second half of the network
+
+400
+00:17:15,214 --> 00:17:17,598
+so that our output image can now be the same size
+
+401
+00:17:17,598 --> 00:17:20,614
+as our input image and this ends up being
+
+402
+00:17:20,614 --> 00:17:22,136
+much more computationally efficient
+
+403
+00:17:22,136 --> 00:17:24,177
+because you can make the network very deep
+
+404
+00:17:24,177 --> 00:17:26,418
+and work at a lower spatial resolution
+
+405
+00:17:26,418 --> 00:17:29,749
+for many of the layers at the inside of the network.
+
+406
+00:17:29,749 --> 00:17:33,205
+So we've already seen examples of downsampling
+
+407
+00:17:33,205 --> 00:17:36,418
+when it comes to convolutional networks.
+
+408
+00:17:36,418 --> 00:17:38,343
+We've seen that you can do strided convolutions
+
+409
+00:17:38,343 --> 00:17:41,180
+or various types of pooling to reduce the spatial size
+
+410
+00:17:41,180 --> 00:17:44,050
+of the image inside a network but we haven't
+
+411
+00:17:44,050 --> 00:17:46,040
+really talked about upsampling and the question
+
+412
+00:17:46,040 --> 00:17:49,107
+you might be wondering is what are these upsampling
+
+413
+00:17:49,107 --> 00:17:51,476
+layers actually look like inside the network?
+
+414
+00:17:51,476 --> 00:17:53,833
+And what are our strategies for increasing the size
+
+415
+00:17:53,833 --> 00:17:55,875
+of a feature map inside the network?
+
+416
+00:17:55,875 --> 00:17:59,208
+Sorry, was there a question in the back?
+
+417
+00:18:07,316 --> 00:18:09,061
+Yeah, so the question is how do we upsample?
+
+418
+00:18:09,061 --> 00:18:10,330
+And the answer is that's the topic
+
+419
+00:18:10,330 --> 00:18:11,758
+of the next couple slides.
+
+420
+00:18:11,758 --> 00:18:13,263
+[laughing]
+
+421
+00:18:13,263 --> 00:18:17,197
+So one strategy for upsampling is something like
+
+422
+00:18:17,197 --> 00:18:21,075
+unpooling so we have this notion of pooling
+
+423
+00:18:21,075 --> 00:18:23,379
+to downsample so we talked about average pooling
+
+424
+00:18:23,379 --> 00:18:26,187
+or max pooling so when we talked about average pooling
+
+425
+00:18:26,187 --> 00:18:27,754
+we're kind of taking a spatial average
+
+426
+00:18:27,754 --> 00:18:30,389
+within a receptive field of each pooling region.
+
+427
+00:18:30,389 --> 00:18:32,765
+One kind of analog for upsampling is this idea
+
+428
+00:18:32,765 --> 00:18:34,853
+of nearest neighbor unpooling.
+
+429
+00:18:34,853 --> 00:18:36,761
+So here on the left we see this example
+
+430
+00:18:36,761 --> 00:18:39,090
+of nearest neighbor unpooling where our input
+
+431
+00:18:39,090 --> 00:18:41,379
+is maybe some two by two grid and our output
+
+432
+00:18:41,379 --> 00:18:43,853
+is a four by four grid and now in our output
+
+433
+00:18:43,853 --> 00:18:47,698
+we've done a two by two stride two nearest neighbor
+
+434
+00:18:47,698 --> 00:18:50,461
+unpooling or upsampling where we've just duplicated
+
+435
+00:18:50,461 --> 00:18:53,177
+that element for every point in our two by two
+
+436
+00:18:53,177 --> 00:18:56,149
+receptive field of the unpooling region.
+
+437
+00:18:56,149 --> 00:18:59,605
+Another thing you might see is this bed of nails unpooling
+
+438
+00:18:59,605 --> 00:19:03,472
+or bed of nails upsampling where you'll just take,
+
+439
+00:19:03,472 --> 00:19:05,741
+again we have a two by two receptive field
+
+440
+00:19:05,741 --> 00:19:09,116
+for our unpooling regions and then you'll take the,
+
+441
+00:19:09,116 --> 00:19:13,465
+in this case you make it all zeros except for one element
+
+442
+00:19:13,465 --> 00:19:17,487
+of the unpooling region so in this case we've taken
+
+443
+00:19:17,487 --> 00:19:19,376
+all of our inputs and always put them in the upper
+
+444
+00:19:19,376 --> 00:19:21,852
+left hand corner of this unpooling region
+
+445
+00:19:21,852 --> 00:19:23,463
+and everything else is zeros.
+
+446
+00:19:23,463 --> 00:19:24,867
+And this is kind of like a bed of nails
+
+447
+00:19:24,867 --> 00:19:27,341
+because the zeros are very flat,
+
+448
+00:19:27,341 --> 00:19:30,133
+then you've got these things poking up
+
+449
+00:19:30,133 --> 00:19:33,560
+for the values at these various non-zero regions.
+
+450
+00:19:33,560 --> 00:19:35,899
+Another thing that you see sometimes which was alluded to
+
+451
+00:19:35,899 --> 00:19:39,591
+by the question a minute ago is this idea of max unpooling
+
+452
+00:19:39,591 --> 00:19:42,848
+so in a lot of these networks they tend to be symmetrical
+
+453
+00:19:42,848 --> 00:19:46,340
+where we have a downsampling portion of the network
+
+454
+00:19:46,340 --> 00:19:48,266
+and then an upsampling portion of the network
+
+455
+00:19:48,266 --> 00:19:52,047
+with a symmetry between those two portions of the network.
+
+456
+00:19:52,047 --> 00:19:55,628
+So sometimes what you'll see is this idea of max unpooling
+
+457
+00:19:55,628 --> 00:20:00,553
+where for each unpooling, for each upsampling layer,
+
+458
+00:20:00,553 --> 00:20:03,325
+it is associated with one of the pooling layers
+
+459
+00:20:03,325 --> 00:20:06,140
+in the first half of the network and now in the first half,
+
+460
+00:20:06,140 --> 00:20:09,380
+in the downsampling when we do max pooling
+
+461
+00:20:09,380 --> 00:20:12,577
+we'll actually remember which element of the receptive field
+
+462
+00:20:12,577 --> 00:20:16,465
+during max pooling was used to do the max pooling
+
+463
+00:20:16,465 --> 00:20:18,481
+and now when we go through the rest of the network
+
+464
+00:20:18,481 --> 00:20:20,821
+then we'll do something that looks like this bed of nails
+
+465
+00:20:20,821 --> 00:20:23,969
+upsampling except rather than always putting the elements
+
+466
+00:20:23,969 --> 00:20:26,391
+in the same position, instead we'll stick it
+
+467
+00:20:26,391 --> 00:20:29,775
+into the position that was used in the corresponding
+
+468
+00:20:29,775 --> 00:20:33,697
+max pooling step earlier in the network.
+
+469
+00:20:33,697 --> 00:20:35,154
+I'm not sure if that explanation was clear
+
+470
+00:20:35,154 --> 00:20:38,321
+but hopefully the picture makes sense.
+
+471
+00:20:39,248 --> 00:20:42,388
+Yeah, so then you just end up filling the rest with zeros.
+
+472
+00:20:42,388 --> 00:20:43,751
+So then you fill the rest with zeros
+
+473
+00:20:43,751 --> 00:20:45,871
+and then you stick the elements from the low resolution
+
+474
+00:20:45,871 --> 00:20:48,256
+patch up into the high resolution patch
+
+475
+00:20:48,256 --> 00:20:51,714
+at the points where the max pooling took place
+
+476
+00:20:51,714 --> 00:20:54,964
+at the corresponding max pooling there.
+
+477
+00:20:56,871 --> 00:21:00,723
+Okay, so that's kind of an interesting idea.
+
+478
+00:21:00,723 --> 00:21:02,056
+Sorry, question?
+
+479
+00:21:08,696 --> 00:21:10,559
+Oh yeah, so the question is why is this a good idea?
+
+480
+00:21:10,559 --> 00:21:11,801
+Why might this matter?
+
+481
+00:21:11,801 --> 00:21:14,502
+So the idea is that when we're doing semantic segmentation
+
+482
+00:21:14,502 --> 00:21:16,806
+we want our predictions to be pixel perfect right.
+
+483
+00:21:16,806 --> 00:21:19,667
+We kind of want to get those sharp boundaries
+
+484
+00:21:19,667 --> 00:21:23,708
+and those tiny details in our predictive segmentation
+
+485
+00:21:23,708 --> 00:21:27,001
+so now if you're doing this max pooling,
+
+486
+00:21:27,001 --> 00:21:29,279
+there's this sort of heterogeneity that's happening
+
+487
+00:21:29,279 --> 00:21:31,782
+inside the feature map due to the max pooling
+
+488
+00:21:31,782 --> 00:21:35,949
+where from the low resolution image you don't know,
+
+489
+00:21:36,839 --> 00:21:39,395
+you're sort of losing spatial information in some sense
+
+490
+00:21:39,395 --> 00:21:42,390
+by you don't know where that feature vector came from
+
+491
+00:21:42,390 --> 00:21:45,253
+in the local receptive field after max pooling.
+
+492
+00:21:45,253 --> 00:21:48,673
+So if you actually unpool by putting the vector
+
+493
+00:21:48,673 --> 00:21:51,394
+in the same slot you might think that that might help us
+
+494
+00:21:51,394 --> 00:21:53,759
+handle these fine details a little bit better
+
+495
+00:21:53,759 --> 00:21:55,866
+and help us preserve some of that spatial information
+
+496
+00:21:55,866 --> 00:21:59,051
+that was lost during max pooling.
+
+497
+00:21:59,051 --> 00:21:59,884
+Question?
+
+498
+00:22:10,883 --> 00:22:13,809
+The question is does this make things easier for back prop?
+
+499
+00:22:13,809 --> 00:22:17,275
+Yeah, I guess, I don't think it changes the back prop
+
+500
+00:22:17,275 --> 00:22:19,389
+dynamics too much because storing these indices
+
+501
+00:22:19,389 --> 00:22:21,009
+is not a huge computational overhead.
+
+502
+00:22:21,009 --> 00:22:24,851
+They're pretty small in comparison to everything else.
+
+503
+00:22:24,851 --> 00:22:26,606
+So another thing that you'll see sometimes
+
+504
+00:22:26,606 --> 00:22:29,566
+is this idea of transpose convolution.
+
+505
+00:22:29,566 --> 00:22:33,259
+So transpose convolution, so for these various types
+
+506
+00:22:33,259 --> 00:22:34,724
+of unpooling that we just talked about,
+
+507
+00:22:34,724 --> 00:22:36,561
+these bed of nails, this nearest neighbor,
+
+508
+00:22:36,561 --> 00:22:38,945
+this max unpooling, all of these are kind of
+
+509
+00:22:38,945 --> 00:22:41,347
+a fixed function, they're not really learning exactly
+
+510
+00:22:41,347 --> 00:22:44,964
+how to do the upsampling so if you think about something
+
+511
+00:22:44,964 --> 00:22:47,404
+like strided convolution, strided convolution
+
+512
+00:22:47,404 --> 00:22:50,212
+is kind of like a learnable layer that learns the way
+
+513
+00:22:50,212 --> 00:22:53,010
+that the network wants to perform downsampling
+
+514
+00:22:53,010 --> 00:22:54,423
+at that layer.
+
+515
+00:22:54,423 --> 00:22:57,890
+And by analogy with that there's this type of layer
+
+516
+00:22:57,890 --> 00:23:00,317
+called a transpose convolution that lets us do
+
+517
+00:23:00,317 --> 00:23:02,534
+kind of learnable upsampling.
+
+518
+00:23:02,534 --> 00:23:04,233
+So it will both upsample the feature map
+
+519
+00:23:04,233 --> 00:23:05,954
+and learn some weights about how it wants
+
+520
+00:23:05,954 --> 00:23:08,068
+to do that upsampling.
+
+521
+00:23:08,068 --> 00:23:10,363
+And this is really just another type of convolution
+
+522
+00:23:10,363 --> 00:23:13,262
+so to see how this works remember how a normal
+
+523
+00:23:13,262 --> 00:23:16,663
+three by three stride one pad one convolution would work.
+
+524
+00:23:16,663 --> 00:23:18,524
+That for this kind of normal convolution
+
+525
+00:23:18,524 --> 00:23:20,488
+that we've seen many times now in this class,
+
+526
+00:23:20,488 --> 00:23:22,207
+our input might by four by four,
+
+527
+00:23:22,207 --> 00:23:24,316
+our output might be four by four,
+
+528
+00:23:24,316 --> 00:23:26,119
+and now we'll have this three by three kernel
+
+529
+00:23:26,119 --> 00:23:27,698
+and we'll take an inner product between,
+
+530
+00:23:27,698 --> 00:23:29,721
+we'll plop down that kernel at the corner of the image,
+
+531
+00:23:29,721 --> 00:23:31,639
+take an inner product, and that inner product
+
+532
+00:23:31,639 --> 00:23:33,249
+will give us the value and the activation
+
+533
+00:23:33,249 --> 00:23:35,409
+in the upper left hand corner of our output.
+
+534
+00:23:35,409 --> 00:23:37,749
+And we'll repeat this for every receptive field
+
+535
+00:23:37,749 --> 00:23:39,388
+in the image.
+
+536
+00:23:39,388 --> 00:23:42,177
+Now if we talk about strided convolution
+
+537
+00:23:42,177 --> 00:23:44,688
+then strided convolution ends up looking pretty similar.
+
+538
+00:23:44,688 --> 00:23:47,714
+However, our input is maybe a four by four region
+
+539
+00:23:47,714 --> 00:23:49,648
+and our output is a two by two region.
+
+540
+00:23:49,648 --> 00:23:51,573
+But we still have this idea of taking,
+
+541
+00:23:51,573 --> 00:23:54,633
+of there being some three by three filter or kernel
+
+542
+00:23:54,633 --> 00:23:56,523
+that we plop down in the corner of the image,
+
+543
+00:23:56,523 --> 00:23:58,318
+take an inner product and use that to compute
+
+544
+00:23:58,318 --> 00:24:00,808
+a value of the activation and the output.
+
+545
+00:24:00,808 --> 00:24:02,865
+But now with strided convolution the idea is that
+
+546
+00:24:02,865 --> 00:24:06,676
+we're moving that, rather than popping down that filter
+
+547
+00:24:06,676 --> 00:24:08,879
+at every possible point in the input,
+
+548
+00:24:08,879 --> 00:24:11,057
+instead we're going to move the filter by two pixels
+
+549
+00:24:11,057 --> 00:24:14,191
+in the input every time we move the filter by one pixel,
+
+550
+00:24:14,191 --> 00:24:16,961
+every time we move by one pixel in the output.
+
+551
+00:24:16,961 --> 00:24:19,293
+Right so this stride of two gives us a ratio
+
+552
+00:24:19,293 --> 00:24:21,363
+between how much do we move in the input
+
+553
+00:24:21,363 --> 00:24:23,361
+versus how much do we move in the output.
+
+554
+00:24:23,361 --> 00:24:25,907
+So when you do a strided convolution with stride two
+
+555
+00:24:25,907 --> 00:24:28,653
+this ends up downsampling the image or the feature map
+
+556
+00:24:28,653 --> 00:24:32,495
+by a factor of two in kind of a learnable way.
+
+557
+00:24:32,495 --> 00:24:35,187
+And now a transpose convolution is sort of the opposite
+
+558
+00:24:35,187 --> 00:24:39,955
+in a way so here our input will be a two by two region
+
+559
+00:24:39,955 --> 00:24:42,638
+and our output will be a four by four region.
+
+560
+00:24:42,638 --> 00:24:44,375
+But now the operation that we perform
+
+561
+00:24:44,375 --> 00:24:46,904
+with transpose convolution is a little bit different.
+
+562
+00:24:46,904 --> 00:24:50,675
+Now so rather than taking an inner product
+
+563
+00:24:50,675 --> 00:24:53,368
+instead what we're going to do is we're going to
+
+564
+00:24:53,368 --> 00:24:56,074
+take the value of our input feature map
+
+565
+00:24:56,074 --> 00:24:58,379
+at that upper left hand corner and that'll be
+
+566
+00:24:58,379 --> 00:25:00,856
+some scalar value in the upper left hand corner.
+
+567
+00:25:00,856 --> 00:25:04,211
+We're going to multiply the filter by that scalar value
+
+568
+00:25:04,211 --> 00:25:06,767
+and then copy those values over to this three by three
+
+569
+00:25:06,767 --> 00:25:11,620
+region in the output so rather than taking an inner product
+
+570
+00:25:11,620 --> 00:25:14,428
+with our filter and the input, instead our input
+
+571
+00:25:14,428 --> 00:25:17,299
+gives weights that we will use to weight the filter
+
+572
+00:25:17,299 --> 00:25:21,547
+and then our output will be weighted copies of the filter
+
+573
+00:25:21,547 --> 00:25:24,911
+that are weighted by the values in the input.
+
+574
+00:25:24,911 --> 00:25:28,243
+And now we can do this sort of same ratio trick
+
+575
+00:25:28,243 --> 00:25:31,168
+in order to upsample so now when we move one pixel
+
+576
+00:25:31,168 --> 00:25:33,947
+in the input now we can plop our filter down
+
+577
+00:25:33,947 --> 00:25:36,703
+two pixels away in the output and it's the same trick
+
+578
+00:25:36,703 --> 00:25:39,743
+that now the blue pixel in the input is some scalar value
+
+579
+00:25:39,743 --> 00:25:41,254
+and we'll take that scalar value,
+
+580
+00:25:41,254 --> 00:25:43,713
+multiply it by the values in the filter,
+
+581
+00:25:43,713 --> 00:25:46,269
+and copy those weighted filter values
+
+582
+00:25:46,269 --> 00:25:49,048
+into this new region in the output.
+
+583
+00:25:49,048 --> 00:25:51,678
+The tricky part is that sometimes these receptive fields
+
+584
+00:25:51,678 --> 00:25:54,765
+in the output can overlap now and now when these
+
+585
+00:25:54,765 --> 00:25:57,419
+receptive fields in the output overlap
+
+586
+00:25:57,419 --> 00:26:00,143
+we just sum the results in the output.
+
+587
+00:26:00,143 --> 00:26:02,299
+So then you can imagine repeating this everywhere
+
+588
+00:26:02,299 --> 00:26:04,720
+and repeating this process everywhere
+
+589
+00:26:04,720 --> 00:26:07,931
+and this ends up doing sort of a learnable upsampling
+
+590
+00:26:07,931 --> 00:26:10,299
+where we use these learned convolutional filter weights
+
+591
+00:26:10,299 --> 00:26:14,466
+to upsample the image and increase the spatial size.
+
+592
+00:26:15,609 --> 00:26:17,768
+By the way, you'll see this operation go
+
+593
+00:26:17,768 --> 00:26:19,975
+by a lot of different names in literature.
+
+594
+00:26:19,975 --> 00:26:24,153
+Sometimes this gets called things like deconvolution
+
+595
+00:26:24,153 --> 00:26:27,024
+which I think is kind of a bad name but you'll see it
+
+596
+00:26:27,024 --> 00:26:31,269
+out there in papers so from a signal processing perspective
+
+597
+00:26:31,269 --> 00:26:34,066
+deconvolution means the inverse operation to convolution
+
+598
+00:26:34,066 --> 00:26:37,343
+which this is not however you'll frequently see this
+
+599
+00:26:37,343 --> 00:26:39,945
+type of layer called a deconvolution layer
+
+600
+00:26:39,945 --> 00:26:42,239
+in some deep learning papers so be aware of that,
+
+601
+00:26:42,239 --> 00:26:44,121
+watch out for that terminology.
+
+602
+00:26:44,121 --> 00:26:46,615
+You'll also sometimes see this called upconvolution
+
+603
+00:26:46,615 --> 00:26:48,280
+which is kind of a cute name.
+
+604
+00:26:48,280 --> 00:26:51,490
+Sometimes it gets called fractionally strided convolution
+
+605
+00:26:51,490 --> 00:26:54,435
+because if we think of the stride as the ratio in step
+
+606
+00:26:54,435 --> 00:26:57,791
+between the input and the output then now this is something
+
+607
+00:26:57,791 --> 00:27:01,437
+like a stride one half convolution because of this ratio
+
+608
+00:27:01,437 --> 00:27:03,247
+of one to two between steps in the input
+
+609
+00:27:03,247 --> 00:27:04,869
+and steps in the output.
+
+610
+00:27:04,869 --> 00:27:07,180
+This also sometimes gets called a backwards strided
+
+611
+00:27:07,180 --> 00:27:09,311
+convolution because if you think about it
+
+612
+00:27:09,311 --> 00:27:13,039
+and work through the math this ends up being the same,
+
+613
+00:27:13,039 --> 00:27:15,287
+the forward pass of a transpose convolution
+
+614
+00:27:15,287 --> 00:27:17,611
+ends up being the same mathematical operation
+
+615
+00:27:17,611 --> 00:27:20,030
+as the backwards pass in a normal convolution
+
+616
+00:27:20,030 --> 00:27:21,859
+so you might have to take my word for it,
+
+617
+00:27:21,859 --> 00:27:24,172
+that might not be super obvious when you first look at this
+
+618
+00:27:24,172 --> 00:27:26,420
+but that's kind of a neat fact so you'll sometimes
+
+619
+00:27:26,420 --> 00:27:28,698
+see that name as well.
+
+620
+00:27:28,698 --> 00:27:30,929
+And as maybe a bit of a more concrete example
+
+621
+00:27:30,929 --> 00:27:33,035
+of what this looks like I think it's maybe a little easier
+
+622
+00:27:33,035 --> 00:27:36,923
+to see in one dimension so if we imagine,
+
+623
+00:27:36,923 --> 00:27:40,084
+so here we're doing a three by three transpose convolution
+
+624
+00:27:40,084 --> 00:27:41,272
+in one dimension.
+
+625
+00:27:41,272 --> 00:27:43,612
+Sorry, not three by three, a three by one
+
+626
+00:27:43,612 --> 00:27:46,091
+transpose convolution in one dimension.
+
+627
+00:27:46,091 --> 00:27:48,117
+So our filter here is just three numbers.
+
+628
+00:27:48,117 --> 00:27:50,211
+Our input is two numbers and now you can see
+
+629
+00:27:50,211 --> 00:27:53,318
+that in our output we've taken the values in the input,
+
+630
+00:27:53,318 --> 00:27:55,396
+used them to weight the values of the filter
+
+631
+00:27:55,396 --> 00:27:58,060
+and plopped down those weighted filters in the output
+
+632
+00:27:58,060 --> 00:28:00,501
+with a stride of two and now where these receptive fields
+
+633
+00:28:00,501 --> 00:28:03,597
+overlap in the output then we sum.
+
+634
+00:28:03,597 --> 00:28:06,297
+So you might be wondering, this is kind of a funny name.
+
+635
+00:28:06,297 --> 00:28:08,698
+Where does the name transpose convolution come from
+
+636
+00:28:08,698 --> 00:28:10,725
+and why is that actually my preferred name
+
+637
+00:28:10,725 --> 00:28:12,253
+for this operation?
+
+638
+00:28:12,253 --> 00:28:13,621
+So that comes from this kind of
+
+639
+00:28:13,621 --> 00:28:15,530
+neat interpretation of convolution.
+
+640
+00:28:15,530 --> 00:28:18,131
+So it turns out that any time you do convolution
+
+641
+00:28:18,131 --> 00:28:21,902
+you can always write convolution as a matrix multiplication.
+
+642
+00:28:21,902 --> 00:28:23,711
+So again, this is kind of easier to see
+
+643
+00:28:23,711 --> 00:28:25,737
+with a one-dimensional example
+
+644
+00:28:25,737 --> 00:28:28,320
+but here we've got some weight.
+
+645
+00:28:29,347 --> 00:28:31,266
+So we're doing a one-dimensional convolution
+
+646
+00:28:31,266 --> 00:28:34,497
+of a weight vector x which has three elements,
+
+647
+00:28:34,497 --> 00:28:37,259
+and an input vector, a vector, which has four elements,
+
+648
+00:28:37,259 --> 00:28:38,706
+A, B, C, D.
+
+649
+00:28:38,706 --> 00:28:41,532
+So here we're doing a three by one convolution
+
+650
+00:28:41,532 --> 00:28:44,944
+with stride one and you can see that we can frame
+
+651
+00:28:44,944 --> 00:28:47,869
+this whole operation as a matrix multiplication
+
+652
+00:28:47,869 --> 00:28:51,944
+where we take our convolutional kernel x
+
+653
+00:28:51,944 --> 00:28:54,781
+and turn it into some matrix capital X
+
+654
+00:28:54,781 --> 00:28:57,498
+which contains copies of that convolutional kernel
+
+655
+00:28:57,498 --> 00:28:59,360
+that are offset by different regions.
+
+656
+00:28:59,360 --> 00:29:01,710
+And now we can take this giant weight matrix X
+
+657
+00:29:01,710 --> 00:29:03,726
+and do a matrix vector multiplication between x
+
+658
+00:29:03,726 --> 00:
