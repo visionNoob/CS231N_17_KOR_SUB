@@ -1,0 +1,6411 @@
+1
+00:00:06,971 --> 00:00:10,106
+Okay, so welcome to lecture two of CS231N.
+
+2
+00:00:10,106 --> 00:00:12,646
+On Tuesday we, just recall,
+we, sort of, gave you
+
+3
+00:00:12,646 --> 00:00:15,098
+the big picture view of
+what is computer vision,
+
+4
+00:00:15,098 --> 00:00:16,187
+what is the history,
+
+5
+00:00:16,187 --> 00:00:18,101
+and a little bit of the
+overview of the class.
+
+6
+00:00:18,101 --> 00:00:20,340
+And today, we're really going
+to dive in, for the first time,
+
+7
+00:00:20,340 --> 00:00:21,451
+into the details.
+
+8
+00:00:21,451 --> 00:00:23,339
+And we'll start to see,
+in much more depth,
+
+9
+00:00:23,339 --> 00:00:25,752
+exactly how some of
+these learning algorithms
+
+10
+00:00:25,752 --> 00:00:27,864
+actually work in practice.
+
+11
+00:00:27,864 --> 00:00:29,089
+So, the first lecture of the class
+
+12
+00:00:29,089 --> 00:00:31,927
+is probably, sort of, the
+largest big picture vision.
+
+13
+00:00:31,927 --> 00:00:33,808
+And the majority of the
+lectures in this class
+
+14
+00:00:33,808 --> 00:00:35,574
+will be much more detail orientated,
+
+15
+00:00:35,574 --> 00:00:37,298
+much more focused on
+the specific mechanics,
+
+16
+00:00:37,298 --> 00:00:39,617
+of these different algorithms.
+
+17
+00:00:39,617 --> 00:00:41,148
+So, today we'll see our
+first learning algorithm
+
+18
+00:00:41,148 --> 00:00:43,419
+and that'll be really exciting, I think.
+
+19
+00:00:43,419 --> 00:00:44,822
+But, before we get to that,
+
+20
+00:00:44,822 --> 00:00:47,535
+I wanted to talk about a couple
+of administrative issues.
+
+21
+00:00:47,535 --> 00:00:48,785
+One, is Piazza.
+
+22
+00:00:49,645 --> 00:00:51,580
+So, I saw it when I checked yesterday,
+
+23
+00:00:51,580 --> 00:00:54,168
+it seemed like we had maybe 500 students
+
+24
+00:00:54,168 --> 00:00:55,357
+signed up on Piazza.
+
+25
+00:00:55,357 --> 00:00:56,839
+Which means that there
+are several hundred of you
+
+26
+00:00:56,839 --> 00:00:58,493
+who are not yet there.
+
+27
+00:00:58,493 --> 00:01:01,457
+So, we really want Piazza
+to be the main source
+
+28
+00:01:01,457 --> 00:01:04,221
+of communication between the
+students and the core staff.
+
+29
+00:01:04,221 --> 00:01:07,401
+So, we've gotten a lot of
+questions to the staff list
+
+30
+00:01:07,401 --> 00:01:11,170
+about project ideas or questions
+about midterm attendance
+
+31
+00:01:11,170 --> 00:01:12,841
+or poster session attendance.
+
+32
+00:01:12,841 --> 00:01:14,389
+And, any, sort of, questions like that
+
+33
+00:01:14,389 --> 00:01:16,138
+should really go to Piazza.
+
+34
+00:01:16,138 --> 00:01:18,134
+You'll probably get answers
+to your questions faster
+
+35
+00:01:18,134 --> 00:01:21,568
+on Piazza, because all the
+TAs are knowing to check that.
+
+36
+00:01:21,568 --> 00:01:23,181
+And it's, sort of, easy
+for emails to get lost
+
+37
+00:01:23,181 --> 00:01:26,234
+in the shuffle if you just
+send to the course list.
+
+38
+00:01:26,234 --> 00:01:28,983
+It's also come to my attention
+that some SCPD students
+
+39
+00:01:28,983 --> 00:01:33,629
+are having a bit of a hard
+time signing up for Piazza.
+
+40
+00:01:33,629 --> 00:01:35,458
+SCPD students are supposed to receive a
+
+41
+00:01:35,458 --> 00:01:37,791
+@stanford.edu email address.
+
+42
+00:01:38,804 --> 00:01:40,733
+So, once you get that email address,
+
+43
+00:01:40,733 --> 00:01:44,276
+then you can use the Stanford
+email to sign into Piazza.
+
+44
+00:01:44,276 --> 00:01:45,857
+Probably that doesn't
+affect those of you who are
+
+45
+00:01:45,857 --> 00:01:46,908
+sitting in the room right now,
+
+46
+00:01:46,908 --> 00:01:50,408
+but, for those students listening on SCPD.
+
+47
+00:01:52,191 --> 00:01:55,643
+The next administrative issue
+is about assignment one.
+
+48
+00:01:55,643 --> 00:01:58,178
+Assignment one will be up later today,
+
+49
+00:01:58,178 --> 00:01:59,517
+probably sometime this afternoon,
+
+50
+00:01:59,517 --> 00:02:01,653
+but I promise, before
+I go to sleep tonight,
+
+51
+00:02:01,653 --> 00:02:03,043
+it'll be up.
+
+52
+00:02:03,043 --> 00:02:04,589
+But, if you're getting a little bit antsy
+
+53
+00:02:04,589 --> 00:02:07,304
+and really want to start
+working on it right now,
+
+54
+00:02:07,304 --> 00:02:09,297
+then you can look at last year's version
+
+55
+00:02:09,297 --> 00:02:10,531
+of assignment one.
+
+56
+00:02:10,531 --> 00:02:12,684
+It'll be pretty much the same content.
+
+57
+00:02:12,684 --> 00:02:15,081
+We're just reshuffling it
+a little bit to make it,
+
+58
+00:02:15,081 --> 00:02:17,169
+like, for example, upgrading
+to work with Python 3,
+
+59
+00:02:17,169 --> 00:02:19,082
+rather than Python 2.7.
+
+60
+00:02:19,082 --> 00:02:20,943
+And some of these minor cosmetic changes,
+
+61
+00:02:20,943 --> 00:02:23,068
+but the content of the
+assignment will still be the same
+
+62
+00:02:23,068 --> 00:02:24,742
+as last year.
+
+63
+00:02:24,742 --> 00:02:27,332
+So, in this assignment you'll
+be implementing your own
+
+64
+00:02:27,332 --> 00:02:28,665
+k-nearest neighbor classifier,
+
+65
+00:02:28,665 --> 00:02:30,686
+which we're going to talk
+about in this lecture.
+
+66
+00:02:30,686 --> 00:02:33,514
+You'll also implement several
+different linear classifiers,
+
+67
+00:02:33,514 --> 00:02:35,694
+including the SVM and Softmax,
+
+68
+00:02:35,694 --> 00:02:37,927
+as well as a simple
+two-layer neural network.
+
+69
+00:02:37,927 --> 00:02:39,410
+And we'll cover all this content
+
+70
+00:02:39,410 --> 00:02:42,160
+over the next couple of lectures.
+
+71
+00:02:43,112 --> 00:02:46,168
+So, all of our assignments
+are using Python and NumPy.
+
+72
+00:02:46,168 --> 00:02:49,229
+If you aren't familiar
+with Python or NumPy,
+
+73
+00:02:49,229 --> 00:02:51,608
+then we have written a
+tutorial that you can find
+
+74
+00:02:51,608 --> 00:02:54,312
+on the course website to
+try and get you up to speed.
+
+75
+00:02:54,312 --> 00:02:56,856
+But, this is, actually, pretty important.
+
+76
+00:02:56,856 --> 00:02:59,211
+NumPy lets you write these
+very efficient vectorized
+
+77
+00:02:59,211 --> 00:03:02,236
+operations that let you do
+quite a lot of computation
+
+78
+00:03:02,236 --> 00:03:03,856
+in just a couple lines of code.
+
+79
+00:03:03,856 --> 00:03:06,081
+So this is super important for pretty much
+
+80
+00:03:06,081 --> 00:03:09,087
+all aspects of numerical
+computing and machine learning
+
+81
+00:03:09,087 --> 00:03:10,288
+and everything like that,
+
+82
+00:03:10,288 --> 00:03:13,424
+is efficiently implementing
+these vectorized operations.
+
+83
+00:03:13,424 --> 00:03:15,600
+And you'll get a lot of practice with this
+
+84
+00:03:15,600 --> 00:03:16,964
+on the first assignment.
+
+85
+00:03:16,964 --> 00:03:19,433
+So, for those of you who
+don't have a lot of experience
+
+86
+00:03:19,433 --> 00:03:23,449
+with Matlab or NumPy or
+other types of vectorized
+
+87
+00:03:23,449 --> 00:03:26,407
+tensor computation, I recommend
+that you start looking
+
+88
+00:03:26,407 --> 00:03:27,606
+at this assignment pretty early
+
+89
+00:03:27,606 --> 00:03:32,175
+and also, read carefully
+through the tutorial.
+
+90
+00:03:32,175 --> 00:03:34,255
+The other thing I wanted to talk about
+
+91
+00:03:34,255 --> 00:03:36,287
+is that we're happy to announce that
+
+92
+00:03:36,287 --> 00:03:38,867
+we're officially supported
+through Google Cloud
+
+93
+00:03:38,867 --> 00:03:40,198
+for this class.
+
+94
+00:03:40,198 --> 00:03:43,630
+So, Google Cloud is somewhat
+similar to Amazon AWS.
+
+95
+00:03:43,630 --> 00:03:46,694
+You can go and start virtual
+machines up in the cloud.
+
+96
+00:03:46,694 --> 00:03:50,432
+These virtual machines can have GPUs.
+
+97
+00:03:50,432 --> 00:03:53,197
+We're working on the tutorial
+for exactly how to use
+
+98
+00:03:53,197 --> 00:03:55,386
+Google Cloud and get it to
+work for the assignments.
+
+99
+00:03:55,386 --> 00:03:58,517
+But our intention is that
+you'll be able to just download
+
+100
+00:03:58,517 --> 00:04:00,776
+some image, and it'll be very seamless
+
+101
+00:04:00,776 --> 00:04:02,366
+for you to work on the assignments
+
+102
+00:04:02,366 --> 00:04:04,723
+on one of these instances on the cloud.
+
+103
+00:04:04,723 --> 00:04:07,086
+And because Google has, very generously,
+
+104
+00:04:07,086 --> 00:04:08,437
+supported this course,
+
+105
+00:04:08,437 --> 00:04:10,414
+we'll be able to distribute to each of you
+
+106
+00:04:10,414 --> 00:04:14,122
+coupons that let you use
+Google Cloud credits for free
+
+107
+00:04:14,122 --> 00:04:15,582
+for the class.
+
+108
+00:04:15,582 --> 00:04:18,571
+So you can feel free to use
+these for the assignments
+
+109
+00:04:18,571 --> 00:04:20,084
+and also for the course projects
+
+110
+00:04:20,084 --> 00:04:22,607
+when you want to start using
+GPUs and larger machines
+
+111
+00:04:22,607 --> 00:04:24,015
+and whatnot.
+
+112
+00:04:24,015 --> 00:04:25,976
+So, we'll post more details about that,
+
+113
+00:04:25,976 --> 00:04:28,023
+probably, on Piazza later today.
+
+114
+00:04:28,023 --> 00:04:29,300
+But, I just wanted to mention,
+
+115
+00:04:29,300 --> 00:04:31,241
+because I know there had
+been a couple of questions
+
+116
+00:04:31,241 --> 00:04:33,369
+about, can I use my laptop?
+
+117
+00:04:33,369 --> 00:04:34,389
+Do I have to run on corn?
+
+118
+00:04:34,389 --> 00:04:35,566
+Do I have to, whatever?
+
+119
+00:04:35,566 --> 00:04:37,607
+And the answer is that,
+you'll be able to run on
+
+120
+00:04:37,607 --> 00:04:41,774
+Google Cloud and we'll provide
+you some coupons for that.
+
+121
+00:04:43,923 --> 00:04:44,756
+Yeah, so,
+
+122
+00:04:45,959 --> 00:04:47,818
+those are, kind of, the
+major administrative issues
+
+123
+00:04:47,818 --> 00:04:49,716
+I wanted to talk about today.
+
+124
+00:04:49,716 --> 00:04:53,681
+And then, let's dive into the content.
+
+125
+00:04:53,681 --> 00:04:55,463
+So, the last lecture
+we talked a little bit
+
+126
+00:04:55,463 --> 00:04:58,125
+about this task of image classification,
+
+127
+00:04:58,125 --> 00:05:00,450
+which is really a core
+task in computer vision.
+
+128
+00:05:00,450 --> 00:05:02,444
+And this is something
+that we'll really focus on
+
+129
+00:05:02,444 --> 00:05:04,048
+throughout the course of the class.
+
+130
+00:05:04,048 --> 00:05:04,964
+Is, exactly,
+
+131
+00:05:04,964 --> 00:05:07,832
+how do we work on this
+image classification task?
+
+132
+00:05:07,832 --> 00:05:09,750
+So, a little bit more concretely,
+
+133
+00:05:09,750 --> 00:05:12,142
+when you're doing image classification,
+
+134
+00:05:12,142 --> 00:05:14,259
+your system receives some input image,
+
+135
+00:05:14,259 --> 00:05:16,457
+which is this cute cat in this example,
+
+136
+00:05:16,457 --> 00:05:20,007
+and the system is aware
+of some predetermined set
+
+137
+00:05:20,007 --> 00:05:22,455
+of categories or labels.
+
+138
+00:05:22,455 --> 00:05:25,465
+So, these might be, like,
+a dog or a cat or a truck
+
+139
+00:05:25,465 --> 00:05:29,134
+or a plane, and there's some
+fixed set of category labels,
+
+140
+00:05:29,134 --> 00:05:31,292
+and the job of the computer
+is to look at the picture
+
+141
+00:05:31,292 --> 00:05:34,831
+and assign it one of these
+fixed category labels.
+
+142
+00:05:34,831 --> 00:05:36,444
+This seems like a really easy problem,
+
+143
+00:05:36,444 --> 00:05:40,268
+because so much of your own
+visual system in your brain
+
+144
+00:05:40,268 --> 00:05:42,480
+is hardwired to doing these, sort of,
+
+145
+00:05:42,480 --> 00:05:44,346
+visual recognition tasks.
+
+146
+00:05:44,346 --> 00:05:46,336
+But this is actually a
+really, really hard problem
+
+147
+00:05:46,336 --> 00:05:48,232
+for a machine.
+
+148
+00:05:48,232 --> 00:05:50,306
+So, if you dig in and
+think about, actually,
+
+149
+00:05:50,306 --> 00:05:53,236
+what does a computer see
+when it looks at this image,
+
+150
+00:05:53,236 --> 00:05:55,852
+it definitely doesn't get
+this holistic idea of a cat
+
+151
+00:05:55,852 --> 00:05:57,428
+that you see when you look at it.
+
+152
+00:05:57,428 --> 00:05:59,418
+And the computer really
+is representing the image
+
+153
+00:05:59,418 --> 00:06:01,755
+as this gigantic grid of numbers.
+
+154
+00:06:01,755 --> 00:06:05,922
+So, the image might be something
+like 800 by 600 pixels.
+
+155
+00:06:07,371 --> 00:06:10,135
+And each pixel is
+represented by three numbers,
+
+156
+00:06:10,135 --> 00:06:13,176
+giving the red, green, and
+blue values for that pixel.
+
+157
+00:06:13,176 --> 00:06:14,106
+So, to the computer,
+
+158
+00:06:14,106 --> 00:06:15,769
+this is just a gigantic grid of numbers.
+
+159
+00:06:15,769 --> 00:06:18,569
+And it's very difficult
+to distill the cat-ness
+
+160
+00:06:18,569 --> 00:06:22,508
+out of this, like, giant array
+of thousands, or whatever,
+
+161
+00:06:22,508 --> 00:06:24,841
+very many different numbers.
+
+162
+00:06:26,956 --> 00:06:30,186
+So, we refer to this
+problem as the semantic gap.
+
+163
+00:06:30,186 --> 00:06:32,735
+This idea of a cat, or
+this label of a cat,
+
+164
+00:06:32,735 --> 00:06:35,462
+is a semantic label that
+we're assigning to this image,
+
+165
+00:06:35,462 --> 00:06:38,771
+and there's this huge gap between
+the semantic idea of a cat
+
+166
+00:06:38,771 --> 00:06:42,897
+and these pixel values that the
+computer is actually seeing.
+
+167
+00:06:42,897 --> 00:06:45,503
+And this is a really hard problem because
+
+168
+00:06:45,503 --> 00:06:48,901
+you can change the picture
+in very small, subtle ways
+
+169
+00:06:48,901 --> 00:06:51,916
+that will cause this pixel
+grid to change entirely.
+
+170
+00:06:51,916 --> 00:06:54,038
+So, for example, if we took this same cat,
+
+171
+00:06:54,038 --> 00:06:55,622
+and if the cat happened to sit still
+
+172
+00:06:55,622 --> 00:06:57,352
+and not even twitch, not move a muscle,
+
+173
+00:06:57,352 --> 00:06:58,782
+which is never going to happen,
+
+174
+00:06:58,782 --> 00:07:01,077
+but we moved the camera to the other side,
+
+175
+00:07:01,077 --> 00:07:04,050
+then every single grid,
+every single pixel,
+
+176
+00:07:04,050 --> 00:07:05,620
+in this giant grid of numbers
+
+177
+00:07:05,620 --> 00:07:06,921
+would be completely different.
+
+178
+00:07:06,921 --> 00:07:09,431
+But, somehow, it's still
+representing the same cat.
+
+179
+00:07:09,431 --> 00:07:12,754
+And our algorithms need
+to be robust to this.
+
+180
+00:07:12,754 --> 00:07:15,131
+But, not only viewpoint is one problem,
+
+181
+00:07:15,131 --> 00:07:16,260
+another is illumination.
+
+182
+00:07:16,260 --> 00:07:18,124
+There can be different
+lighting conditions going on
+
+183
+00:07:18,124 --> 00:07:19,298
+in the scene.
+
+184
+00:07:19,298 --> 00:07:22,500
+Whether the cat is appearing
+in this very dark, moody scene,
+
+185
+00:07:22,500 --> 00:07:25,520
+or like is this very bright,
+sunlit scene, it's still a cat,
+
+186
+00:07:25,520 --> 00:07:28,488
+and our algorithms need
+to be robust to that.
+
+187
+00:07:28,488 --> 00:07:30,145
+Objects can also deform.
+
+188
+00:07:30,145 --> 00:07:32,355
+I think cats are, maybe,
+among the more deformable
+
+189
+00:07:32,355 --> 00:07:34,549
+of animals that you might see out there.
+
+190
+00:07:34,549 --> 00:07:37,825
+And cats can really assume a
+lot of different, varied poses
+
+191
+00:07:37,825 --> 00:07:38,940
+and positions.
+
+192
+00:07:38,940 --> 00:07:40,774
+And our algorithms should
+be robust to these different
+
+193
+00:07:40,774 --> 00:07:42,441
+kinds of transforms.
+
+194
+00:07:43,442 --> 00:07:45,823
+There can also be problems of occlusion,
+
+195
+00:07:45,823 --> 00:07:49,762
+where you might only see part
+of a cat, like, just the face,
+
+196
+00:07:49,762 --> 00:07:51,865
+or in this extreme example,
+just a tail peeking out
+
+197
+00:07:51,865 --> 00:07:53,686
+from under the couch cushion.
+
+198
+00:07:53,686 --> 00:07:56,626
+But, in these cases, it's pretty
+easy for you, as a person,
+
+199
+00:07:56,626 --> 00:07:58,897
+to realize that this is probably a cat,
+
+200
+00:07:58,897 --> 00:08:01,532
+and you still recognize
+these images as cats.
+
+201
+00:08:01,532 --> 00:08:03,929
+And this is something that our algorithms
+
+202
+00:08:03,929 --> 00:08:05,659
+also must be robust to,
+
+203
+00:08:05,659 --> 00:08:08,460
+which is quite difficult, I think.
+
+204
+00:08:08,460 --> 00:08:10,792
+There can also be problems
+of background clutter,
+
+205
+00:08:10,792 --> 00:08:13,329
+where maybe the foreground
+object of the cat,
+
+206
+00:08:13,329 --> 00:08:15,582
+could actually look quite
+similar in appearance
+
+207
+00:08:15,582 --> 00:08:16,677
+to the background.
+
+208
+00:08:16,677 --> 00:08:20,389
+And this is another thing
+that we need to handle.
+
+209
+00:08:20,389 --> 00:08:23,637
+There's also this problem
+of intraclass variation,
+
+210
+00:08:23,637 --> 00:08:26,776
+that this one notion of
+cat-ness, actually spans a lot of
+
+211
+00:08:26,776 --> 00:08:28,455
+different visual appearances.
+
+212
+00:08:28,455 --> 00:08:30,340
+And cats can come in
+different shapes and sizes
+
+213
+00:08:30,340 --> 00:08:32,158
+and colors and ages.
+
+214
+00:08:32,158 --> 00:08:34,154
+And our algorithm, again, needs to work
+
+215
+00:08:34,154 --> 00:08:36,345
+and handle all these different variations.
+
+216
+00:08:36,345 --> 00:08:40,033
+So, this is actually a really,
+really challenging problem.
+
+217
+00:08:40,033 --> 00:08:43,402
+And it's sort of easy to
+forget how easy this is
+
+218
+00:08:43,402 --> 00:08:46,264
+because so much of your
+brain is specifically tuned
+
+219
+00:08:46,264 --> 00:08:47,931
+for dealing with these things.
+
+220
+00:08:47,931 --> 00:08:49,604
+But now if we want our computer programs
+
+221
+00:08:49,604 --> 00:08:52,590
+to deal with all of these
+problems, all simultaneously,
+
+222
+00:08:52,590 --> 00:08:54,288
+and not just for cats, by the way,
+
+223
+00:08:54,288 --> 00:08:56,832
+but for just about any object
+category you can imagine,
+
+224
+00:08:56,832 --> 00:08:59,052
+this is a fantastically
+challenging problem.
+
+225
+00:08:59,052 --> 00:09:00,686
+And it's, actually, somewhat miraculous
+
+226
+00:09:00,686 --> 00:09:03,078
+that this works at all, in my opinion.
+
+227
+00:09:03,078 --> 00:09:04,703
+But, actually, not only does it work,
+
+228
+00:09:04,703 --> 00:09:07,285
+but these things work very
+close to human accuracy
+
+229
+00:09:07,285 --> 00:09:09,278
+in some limited situations.
+
+230
+00:09:09,278 --> 00:09:12,379
+And take only hundreds
+of milliseconds to do so.
+
+231
+00:09:12,379 --> 00:09:14,921
+So, this is some pretty
+amazing, incredible technology,
+
+232
+00:09:14,921 --> 00:09:18,418
+in my opinion, and over the
+course of the rest of the class
+
+233
+00:09:18,418 --> 00:09:20,241
+we will really see what
+kinds of advancements
+
+234
+00:09:20,241 --> 00:09:22,241
+have made this possible.
+
+235
+00:09:23,492 --> 00:09:24,728
+So now, if you, kind of, think about
+
+236
+00:09:24,728 --> 00:09:27,565
+what is the API for writing
+an image classifier,
+
+237
+00:09:27,565 --> 00:09:30,098
+you might sit down and try
+to write a method in Python
+
+238
+00:09:30,098 --> 00:09:31,131
+like this.
+
+239
+00:09:31,131 --> 00:09:32,739
+Where you want to take in an image
+
+240
+00:09:32,739 --> 00:09:34,401
+and then do some crazy magic
+
+241
+00:09:34,401 --> 00:09:36,185
+and then, eventually,
+spit out this class label
+
+242
+00:09:36,185 --> 00:09:38,180
+to say cat or dog or whatnot.
+
+243
+00:09:38,180 --> 00:09:41,695
+And there's really no obvious
+way to do this, right?
+
+244
+00:09:41,695 --> 00:09:43,476
+If you're taking an algorithms class
+
+245
+00:09:43,476 --> 00:09:44,981
+and your task is to sort numbers
+
+246
+00:09:44,981 --> 00:09:46,837
+or compute a convex hull
+
+247
+00:09:46,837 --> 00:09:49,535
+or, even, do something
+like RSA encryption,
+
+248
+00:09:49,535 --> 00:09:51,584
+you, sort of, can write down an algorithm
+
+249
+00:09:51,584 --> 00:09:53,725
+and enumerate all the
+steps that need to happen
+
+250
+00:09:53,725 --> 00:09:55,773
+in order for this things to work.
+
+251
+00:09:55,773 --> 00:09:58,325
+But, when we're trying
+to recognize objects,
+
+252
+00:09:58,325 --> 00:10:00,390
+or recognize cats or images,
+
+253
+00:10:00,390 --> 00:10:02,838
+there's no really clear,
+explicit algorithm
+
+254
+00:10:02,838 --> 00:10:04,810
+that makes intuitive sense,
+
+255
+00:10:04,810 --> 00:10:07,909
+for how you might go about
+recognizing these objects.
+
+256
+00:10:07,909 --> 00:10:09,874
+So, this is, again, quite challenging,
+
+257
+00:10:09,874 --> 00:10:12,163
+if you think about,
+
+258
+00:10:12,163 --> 00:10:13,447
+if it was your first day programming
+
+259
+00:10:13,447 --> 00:10:15,464
+and you had to sit down
+and write this function,
+
+260
+00:10:15,464 --> 00:10:18,869
+I think most people would be in trouble.
+
+261
+00:10:18,869 --> 00:10:19,740
+That being said,
+
+262
+00:10:19,740 --> 00:10:21,907
+people have definitely
+made explicit attempts
+
+263
+00:10:21,907 --> 00:10:25,029
+to try to write, sort
+of, high-end coded rules
+
+264
+00:10:25,029 --> 00:10:27,004
+for recognizing different animals.
+
+265
+00:10:27,004 --> 00:10:29,193
+So, we touched on this a
+little bit in the last lecture,
+
+266
+00:10:29,193 --> 00:10:32,095
+but maybe one idea for cats is that,
+
+267
+00:10:32,095 --> 00:10:35,596
+we know that cats have ears
+and eyes and mouths and noses.
+
+268
+00:10:35,596 --> 00:10:37,945
+And we know that edges,
+from Hubel and Wiesel,
+
+269
+00:10:37,945 --> 00:10:39,512
+we know that edges are pretty important
+
+270
+00:10:39,512 --> 00:10:41,641
+when it comes to visual recognition.
+
+271
+00:10:41,641 --> 00:10:43,820
+So one thing we might try to do is
+
+272
+00:10:43,820 --> 00:10:45,425
+compute the edges of this image
+
+273
+00:10:45,425 --> 00:10:47,543
+and then go in and try to
+categorize all the different
+
+274
+00:10:47,543 --> 00:10:50,983
+corners and boundaries, and
+say that, if we have maybe
+
+275
+00:10:50,983 --> 00:10:53,146
+three lines meeting this way,
+then it might be a corner,
+
+276
+00:10:53,146 --> 00:10:55,186
+and an ear has one corner
+here and one corner there
+
+277
+00:10:55,186 --> 00:10:56,483
+and one corner there,
+
+278
+00:10:56,483 --> 00:10:59,076
+and then, kind of, write down
+this explicit set of rules
+
+279
+00:10:59,076 --> 00:11:01,608
+for recognizing cats.
+
+280
+00:11:01,608 --> 00:11:04,391
+But this turns out not to work very well.
+
+281
+00:11:04,391 --> 00:11:06,127
+One, it's super brittle.
+
+282
+00:11:06,127 --> 00:11:09,013
+And, two, say, if you want
+to start over for another
+
+283
+00:11:09,013 --> 00:11:11,876
+object category, and maybe
+not worry about cats,
+
+284
+00:11:11,876 --> 00:11:15,005
+but talk about trucks or dogs
+or fishes or something else,
+
+285
+00:11:15,005 --> 00:11:17,081
+then you need to start all over again.
+
+286
+00:11:17,081 --> 00:11:19,853
+So, this is really not a
+very scalable approach.
+
+287
+00:11:19,853 --> 00:11:22,579
+We want to come up with some
+algorithm, or some method,
+
+288
+00:11:22,579 --> 00:11:25,181
+for these recognition tasks
+
+289
+00:11:25,181 --> 00:11:27,360
+which scales much more
+naturally to all the variety
+
+290
+00:11:27,360 --> 00:11:29,360
+of objects in the world.
+
+291
+00:11:31,311 --> 00:11:34,766
+So, the insight that, sort
+of, makes this all work
+
+292
+00:11:34,766 --> 00:11:38,092
+is this idea of the data-driven approach.
+
+293
+00:11:38,092 --> 00:11:41,046
+Rather than sitting down and
+writing these hand-specified
+
+294
+00:11:41,046 --> 00:11:44,340
+rules to try to craft exactly
+what is a cat or a fish
+
+295
+00:11:44,340 --> 00:11:45,766
+or what have you,
+
+296
+00:11:45,766 --> 00:11:47,845
+instead, we'll go out onto the internet
+
+297
+00:11:47,845 --> 00:11:51,313
+and collect a large
+dataset of many, many cats
+
+298
+00:11:51,313 --> 00:11:53,524
+and many, many airplanes
+and many, many deer
+
+299
+00:11:53,524 --> 00:11:55,402
+and different things like this.
+
+300
+00:11:55,402 --> 00:11:58,075
+And we can actually use tools
+like Google Image Search,
+
+301
+00:11:58,075 --> 00:11:59,138
+or something like that,
+
+302
+00:11:59,138 --> 00:12:01,546
+to go out and collect a very
+large number of examples
+
+303
+00:12:01,546 --> 00:12:03,866
+of these different categories.
+
+304
+00:12:03,866 --> 00:12:06,203
+By the way, this actually
+takes quite a lot of effort
+
+305
+00:12:06,203 --> 00:12:08,338
+to go out and actually
+collect these datasets
+
+306
+00:12:08,338 --> 00:12:10,873
+but, luckily, there's a lot
+of really good, high quality
+
+307
+00:12:10,873 --> 00:12:14,105
+datasets out there already for you to use.
+
+308
+00:12:14,105 --> 00:12:16,073
+Then once we get this dataset,
+
+309
+00:12:16,073 --> 00:12:18,536
+we train this machine learning classifier
+
+310
+00:12:18,536 --> 00:12:20,869
+that is going to ingest all of the data,
+
+311
+00:12:20,869 --> 00:12:22,339
+summarize it in some way,
+
+312
+00:12:22,339 --> 00:12:23,733
+and then spit out a model
+
+313
+00:12:23,733 --> 00:12:26,130
+that summarizes the
+knowledge of how to recognize
+
+314
+00:12:26,130 --> 00:12:28,446
+these different object categories.
+
+315
+00:12:28,446 --> 00:12:30,134
+Then finally, we'll
+use this training model
+
+316
+00:12:30,134 --> 00:12:31,756
+and apply it on new images
+
+317
+00:12:31,756 --> 00:12:33,601
+that will then be able to recognize
+
+318
+00:12:33,601 --> 00:12:35,930
+cats and dogs and whatnot.
+
+319
+00:12:35,930 --> 00:12:38,428
+So here our API has changed a little bit.
+
+320
+00:12:38,428 --> 00:12:39,446
+Rather than a single function
+
+321
+00:12:39,446 --> 00:12:42,099
+that just inputs an image
+and recognizes a cat,
+
+322
+00:12:42,099 --> 00:12:43,621
+we have these two functions.
+
+323
+00:12:43,621 --> 00:12:48,084
+One, called, train, that's
+going to input images and labels
+
+324
+00:12:48,084 --> 00:12:49,115
+and then output a model,
+
+325
+00:12:49,115 --> 00:12:52,030
+and then, separately, another
+function called, predict,
+
+326
+00:12:52,030 --> 00:12:54,013
+which will input the model
+and than make predictions
+
+327
+00:12:54,013 --> 00:12:55,276
+for images.
+
+328
+00:12:55,276 --> 00:12:56,780
+And this is, kind of, the key insight
+
+329
+00:12:56,780 --> 00:12:59,178
+that allowed all these things
+to start working really well
+
+330
+00:12:59,178 --> 00:13:01,928
+over the last 10, 20 years or so.
+
+331
+00:13:05,784 --> 00:13:08,096
+So, this class is primarily
+about neural networks
+
+332
+00:13:08,096 --> 00:13:09,572
+and convolutional neural networks
+
+333
+00:13:09,572 --> 00:13:11,111
+and deep learning and all that,
+
+334
+00:13:11,111 --> 00:13:14,446
+but this idea of a data-driven
+approach is much more general
+
+335
+00:13:14,446 --> 00:13:15,819
+than just deep learning.
+
+336
+00:13:15,819 --> 00:13:17,832
+And I think it's useful to, sort of,
+
+337
+00:13:17,832 --> 00:13:19,145
+step through this process
+
+338
+00:13:19,145 --> 00:13:20,924
+for a very simple classifier first,
+
+339
+00:13:20,924 --> 00:13:23,058
+before we get to these big, complex ones.
+
+340
+00:13:23,058 --> 00:13:26,898
+So, probably, the simplest
+classifier you can imagine
+
+341
+00:13:26,898 --> 00:13:28,907
+is something we call nearest neighbor.
+
+342
+00:13:28,907 --> 00:13:31,243
+The algorithm is pretty dumb, honestly.
+
+343
+00:13:31,243 --> 00:13:34,315
+So, during the training
+step we won't do anything,
+
+344
+00:13:34,315 --> 00:13:36,966
+we'll just memorize all
+of the training data.
+
+345
+00:13:36,966 --> 00:13:39,108
+So this is very simple.
+
+346
+00:13:39,108 --> 00:13:41,006
+And now, during the prediction step,
+
+347
+00:13:41,006 --> 00:13:43,191
+we're going to take some new image
+
+348
+00:13:43,191 --> 00:13:45,597
+and go and try to find
+the most similar image
+
+349
+00:13:45,597 --> 00:13:47,964
+in the training data to that new image,
+
+350
+00:13:47,964 --> 00:13:51,453
+and now predict the label
+of that most similar image.
+
+351
+00:13:51,453 --> 00:13:53,169
+A very simple algorithm.
+
+352
+00:13:53,169 --> 00:13:55,104
+But it, sort of, has a lot
+of these nice properties
+
+353
+00:13:55,104 --> 00:13:58,771
+with respect to
+data-drivenness and whatnot.
+
+354
+00:13:59,977 --> 00:14:01,680
+So, to be a little bit more concrete,
+
+355
+00:14:01,680 --> 00:14:04,951
+you might imagine working on
+this dataset called CIFAR-10,
+
+356
+00:14:04,951 --> 00:14:07,331
+which is very commonly
+used in machine learning,
+
+357
+00:14:07,331 --> 00:14:09,259
+as kind of a small test case.
+
+358
+00:14:09,259 --> 00:14:11,579
+And you'll be working with
+this dataset on your homework.
+
+359
+00:14:11,579 --> 00:14:15,159
+So, the CIFAR-10 dataset gives
+you 10 different classes,
+
+360
+00:14:15,159 --> 00:14:17,965
+airplanes and automobiles and
+birds and cats and different
+
+361
+00:14:17,965 --> 00:14:19,920
+things like that.
+
+362
+00:14:19,920 --> 00:14:22,073
+And for each of those 10 categories
+
+363
+00:14:22,073 --> 00:14:24,990
+it provides 50,000 training images,
+
+364
+00:14:27,173 --> 00:14:30,250
+roughly evenly distributed
+across these 10 categories.
+
+365
+00:14:30,250 --> 00:14:33,648
+And then 10,000 additional testing images
+
+366
+00:14:33,648 --> 00:14:37,565
+that you're supposed to
+test your algorithm on.
+
+367
+00:14:38,707 --> 00:14:41,265
+So here's an example
+of applying this simple
+
+368
+00:14:41,265 --> 00:14:44,003
+nearest neighbor classifier
+to some of these test images
+
+369
+00:14:44,003 --> 00:14:45,741
+on CIFAR-10.
+
+370
+00:14:45,741 --> 00:14:48,703
+So, on this grid on the right,
+
+371
+00:14:48,703 --> 00:14:50,863
+for the left most column,
+
+372
+00:14:50,863 --> 00:14:53,693
+gives a test image in
+the CIFAR-10 dataset.
+
+373
+00:14:53,693 --> 00:14:58,375
+And now on the right, we've
+sorted the training images
+
+374
+00:14:58,375 --> 00:15:01,328
+and show the most similar training images
+
+375
+00:15:01,328 --> 00:15:03,571
+to each of these test examples.
+
+376
+00:15:03,571 --> 00:15:05,878
+And you can see that they
+look kind of visually similar
+
+377
+00:15:05,878 --> 00:15:07,938
+to the training images,
+
+378
+00:15:07,938 --> 00:15:10,974
+although they are not
+always correct, right?
+
+379
+00:15:10,974 --> 00:15:13,407
+So, maybe on the second row,
+we see that the testing,
+
+380
+00:15:13,407 --> 00:15:14,687
+this is kind of hard to see,
+
+381
+00:15:14,687 --> 00:15:17,340
+because these images are 32 by 32 pixels,
+
+382
+00:15:17,340 --> 00:15:18,768
+you need to really dive in there
+
+383
+00:15:18,768 --> 00:15:21,224
+and try to make your best guess.
+
+384
+00:15:21,224 --> 00:15:23,850
+But, this image is a dog and
+it's nearest neighbor is also
+
+385
+00:15:23,850 --> 00:15:28,072
+a dog, but this next one,
+I think is actually a deer
+
+386
+00:15:28,072 --> 00:15:30,006
+or a horse or something else.
+
+387
+00:15:30,006 --> 00:15:33,237
+But, you can see that it
+looks quite visually similar,
+
+388
+00:15:33,237 --> 00:15:34,773
+because there's kind of a
+white blob in the middle
+
+389
+00:15:34,773 --> 00:15:36,370
+and whatnot.
+
+390
+00:15:36,370 --> 00:15:38,630
+So, if we're applying the
+nearest neighbor algorithm
+
+391
+00:15:38,630 --> 00:15:39,651
+to this image,
+
+392
+00:15:39,651 --> 00:15:42,707
+we'll find the closest
+example in the training set.
+
+393
+00:15:42,707 --> 00:15:45,107
+And now, the closest
+example, we know it's label,
+
+394
+00:15:45,107 --> 00:15:47,135
+because it comes from the training set.
+
+395
+00:15:47,135 --> 00:15:49,735
+And now, we'll simply say that
+this testing image is also
+
+396
+00:15:49,735 --> 00:15:50,875
+a dog.
+
+397
+00:15:50,875 --> 00:15:53,946
+You can see from these
+examples that is probably not
+
+398
+00:15:53,946 --> 00:15:55,851
+going to work very well,
+
+399
+00:15:55,851 --> 00:16:00,018
+but it's still kind of a
+nice example to work through.
+
+400
+00:16:00,939 --> 00:16:03,724
+But then, one detail
+that we need to know is,
+
+401
+00:16:03,724 --> 00:16:05,013
+given a pair of images,
+
+402
+00:16:05,013 --> 00:16:06,908
+how can we actually compare them?
+
+403
+00:16:06,908 --> 00:16:09,152
+Because, if we're going to take
+our test image and compare it
+
+404
+00:16:09,152 --> 00:16:10,573
+to all the training images,
+
+405
+00:16:10,573 --> 00:16:12,165
+we actually have many different choices
+
+406
+00:16:12,165 --> 00:16:15,640
+for exactly what that comparison
+function should look like.
+
+407
+00:16:15,640 --> 00:16:17,687
+So, in the example in the previous slide,
+
+408
+00:16:17,687 --> 00:16:20,008
+we've used what's called the L1 distance,
+
+409
+00:16:20,008 --> 00:16:22,547
+also sometimes called
+the Manhattan distance.
+
+410
+00:16:22,547 --> 00:16:25,725
+So, this is a really
+sort of simple, easy idea
+
+411
+00:16:25,725 --> 00:16:27,448
+for comparing images.
+
+412
+00:16:27,448 --> 00:16:31,691
+And that's that we're going to
+just compare individual pixels
+
+413
+00:16:31,691 --> 00:16:32,969
+in these images.
+
+414
+00:16:32,969 --> 00:16:36,519
+So, supposing that our test
+image is maybe just a tiny
+
+415
+00:16:36,519 --> 00:16:39,346
+four by four image of pixel values,
+
+416
+00:16:39,346 --> 00:16:41,802
+then we're take this upper-left hand pixel
+
+417
+00:16:41,802 --> 00:16:43,172
+of the test image,
+
+418
+00:16:43,172 --> 00:16:45,077
+subtract off the value
+in the training image,
+
+419
+00:16:45,077 --> 00:16:46,242
+take the absolute value,
+
+420
+00:16:46,242 --> 00:16:49,068
+and get the difference in that
+pixel between the two images.
+
+421
+00:16:49,068 --> 00:16:50,916
+And then, sum all these
+up across all the pixels
+
+422
+00:16:50,916 --> 00:16:51,950
+in the image.
+
+423
+00:16:51,950 --> 00:16:54,213
+So, this is kind of a stupid
+way to compare images,
+
+424
+00:16:54,213 --> 00:16:57,963
+but it does some reasonable
+things sometimes.
+
+425
+00:16:57,963 --> 00:16:59,535
+But, this gives us a very concrete way
+
+426
+00:16:59,535 --> 00:17:01,991
+to measure the difference
+between two images.
+
+427
+00:17:01,991 --> 00:17:05,064
+And in this case, we have
+this difference of 456
+
+428
+00:17:05,064 --> 00:17:07,147
+between these two images.
+
+429
+00:17:08,446 --> 00:17:10,944
+So, here's some full Python code
+
+430
+00:17:10,944 --> 00:17:13,233
+for implementing this
+nearest neighbor classifier
+
+431
+00:17:13,233 --> 00:17:16,582
+and you can see it's pretty
+short and pretty concise
+
+432
+00:17:16,583 --> 00:17:18,804
+because we've made use of
+many of these vectorized
+
+433
+00:17:18,804 --> 00:17:21,348
+operations offered by NumPy.
+
+434
+00:17:21,348 --> 00:17:25,078
+So, here we can see that
+this training function,
+
+435
+00:17:25,079 --> 00:17:26,247
+that we talked about earlier,
+
+436
+00:17:26,247 --> 00:17:28,946
+is, again, very simple, in
+the case of nearest neighbor,
+
+437
+00:17:28,946 --> 00:17:30,573
+you just memorize the training data,
+
+438
+00:17:30,573 --> 00:17:33,427
+there's not really much to do here.
+
+439
+00:17:33,427 --> 00:17:35,869
+And now, at test time, we're
+going to take in our image
+
+440
+00:17:35,869 --> 00:17:39,126
+and then go in and compare
+using this L1 distance function,
+
+441
+00:17:39,126 --> 00:17:41,984
+our test image to each of
+these training examples
+
+442
+00:17:41,984 --> 00:17:45,395
+and find the most similar
+example in the training set.
+
+443
+00:17:45,395 --> 00:17:47,371
+And you can see that, we're
+actually able to do this
+
+444
+00:17:47,371 --> 00:17:50,113
+in just one or two lines of Python code
+
+445
+00:17:50,113 --> 00:17:53,882
+by utilizing these vectorized
+operations in NumPy.
+
+446
+00:17:53,882 --> 00:17:55,779
+So, this is something that
+you'll get practice with
+
+447
+00:17:55,779 --> 00:17:57,779
+on the first assignment.
+
+448
+00:17:58,628 --> 00:18:02,179
+So now, a couple questions
+about this simple classifier.
+
+449
+00:18:02,179 --> 00:18:04,910
+First, if we have N examples
+in our training set,
+
+450
+00:18:04,910 --> 00:18:09,077
+then how fast can we expect
+training and testing to be?
+
+451
+00:18:12,233 --> 00:18:13,998
+Well, training is probably constant
+
+452
+00:18:13,998 --> 00:18:15,712
+because we don't really
+need to do anything,
+
+453
+00:18:15,712 --> 00:18:17,878
+we just need to memorize the data.
+
+454
+00:18:17,878 --> 00:18:19,241
+And if you're just copying a pointer,
+
+455
+00:18:19,241 --> 00:18:20,663
+that's going to be constant time
+
+456
+00:18:20,663 --> 00:18:22,703
+no matter how big your dataset is.
+
+457
+00:18:22,703 --> 00:18:26,209
+But now, at test time we need
+to do this comparison stop
+
+458
+00:18:26,209 --> 00:18:27,679
+and compare our test image
+
+459
+00:18:27,679 --> 00:18:31,099
+to each of the N training
+examples in the dataset.
+
+460
+00:18:31,099 --> 00:18:33,766
+And this is actually quite slow.
+
+461
+00:18:34,991 --> 00:18:37,448
+So, this is actually somewhat backwards,
+
+462
+00:18:37,448 --> 00:18:38,641
+if you think about it.
+
+463
+00:18:38,641 --> 00:18:40,350
+Because, in practice,
+
+464
+00:18:40,350 --> 00:18:43,489
+we want our classifiers to
+be slow at training time
+
+465
+00:18:43,489 --> 00:18:45,326
+and then fast at testing time.
+
+466
+00:18:45,326 --> 00:18:47,858
+Because, you might imagine,
+that a classifier might go
+
+467
+00:18:47,858 --> 00:18:49,882
+and be trained in a data center somewhere
+
+468
+00:18:49,882 --> 00:18:52,045
+and you can afford to
+spend a lot of computation
+
+469
+00:18:52,045 --> 00:18:54,640
+at training time to make
+the classifier really good.
+
+470
+00:18:54,640 --> 00:18:55,473
+But then,
+
+471
+00:18:55,473 --> 00:18:57,566
+when you go and deploy the
+classifier at test time,
+
+472
+00:18:57,566 --> 00:18:59,503
+you want it to run on your mobile phone
+
+473
+00:18:59,503 --> 00:19:02,248
+or in a browser or some
+other low power device,
+
+474
+00:19:02,248 --> 00:19:04,493
+and you really want the
+testing time performance
+
+475
+00:19:04,493 --> 00:19:07,075
+of your classifier to be quite fast.
+
+476
+00:19:07,075 --> 00:19:09,929
+So, from this perspective, this
+nearest neighbor algorithm,
+
+477
+00:19:09,929 --> 00:19:11,826
+is, actually, a little bit backwards.
+
+478
+00:19:11,826 --> 00:19:13,591
+And we'll see that once we move to
+
+479
+00:19:13,591 --> 00:19:14,720
+convolutional neural networks,
+
+480
+00:19:14,720 --> 00:19:16,420
+and other types of parametric models,
+
+481
+00:19:16,420 --> 00:19:18,286
+they'll be the reverse of this.
+
+482
+00:19:18,286 --> 00:19:20,226
+Where you'll spend a lot of
+compute at training time,
+
+483
+00:19:20,226 --> 00:19:24,936
+but then they'll be quite
+fast at testing time.
+
+484
+00:19:24,936 --> 00:19:25,969
+So then, the question is,
+
+485
+00:19:25,969 --> 00:19:28,139
+what exactly does this
+nearest neighbor algorithm
+
+486
+00:19:28,139 --> 00:19:30,816
+look like when you apply it in practice?
+
+487
+00:19:30,816 --> 00:19:34,049
+So, here we've drawn, what
+we call the decision regions
+
+488
+00:19:34,049 --> 00:19:36,130
+of a nearest neighbor classifier.
+
+489
+00:19:36,130 --> 00:19:39,636
+So, here our training set
+consists of these points
+
+490
+00:19:39,636 --> 00:19:42,021
+in the two dimensional plane,
+
+491
+00:19:42,021 --> 00:19:45,388
+where the color of the point
+represents the category,
+
+492
+00:19:45,388 --> 00:19:47,547
+or the class label, of that point.
+
+493
+00:19:47,547 --> 00:19:49,221
+So, here we see we have five classes
+
+494
+00:19:49,221 --> 00:19:51,543
+and some blue ones up in the corner here,
+
+495
+00:19:51,543 --> 00:19:53,921
+some purple ones in the
+upper-right hand corner.
+
+496
+00:19:53,921 --> 00:19:56,491
+And now for each pixel
+in this entire plane,
+
+497
+00:19:56,491 --> 00:20:00,860
+we've gone and computed
+what is the nearest example
+
+498
+00:20:00,860 --> 00:20:02,560
+in these training data,
+
+499
+00:20:02,560 --> 00:20:04,391
+and then colored the
+point of the background
+
+500
+00:20:04,391 --> 00:20:06,954
+corresponding to what is the class label.
+
+501
+00:20:06,954 --> 00:20:09,049
+So, you can see that this
+nearest neighbor classifier
+
+502
+00:20:09,049 --> 00:20:11,032
+is just sort of carving up the space
+
+503
+00:20:11,032 --> 00:20:14,979
+and coloring the space
+according to the nearby points.
+
+504
+00:20:14,979 --> 00:20:18,320
+But this classifier is maybe not so great.
+
+505
+00:20:18,320 --> 00:20:20,002
+And by looking at this picture
+
+506
+00:20:20,002 --> 00:20:22,568
+we can start to see some of the
+problems that might come out
+
+507
+00:20:22,568 --> 00:20:24,676
+with a nearest neighbor classifier.
+
+508
+00:20:24,676 --> 00:20:27,487
+For one, this central
+region actually contains
+
+509
+00:20:27,487 --> 00:20:29,208
+mostly green points,
+
+510
+00:20:29,208 --> 00:20:31,591
+but one little yellow point in the middle.
+
+511
+00:20:31,591 --> 00:20:34,406
+But because we're just looking
+at the nearest neighbor,
+
+512
+00:20:34,406 --> 00:20:36,411
+this causes a little
+yellow island to appear
+
+513
+00:20:36,411 --> 00:20:38,552
+in this middle of this green cluster.
+
+514
+00:20:38,552 --> 00:20:40,087
+And that's, maybe, not so great.
+
+515
+00:20:40,087 --> 00:20:44,081
+Maybe those points actually
+should have been green.
+
+516
+00:20:44,081 --> 00:20:47,990
+And then, similarly we also
+see these, sort of, fingers,
+
+517
+00:20:47,990 --> 00:20:50,225
+like the green region
+pushing into the blue region,
+
+518
+00:20:50,225 --> 00:20:52,450
+again, due to the presence of one point,
+
+519
+00:20:52,450 --> 00:20:55,180
+which may have been noisy or spurious.
+
+520
+00:20:55,180 --> 00:20:58,205
+So, this kind of motivates
+a slight generalization
+
+521
+00:20:58,205 --> 00:21:01,606
+of this algorithm called
+k-nearest neighbors.
+
+522
+00:21:01,606 --> 00:21:05,070
+So rather than just looking for
+the single nearest neighbor,
+
+523
+00:21:05,070 --> 00:21:08,021
+instead we'll do something
+a little bit fancier
+
+524
+00:21:08,021 --> 00:21:10,627
+and find K of our nearest neighbors,
+
+525
+00:21:10,627 --> 00:21:12,240
+according to our distance metric,
+
+526
+00:21:12,240 --> 00:21:15,057
+and then take a vote among
+each of our neighbors.
+
+527
+00:21:15,057 --> 00:21:16,708
+And then predict the majority vote
+
+528
+00:21:16,708 --> 00:21:18,733
+among our neighbors.
+
+529
+00:21:18,733 --> 00:21:21,032
+You can imagine slightly more
+complex ways of doing this.
+
+530
+00:21:21,032 --> 00:21:22,919
+Maybe you'd vote weighted on the distance,
+
+531
+00:21:22,919 --> 00:21:24,148
+or something like that,
+
+532
+00:21:24,148 --> 00:21:27,912
+but the simplest thing that
+tends to work pretty well
+
+533
+00:21:27,912 --> 00:21:29,810
+is just taking a majority vote.
+
+534
+00:21:29,810 --> 00:21:32,810
+So here we've shown the
+exact same set of points
+
+535
+00:21:32,810 --> 00:21:35,899
+using this K=1 nearest
+neighbor classifier,
+
+536
+00:21:35,899 --> 00:21:39,928
+as well as K=3 and K=5 in
+the middle and on the right.
+
+537
+00:21:39,928 --> 00:21:43,792
+And once we move to K=3, you
+can see that that spurious
+
+538
+00:21:43,792 --> 00:21:46,186
+yellow point in the middle
+of the green cluster
+
+539
+00:21:46,186 --> 00:21:49,369
+is no longer causing the
+points near that region
+
+540
+00:21:49,369 --> 00:21:50,966
+to be classified as yellow.
+
+541
+00:21:50,966 --> 00:21:53,684
+Now this entire green
+portion in the middle
+
+542
+00:21:53,684 --> 00:21:55,852
+is all being classified as green.
+
+543
+00:21:55,852 --> 00:21:57,737
+You can also see that these fingers
+
+544
+00:21:57,737 --> 00:21:59,272
+of the red and blue regions
+
+545
+00:21:59,272 --> 00:22:00,823
+are starting to get smoothed out
+
+546
+00:22:00,823 --> 00:22:02,454
+due to this majority voting.
+
+547
+00:22:02,454 --> 00:22:05,381
+And then, once we move to the K=5 case,
+
+548
+00:22:05,381 --> 00:22:06,900
+then these decision boundaries
+
+549
+00:22:06,900 --> 00:22:08,437
+between the blue and red regions
+
+550
+00:22:08,437 --> 00:22:12,064
+have become quite smooth and quite nice.
+
+551
+00:22:12,064 --> 00:22:13,818
+So, generally when you're
+using nearest neighbors
+
+552
+00:22:13,818 --> 00:22:14,727
+classifiers,
+
+553
+00:22:14,727 --> 00:22:18,718
+you almost always want
+to use some value of K,
+
+554
+00:22:18,718 --> 00:22:20,771
+which is larger than one
+
+555
+00:22:20,771 --> 00:22:22,897
+because this tends to
+smooth out your decision
+
+556
+00:22:22,897 --> 00:22:26,064
+boundaries and lead to better results.
+
+557
+00:22:29,252 --> 00:22:30,159
+Question?
+
+558
+00:22:30,159 --> 00:22:34,279
+[student asking a question]
+
+559
+00:22:34,279 --> 00:22:35,208
+Yes, so the question is,
+
+560
+00:22:35,208 --> 00:22:38,133
+what is the deal with these white regions?
+
+561
+00:22:38,133 --> 00:22:41,025
+The white regions are
+where there was no majority
+
+562
+00:22:41,025 --> 00:22:43,247
+among the k-nearest neighbors.
+
+563
+00:22:43,247 --> 00:22:45,521
+You could imagine maybe doing
+something slightly fancier
+
+564
+00:22:45,521 --> 00:22:48,972
+and maybe taking a guess
+or randomly selecting among
+
+565
+00:22:48,972 --> 00:22:50,472
+the majority winners,
+
+566
+00:22:50,472 --> 00:22:52,729
+but for this simple example
+we're just coloring it white
+
+567
+00:22:52,729 --> 00:22:54,335
+to indicate there was no nearest neighbor
+
+568
+00:22:54,335 --> 00:22:55,668
+in those points.
+
+569
+00:23:00,005 --> 00:23:02,439
+Whenever we're thinking
+about computer vision
+
+570
+00:23:02,439 --> 00:23:04,225
+I think it's really useful to kind of flip
+
+571
+00:23:04,225 --> 00:23:06,616
+back and forth between
+several different viewpoints.
+
+572
+00:23:06,616 --> 00:23:09,480
+One, is this idea of high
+dimensional points in the plane,
+
+573
+00:23:09,480 --> 00:23:13,049
+and then the other is actually
+looking at concrete images.
+
+574
+00:23:13,049 --> 00:23:15,118
+Because the pixels of the image actually
+
+575
+00:23:15,118 --> 00:23:18,185
+allow us to think of these
+images as high dimensional
+
+576
+00:23:18,185 --> 00:23:19,048
+vectors.
+
+577
+00:23:19,048 --> 00:23:21,181
+And it's sort of useful to
+ping pong back and forth
+
+578
+00:23:21,181 --> 00:23:23,395
+between these two different viewpoints.
+
+579
+00:23:23,395 --> 00:23:26,193
+So then, sort of taking
+this k-nearest neighbor
+
+580
+00:23:26,193 --> 00:23:27,876
+and going back to the images
+
+581
+00:23:27,876 --> 00:23:29,443
+you can see that it's
+actually not very good.
+
+582
+00:23:29,443 --> 00:23:31,216
+Here I've colored in red and green
+
+583
+00:23:31,216 --> 00:23:33,265
+which images would actually
+be classified correctly
+
+584
+00:23:33,265 --> 00:23:35,385
+or incorrectly according
+to their nearest neighbor.
+
+585
+00:23:35,385 --> 00:23:38,288
+And you can see that it's
+really not very good.
+
+586
+00:23:38,288 --> 00:23:41,459
+But maybe if we used a larger value of K
+
+587
+00:23:41,459 --> 00:23:43,690
+then this would involve
+actually voting among
+
+588
+00:23:43,690 --> 00:23:45,586
+maybe the top three or the top five
+
+589
+00:23:45,586 --> 00:23:47,264
+or maybe even the whole row.
+
+590
+00:23:47,264 --> 00:23:48,806
+And you could imagine that
+that would end up being
+
+591
+00:23:48,806 --> 00:23:52,158
+a lot more robust to some
+of this noise that we see
+
+592
+00:23:52,158 --> 00:23:55,325
+when retrieving neighbors in this way.
+
+593
+00:23:57,070 --> 00:23:59,803
+So another choice we
+have when we're working
+
+594
+00:23:59,803 --> 00:24:01,666
+with the k-nearest neighbor algorithm
+
+595
+00:24:01,666 --> 00:24:04,187
+is determining exactly
+how we should be comparing
+
+596
+00:24:04,187 --> 00:24:05,727
+our different points.
+
+597
+00:24:05,727 --> 00:24:09,624
+For the examples so far we've just shown
+
+598
+00:24:09,624 --> 00:24:11,666
+we've talked about this L1 distance
+
+599
+00:24:11,666 --> 00:24:13,522
+which takes the sum of the absolute values
+
+600
+00:24:13,522 --> 00:24:15,126
+between the pixels.
+
+601
+00:24:15,126 --> 00:24:18,299
+But another common choice is
+the L2 or Euclidean distance
+
+602
+00:24:18,299 --> 00:24:21,266
+where you take the square
+root of the sum of the squares
+
+603
+00:24:21,266 --> 00:24:24,491
+and take this as your distance.
+
+604
+00:24:24,491 --> 00:24:26,588
+Choosing different
+distance metrics actually
+
+605
+00:24:26,588 --> 00:24:28,727
+is a pretty interesting topic
+
+606
+00:24:28,727 --> 00:24:30,072
+because different distance metrics
+
+607
+00:24:30,072 --> 00:24:32,266
+make different assumptions
+about the underlying
+
+608
+00:24:32,266 --> 00:24:35,386
+geometry or topology that
+you'd expect in the space.
+
+609
+00:24:35,386 --> 00:24:39,103
+So, this L1 distance, underneath
+this, this is actually
+
+610
+00:24:39,103 --> 00:24:41,688
+a circle according to the L1 distance
+
+611
+00:24:41,688 --> 00:24:43,487
+and it forms this square shape thing
+
+612
+00:24:43,487 --> 00:24:45,020
+around the origin.
+
+613
+00:24:45,020 --> 00:24:47,637
+Where each of the points
+on this, on the square,
+
+614
+00:24:47,637 --> 00:24:51,017
+is equidistant from the
+origin according to L1,
+
+615
+00:24:51,017 --> 00:24:53,116
+whereas with the L2 or Euclidean distance
+
+616
+00:24:53,116 --> 00:24:55,290
+then this circle is a familiar circle,
+
+617
+00:24:55,290 --> 00:24:57,241
+it looks like what you'd expect.
+
+618
+00:24:57,241 --> 00:24:59,521
+So one interesting thing to
+point out between these two
+
+619
+00:24:59,521 --> 00:25:00,798
+metrics in particular,
+
+620
+00:25:00,798 --> 00:25:03,672
+is that the L1 distance
+depends on your choice
+
+621
+00:25:03,672 --> 00:25:05,135
+of coordinates system.
+
+622
+00:25:05,135 --> 00:25:07,306
+So if you were to rotate
+the coordinate frame
+
+623
+00:25:07,306 --> 00:25:08,902
+that would actually change the L1 distance
+
+624
+00:25:08,902 --> 00:25:10,201
+between the points.
+
+625
+00:25:10,201 --> 00:25:13,287
+Whereas changing the coordinate
+frame in the L2 distance
+
+626
+00:25:13,287 --> 00:25:15,491
+doesn't matter, it's the
+same thing no matter what
+
+627
+00:25:15,491 --> 00:25:18,281
+your coordinate frame is.
+
+628
+00:25:18,281 --> 00:25:21,721
+Maybe if your input features,
+if the individual entries
+
+629
+00:25:21,721 --> 00:25:23,866
+in your vector have some important meaning
+
+630
+00:25:23,866 --> 00:25:24,791
+for your task,
+
+631
+00:25:24,791 --> 00:25:27,935
+then maybe somehow L1 might
+be a more natural fit.
+
+632
+00:25:27,935 --> 00:25:30,533
+But if it's just a generic
+vector in some space
+
+633
+00:25:30,533 --> 00:25:32,373
+and you don't know which
+of the different elements,
+
+634
+00:25:32,373 --> 00:25:34,121
+you don't know what they actually mean,
+
+635
+00:25:34,121 --> 00:25:37,531
+then maybe L2 is slightly more natural.
+
+636
+00:25:37,531 --> 00:25:40,154
+And another point here is that
+
+637
+00:25:40,154 --> 00:25:41,839
+by using different distance metrics
+
+638
+00:25:41,839 --> 00:25:43,474
+we can actually generalize
+the k-nearest neighbor
+
+639
+00:25:43,474 --> 00:25:46,343
+classifier to many, many
+different types of data,
+
+640
+00:25:46,343 --> 00:25:48,280
+not just vectors, not just images.
+
+641
+00:25:48,280 --> 00:25:51,410
+So, for example, imagine you
+wanted to classify pieces
+
+642
+00:25:51,410 --> 00:25:54,073
+of text, then the only
+thing you need to do
+
+643
+00:25:54,073 --> 00:25:55,366
+to use k-nearest neighbors
+
+644
+00:25:55,366 --> 00:25:57,716
+is to specify some distance function
+
+645
+00:25:57,716 --> 00:26:01,692
+that can measure distances
+between maybe two paragraphs
+
+646
+00:26:01,692 --> 00:26:03,831
+or two sentences or something like that.
+
+647
+00:26:03,831 --> 00:26:06,908
+So, simply by specifying
+different distance metrics
+
+648
+00:26:06,908 --> 00:26:09,377
+we can actually apply this
+algorithm very generally
+
+649
+00:26:09,377 --> 00:26:12,701
+to basically any type of data.
+
+650
+00:26:12,701 --> 00:26:14,598
+Even though it's a kind
+of simple algorithm,
+
+651
+00:26:14,598 --> 00:26:17,200
+in general, it's a very
+good thing to try first
+
+652
+00:26:17,200 --> 00:26:20,283
+when you're looking at a new problem.
+
+653
+00:26:21,805 --> 00:26:23,986
+So then, it's also kind of
+interesting to think about
+
+654
+00:26:23,986 --> 00:26:25,854
+what is actually happening geometrically
+
+655
+00:26:25,854 --> 00:26:28,441
+if we choose different distance metrics.
+
+656
+00:26:28,441 --> 00:26:31,370
+So here we see the same
+set of points on the left
+
+657
+00:26:31,370 --> 00:26:33,577
+using the L1, or Manhattan distance,
+
+658
+00:26:33,577 --> 00:26:36,767
+and then, on the right,
+using the familiar L2,
+
+659
+00:26:36,767 --> 00:26:38,087
+or Euclidean distance.
+
+660
+00:26:38,087 --> 00:26:40,298
+And you can see that the
+shapes of these decision
+
+661
+00:26:40,298 --> 00:26:42,476
+boundaries actually change quite a bit
+
+662
+00:26:42,476 --> 00:26:44,093
+between the two metrics.
+
+663
+00:26:44,093 --> 00:26:46,792
+So when you're looking at
+L1 these decision boundaries
+
+664
+00:26:46,792 --> 00:26:49,337
+tend to follow the coordinate axes.
+
+665
+00:26:49,337 --> 00:26:52,168
+And this is again because
+the L1 depends on our choice
+
+666
+00:26:52,168 --> 00:26:53,451
+of coordinate system.
+
+667
+00:26:53,451 --> 00:26:56,020
+Where the L2 sort of doesn't
+really care about the
+
+668
+00:26:56,020 --> 00:26:57,544
+coordinate axis, it
+just puts the boundaries
+
+669
+00:26:57,544 --> 00:27:00,294
+where they should fall naturally.
+
+670
+00:27:04,161 --> 00:27:06,406
+My confession is that
+each of these examples
+
+671
+00:27:06,406 --> 00:27:08,669
+that I've shown you is
+actually from this interactive
+
+672
+00:27:08,669 --> 00:27:10,293
+web demo that I built,
+
+673
+00:27:10,293 --> 00:27:12,918
+where you can go and play
+with this k-nearest neighbor
+
+674
+00:27:12,918 --> 00:27:14,618
+classifier on your own.
+
+675
+00:27:14,618 --> 00:27:17,938
+And this is really hard to
+work on a projector screen.
+
+676
+00:27:17,938 --> 00:27:21,271
+So maybe we'll do that on your own time.
+
+677
+00:27:26,820 --> 00:27:29,403
+So, let's just go back to here.
+
+678
+00:27:32,951 --> 00:27:35,784
+Man, this is kind of embarrassing.
+
+679
+00:28:07,103 --> 00:28:09,679
+Okay, that was way more
+trouble than it was worth.
+
+680
+00:28:09,679 --> 00:28:12,319
+So, let's skip this, but I encourage you
+
+681
+00:28:12,319 --> 00:28:13,496
+to go play with this in your browser.
+
+682
+00:28:13,496 --> 00:28:15,541
+It's actually pretty fun
+
+683
+00:28:15,541 --> 00:28:17,742
+and kind of nice to build intuition about
+
+684
+00:28:17,742 --> 00:28:19,246
+how the decision boundary changes
+
+685
+00:28:19,246 --> 00:28:20,536
+as you change the K
+
+686
+00:28:20,536 --> 00:28:23,529
+and change your distance metric
+
+687
+00:28:23,529 --> 00:28:26,029
+and all those sorts of things.
+
+688
+00:28:30,641 --> 00:28:32,387
+Okay, so then the question is
+
+689
+00:28:32,387 --> 00:28:34,072
+once you're actually trying
+to use this algorithm
+
+690
+00:28:34,072 --> 00:28:36,146
+in practice, there's several choices
+
+691
+00:28:36,146 --> 00:28:37,178
+you need to make.
+
+692
+00:28:37,178 --> 00:28:39,426
+We talked about choosing
+different values of K.
+
+693
+00:28:39,426 --> 00:28:41,520
+We talked about choosing
+different distance metrics.
+
+694
+00:28:41,520 --> 00:28:43,403
+And the question becomes
+
+695
+00:28:43,403 --> 00:28:45,584
+how do you actually make
+these choices for your problem
+
+696
+00:28:45,584 --> 00:28:47,286
+and for your data?
+
+697
+00:28:47,286 --> 00:28:51,736
+So, these choices, of things
+like K and the distance metric,
+
+698
+00:28:51,736 --> 00:28:53,937
+we call hyperparameters,
+
+699
+00:28:53,937 --> 00:28:56,456
+because they are not necessarily
+learned from the training
+
+700
+00:28:56,456 --> 00:28:57,289
+data,
+
+701
+00:28:57,289 --> 00:29:00,267
+instead these are choices about
+your algorithm that you make
+
+702
+00:29:00,267 --> 00:29:01,313
+ahead of time
+
+703
+00:29:01,313 --> 00:29:05,623
+and there's no way to learn
+them directly from the data.
+
+704
+00:29:05,623 --> 00:29:08,821
+So, the question is how
+do you set these things
+
+705
+00:29:08,821 --> 00:29:10,260
+in practice?
+
+706
+00:29:10,260 --> 00:29:12,277
+And they turn out to be
+very problem-dependent.
+
+707
+00:29:12,277 --> 00:29:15,309
+And the simple thing that
+most people do is simply
+
+708
+00:29:15,309 --> 00:29:17,957
+try different values of
+hyperparameters for your data
+
+709
+00:29:17,957 --> 00:29:20,950
+and for your problem, and
+figure out which one works best.
+
+710
+00:29:20,950 --> 00:29:22,404
+There's a question?
+
+711
+00:29:22,404 --> 00:29:26,071
+[student asking a question]
+
+712
+00:29:29,589 --> 00:29:32,367
+So, the question is, where L1
+distance might be preferable
+
+713
+00:29:32,367 --> 00:29:34,447
+to using L2 distance?
+
+714
+00:29:34,447 --> 00:29:36,800
+I think it's mainly problem-dependent,
+
+715
+00:29:36,800 --> 00:29:38,106
+it's sort of difficult to say
+
+716
+00:29:38,106 --> 00:29:40,371
+in which cases you think
+one might be better
+
+717
+00:29:40,371 --> 00:29:41,204
+than the other.
+
+718
+00:29:41,204 --> 00:29:44,719
+but I think that because L1
+has this sort of coordinate
+
+719
+00:29:44,719 --> 00:29:48,877
+dependency, it actually depends
+on the coordinate system
+
+720
+00:29:48,877 --> 00:29:50,185
+of your data,
+
+721
+00:29:50,185 --> 00:29:52,833
+if you know that you have a vector,
+
+722
+00:29:52,833 --> 00:29:54,482
+and maybe the individual
+elements of the vector
+
+723
+00:29:54,482 --> 00:29:55,513
+have meaning.
+
+724
+00:29:55,513 --> 00:29:58,583
+Like maybe you're classifying
+employees for some reason
+
+725
+00:29:58,583 --> 00:30:00,713
+and then the different elements
+of that vector correspond
+
+726
+00:30:00,713 --> 00:30:03,976
+to different features or
+aspects of an employee.
+
+727
+00:30:03,976 --> 00:30:06,432
+Like their salary or the
+number of years they've been
+
+728
+00:30:06,432 --> 00:30:08,778
+working at the company
+or something like that.
+
+729
+00:30:08,778 --> 00:30:10,949
+So I think when your
+individual elements actually
+
+730
+00:30:10,949 --> 00:30:11,860
+have some meaning,
+
+731
+00:30:11,860 --> 00:30:14,297
+is where I think maybe using
+L1 might make a little bit
+
+732
+00:30:14,297 --> 00:30:15,850
+more sense.
+
+733
+00:30:15,850 --> 00:30:17,623
+But in general, again,
+this is a hyperparameter
+
+734
+00:30:17,623 --> 00:30:19,989
+and it really depends on
+your problem and your data
+
+735
+00:30:19,989 --> 00:30:22,214
+so the best answer is
+just to try them both
+
+736
+00:30:22,214 --> 00:30:24,381
+and see what works better.
+
+737
+00:30:28,381 --> 00:30:30,092
+Even this idea of trying
+out different values
+
+738
+00:30:30,092 --> 00:30:32,413
+of hyperparameters and
+seeing what works best,
+
+739
+00:30:32,413 --> 00:30:34,238
+there are many different choices here.
+
+740
+00:30:34,238 --> 00:30:36,287
+What exactly does it mean
+to try hyperparameters
+
+741
+00:30:36,287 --> 00:30:38,268
+and see what works best?
+
+742
+00:30:38,268 --> 00:30:40,391
+Well, the first idea you might think of
+
+743
+00:30:40,391 --> 00:30:42,911
+is simply choosing the
+hyperparameters that give you
+
+744
+00:30:42,911 --> 00:30:45,032
+the best accuracy or best performance
+
+745
+00:30:45,032 --> 00:30:47,691
+on your training data.
+
+746
+00:30:47,691 --> 00:30:49,961
+This is actually a really terrible idea.
+
+747
+00:30:49,961 --> 00:30:52,137
+You should never do this.
+
+748
+00:30:52,137 --> 00:30:54,081
+In the concrete case
+of the nearest neighbor
+
+749
+00:30:54,081 --> 00:30:55,717
+classifier, for example,
+
+750
+00:30:55,717 --> 00:30:59,324
+if we set K=1, we will always
+classify the training data
+
+751
+00:30:59,324 --> 00:31:00,157
+perfectly.
+
+752
+00:31:01,124 --> 00:31:04,420
+So if we use this strategy
+we'll always pick K=1,
+
+753
+00:31:04,420 --> 00:31:06,390
+but, as we saw from the examples earlier,
+
+754
+00:31:06,390 --> 00:31:10,446
+in practice it seems that
+setting K equals to larger values
+
+755
+00:31:10,446 --> 00:31:13,184
+might cause us to misclassify
+some of the training data,
+
+756
+00:31:13,184 --> 00:31:14,713
+but, in fact, lead to better performance
+
+757
+00:31:14,713 --> 00:31:17,915
+on points that were not
+in the training data.
+
+758
+00:31:17,915 --> 00:31:19,208
+And ultimately in machine learning
+
+759
+00:31:19,208 --> 00:31:21,434
+we don't care about
+fitting the training data,
+
+760
+00:31:21,434 --> 00:31:23,317
+we really care about how our classifier,
+
+761
+00:31:23,317 --> 00:31:24,463
+or how our method,
+
+762
+00:31:24,463 --> 00:31:27,051
+will perform on unseen
+data after training.
+
+763
+00:31:27,051 --> 00:31:30,495
+So, this is a terrible
+idea, don't do this.
+
+764
+00:31:30,495 --> 00:31:32,687
+So, another idea that you might think of,
+
+765
+00:31:32,687 --> 00:31:34,856
+is maybe we'll take our full dataset
+
+766
+00:31:34,856 --> 00:31:36,532
+and we'll split it into some training data
+
+767
+00:31:36,532 --> 00:31:38,390
+and some test data.
+
+768
+00:31:38,390 --> 00:31:42,294
+And now I'll try training
+my algorithm with different
+
+769
+00:31:42,294 --> 00:31:44,409
+choices of hyperparameters
+on the training data
+
+770
+00:31:44,409 --> 00:31:47,263
+and then I'll go and apply
+that trained classifier
+
+771
+00:31:47,263 --> 00:31:49,584
+on the test data and now I will pick
+
+772
+00:31:49,584 --> 00:31:52,299
+the set of hyperparameters
+that cause me to perform best
+
+773
+00:31:52,299 --> 00:31:53,716
+on the test data.
+
+774
+00:31:54,582 --> 00:31:57,414
+This seems like maybe a
+more reasonable strategy,
+
+775
+00:31:57,414 --> 00:31:59,546
+but, in fact, this is also a terrible idea
+
+776
+00:31:59,546 --> 00:32:01,087
+and you should never do this.
+
+777
+00:32:01,087 --> 00:32:03,723
+Because, again, the point
+of machine learning systems
+
+778
+00:32:03,723 --> 00:32:06,515
+is that we want to know how
+our algorithm will perform.
+
+779
+00:32:06,515 --> 00:32:08,017
+So, the point of the test set
+
+780
+00:32:08,017 --> 00:32:10,760
+is to give us some estimate
+of how our method will do
+
+781
+00:32:10,760 --> 00:32:14,523
+on unseen data that's
+coming out from the wild.
+
+782
+00:32:14,523 --> 00:32:17,710
+And if we use this strategy
+of training many different
+
+783
+00:32:17,710 --> 00:32:19,749
+algorithms with different hyperparameters,
+
+784
+00:32:19,749 --> 00:32:22,133
+and then, selecting the
+one which does the best
+
+785
+00:32:22,133 --> 00:32:23,363
+on the test data,
+
+786
+00:32:23,363 --> 00:32:26,404
+then, it's possible, that
+we may have just picked
+
+787
+00:32:26,404 --> 00:32:28,045
+the right set of hyperparameters
+
+788
+00:32:28,045 --> 00:32:30,319
+that caused our algorithm
+to work quite well
+
+789
+00:32:30,319 --> 00:32:31,663
+on this testing set,
+
+790
+00:32:31,663 --> 00:32:33,776
+but now our performance on this test set
+
+791
+00:32:33,776 --> 00:32:35,488
+will no longer be representative
+
+792
+00:32:35,488 --> 00:32:38,280
+of our performance of new, unseen data.
+
+793
+00:32:38,280 --> 00:32:41,491
+So, again, you should not
+do this, this is a bad idea,
+
+794
+00:32:41,491 --> 00:32:44,672
+you'll get in trouble if you do this.
+
+795
+00:32:44,672 --> 00:32:47,025
+What is much more common, is
+to actually split your data
+
+796
+00:32:47,025 --> 00:32:49,192
+into three different sets.
+
+797
+00:32:50,185 --> 00:32:54,165
+You'll partition most of
+your data into a training set
+
+798
+00:32:54,165 --> 00:32:56,159
+and then you'll create a validation set
+
+799
+00:32:56,159 --> 00:32:57,305
+and a test set.
+
+800
+00:32:57,305 --> 00:33:01,465
+And now what we typically do
+is go and train our algorithm
+
+801
+00:33:01,465 --> 00:33:03,500
+with many different
+choices of hyperparameters
+
+802
+00:33:03,500 --> 00:33:05,172
+on the training set,
+
+803
+00:33:05,172 --> 00:33:07,227
+evaluate on the validation set,
+
+804
+00:33:07,227 --> 00:33:08,802
+and now pick the set of hyperparameters
+
+805
+00:33:08,802 --> 00:33:11,621
+which performs best on the validation set.
+
+806
+00:33:11,621 --> 00:33:13,719
+And now, after you've
+done all your development,
+
+807
+00:33:13,719 --> 00:33:14,899
+you've done all your debugging,
+
+808
+00:33:14,899 --> 00:33:16,627
+after you've dome everything,
+
+809
+00:33:16,627 --> 00:33:20,000
+then you'd take that best
+performing classifier
+
+810
+00:33:20,000 --> 00:33:21,614
+on the validation set
+
+811
+00:33:21,614 --> 00:33:23,401
+and run it once on the test set.
+
+812
+00:33:23,401 --> 00:33:25,005
+And now that's the number
+that goes into your paper,
+
+813
+00:33:25,005 --> 00:33:27,139
+that's the number that
+goes into your report,
+
+814
+00:33:27,139 --> 00:33:29,542
+that's the number that
+actually is telling you how
+
+815
+00:33:29,542 --> 00:33:32,393
+your algorithm is doing on unseen data.
+
+816
+00:33:32,393 --> 00:33:34,335
+And this is actually
+really, really important
+
+817
+00:33:34,335 --> 00:33:36,516
+that you keep a very
+strict separation between
+
+818
+00:33:36,516 --> 00:33:38,847
+the validation data and the test data.
+
+819
+00:33:38,847 --> 00:33:41,437
+So, for example, when we're
+working on research papers,
+
+820
+00:33:41,437 --> 00:33:43,303
+we typically only touch the test set
+
+821
+00:33:43,303 --> 00:33:45,653
+at the very last minute.
+
+822
+00:33:45,653 --> 00:33:47,029
+So, when I'm writing papers,
+
+823
+00:33:47,029 --> 00:33:49,472
+I tend to only touch the
+test set for my problem
+
+824
+00:33:49,472 --> 00:33:51,809
+in maybe the week before
+the deadline or so
+
+825
+00:33:51,809 --> 00:33:54,159
+to really insure that we're not
+
+826
+00:33:54,159 --> 00:33:56,665
+being dishonest here and
+we're not reporting a number
+
+827
+00:33:56,665 --> 00:33:57,961
+which is unfair.
+
+828
+00:33:57,961 --> 00:34:00,102
+So, this is actually super important
+
+829
+00:34:00,102 --> 00:34:02,216
+and you want to make sure
+to keep your test data
+
+830
+00:34:02,216 --> 00:34:03,883
+quite under control.
+
+831
+00:34:06,468 --> 00:34:08,721
+So another strategy for
+setting hyperparameters
+
+832
+00:34:08,721 --> 00:34:10,840
+is called cross validation.
+
+833
+00:34:10,840 --> 00:34:13,868
+And this is used a
+little bit more commonly
+
+834
+00:34:13,868 --> 00:34:17,317
+for small data sets, not used
+so much in deep learning.
+
+835
+00:34:17,317 --> 00:34:20,201
+So here the idea is we're
+going to take our test data,
+
+836
+00:34:20,201 --> 00:34:21,674
+or we're going to take our dataset,
+
+837
+00:34:21,674 --> 00:34:25,534
+as usual, hold out some test
+set to use at the very end,
+
+838
+00:34:25,534 --> 00:34:27,023
+and now, for the rest of the data,
+
+839
+00:34:27,023 --> 00:34:29,188
+rather than splitting it
+into a single training
+
+840
+00:34:29,188 --> 00:34:31,265
+and validation partition,
+
+841
+00:34:31,266 --> 00:34:33,851
+instead, we can split our training data
+
+842
+00:34:33,851 --> 00:34:35,515
+into many different folds.
+
+843
+00:34:35,516 --> 00:34:38,879
+And now, in this way, we've
+cycled through choosing which
+
+844
+00:34:38,879 --> 00:34:41,415
+fold is going to be the validation set.
+
+845
+00:34:41,415 --> 00:34:43,286
+So now, in this example,
+
+846
+00:34:43,286 --> 00:34:45,498
+we're using five fold cross validation,
+
+847
+00:34:45,498 --> 00:34:47,594
+so you would train your
+algorithm with one set of
+
+848
+00:34:47,594 --> 00:34:49,984
+hyperparameters on the first four folds,
+
+849
+00:34:49,985 --> 00:34:51,928
+evaluate the performance on fold four,
+
+850
+00:34:51,928 --> 00:34:54,177
+and now go and retrain
+your algorithm on folds
+
+851
+00:34:54,177 --> 00:34:55,712
+one, two, three, and five,
+
+852
+00:34:55,712 --> 00:34:57,769
+evaluate on fold four,
+
+853
+00:34:57,769 --> 00:35:00,293
+and cycle through all the different folds.
+
+854
+00:35:00,293 --> 00:35:01,765
+And, when you do it this way,
+
+855
+00:35:01,765 --> 00:35:04,098
+you get much higher confidence about
+
+856
+00:35:04,098 --> 00:35:06,215
+which hyperparameters are going to perform
+
+857
+00:35:06,215 --> 00:35:07,511
+more robustly.
+
+858
+00:35:07,511 --> 00:35:09,714
+So this is kind of the
+gold standard to use,
+
+859
+00:35:09,714 --> 00:35:11,749
+but, in practice in deep learning
+
+860
+00:35:11,749 --> 00:35:13,285
+when we're training large models
+
+861
+00:35:13,285 --> 00:35:15,972
+and training is very
+computationally expensive,
+
+862
+00:35:15,972 --> 00:35:18,652
+these doesn't get used
+too much in practice.
+
+863
+00:35:18,652 --> 00:35:19,519
+Question?
+
+864
+00:35:19,519 --> 00:35:23,186
+[student asking a question]
+
+865
+00:35:29,515 --> 00:35:31,371
+Yeah, so the question is,
+
+866
+00:35:31,371 --> 00:35:32,634
+a little bit more concretely,
+
+867
+00:35:32,634 --> 00:35:34,320
+what's the difference
+between the training and the
+
+868
+00:35:34,320 --> 00:35:35,728
+validation set?
+
+869
+00:35:35,728 --> 00:35:39,895
+So, if you think about the
+k-nearest neighbor classifier
+
+870
+00:35:41,060 --> 00:35:45,300
+then the training set is this
+set of images with labels
+
+871
+00:35:45,300 --> 00:35:46,974
+where we memorize the labels.
+
+872
+00:35:46,974 --> 00:35:48,607
+And now, to classify an image,
+
+873
+00:35:48,607 --> 00:35:51,405
+we're going to take the image
+and compare it to each element
+
+874
+00:35:51,405 --> 00:35:52,451
+in the training data,
+
+875
+00:35:52,451 --> 00:35:56,618
+and then transfer the label
+from the nearest training point.
+
+876
+00:36:00,052 --> 00:36:02,102
+So now our algorithm
+will memorize everything
+
+877
+00:36:02,102 --> 00:36:03,184
+in the training set,
+
+878
+00:36:03,184 --> 00:36:05,934
+and now we'll take each
+element of the validation set
+
+879
+00:36:05,934 --> 00:36:08,062
+and compare it to each
+element in the training data
+
+880
+00:36:08,062 --> 00:36:12,081
+and then use this to
+determine what is the accuracy
+
+881
+00:36:12,081 --> 00:36:16,815
+of our classifier when it's
+applied on the validation set.
+
+882
+00:36:16,815 --> 00:36:18,746
+So this is the distinction
+between training
+
+883
+00:36:18,746 --> 00:36:19,919
+and validation.
+
+884
+00:36:19,919 --> 00:36:22,364
+Where your algorithm is
+able to see the labels
+
+885
+00:36:22,364 --> 00:36:24,207
+of the training set,
+
+886
+00:36:24,207 --> 00:36:25,528
+but for the validation set,
+
+887
+00:36:25,528 --> 00:36:28,473
+your algorithm doesn't have
+direct access to the labels.
+
+888
+00:36:28,473 --> 00:36:30,818
+We only use the labels
+of the validation set
+
+889
+00:36:30,818 --> 00:36:34,043
+to check how well our algorithm is doing.
+
+890
+00:36:34,043 --> 00:36:34,907
+A question?
+
+891
+00:36:34,907 --> 00:36:38,574
+[student asking a question]
+
+892
+00:36:44,373 --> 00:36:47,736
+The question is, whether the test set,
+
+893
+00:36:47,736 --> 00:36:49,442
+is it possible that the
+test set might not be
+
+894
+00:36:49,442 --> 00:36:52,941
+representative of data
+out there in the wild?
+
+895
+00:36:52,941 --> 00:36:55,955
+This definitely can be
+a problem in practice,
+
+896
+00:36:55,955 --> 00:36:58,252
+the underlying statistical
+assumption here is that
+
+897
+00:36:58,252 --> 00:37:01,863
+your data are all independently
+and identically distributed,
+
+898
+00:37:01,863 --> 00:37:05,280
+so that all of your data points should be
+
+899
+00:37:06,631 --> 00:37:10,125
+drawn from the same underlying
+probability distribution.
+
+900
+00:37:10,125 --> 00:37:12,948
+Of course, in practice, this
+might not always be the case,
+
+901
+00:37:12,948 --> 00:37:14,768
+and you definitely can run into cases
+
+902
+00:37:14,768 --> 00:37:18,798
+where the test set might
+not be super representative
+
+903
+00:37:18,798 --> 00:37:20,951
+of what you see in the wild.
+
+904
+00:37:20,951 --> 00:37:23,826
+So this is kind of a problem
+that dataset creators and
+
+905
+00:37:23,826 --> 00:37:25,473
+dataset curators need to think about.
+
+906
+00:37:25,473 --> 00:37:27,712
+But when I'm creating
+datasets, for example,
+
+907
+00:37:27,712 --> 00:37:28,626
+one thing I do,
+
+908
+00:37:28,626 --> 00:37:31,454
+is I'll go and collect a whole
+bunch of data all at once,
+
+909
+00:37:31,454 --> 00:37:34,252
+using the exact same methodology
+for collecting the data,
+
+910
+00:37:34,252 --> 00:37:36,656
+and then afterwards you go
+and partition it randomly
+
+911
+00:37:36,656 --> 00:37:38,690
+between train and test.
+
+912
+00:37:38,690 --> 00:37:40,962
+One thing that can screw you up here is
+
+913
+00:37:40,962 --> 00:37:43,024
+maybe if you're collecting data over time
+
+914
+00:37:43,024 --> 00:37:45,489
+and you make the earlier
+data, that you collect first,
+
+915
+00:37:45,489 --> 00:37:46,343
+be the training data,
+
+916
+00:37:46,343 --> 00:37:48,601
+and the later data that you
+collect be the test data,
+
+917
+00:37:48,601 --> 00:37:50,300
+then you actually might
+run into this shift
+
+918
+00:37:50,300 --> 00:37:51,613
+that could cause problems.
+
+919
+00:37:51,613 --> 00:37:53,971
+But as long as this partition is random
+
+920
+00:37:53,971 --> 00:37:55,831
+among your entire set of data points,
+
+921
+00:37:55,831 --> 00:37:58,762
+then that's how we try
+to alleviate this problem
+
+922
+00:37:58,762 --> 00:37:59,762
+in practice.
+
+923
+00:38:04,297 --> 00:38:06,619
+So then, once you've gone through this
+
+924
+00:38:06,619 --> 00:38:08,351
+cross validation procedure,
+
+925
+00:38:08,351 --> 00:38:11,493
+then you end up with graphs
+that look something like this.
+
+926
+00:38:11,493 --> 00:38:14,856
+So here, on the X axis, we
+are showing the value of K
+
+927
+00:38:14,856 --> 00:38:17,354
+for a k-nearest neighbor
+classifier on some problem,
+
+928
+00:38:17,354 --> 00:38:21,565
+and now on the Y axis, we are
+showing what is the accuracy
+
+929
+00:38:21,565 --> 00:38:25,102
+of our classifier on some dataset
+
+930
+00:38:25,102 --> 00:38:26,961
+for different values of K.
+
+931
+00:38:26,961 --> 00:38:28,332
+And you can see that, in this case,
+
+932
+00:38:28,332 --> 00:38:31,705
+we've done five fold cross
+validation over the data,
+
+933
+00:38:31,705 --> 00:38:34,639
+so, for each value of K we
+have five different examples
+
+934
+00:38:34,639 --> 00:38:38,346
+of how well this algorithm is doing.
+
+935
+00:38:38,346 --> 00:38:41,050
+And, actually, going back
+to the question about
+
+936
+00:38:41,050 --> 00:38:43,165
+having some test sets
+that are better or worse
+
+937
+00:38:43,165 --> 00:38:44,748
+for your algorithm,
+
+938
+00:38:46,239 --> 00:38:47,683
+using K fold cross validation
+
+939
+00:38:47,683 --> 00:38:50,276
+is maybe one way to help
+quantify that a little bit.
+
+940
+00:38:50,276 --> 00:38:54,935
+And, in that, we can see the
+variance of how this algorithm
+
+941
+00:38:54,935 --> 00:38:57,606
+performs on different
+of the validation folds.
+
+942
+00:38:57,606 --> 00:38:58,981
+And that gives you some sense of,
+
+943
+00:38:58,981 --> 00:39:00,359
+not just what is the best,
+
+944
+00:39:00,359 --> 00:39:04,301
+but, also, what is the
+distribution of that performance.
+
+945
+00:39:04,301 --> 00:39:06,442
+So, whenever you're training
+machine learning models
+
+946
+00:39:06,442 --> 00:39:08,151
+you end up making plots like this,
+
+947
+00:39:08,151 --> 00:39:09,744
+where they show you what is your accuracy,
+
+948
+00:39:09,744 --> 00:39:12,380
+or your performance as a
+function of your hyperparameters,
+
+949
+00:39:12,380 --> 00:39:14,857
+and then you want to
+go and pick the model,
+
+950
+00:39:14,857 --> 00:39:16,151
+or the set of hyperparameters,
+
+951
+00:39:16,151 --> 00:39:17,198
+at the end of the day,
+
+952
+00:39:17,198 --> 00:39:19,995
+that performs the best
+on the validation set.
+
+953
+00:39:19,995 --> 00:39:23,195
+So, here we see that maybe
+about K=7 probably works
+
+954
+00:39:23,195 --> 00:39:25,528
+about best for this problem.
+
+955
+00:39:29,713 --> 00:39:32,007
+So, k-nearest neighbor
+classifiers on images
+
+956
+00:39:32,007 --> 00:39:34,458
+are actually almost
+never used in practice.
+
+957
+00:39:34,458 --> 00:39:38,233
+Because, with all of these
+problems that we've talked about.
+
+958
+00:39:38,233 --> 00:39:41,393
+So, one problem is that
+it's very slow at test time,
+
+959
+00:39:41,393 --> 00:39:43,115
+which is the reverse of what we want,
+
+960
+00:39:43,115 --> 00:39:44,287
+which we talked about earlier.
+
+961
+00:39:44,287 --> 00:39:45,582
+Another problem is that
+
+962
+00:39:45,582 --> 00:39:48,859
+these things like Euclidean
+distance, or L1 distance,
+
+963
+00:39:48,859 --> 00:39:51,648
+are really not a very good way
+
+964
+00:39:51,648 --> 00:39:54,495
+to measure distances between images.
+
+965
+00:39:54,495 --> 00:39:57,247
+These, sort of, vectorial
+distance functions
+
+966
+00:39:57,247 --> 00:39:59,857
+do not correspond very well
+to perceptual similarity
+
+967
+00:39:59,857 --> 00:40:01,254
+between images.
+
+968
+00:40:01,254 --> 00:40:04,076
+How you perceive
+differences between images.
+
+969
+00:40:04,076 --> 00:40:06,910
+So, in this example, we've constructed,
+
+970
+00:40:06,910 --> 00:40:08,796
+there's this image on the left of a girl,
+
+971
+00:40:08,796 --> 00:40:11,234
+and then three different
+distorted images on the right
+
+972
+00:40:11,234 --> 00:40:12,930
+where we've blocked out her mouth,
+
+973
+00:40:12,930 --> 00:40:16,029
+we've actually shifted
+down by a couple pixels,
+
+974
+00:40:16,029 --> 00:40:18,416
+or tinted the entire image blue.
+
+975
+00:40:18,416 --> 00:40:20,849
+And, actually, if you compute
+the Euclidean distance
+
+976
+00:40:20,849 --> 00:40:22,785
+between the original and the boxed,
+
+977
+00:40:22,785 --> 00:40:24,145
+the original and the shuffled,
+
+978
+00:40:24,145 --> 00:40:25,425
+and original in the tinted,
+
+979
+00:40:25,425 --> 00:40:27,735
+they all have the same L2 distance.
+
+980
+00:40:27,735 --> 00:40:29,469
+Which is, maybe, not so good
+
+981
+00:40:29,469 --> 00:40:32,585
+because it sort of
+gives you the sense that
+
+982
+00:40:32,585 --> 00:40:34,952
+the L2 distance is really
+not doing a very good job
+
+983
+00:40:34,952 --> 00:40:39,119
+at capturing these perceptional
+distances between images.
+
+984
+00:40:40,642 --> 00:40:42,818
+Another, sort of, problem
+with the k-nearest neighbor
+
+985
+00:40:42,818 --> 00:40:45,338
+classifier has to do with
+something we call the curse
+
+986
+00:40:45,338 --> 00:40:46,819
+of dimensionality.
+
+987
+00:40:46,819 --> 00:40:49,744
+So, if you recall back this
+viewpoint we had of the
+
+988
+00:40:49,744 --> 00:40:51,279
+k-nearest neighbor classifier,
+
+989
+00:40:51,279 --> 00:40:53,811
+it's sort of dropping paint
+around each of the training
+
+990
+00:40:53,811 --> 00:40:57,186
+data points and using that to
+sort of partition the space.
+
+991
+00:40:57,186 --> 00:40:59,517
+So that means that if we
+expect the k-nearest neighbor
+
+992
+00:40:59,517 --> 00:41:01,105
+classifier to work well,
+
+993
+00:41:01,105 --> 00:41:04,160
+we kind of need our training
+examples to cover the space
+
+994
+00:41:04,160 --> 00:41:05,646
+quite densely.
+
+995
+00:41:05,646 --> 00:41:10,525
+Otherwise our nearest neighbors
+could actually be quite far
+
+996
+00:41:10,525 --> 00:41:14,171
+away and might not actually
+be very similar to our testing
+
+997
+00:41:14,171 --> 00:41:15,004
+points.
+
+998
+00:41:16,738 --> 00:41:17,571
+And the problem is,
+
+999
+00:41:17,571 --> 00:41:19,197
+that actually densely covering the space,
+
+1000
+00:41:19,197 --> 00:41:21,467
+means that we need a number
+of training examples,
+
+1001
+00:41:21,467 --> 00:41:24,666
+which is exponential in the
+dimension of the problem.
+
+1002
+00:41:24,666 --> 00:41:29,217
+So this is very bad, exponential
+growth is always bad,
+
+1003
+00:41:29,217 --> 00:41:31,310
+basically, you're never
+going to get enough images
+
+1004
+00:41:31,310 --> 00:41:33,422
+to densely cover this space of pixels
+
+1005
+00:41:33,422 --> 00:41:35,587
+in this high dimensional space.
+
+1006
+00:41:35,587 --> 00:41:37,487
+So that's maybe another
+thing to keep in mind
+
+1007
+00:41:37,487 --> 00:41:41,300
+when you're thinking about
+using k-nearest neighbor.
+
+1008
+00:41:41,300 --> 00:41:42,749
+So, kind of the summary
+is that we're using
+
+1009
+00:41:42,749 --> 00:41:44,460
+k-nearest neighbor to introduce this idea
+
+1010
+00:41:44,460 --> 00:41:45,701
+of image classification.
+
+1011
+00:41:45,701 --> 00:41:47,634
+We have a training set
+of images and labels
+
+1012
+00:41:47,634 --> 00:41:48,926
+and then we use that
+
+1013
+00:41:48,926 --> 00:41:51,445
+to predict these labels on the test set.
+
+1014
+00:41:51,445 --> 00:41:52,278
+Question?
+
+1015
+00:41:52,278 --> 00:41:54,519
+[student asking a question]
+
+1016
+00:41:54,519 --> 00:41:55,352
+Oh, sorry, the question is,
+
+1017
+00:41:55,352 --> 00:41:57,271
+what was going on with this picture?
+
+1018
+00:41:57,271 --> 00:41:59,168
+What are the green and the blue dots?
+
+1019
+00:41:59,168 --> 00:42:02,335
+So here, we have some training samples
+
+1020
+00:42:03,463 --> 00:42:05,596
+which are represented by points,
+
+1021
+00:42:05,596 --> 00:42:08,128
+and the color of the dot
+maybe represents the category
+
+1022
+00:42:08,128 --> 00:42:11,004
+of the point, of this training sample.
+
+1023
+00:42:11,004 --> 00:42:12,629
+So, if we're in one dimension,
+
+1024
+00:42:12,629 --> 00:42:15,161
+then you maybe only need
+four training samples
+
+1025
+00:42:15,161 --> 00:42:17,525
+to densely cover the space,
+
+1026
+00:42:17,525 --> 00:42:19,478
+but if we move to two dimensions,
+
+1027
+00:42:19,478 --> 00:42:22,701
+then, we now need, four times
+four is 16 training examples
+
+1028
+00:42:22,701 --> 00:42:25,529
+to densely cover this space.
+
+1029
+00:42:25,529 --> 00:42:28,767
+And if we move to three, four,
+five, many more dimensions,
+
+1030
+00:42:28,767 --> 00:42:30,431
+the number of training
+examples that we need
+
+1031
+00:42:30,431 --> 00:42:32,344
+to densely cover the space,
+
+1032
+00:42:32,344 --> 00:42:35,200
+grows exponentially with the dimension.
+
+1033
+00:42:35,200 --> 00:42:36,536
+So, this is kind of giving you the sense,
+
+1034
+00:42:36,536 --> 00:42:37,601
+that maybe in two dimensions
+
+1035
+00:42:37,601 --> 00:42:40,501
+we might have this kind
+of funny curved shape,
+
+1036
+00:42:40,501 --> 00:42:44,848
+or you might have sort of
+arbitrary manifolds of labels
+
+1037
+00:42:44,848 --> 00:42:47,641
+in different dimensional spaces.
+
+1038
+00:42:47,641 --> 00:42:49,403
+Because the k-nearest neighbor algorithm
+
+1039
+00:42:49,403 --> 00:42:51,704
+doesn't really make any
+assumptions about these
+
+1040
+00:42:51,704 --> 00:42:53,029
+underlying manifolds,
+
+1041
+00:42:53,029 --> 00:42:54,565
+the only way it can perform properly
+
+1042
+00:42:54,565 --> 00:42:57,713
+is if it has quite a dense
+sample of training points
+
+1043
+00:42:57,713 --> 00:42:58,796
+to work with.
+
+1044
+00:43:01,741 --> 00:43:04,915
+So, this is kind of the
+overview of k-nearest neighbors
+
+1045
+00:43:04,915 --> 00:43:07,015
+and you'll get a chance
+to actually implement this
+
+1046
+00:43:07,015 --> 00:43:11,214
+and try it out on images
+in the first assignment.
+
+1047
+00:43:11,214 --> 00:43:12,953
+So, if there's any last minute
+questions about K and N,
+
+1048
+00:43:12,953 --> 00:43:16,059
+I'm going to move on to the next topic.
+
+1049
+00:43:16,059 --> 00:43:16,892
+Question?
+
+1050
+00:43:16,892 --> 00:43:21,014
+[student is asking a question]
+
+1051
+00:43:21,014 --> 00:43:22,034
+Sorry, say that again.
+
+1052
+00:43:22,034 --> 00:43:25,951
+[student is asking a question]
+
+1053
+00:43:28,437 --> 00:43:29,270
+Yeah, so the question is,
+
+1054
+00:43:29,270 --> 00:43:32,033
+why do these images have
+the same L2 distance?
+
+1055
+00:43:32,033 --> 00:43:34,036
+And the answer is that, I
+carefully constructed them
+
+1056
+00:43:34,036 --> 00:43:35,915
+to have the same L2 distance.
+
+1057
+00:43:35,915 --> 00:43:38,716
+[laughing]
+
+1058
+00:43:38,716 --> 00:43:41,812
+But it's just giving you the
+sense that the L2 distance
+
+1059
+00:43:41,812 --> 00:43:45,096
+is not a very good measure
+of similarity between images.
+
+1060
+00:43:45,096 --> 00:43:47,306
+And these images are
+actually all different from
+
+1061
+00:43:47,306 --> 00:43:50,223
+each other in quite disparate ways.
+
+1062
+00:43:52,470 --> 00:43:54,498
+If you're using K and N,
+
+1063
+00:43:54,498 --> 00:43:56,654
+then the only thing you
+have to measure distance
+
+1064
+00:43:56,654 --> 00:43:57,649
+between images,
+
+1065
+00:43:57,649 --> 00:44:00,236
+is this single distance metric.
+
+1066
+00:44:00,236 --> 00:44:03,200
+And this kind of gives
+you an example where
+
+1067
+00:44:03,200 --> 00:44:05,229
+that distance metric is
+actually not capturing
+
+1068
+00:44:05,229 --> 00:44:07,331
+the full description of
+distance or difference
+
+1069
+00:44:07,331 --> 00:44:08,949
+between images.
+
+1070
+00:44:08,949 --> 00:44:12,042
+So, if this case, I just sort
+of carefully constructed these
+
+1071
+00:44:12,042 --> 00:44:15,384
+translations and these
+offsets to match exactly.
+
+1072
+00:44:15,384 --> 00:44:16,217
+Question?
+
+1073
+00:44:16,217 --> 00:44:19,884
+[student asking a question]
+
+1074
+00:44:28,672 --> 00:44:29,925
+So, the question is,
+
+1075
+00:44:29,925 --> 00:44:31,249
+maybe this is actually good,
+
+1076
+00:44:31,249 --> 00:44:33,228
+because all of these things
+
+1077
+00:44:33,228 --> 00:44:36,615
+are actually having the
+same distance to the image.
+
+1078
+00:44:36,615 --> 00:44:38,024
+That's maybe true for this example,
+
+1079
+00:44:38,024 --> 00:44:40,390
+but I think you could also
+construct examples where
+
+1080
+00:44:40,390 --> 00:44:41,810
+maybe we have two original images
+
+1081
+00:44:41,810 --> 00:44:43,352
+and then by putting the
+boxes in the right places
+
+1082
+00:44:43,352 --> 00:44:44,270
+or tinting them,
+
+1083
+00:44:44,270 --> 00:44:46,652
+we could cause it to be
+nearer to pretty much
+
+1084
+00:44:46,652 --> 00:44:48,316
+anything that you want, right?
+
+1085
+00:44:48,316 --> 00:44:50,850
+Because in this example, we
+can kind of like do arbitrary
+
+1086
+00:44:50,850 --> 00:44:52,007
+shifting and tinting
+
+1087
+00:44:52,007 --> 00:44:54,612
+to kind of change these
+distances nearly arbitrarily
+
+1088
+00:44:54,612 --> 00:44:57,469
+without changing the perceptional
+nature of these images.
+
+1089
+00:44:57,469 --> 00:44:59,256
+So, I think that this
+can actually screw you up
+
+1090
+00:44:59,256 --> 00:45:03,172
+if you have many
+different original images.
+
+1091
+00:45:03,172 --> 00:45:04,039
+Question?
+
+1092
+00:45:04,039 --> 00:45:07,956
+[student is asking a question]
+
+1093
+00:45:15,207 --> 00:45:16,040
+The question is,
+
+1094
+00:45:16,040 --> 00:45:17,339
+whether or not it's
+common in real-world cases
+
+1095
+00:45:17,339 --> 00:45:20,664
+to go back and retrain the entire dataset
+
+1096
+00:45:20,664 --> 00:45:24,098
+once you've found those
+best hyperparameters?
+
+1097
+00:45:24,098 --> 00:45:27,765
+So, people do sometimes
+do this in practice,
+
+1098
+00:45:28,787 --> 00:45:30,982
+but it's somewhat a matter of taste.
+
+1099
+00:45:30,982 --> 00:45:32,568
+If you're really rushing for that deadline
+
+1100
+00:45:32,568 --> 00:45:34,430
+and you've really got to
+get this model out the door
+
+1101
+00:45:34,430 --> 00:45:36,781
+then, if it takes a long
+time to retrain the model
+
+1102
+00:45:36,781 --> 00:45:38,176
+on the whole dataset,
+
+1103
+00:45:38,176 --> 00:45:39,875
+then maybe you won't do it.
+
+1104
+00:45:39,875 --> 00:45:41,776
+But if you have a little
+bit more time to spare
+
+1105
+00:45:41,776 --> 00:45:43,432
+and a little bit more compute to spare,
+
+1106
+00:45:43,432 --> 00:45:45,929
+and you want to squeeze out
+that maybe that extra 1%
+
+1107
+00:45:45,929 --> 00:45:50,012
+of performance, then that
+is a trick you can use.
+
+1108
+00:45:53,288 --> 00:45:54,858
+So we kind of saw that
+the k-nearest neighbor
+
+1109
+00:45:54,858 --> 00:45:56,758
+has a lot of the nice properties
+
+1110
+00:45:56,758 --> 00:45:58,409
+of machine learning algorithms,
+
+1111
+00:45:58,409 --> 00:46:00,490
+but in practice it's not so great,
+
+1112
+00:46:00,490 --> 00:46:03,823
+and really not used very much in images.
+
+1113
+00:46:05,258 --> 00:46:07,134
+So the next thing I'd
+like to talk about is
+
+1114
+00:46:07,134 --> 00:46:08,895
+linear classification.
+
+1115
+00:46:08,895 --> 00:46:11,753
+And linear classification is,
+again, quite a simple learning
+
+1116
+00:46:11,753 --> 00:46:14,981
+algorithm, but this will
+become super important
+
+1117
+00:46:14,981 --> 00:46:17,257
+and help us build up to
+whole neural networks
+
+1118
+00:46:17,257 --> 00:46:19,845
+and whole convolutional networks.
+
+1119
+00:46:19,845 --> 00:46:21,736
+So, one analogy people often talk about
+
+1120
+00:46:21,736 --> 00:46:23,470
+when working with neural networks
+
+1121
+00:46:23,470 --> 00:46:26,242
+is we think of them as being
+kind of like Lego blocks.
+
+1122
+00:46:26,242 --> 00:46:28,154
+That you can have different
+kinds of components
+
+1123
+00:46:28,154 --> 00:46:30,345
+of neural networks and you
+can stick these components
+
+1124
+00:46:30,345 --> 00:46:33,814
+together to build these
+large different towers of
+
+1125
+00:46:33,814 --> 00:46:36,378
+convolutional networks.
+
+1126
+00:46:36,378 --> 00:46:38,404
+One of the most basic
+building blocks that we'll see
+
+1127
+00:46:38,404 --> 00:46:41,513
+in different types of
+deep learning applications
+
+1128
+00:46:41,513 --> 00:46:43,215
+is this linear classifier.
+
+1129
+00:46:43,215 --> 00:46:44,996
+So, I think it's actually
+really important to
+
+1130
+00:46:44,996 --> 00:46:46,905
+have a good understanding
+of what's happening
+
+1131
+00:46:46,905 --> 00:46:48,270
+with linear classification.
+
+1132
+00:46:48,270 --> 00:46:50,236
+Because these will end up
+generalizing quite nicely
+
+1133
+00:46:50,236 --> 00:46:52,712
+to whole neural networks.
+
+1134
+00:46:52,712 --> 00:46:55,243
+So another example of kind
+of this modular nature
+
+1135
+00:46:55,243 --> 00:46:56,139
+of neural networks
+
+1136
+00:46:56,139 --> 00:46:58,728
+comes from some research in our
+own lab on image captioning,
+
+1137
+00:46:58,728 --> 00:47:00,281
+just as a little bit of a preview.
+
+1138
+00:47:00,281 --> 00:47:02,847
+So here the setup is that
+we want to input an image
+
+1139
+00:47:02,847 --> 00:47:04,789
+and then output a descriptive sentence
+
+1140
+00:47:04,789 --> 00:47:06,226
+describing the image.
+
+1141
+00:47:06,226 --> 00:47:08,162
+And the way this kind of works is that
+
+1142
+00:47:08,162 --> 00:47:10,710
+we have one convolutional
+neural network that's looking
+
+1143
+00:47:10,710 --> 00:47:11,548
+at the image,
+
+1144
+00:47:11,548 --> 00:47:13,444
+and a recurrent neural network that knows
+
+1145
+00:47:13,444 --> 00:47:14,496
+about language.
+
+1146
+00:47:14,496 --> 00:47:16,664
+And we can kind of just stick
+these two pieces together
+
+1147
+00:47:16,664 --> 00:47:18,776
+like Lego blocks and train
+the whole thing together
+
+1148
+00:47:18,776 --> 00:47:20,919
+and end up with a pretty cool system
+
+1149
+00:47:20,919 --> 00:47:22,767
+that can do some non-trivial things.
+
+1150
+00:47:22,767 --> 00:47:25,077
+And we'll work through the
+details of this model as we go
+
+1151
+00:47:25,077 --> 00:47:26,388
+forward in the class,
+
+1152
+00:47:26,388 --> 00:47:27,711
+but this just gives you the sense that,
+
+1153
+00:47:27,711 --> 00:47:30,209
+these deep neural networks
+are kind of like Legos
+
+1154
+00:47:30,209 --> 00:47:31,999
+and this linear classifier
+
+1155
+00:47:31,999 --> 00:47:34,082
+is kind of like the most
+basic building blocks
+
+1156
+00:47:34,082 --> 00:47:36,082
+of these giant networks.
+
+1157
+00:47:37,096 --> 00:47:39,189
+But that's a little bit too
+exciting for lecture two,
+
+1158
+00:47:39,189 --> 00:47:41,257
+so we have to go back to
+CIFAR-10 for the moment.
+
+1159
+00:47:41,257 --> 00:47:42,375
+[laughing]
+
+1160
+00:47:42,375 --> 00:47:45,641
+So, recall that CIFAR-10 has
+these 50,000 training examples,
+
+1161
+00:47:45,641 --> 00:47:49,808
+each image is 32 by 32 pixels
+and three color channels.
+
+1162
+00:47:52,068 --> 00:47:53,963
+In linear classification,
+we're going to take a bit
+
+1163
+00:47:53,963 --> 00:47:56,696
+of a different approach
+from k-nearest neighbor.
+
+1164
+00:47:56,696 --> 00:48:01,646
+So, the linear classifier is
+one of the simplest examples
+
+1165
+00:48:01,646 --> 00:48:04,734
+of what we call a parametric model.
+
+1166
+00:48:04,734 --> 00:48:07,548
+So now, our parametric model
+actually has two different
+
+1167
+00:48:07,548 --> 00:48:08,685
+components.
+
+1168
+00:48:08,685 --> 00:48:12,201
+It's going to take in this image,
+maybe, of a cat on the left,
+
+1169
+00:48:12,201 --> 00:48:13,539
+and this,
+
+1170
+00:48:13,539 --> 00:48:17,384
+that we usually write
+as X for our input data,
+
+1171
+00:48:17,384 --> 00:48:20,220
+and also a set of parameters, or weights,
+
+1172
+00:48:20,220 --> 00:48:23,475
+which is usually called
+W, also sometimes theta,
+
+1173
+00:48:23,475 --> 00:48:24,767
+depending on the literature.
+
+1174
+00:48:24,767 --> 00:48:26,974
+And now we're going to
+write down some function
+
+1175
+00:48:26,974 --> 00:48:30,780
+which takes in both the data,
+X, and the parameters, W,
+
+1176
+00:48:30,780 --> 00:48:34,180
+and this'll spit out now
+10 numbers describing
+
+1177
+00:48:34,180 --> 00:48:37,950
+what are the scores
+corresponding to each of those 10
+
+1178
+00:48:37,950 --> 00:48:39,991
+categories in CIFAR-10.
+
+1179
+00:48:39,991 --> 00:48:44,232
+With the interpretation that,
+like the larger score for cat,
+
+1180
+00:48:44,232 --> 00:48:48,583
+indicates a larger probability
+of that input X being cat.
+
+1181
+00:48:48,583 --> 00:48:49,827
+And now, a question?
+
+1182
+00:48:49,827 --> 00:48:53,494
+[student asking a question]
+
+1183
+00:48:55,380 --> 00:48:56,717
+Sorry, can you repeat that?
+
+1184
+00:48:56,717 --> 00:48:58,863
+[student asking a question]
+
+1185
+00:48:58,863 --> 00:49:01,524
+Oh, so the question is what is the three?
+
+1186
+00:49:01,524 --> 00:49:04,986
+The three, in this example,
+corresponds to the three color
+
+1187
+00:49:04,986 --> 00:49:06,943
+channels, red, green, and blue.
+
+1188
+00:49:06,943 --> 00:49:08,469
+Because we typically work on color images,
+
+1189
+00:49:08,469 --> 00:49:12,636
+that's nice information that
+you don't want to throw away.
+
+1190
+00:49:15,323 --> 00:49:17,243
+So, in the k-nearest neighbor setup
+
+1191
+00:49:17,243 --> 00:49:18,999
+there was no parameters, instead,
+
+1192
+00:49:18,999 --> 00:49:21,686
+we just kind of keep around
+the whole training data,
+
+1193
+00:49:21,686 --> 00:49:22,657
+the whole training set,
+
+1194
+00:49:22,657 --> 00:49:24,092
+and use that at test time.
+
+1195
+00:49:24,092 --> 00:49:25,825
+But now, in a parametric approach,
+
+1196
+00:49:25,825 --> 00:49:28,196
+we're going to summarize our
+knowledge of the training data
+
+1197
+00:49:28,196 --> 00:49:31,105
+and stick all that knowledge
+into these parameters, W.
+
+1198
+00:49:31,105 --> 00:49:33,607
+And now, at test time, we
+no longer need the actual
+
+1199
+00:49:33,607 --> 00:49:35,371
+training data, we can throw it away.
+
+1200
+00:49:35,371 --> 00:49:37,938
+We only need these
+parameters, W, at test time.
+
+1201
+00:49:37,938 --> 00:49:40,561
+So this allows our models
+to now be more efficient
+
+1202
+00:49:40,561 --> 00:49:44,684
+and actually run on maybe
+small devices like phones.
+
+1203
+00:49:44,684 --> 00:49:47,277
+So, kind of, the whole
+story in deep learning
+
+1204
+00:49:47,277 --> 00:49:49,404
+is coming up with the
+right structure for this
+
+1205
+00:49:49,404 --> 00:49:50,906
+function, F.
+
+1206
+00:49:50,906 --> 00:49:53,451
+You can imagine writing down
+different functional forms
+
+1207
+00:49:53,451 --> 00:49:55,406
+for how to combine weights
+and data in different
+
+1208
+00:49:55,406 --> 00:49:58,608
+complex ways, and these
+could correspond to different
+
+1209
+00:49:58,608 --> 00:50:01,169
+network architectures.
+
+1210
+00:50:01,169 --> 00:50:02,489
+But the simplest possible example
+
+1211
+00:50:02,489 --> 00:50:04,132
+of combining these two things
+
+1212
+00:50:04,132 --> 00:50:05,729
+is just, maybe, to multiply them.
+
+1213
+00:50:05,729 --> 00:50:08,833
+And this is a linear classifier.
+
+1214
+00:50:08,833 --> 00:50:13,181
+So here our F of X, W is
+just equal to the W times X.
+
+1215
+00:50:13,181 --> 00:50:15,770
+Probably the simplest
+equation you can imagine.
+
+1216
+00:50:15,770 --> 00:50:16,603
+So here,
+
+1217
+00:50:16,603 --> 00:50:18,921
+if you kind of unpack the
+dimensions of these things,
+
+1218
+00:50:18,921 --> 00:50:23,088
+we recall that our image was
+maybe 32 by 32 by 3 values.
+
+1219
+00:50:24,871 --> 00:50:28,207
+So then, we're going to take
+those values and then stretch
+
+1220
+00:50:28,207 --> 00:50:31,424
+them out into a long column vector
+
+1221
+00:50:31,424 --> 00:50:34,715
+that has 3,072 by one entries.
+
+1222
+00:50:34,715 --> 00:50:38,632
+And now we want to end
+up with 10 class scores.
+
+1223
+00:50:39,746 --> 00:50:41,742
+We want to end up with
+10 numbers for this image
+
+1224
+00:50:41,742 --> 00:50:44,236
+giving us the scores for
+each of the 10 categories.
+
+1225
+00:50:44,236 --> 00:50:46,279
+Which means that now our matrix, W,
+
+1226
+00:50:46,279 --> 00:50:49,032
+needs to be ten by 3072.
+
+1227
+00:50:49,032 --> 00:50:51,299
+So that once we multiply
+these two things out
+
+1228
+00:50:51,299 --> 00:50:53,243
+then we'll end up with
+a single column vector
+
+1229
+00:50:53,243 --> 00:50:57,086
+10 by one, giving us our 10 class scores.
+
+1230
+00:50:57,086 --> 00:51:00,317
+Also sometimes, you'll typically see this,
+
+1231
+00:51:00,317 --> 00:51:01,910
+we'll often add a bias term
+
+1232
+00:51:01,910 --> 00:51:04,724
+which will be a constant
+vector of 10 elements
+
+1233
+00:51:04,724 --> 00:51:06,669
+that does not interact
+with the training data,
+
+1234
+00:51:06,669 --> 00:51:09,656
+and instead just gives us
+some sort of data independent
+
+1235
+00:51:09,656 --> 00:51:12,235
+preferences for some classes over another.
+
+1236
+00:51:12,235 --> 00:51:13,878
+So you might imagine that
+if you're dataset was
+
+1237
+00:51:13,878 --> 00:51:16,300
+unbalanced and had many
+more cats than dogs,
+
+1238
+00:51:16,300 --> 00:51:19,259
+for example, then the bias
+elements corresponding
+
+1239
+00:51:19,259 --> 00:51:23,553
+to cat would be higher
+than the other ones.
+
+1240
+00:51:23,553 --> 00:51:25,445
+So if you kind of think about pictorially
+
+1241
+00:51:25,445 --> 00:51:27,778
+what this function is doing,
+
+1242
+00:51:28,930 --> 00:51:31,483
+in this figure we have
+an example on the left
+
+1243
+00:51:31,483 --> 00:51:35,729
+of a simple image with
+just a two by two image,
+
+1244
+00:51:35,729 --> 00:51:37,099
+so it has four pixels total.
+
+1245
+00:51:37,099 --> 00:51:39,832
+So the way that the
+linear classifier works
+
+1246
+00:51:39,832 --> 00:51:42,273
+is that we take this two by two image,
+
+1247
+00:51:42,273 --> 00:51:45,202
+we stretch it out into a column vector
+
+1248
+00:51:45,202 --> 00:51:46,577
+with four elements,
+
+1249
+00:51:46,577 --> 00:51:49,301
+and now, in this example,
+we are just restricting to
+
+1250
+00:51:49,301 --> 00:51:51,765
+three classes, cat, dog, and ship,
+
+1251
+00:51:51,765 --> 00:51:54,030
+because you can't fit 10 on a slide,
+
+1252
+00:51:54,030 --> 00:51:58,197
+and now our weight matrix is
+going to be four by three,
+
+1253
+00:51:59,890 --> 00:52:02,236
+so we have four pixels and three classes.
+
+1254
+00:52:02,236 --> 00:52:05,567
+And now, again, we have a
+three element bias vector
+
+1255
+00:52:05,567 --> 00:52:08,858
+that gives us data independent bias terms
+
+1256
+00:52:08,858 --> 00:52:11,125
+for each category.
+
+1257
+00:52:11,125 --> 00:52:13,467
+Now we see that the cat score
+is going to be the enter
+
+1258
+00:52:13,467 --> 00:52:16,717
+product between the pixels of our image
+
+1259
+00:52:18,436 --> 00:52:20,650
+and this row in the weight matrix
+
+1260
+00:52:20,650 --> 00:52:22,814
+added together with this bias term.
+
+1261
+00:52:22,814 --> 00:52:25,134
+So, when you look at it this way
+
+1262
+00:52:25,134 --> 00:52:28,146
+you can kind of understand
+linear classification
+
+1263
+00:52:28,146 --> 00:52:30,157
+as almost a template matching approach.
+
+1264
+00:52:30,157 --> 00:52:32,444
+Where each of the rows in this matrix
+
+1265
+00:52:32,444 --> 00:52:35,652
+correspond to some template of the image.
+
+1266
+00:52:35,652 --> 00:52:38,113
+And now the enter product or dot product
+
+1267
+00:52:38,113 --> 00:52:41,099
+between the row of the
+matrix and the column
+
+1268
+00:52:41,099 --> 00:52:43,183
+giving the pixels of the image,
+
+1269
+00:52:43,183 --> 00:52:45,165
+computing this dot
+product kind of gives us
+
+1270
+00:52:45,165 --> 00:52:47,874
+a similarity between this
+template for the class
+
+1271
+00:52:47,874 --> 00:52:50,458
+and the pixels of our image.
+
+1272
+00:52:50,458 --> 00:52:52,906
+And then bias just,
+again, gives you this data
+
+1273
+00:52:52,906 --> 00:52:57,073
+independence scaling offset
+to each of the classes.
+
+1274
+00:53:00,837 --> 00:53:02,401
+If we think about linear classification
+
+1275
+00:53:02,401 --> 00:53:04,705
+from this viewpoint of template matching
+
+1276
+00:53:04,705 --> 00:53:07,532
+we can actually take the
+rows of that weight matrix
+
+1277
+00:53:07,532 --> 00:53:09,965
+and unravel them back into images
+
+1278
+00:53:09,965 --> 00:53:12,799
+and actually visualize
+those templates as images.
+
+1279
+00:53:12,799 --> 00:53:14,734
+And this gives us some
+sense of what a linear
+
+1280
+00:53:14,734 --> 00:53:16,769
+classifier might actually be doing
+
+1281
+00:53:16,769 --> 00:53:18,908
+to try to understand our data.
+
+1282
+00:53:18,908 --> 00:53:21,057
+So, in this example, we've
+gone ahead and trained
+
+1283
+00:53:21,057 --> 00:53:23,208
+a linear classifier on our images.
+
+1284
+00:53:23,208 --> 00:53:25,355
+And now on the bottom we're visualizing
+
+1285
+00:53:25,355 --> 00:53:28,974
+what are those rows in
+that learned weight matrix
+
+1286
+00:53:28,974 --> 00:53:30,892
+corresponding to each of the 10 categories
+
+1287
+00:53:30,892 --> 00:53:32,274
+in CIFAR-10.
+
+1288
+00:53:32,274 --> 00:53:34,117
+And in this way we kind
+of get a sense for what's
+
+1289
+00:53:34,117 --> 00:53:35,686
+going on in these images.
+
+1290
+00:53:35,686 --> 00:53:38,841
+So, for example, in the
+left, on the bottom left,
+
+1291
+00:53:38,841 --> 00:53:40,978
+we see the template for the plane class,
+
+1292
+00:53:40,978 --> 00:53:42,941
+kind of consists of this like blue blob,
+
+1293
+00:53:42,941 --> 00:53:44,856
+this kind of blobby thing in the middle
+
+1294
+00:53:44,856 --> 00:53:46,739
+and maybe blue in the background,
+
+1295
+00:53:46,739 --> 00:53:49,212
+which gives you the sense
+that this linear classifier
+
+1296
+00:53:49,212 --> 00:53:51,574
+for plane is maybe looking for blue stuff
+
+1297
+00:53:51,574 --> 00:53:54,585
+and blobby stuff, and those
+features are going to cause
+
+1298
+00:53:54,585 --> 00:53:57,606
+the classifier to like planes more.
+
+1299
+00:53:57,606 --> 00:53:59,444
+Or if we look at this car example,
+
+1300
+00:53:59,444 --> 00:54:02,441
+we kind of see that
+there's a red blobby thing
+
+1301
+00:54:02,441 --> 00:54:04,801
+through the middle and a
+blue blobby thing at the top
+
+1302
+00:54:04,801 --> 00:54:08,721
+that maybe is kind of a blurry windshield.
+
+1303
+00:54:08,721 --> 00:54:09,654
+But this is a little bit weird,
+
+1304
+00:54:09,654 --> 00:54:11,271
+this doesn't really look like a car.
+
+1305
+00:54:11,271 --> 00:54:13,716
+No individual car
+actually looks like this.
+
+1306
+00:54:13,716 --> 00:54:15,628
+So the problem is that
+the linear classifier
+
+1307
+00:54:15,628 --> 00:54:18,317
+is only learning one
+template for each class.
+
+1308
+00:54:18,317 --> 00:54:20,823
+So if there's sort of
+variations in how that class
+
+1309
+00:54:20,823 --> 00:54:21,748
+might appear,
+
+1310
+00:54:21,748 --> 00:54:24,340
+it's trying to average out all
+those different variations,
+
+1311
+00:54:24,340 --> 00:54:25,658
+all those different appearances,
+
+1312
+00:54:25,658 --> 00:54:27,461
+and use just one single template
+
+1313
+00:54:27,461 --> 00:54:29,675
+to recognize each of those categories.
+
+1314
+00:54:29,675 --> 00:54:31,961
+We can also see this pretty
+explicitly in the horse
+
+1315
+00:54:31,961 --> 00:54:33,139
+classifier.
+
+1316
+00:54:33,139 --> 00:54:35,776
+So in the horse classifier we
+see green stuff on the bottom
+
+1317
+00:54:35,776 --> 00:54:37,340
+because horses are usually on grass.
+
+1318
+00:54:37,340 --> 00:54:39,289
+And then, if you look
+carefully, the horse actually
+
+1319
+00:54:39,289 --> 00:54:43,125
+seems to have maybe two
+heads, one head on each side.
+
+1320
+00:54:43,125 --> 00:54:45,855
+And I've never seen a
+horse with two heads.
+
+1321
+00:54:45,855 --> 00:54:48,063
+But the linear classifier
+is just doing the best
+
+1322
+00:54:48,063 --> 00:54:50,513
+that it can, because it's
+only allowed to learn
+
+1323
+00:54:50,513 --> 00:54:52,788
+one template per category.
+
+1324
+00:54:52,788 --> 00:54:55,085
+And as we move forward
+into neural networks
+
+1325
+00:54:55,085 --> 00:54:56,367
+and more complex models,
+
+1326
+00:54:56,367 --> 00:54:59,460
+we'll be able to achieve
+much better accuracy
+
+1327
+00:54:59,460 --> 00:55:01,230
+because they no longer
+have this restriction
+
+1328
+00:55:01,230 --> 00:55:05,230
+of just learning a single
+template per category.
+
+1329
+00:55:09,030 --> 00:55:11,223
+Another viewpoint of the linear classifier
+
+1330
+00:55:11,223 --> 00:55:13,523
+is to go back to this idea of images
+
+1331
+00:55:13,523 --> 00:55:15,649
+as points and high dimensional space.
+
+1332
+00:55:15,649 --> 00:55:19,232
+And you can imagine
+that each of our images
+
+1333
+00:55:20,191 --> 00:55:23,328
+is something like a point in
+this high dimensional space.
+
+1334
+00:55:23,328 --> 00:55:26,341
+And now the linear classifier
+is putting in these
+
+1335
+00:55:26,341 --> 00:55:29,305
+linear decision boundaries
+to try to draw linear
+
+1336
+00:55:29,305 --> 00:55:31,402
+separation between one category
+
+1337
+00:55:31,402 --> 00:55:33,125
+and the rest of the categories.
+
+1338
+00:55:33,125 --> 00:55:35,838
+So maybe up on the upper-left hand side
+
+1339
+00:55:35,838 --> 00:55:38,897
+we see these training
+examples of airplanes
+
+1340
+00:55:38,897 --> 00:55:41,446
+and throughout the process of training
+
+1341
+00:55:41,446 --> 00:55:43,845
+the linear classier will
+go and try to draw this
+
+1342
+00:55:43,845 --> 00:55:46,692
+blue line to separate
+out with a single line
+
+1343
+00:55:46,692 --> 00:55:49,493
+the airplane class from all
+the rest of the classes.
+
+1344
+00:55:49,493 --> 00:55:51,492
+And it's actually kind of
+fun if you watch during
+
+1345
+00:55:51,492 --> 00:55:53,902
+the training process these
+lines will start out randomly
+
+1346
+00:55:53,902 --> 00:55:55,818
+and then go and snap into
+place to try to separate
+
+1347
+00:55:55,818 --> 00:55:57,318
+the data properly.
+
+1348
+00:55:58,709 --> 00:56:00,921
+But when you think about
+linear classification
+
+1349
+00:56:00,921 --> 00:56:04,000
+in this way, from this high
+dimensional point of view,
+
+1350
+00:56:04,000 --> 00:56:06,768
+you can start to see again
+what are some of the problems
+
+1351
+00:56:06,768 --> 00:56:09,758
+that might come up with
+linear classification.
+
+1352
+00:56:09,758 --> 00:56:11,672
+And it's not too hard
+to construct examples
+
+1353
+00:56:11,672 --> 00:56:15,232
+of datasets where a linear
+classifier will totally fail.
+
+1354
+00:56:15,232 --> 00:56:16,998
+So, one example, on the left here,
+
+1355
+00:56:16,998 --> 00:56:20,324
+is that, suppose we have a
+dataset of two categories,
+
+1356
+00:56:20,324 --> 00:56:22,067
+and these are all maybe
+somewhat artificial,
+
+1357
+00:56:22,067 --> 00:56:24,990
+but maybe our dataset has two categories,
+
+1358
+00:56:24,990 --> 00:56:26,095
+blue and red.
+
+1359
+00:56:26,095 --> 00:56:30,414
+And the blue categories
+are the number of pixels
+
+1360
+00:56:30,414 --> 00:56:33,122
+in the image, which are
+greater than zero, is odd.
+
+1361
+00:56:33,122 --> 00:56:34,944
+And anything where the
+number of pixels greater
+
+1362
+00:56:34,944 --> 00:56:38,714
+than zero is even, we want to
+classify as the red category.
+
+1363
+00:56:38,714 --> 00:56:42,881
+So if you actually go and
+draw what these different
+
+1364
+00:56:43,991 --> 00:56:46,259
+decisions regions look like in the plane,
+
+1365
+00:56:46,259 --> 00:56:49,907
+you can see that our blue class
+with an odd number of pixels
+
+1366
+00:56:49,907 --> 00:56:53,426
+is going to be these two
+quadrants in the plane,
+
+1367
+00:56:53,426 --> 00:56:56,063
+and even will be the
+opposite two quadrants.
+
+1368
+00:56:56,063 --> 00:56:59,609
+So now, there's no way that we
+can draw a single linear line
+
+1369
+00:56:59,609 --> 00:57:01,364
+to separate the blue from the red.
+
+1370
+00:57:01,364 --> 00:57:03,412
+So this would be an example
+where a linear classifier
+
+1371
+00:57:03,412 --> 00:57:05,273
+would really struggle.
+
+1372
+00:57:05,273 --> 00:57:09,535
+And this is maybe not such an
+artificial thing after all.
+
+1373
+00:57:09,535 --> 00:57:10,912
+Instead of counting pixels,
+
+1374
+00:57:10,912 --> 00:57:13,042
+maybe we're actually trying
+to count whether the number
+
+1375
+00:57:13,042 --> 00:57:16,424
+of animals or people in
+an image is odd or even.
+
+1376
+00:57:16,424 --> 00:57:19,004
+So this kind of a parity problem
+
+1377
+00:57:19,004 --> 00:57:21,145
+of separating odds from evens
+
+1378
+00:57:21,145 --> 00:57:22,725
+is something that linear classification
+
+1379
+00:57:22,725 --> 00:57:25,725
+really struggles with traditionally.
+
+1380
+00:57:28,376 --> 00:57:31,438
+Other situations where a linear
+classifier really struggles
+
+1381
+00:57:31,438 --> 00:57:33,974
+are multimodal situations.
+
+1382
+00:57:33,974 --> 00:57:35,146
+So here on the right,
+
+1383
+00:57:35,146 --> 00:57:39,541
+maybe our blue category has
+these three different islands
+
+1384
+00:57:39,541 --> 00:57:41,915
+of where the blue category lives,
+
+1385
+00:57:41,915 --> 00:57:44,791
+and then everything else
+is some other category.
+
+1386
+00:57:44,791 --> 00:57:46,529
+So, for something like horses,
+
+1387
+00:57:46,529 --> 00:57:47,961
+we saw on the previous example,
+
+1388
+00:57:47,961 --> 00:57:50,106
+is something where this
+actually might be happening
+
+1389
+00:57:50,106 --> 00:57:50,959
+in practice.
+
+1390
+00:57:50,959 --> 00:57:53,560
+Where there's maybe one
+island in the pixel space of
+
+1391
+00:57:53,560 --> 00:57:55,159
+horses looking to the left,
+
+1392
+00:57:55,159 --> 00:57:57,268
+and another island of
+horses looking to the right.
+
+1393
+00:57:57,268 --> 00:58:00,360
+And now there's no good
+way to draw a single linear
+
+1394
+00:58:00,360 --> 00:58:03,757
+boundary between these two
+isolated islands of data.
+
+1395
+00:58:03,757 --> 00:58:07,257
+So anytime where you have multimodal data,
+
+1396
+00:58:08,098 --> 00:58:08,931
+like one class
+
+1397
+00:58:08,931 --> 00:58:10,854
+that can appear in
+different regions of space,
+
+1398
+00:58:10,854 --> 00:58:13,963
+is another place where linear
+classifiers might struggle.
+
+1399
+00:58:13,963 --> 00:58:15,932
+So there's kind of a lot of problems with
+
+1400
+00:58:15,932 --> 00:58:18,575
+linear classifiers, but it
+is a super simple algorithm,
+
+1401
+00:58:18,575 --> 00:58:22,259
+super nice and easy to interpret
+and easy to understand.
+
+1402
+00:58:22,259 --> 00:58:24,412
+So you'll actually be
+implementing these things
+
+1403
+00:58:24,412 --> 00:58:27,245
+on your first homework assignment.
+
+1404
+00:58:28,852 --> 00:58:29,971
+At this point,
+
+1405
+00:58:29,971 --> 00:58:30,980
+we kind of talked about
+
+1406
+00:58:30,980 --> 00:58:33,313
+what is the functional
+form corresponding to a
+
+1407
+00:58:33,313 --> 00:58:34,402
+linear classifier.
+
+1408
+00:58:34,402 --> 00:58:36,711
+And we've seen that this functional form
+
+1409
+00:58:36,711 --> 00:58:39,185
+of matrix vector multiply
+
+1410
+00:58:39,185 --> 00:58:41,541
+corresponds this idea of template matching
+
+1411
+00:58:41,541 --> 00:58:43,364
+and learning a single
+template for each category
+
+1412
+00:58:43,364 --> 00:58:44,922
+in your data.
+
+1413
+00:58:44,922 --> 00:58:48,339
+And then once we have this trained matrix
+
+1414
+00:58:49,485 --> 00:58:52,499
+you can use it to actually
+go and get your scores
+
+1415
+00:58:52,499 --> 00:58:55,738
+for any new training example.
+
+1416
+00:58:55,738 --> 00:58:58,104
+But what we have not told you is
+
+1417
+00:58:58,104 --> 00:59:00,597
+how do you actually go
+about choosing the right W
+
+1418
+00:59:00,597 --> 00:59:01,951
+for your dataset.
+
+1419
+00:59:01,951 --> 00:59:03,908
+We've just talked about
+what is the functional form
+
+1420
+00:59:03,908 --> 00:59:06,907
+and what is going on with this thing.
+
+1421
+00:59:06,907 --> 00:59:11,086
+So that's something we'll
+really focus on next time.
+
+1422
+00:59:11,086 --> 00:59:12,933
+And next lecture we'll talk about
+
+1423
+00:59:12,933 --> 00:59:14,668
+what are the strategies and algorithms
+
+1424
+00:59:14,668 --> 00:59:16,581
+for choosing the right W.
+
+1425
+00:59:16,581 --> 00:59:17,708
+And this will lead us to questions
+
+1426
+00:59:17,708 --> 00:59:19,544
+of loss functions and optimization
+
+1427
+00:59:19,544 --> 00:59:21,322
+and eventually ConvNets.
+
+1428
+00:59:21,322 --> 00:59:25,044
+So, that's a bit of the
+preview for next week.
+
+1429
+00:59:25,044 --> 00:00:00,000
+And that's all we have for today.
+

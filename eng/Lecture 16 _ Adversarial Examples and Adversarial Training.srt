@@ -1,0 +1,8243 @@
+1
+00:00:08,407 --> 00:00:10,321
+- Okay, sounds like it is.
+
+2
+00:00:10,321 --> 00:00:12,450
+I'll be telling you about
+adversarial examples
+
+3
+00:00:12,450 --> 00:00:15,292
+and adversarial training today.
+
+4
+00:00:15,292 --> 00:00:16,125
+Thank you.
+
+5
+00:00:18,100 --> 00:00:20,606
+As an overview, I will
+start off by telling you
+
+6
+00:00:20,606 --> 00:00:22,871
+what adversarial examples are,
+
+7
+00:00:22,871 --> 00:00:26,017
+and then I'll explain why they happen,
+
+8
+00:00:26,017 --> 00:00:28,670
+why it's possible for them to exist.
+
+9
+00:00:28,670 --> 00:00:31,026
+I'll talk a little bit about
+how adversarial examples
+
+10
+00:00:31,026 --> 00:00:33,580
+pose real world security threats,
+
+11
+00:00:33,580 --> 00:00:36,248
+that they can actually
+be used to compromise
+
+12
+00:00:36,248 --> 00:00:38,514
+systems built on machine learning.
+
+13
+00:00:38,514 --> 00:00:41,302
+I'll tell you what the
+defenses are so far,
+
+14
+00:00:41,302 --> 00:00:43,986
+but mostly defenses are
+an open research problem
+
+15
+00:00:43,986 --> 00:00:47,586
+that I hope some of you
+will move on to tackle.
+
+16
+00:00:47,586 --> 00:00:49,075
+And then finally I'll tell you
+
+17
+00:00:49,075 --> 00:00:50,644
+how to use adversarial examples
+
+18
+00:00:50,644 --> 00:00:53,156
+to improve other machine
+learning algorithms
+
+19
+00:00:53,156 --> 00:00:56,020
+even if you want to build a
+machine learning algorithm
+
+20
+00:00:56,020 --> 00:00:59,270
+that won't face a real world adversary.
+
+21
+00:01:00,989 --> 00:01:05,272
+Looking at the big picture and
+the context for this lecture,
+
+22
+00:01:05,272 --> 00:01:07,511
+I think most of you are probably here
+
+23
+00:01:07,511 --> 00:01:10,390
+because you've heard
+how incredibly powerful
+
+24
+00:01:10,390 --> 00:01:12,692
+and successful machine learning is,
+
+25
+00:01:12,692 --> 00:01:14,478
+that very many different tasks
+
+26
+00:01:14,478 --> 00:01:17,130
+that could not be solved
+with software before
+
+27
+00:01:17,130 --> 00:01:20,188
+are now solvable thanks to deep learning
+
+28
+00:01:20,188 --> 00:01:23,785
+and convolutional networks
+and gradient descent.
+
+29
+00:01:23,785 --> 00:01:27,138
+All of these technologies
+that are working really well.
+
+30
+00:01:27,138 --> 00:01:28,661
+Until just a few years ago,
+
+31
+00:01:28,661 --> 00:01:30,988
+these technologies didn't really work.
+
+32
+00:01:30,988 --> 00:01:33,868
+In about 2013, we started to see
+
+33
+00:01:33,868 --> 00:01:37,036
+that deep learning achieved
+human level performance
+
+34
+00:01:37,036 --> 00:01:39,018
+at a lot of different tasks.
+
+35
+00:01:39,018 --> 00:01:40,993
+We saw that convolutional nets
+
+36
+00:01:40,993 --> 00:01:43,228
+could recognize objects and images
+
+37
+00:01:43,228 --> 00:01:47,165
+and score about the same as
+people in those benchmarks,
+
+38
+00:01:47,165 --> 00:01:49,638
+with the caveat that
+part of the reason that
+
+39
+00:01:49,638 --> 00:01:51,306
+algorithms score as well as people
+
+40
+00:01:51,306 --> 00:01:52,761
+is that people can't tell
+
+41
+00:01:52,761 --> 00:01:55,410
+Alaskan Huskies from
+Siberian Huskies very well,
+
+42
+00:01:55,410 --> 00:01:58,559
+but modulo the strangeness
+of the benchmarks
+
+43
+00:01:58,559 --> 00:02:01,781
+deep learning caught up to
+about human level performance
+
+44
+00:02:01,781 --> 00:02:05,243
+for object recognition in about 2013.
+
+45
+00:02:05,243 --> 00:02:08,547
+That same year, we also
+saw that object recognition
+
+46
+00:02:08,547 --> 00:02:12,458
+applied to human faces caught
+up to about human level.
+
+47
+00:02:12,458 --> 00:02:14,709
+That suddenly we had computers
+
+48
+00:02:14,709 --> 00:02:17,874
+that could recognize
+faces about as well as
+
+49
+00:02:17,874 --> 00:02:21,728
+you or I could recognize
+faces of strangers.
+
+50
+00:02:21,728 --> 00:02:24,642
+You can recognize the faces
+of your friends and family
+
+51
+00:02:24,642 --> 00:02:27,537
+better than a computer,
+but when you're dealing
+
+52
+00:02:27,537 --> 00:02:30,152
+with people that you haven't
+had a lot of experience with
+
+53
+00:02:30,152 --> 00:02:34,306
+the computer caught up
+to us in about 2013.
+
+54
+00:02:34,306 --> 00:02:36,108
+We also saw that computers caught up
+
+55
+00:02:36,108 --> 00:02:40,275
+to humans for reading type
+written fonts in photos
+
+56
+00:02:41,183 --> 00:02:42,987
+in about 2013.
+
+57
+00:02:42,987 --> 00:02:46,401
+It even got the point that we
+could no longer use CAPTCHAs
+
+58
+00:02:46,401 --> 00:02:50,634
+to tell whether a user of
+a webpage is human or not
+
+59
+00:02:50,634 --> 00:02:52,439
+because the convolutional network
+
+60
+00:02:52,439 --> 00:02:56,496
+is better at reading obfuscated
+text than a human is.
+
+61
+00:02:56,496 --> 00:02:58,406
+So with this context today
+
+62
+00:02:58,406 --> 00:03:00,095
+of deep learning working really well
+
+63
+00:03:00,095 --> 00:03:02,019
+especially for computer vision
+
+64
+00:03:02,019 --> 00:03:05,136
+it's a little bit unusual to think about
+
+65
+00:03:05,136 --> 00:03:07,800
+the computer making a mistake.
+
+66
+00:03:07,800 --> 00:03:10,409
+Before about 2013,
+nobody was ever surprised
+
+67
+00:03:10,409 --> 00:03:12,250
+if the computer made a mistake.
+
+68
+00:03:12,250 --> 00:03:14,659
+That was the rule not the exception,
+
+69
+00:03:14,659 --> 00:03:16,767
+and so today's topic which is all about
+
+70
+00:03:16,767 --> 00:03:20,132
+unusual mistakes that deep
+learning algorithms make
+
+71
+00:03:20,132 --> 00:03:24,000
+this topic wasn't really
+a serious avenue of study
+
+72
+00:03:24,000 --> 00:03:28,099
+until the algorithms started
+to work well most of the time,
+
+73
+00:03:28,099 --> 00:03:31,555
+and now people study
+the way that they break
+
+74
+00:03:31,555 --> 00:03:36,412
+now that that's actually the
+exception rather than the rule.
+
+75
+00:03:36,412 --> 00:03:39,168
+An adversarial example is an example
+
+76
+00:03:39,168 --> 00:03:43,382
+that has been carefully
+computed to be misclassified.
+
+77
+00:03:43,382 --> 00:03:45,864
+In a lot of cases we're
+able to make the new image
+
+78
+00:03:45,864 --> 00:03:48,331
+indistinguishable to a human observer
+
+79
+00:03:48,331 --> 00:03:50,226
+from the original image.
+
+80
+00:03:50,226 --> 00:03:52,833
+Here, I show you one where
+we start with a panda.
+
+81
+00:03:52,833 --> 00:03:54,528
+On the left this is a panda
+
+82
+00:03:54,528 --> 00:03:57,297
+that has not been modified in any way,
+
+83
+00:03:57,297 --> 00:03:59,855
+and the convolutional
+network trained on the image
+
+84
+00:03:59,855 --> 00:04:03,849
+in that dataset is able to
+recognize it as being a panda.
+
+85
+00:04:03,849 --> 00:04:05,524
+One interesting thing is that the model
+
+86
+00:04:05,524 --> 00:04:08,064
+doesn't have a whole lot of
+confidence in that decision.
+
+87
+00:04:08,064 --> 00:04:10,656
+It assigns about 60% probability
+
+88
+00:04:10,656 --> 00:04:13,411
+to this image being a panda.
+
+89
+00:04:13,411 --> 00:04:16,055
+If we then compute exactly the way
+
+90
+00:04:16,055 --> 00:04:17,947
+that we could modify the image
+
+91
+00:04:17,947 --> 00:04:20,624
+to cause the convolutional
+network to make a mistake
+
+92
+00:04:20,624 --> 00:04:23,006
+we find that the optimal direction
+
+93
+00:04:23,006 --> 00:04:27,017
+to move all the pixels is given
+by this image in the middle.
+
+94
+00:04:27,017 --> 00:04:29,625
+To a human it looks a lot like noise.
+
+95
+00:04:29,625 --> 00:04:31,176
+It's not actually noise.
+
+96
+00:04:31,176 --> 00:04:33,244
+It's carefully computed as a function
+
+97
+00:04:33,244 --> 00:04:34,883
+of the parameters of the network.
+
+98
+00:04:34,883 --> 00:04:36,880
+There's actually a lot of structure there.
+
+99
+00:04:36,880 --> 00:04:41,053
+If we multiply that image
+of the structured attack
+
+100
+00:04:41,053 --> 00:04:45,373
+by a very small coefficient and
+add it to the original panda
+
+101
+00:04:45,373 --> 00:04:48,131
+we get an image that a human can't tell
+
+102
+00:04:48,131 --> 00:04:49,806
+from the original panda.
+
+103
+00:04:49,806 --> 00:04:52,811
+In fact, on this slide
+there is no difference
+
+104
+00:04:52,811 --> 00:04:54,447
+between the panda on the left
+
+105
+00:04:54,447 --> 00:04:56,286
+and the panda on the right.
+
+106
+00:04:56,286 --> 00:04:58,753
+When we present the image
+to convolutional network
+
+107
+00:04:58,753 --> 00:05:01,921
+we use 32-bit floating point values.
+
+108
+00:05:01,921 --> 00:05:05,142
+The monitor here can
+only display eight bits
+
+109
+00:05:05,142 --> 00:05:07,712
+of color resolution, and
+we have made a change
+
+110
+00:05:07,712 --> 00:05:09,279
+that's just barely too small
+
+111
+00:05:09,279 --> 00:05:12,613
+to affect the smallest
+of those eight bits,
+
+112
+00:05:12,613 --> 00:05:14,411
+but it effects the other 24
+
+113
+00:05:14,411 --> 00:05:17,345
+of the 32-bit floating
+point representation,
+
+114
+00:05:17,345 --> 00:05:19,342
+and that little tiny change is enough
+
+115
+00:05:19,342 --> 00:05:21,198
+to fool the convolutional network
+
+116
+00:05:21,198 --> 00:05:25,365
+into recognizing this image
+of a panda as being a gibbon.
+
+117
+00:05:26,420 --> 00:05:28,056
+Another interesting thing is that
+
+118
+00:05:28,056 --> 00:05:29,857
+it doesn't just change the class.
+
+119
+00:05:29,857 --> 00:05:32,881
+It's not that we just barely
+found the decision boundary
+
+120
+00:05:32,881 --> 00:05:34,734
+and just barely stepped across it.
+
+121
+00:05:34,734 --> 00:05:37,702
+The convolutional network
+actually has much more confidence
+
+122
+00:05:37,702 --> 00:05:40,172
+in its incorrect prediction,
+
+123
+00:05:40,172 --> 00:05:42,097
+that the image on the right is a gibbon,
+
+124
+00:05:42,097 --> 00:05:45,891
+than it had for the
+original being a panda.
+
+125
+00:05:45,891 --> 00:05:47,588
+On the right, it believes that the image
+
+126
+00:05:47,588 --> 00:05:50,752
+is a gibbon with 99.9% probability,
+
+127
+00:05:50,752 --> 00:05:53,848
+so before it thought that there was about
+
+128
+00:05:53,848 --> 00:05:57,341
+1/3 chance that it was
+something other than a panda,
+
+129
+00:05:57,341 --> 00:06:00,238
+and now it's about as
+certain as it can possibly be
+
+130
+00:06:00,238 --> 00:06:02,417
+that it's a gibbon.
+
+131
+00:06:02,417 --> 00:06:05,585
+As a little bit of history,
+people have studied ways
+
+132
+00:06:05,585 --> 00:06:07,942
+of computing attacks to fool
+
+133
+00:06:07,942 --> 00:06:09,656
+different machine learning models
+
+134
+00:06:09,656 --> 00:06:13,596
+since at least about
+2004, and maybe earlier.
+
+135
+00:06:13,596 --> 00:06:15,305
+For a long time this
+was done in the context
+
+136
+00:06:15,305 --> 00:06:17,772
+of fooling spam detectors.
+
+137
+00:06:17,772 --> 00:06:21,406
+In about 2013, Battista Biggio found
+
+138
+00:06:21,406 --> 00:06:24,161
+that you could fool neural
+networks in this way,
+
+139
+00:06:24,161 --> 00:06:27,080
+and around the same time my
+colleague, Christian Szegedy,
+
+140
+00:06:27,080 --> 00:06:29,311
+found that you could
+make this kind of attack
+
+141
+00:06:29,311 --> 00:06:30,948
+against deep neural networks
+
+142
+00:06:30,948 --> 00:06:33,147
+just by using an optimization algorithm
+
+143
+00:06:33,147 --> 00:06:36,368
+to search on the input of the image.
+
+144
+00:06:36,368 --> 00:06:37,952
+A lot of what I'll be
+telling you about today
+
+145
+00:06:37,952 --> 00:06:40,111
+is my own follow-up work on this topic,
+
+146
+00:06:40,111 --> 00:06:43,496
+but I've spent a lot of my
+career over the past few years
+
+147
+00:06:43,496 --> 00:06:46,539
+understanding why these
+attacks are possible
+
+148
+00:06:46,539 --> 00:06:50,706
+and why it's so easy to fool
+these convolutional networks.
+
+149
+00:06:52,279 --> 00:06:54,129
+When my colleague, Christian,
+
+150
+00:06:54,129 --> 00:06:57,104
+first discovered this phenomenon
+
+151
+00:06:57,104 --> 00:07:01,237
+independently from Battista
+Biggio but around the same time,
+
+152
+00:07:01,237 --> 00:07:04,404
+he found that it was actually a result
+
+153
+00:07:05,652 --> 00:07:08,206
+of a visualization he was trying to make.
+
+154
+00:07:08,206 --> 00:07:10,260
+He wasn't studying security.
+
+155
+00:07:10,260 --> 00:07:12,401
+He wasn't studying how
+to fool a neural network.
+
+156
+00:07:12,401 --> 00:07:14,686
+Instead, he had a convolutional network
+
+157
+00:07:14,686 --> 00:07:16,736
+that could recognize objects very well,
+
+158
+00:07:16,736 --> 00:07:19,134
+and he wants to understand how it worked,
+
+159
+00:07:19,134 --> 00:07:23,301
+so he thought that maybe he
+could take an image of a scene,
+
+160
+00:07:24,156 --> 00:07:26,350
+for example a picture of a ship,
+
+161
+00:07:26,350 --> 00:07:28,784
+and he could gradually
+transform that image
+
+162
+00:07:28,784 --> 00:07:31,428
+into something that the
+network would recognize
+
+163
+00:07:31,428 --> 00:07:33,622
+as being an airplane.
+
+164
+00:07:33,622 --> 00:07:35,513
+Over the course of that transformation,
+
+165
+00:07:35,513 --> 00:07:38,844
+he could see how the
+features of the input change.
+
+166
+00:07:38,844 --> 00:07:40,860
+You might expect that maybe the background
+                                                                           
+167
+00:07:34,360 --> 00:07:37,692
+would turn blue to look like
+the sky behind an airplane,
+
+167
+00:07:44,192 --> 00:07:46,424
+or you might expect that the ship
+
+168
+00:07:46,424 --> 00:07:48,883
+would grow wings to look
+more like an airplane.
+
+169
+00:07:48,883 --> 00:07:51,209
+You could conclude from
+that that the convolution
+
+170
+00:07:51,209 --> 00:07:56,124
+uses the blue sky or uses the
+wings to recognize airplanes.
+
+171
+00:07:56,124 --> 00:07:59,019
+That's actually not really
+what happened at all.
+
+172
+00:07:59,019 --> 00:08:01,212
+Each of these panels
+here shows an animation
+
+173
+00:08:01,212 --> 00:08:03,737
+that you read left to
+right, top to bottom.
+
+174
+00:08:03,737 --> 00:08:06,848
+Each panel is another
+step of gradient ascent
+
+175
+00:08:06,848 --> 00:08:11,441
+on the log probability that
+the input is an airplane
+
+176
+00:08:11,441 --> 00:08:14,067
+according to a convolutional net model,
+
+177
+00:08:14,067 --> 00:08:18,833
+and then we follow the gradient
+on the input to the image.
+
+178
+00:08:18,833 --> 00:08:20,585
+You're probably used to
+following the gradient
+
+179
+00:08:20,585 --> 00:08:22,222
+on the parameters of a model.
+
+180
+00:08:22,222 --> 00:08:23,840
+You can use the back propagation algorithm
+
+181
+00:08:23,840 --> 00:08:26,182
+to compute the gradient on the input image
+
+182
+00:08:26,182 --> 00:08:28,001
+using exactly the same procedure
+
+183
+00:08:28,001 --> 00:08:29,816
+that you would use to compute the gradient
+
+184
+00:08:29,816 --> 00:08:31,976
+on the parameters.
+
+185
+00:08:31,976 --> 00:08:34,803
+In this animation of the
+ship in the upper left,
+
+186
+00:08:34,803 --> 00:08:37,918
+we see five panels that all
+look basically the same.
+
+187
+00:08:37,918 --> 00:08:39,339
+Gradient descent doesn't seem
+
+188
+00:08:39,339 --> 00:08:40,793
+to have moved the image at all,
+
+189
+00:08:40,793 --> 00:08:43,496
+but by the last panel the
+network is completely confident
+
+190
+00:08:43,496 --> 00:08:45,287
+that this is an airplane.
+
+191
+00:08:45,287 --> 00:08:47,580
+When you first code up
+this kind of experiment,
+
+192
+00:08:47,580 --> 00:08:49,433
+especially if you don't
+know what's going to happen,
+
+193
+00:08:49,433 --> 00:08:51,881
+it feels a little bit like
+you have a bug in your script
+
+194
+00:08:51,881 --> 00:08:52,937
+and you're just displaying
+
+195
+00:08:52,937 --> 00:08:54,761
+the same image over and over again.
+
+196
+00:08:54,761 --> 00:08:55,952
+The first time I did it,
+
+197
+00:08:55,952 --> 00:08:58,419
+I couldn't believe it was happening,
+
+198
+00:08:58,419 --> 00:09:00,540
+and I had to open up the images in NumPy,
+
+199
+00:09:00,540 --> 00:09:02,355
+and take the difference of them,
+
+200
+00:09:02,355 --> 00:09:03,813
+and make sure that there was actually
+
+201
+00:09:03,813 --> 00:09:07,359
+a non-zero difference
+in there, but there is.
+
+202
+00:09:07,359 --> 00:09:09,250
+I show several different animations here
+
+203
+00:09:09,250 --> 00:09:12,333
+of a ship, a car, a cat, and a truck.
+
+204
+00:09:13,172 --> 00:09:15,817
+The only one where I actually
+see any change at all
+
+205
+00:09:15,817 --> 00:09:18,250
+is the image of the cat.
+
+206
+00:09:18,250 --> 00:09:21,038
+The color of the cat's
+face changes a little bit,
+
+207
+00:09:21,038 --> 00:09:23,646
+and maybe it becomes a little bit more
+
+208
+00:09:23,646 --> 00:09:25,969
+like the color of a metal airplane.
+
+209
+00:09:25,969 --> 00:09:28,470
+Other than that, I don't see any changes
+
+210
+00:09:28,470 --> 00:09:29,895
+in any of these animations,
+
+211
+00:09:29,895 --> 00:09:33,908
+and I don't see anything very
+suggestive of an airplane.
+
+212
+00:09:33,908 --> 00:09:36,985
+So gradient descent, rather
+than turning the input
+
+213
+00:09:36,985 --> 00:09:39,240
+into an example of an airplane,
+
+214
+00:09:39,240 --> 00:09:42,818
+has found an image that fools the network
+
+215
+00:09:42,818 --> 00:09:45,519
+into thinking that the
+input is an airplane.
+
+216
+00:09:45,519 --> 00:09:47,050
+And if we were malicious attackers
+
+217
+00:09:47,050 --> 00:09:49,567
+we didn't even have to work
+very hard to figure out
+
+218
+00:09:49,567 --> 00:09:51,102
+how to fool the network.
+
+219
+00:09:51,102 --> 00:09:52,234
+We just asked the network
+
+220
+00:09:52,234 --> 00:09:53,837
+to give us an image of an airplane,
+
+221
+00:09:53,837 --> 00:09:56,516
+and it gave us something
+that fools it into thinking
+
+222
+00:09:56,516 --> 00:09:59,016
+that the input is an airplane.
+
+223
+00:10:00,310 --> 00:10:02,727
+When Christian first published this work,
+
+224
+00:10:02,727 --> 00:10:05,175
+a lot of articles came
+out with titles like,
+
+225
+00:10:05,175 --> 00:10:07,210
+The Flaw Looking At Every
+Deep Neural Network,
+
+226
+00:10:07,210 --> 00:10:10,590
+or Deep Learning has Deep Flaws.
+
+227
+00:10:10,590 --> 00:10:12,577
+It's important to remember
+that these vulnerabilities
+
+228
+00:10:12,577 --> 00:10:15,903
+apply to essentially every
+machine learning algorithm
+
+229
+00:10:15,903 --> 00:10:18,625
+that we've studied so far.
+
+230
+00:10:18,625 --> 00:10:20,458
+Some of them like RBF networks
+
+231
+00:10:20,458 --> 00:10:22,906
+and partisan density estimators
+
+232
+00:10:22,906 --> 00:10:24,942
+are able to resist this effect somewhat,
+
+233
+00:10:24,942 --> 00:10:27,908
+but even very simple
+machine learning algorithms
+
+234
+00:10:27,908 --> 00:10:32,069
+are highly vulnerable
+to adversarial examples.
+
+235
+00:10:32,069 --> 00:10:33,870
+In this image, I show an animation
+
+236
+00:10:33,870 --> 00:10:37,038
+of what happens when we
+attack a linear model,
+
+237
+00:10:37,038 --> 00:10:38,890
+so it's not a deep algorithm at all.
+
+238
+00:10:38,890 --> 00:10:41,370
+It's just a shallow softmax model.
+
+239
+00:10:41,370 --> 00:10:45,440
+You multiply by a matrix, you
+add a vector of bias terms,
+
+240
+00:10:45,440 --> 00:10:47,223
+you apply the softmax function,
+
+241
+00:10:47,223 --> 00:10:48,846
+and you've got your
+probability distribution
+
+242
+00:10:48,846 --> 00:10:51,249
+over the 10 MNIST classes.
+
+243
+00:10:51,249 --> 00:10:54,022
+At the upper left, I start
+with an image of a nine,
+
+244
+00:10:54,022 --> 00:10:57,161
+and then as we move left
+to right, top to bottom,
+
+245
+00:10:57,161 --> 00:11:00,141
+I gradually transform it to be a zero.
+
+246
+00:11:00,141 --> 00:11:02,053
+Where I've drawn the yellow box,
+
+247
+00:11:02,053 --> 00:11:05,640
+the model assigns high
+probability to it being a zero.
+
+248
+00:11:05,640 --> 00:11:08,323
+I forget exactly what my threshold
+was for high probability,
+
+249
+00:11:08,323 --> 00:11:11,856
+but I think it was around 0.9 or so.
+
+250
+00:11:11,856 --> 00:11:13,503
+Then as we move to the second row,
+
+251
+00:11:13,503 --> 00:11:15,462
+I transform it into a one,
+
+252
+00:11:15,462 --> 00:11:17,136
+and the second yellow box indicates
+
+253
+00:11:17,136 --> 00:11:18,932
+where we've successfully fooled the model
+
+254
+00:11:18,932 --> 00:11:21,663
+into thinking it's a one
+with high probability.
+
+255
+00:11:21,663 --> 00:11:23,878
+And then as you read the
+rest of the yellow boxes
+
+256
+00:11:23,878 --> 00:11:25,250
+left to right, top to bottom,
+
+257
+00:11:25,250 --> 00:11:27,691
+we go through the twos,
+threes, fours, and so on,
+
+258
+00:11:27,691 --> 00:11:29,646
+until finally at the lower right
+
+259
+00:11:29,646 --> 00:11:31,855
+we have a nine that has
+a yellow box around it,
+
+260
+00:11:31,855 --> 00:11:33,794
+and it actually looks like a nine,
+
+261
+00:11:33,794 --> 00:11:35,001
+but in this case the only reason
+
+262
+00:11:35,001 --> 00:11:36,185
+it actually looks like a nine
+
+263
+00:11:36,185 --> 00:11:39,369
+is that we started the
+whole process with a nine.
+
+264
+00:11:39,369 --> 00:11:43,042
+We successfully swept through
+all 10 classes of MNIST
+
+265
+00:11:43,042 --> 00:11:46,892
+without substantially changing
+the image of the digit
+
+266
+00:11:46,892 --> 00:11:50,578
+in any way that would interfere
+with human recognition.
+
+267
+00:11:50,578 --> 00:11:54,745
+This linear model was actually
+extremely easy to fool.
+
+268
+00:11:55,879 --> 00:11:57,791
+Besides linear models, we've also seen
+
+269
+00:11:57,791 --> 00:12:01,480
+that we can fool many different
+kinds of linear models
+
+270
+00:12:01,480 --> 00:12:04,588
+including logistic regression and SVMs.
+
+271
+00:12:04,588 --> 00:12:07,118
+We've also found that we
+can fool decision trees,
+
+272
+00:12:07,118 --> 00:12:11,285
+and to a lesser extent,
+nearest neighbors classifiers.
+
+273
+00:12:13,049 --> 00:12:16,605
+We wanted to explain
+exactly why this happens.
+
+274
+00:12:16,605 --> 00:12:20,122
+Back in about 2014, after we'd
+published the original paper
+
+275
+00:12:20,122 --> 00:12:22,934
+where we'd said that these problems exist,
+
+276
+00:12:22,934 --> 00:12:25,929
+we were trying to figure
+out why they happen.
+
+277
+00:12:25,929 --> 00:12:27,394
+When we wrote our first paper,
+
+278
+00:12:27,394 --> 00:12:30,517
+we thought that basically
+this is a form of overfitting,
+
+279
+00:12:30,517 --> 00:12:34,087
+that you have a very
+complicated deep neural network,
+
+280
+00:12:34,087 --> 00:12:36,086
+it learns to fit the training set,
+
+281
+00:12:36,086 --> 00:12:39,604
+its behavior on the test
+set is somewhat undefined,
+
+282
+00:12:39,604 --> 00:12:41,858
+and then it makes random mistakes
+
+283
+00:12:41,858 --> 00:12:44,023
+that an attacker can exploit.
+
+284
+00:12:44,023 --> 00:12:45,778
+Let's walk through what
+that story looks like
+
+285
+00:12:45,778 --> 00:12:47,650
+somewhat concretely.
+
+286
+00:12:47,650 --> 00:12:50,885
+I have here a training
+set of three blue X's
+
+287
+00:12:50,885 --> 00:12:53,105
+and three green O's.
+
+288
+00:12:53,105 --> 00:12:54,364
+We want to make a classifier
+
+289
+00:12:54,364 --> 00:12:57,435
+that can recognize X's and recognize O's.
+
+290
+00:12:57,435 --> 00:12:59,806
+We have a very complicated classifier
+
+291
+00:12:59,806 --> 00:13:01,972
+that can easily fit the training set,
+
+292
+00:13:01,972 --> 00:13:03,633
+so we represent everywhere it believes
+
+293
+00:13:03,633 --> 00:13:06,486
+X's should be with blobs of blue color,
+
+294
+00:13:06,486 --> 00:13:08,369
+and I've drawn a blob of blue
+
+295
+00:13:08,369 --> 00:13:10,629
+around all of the training set X's,
+
+296
+00:13:10,629 --> 00:13:13,157
+so it correctly classifies
+the training set.
+
+297
+00:13:13,157 --> 00:13:17,840
+It also has a blob of green
+mass showing where the O's are,
+
+298
+00:13:17,840 --> 00:13:21,360
+and it successfully fits all
+of the green training set O's,
+
+299
+00:13:21,360 --> 00:13:24,482
+but then because this is a
+very complicated function
+
+300
+00:13:24,482 --> 00:13:26,850
+and it has just way more parameters
+
+301
+00:13:26,850 --> 00:13:29,998
+than it actually needs to
+represent the training task,
+
+302
+00:13:29,998 --> 00:13:33,168
+it throws little blobs of probability mass
+
+303
+00:13:33,168 --> 00:13:35,680
+around the rest of space randomly.
+
+304
+00:13:35,680 --> 00:13:37,566
+On the left there's a blob of green space
+
+305
+00:13:37,566 --> 00:13:40,121
+that's kind of near the training set X's,
+
+306
+00:13:40,121 --> 00:13:42,032
+and I've drawn a red X there to show
+
+307
+00:13:42,032 --> 00:13:43,740
+that maybe this would be
+an adversarial example
+
+308
+00:13:43,740 --> 00:13:46,441
+where we expect the
+classification to be X,
+
+309
+00:13:46,441 --> 00:13:48,570
+but the model assigns O.
+
+310
+00:13:48,570 --> 00:13:51,663
+On the right, I've shown
+that there's a red O
+
+311
+00:13:51,663 --> 00:13:53,826
+where we have another adversarial example.
+
+312
+00:13:53,826 --> 00:13:55,655
+We're very near the other O's.
+
+313
+00:13:55,655 --> 00:13:58,175
+We might expect the model to
+assign this class to be an O,
+
+314
+00:13:58,175 --> 00:14:00,375
+and yet because it's drawn blue mass there
+
+315
+00:14:00,375 --> 00:14:04,060
+it's actually assigning it to be an X.
+
+316
+00:14:04,060 --> 00:14:05,614
+If overfitting is really the story
+
+317
+00:14:05,614 --> 00:14:09,105
+then each adversarial
+example is more or less
+
+318
+00:14:09,105 --> 00:14:12,877
+the result of bad luck and
+also more or less unique.
+
+319
+00:14:12,877 --> 00:14:14,455
+If we fit the model again
+
+320
+00:14:14,455 --> 00:14:16,378
+or we fit a slightly different model
+
+321
+00:14:16,378 --> 00:14:19,137
+we would expect to make
+different random mistakes
+
+322
+00:14:19,137 --> 00:14:22,338
+on this points that are
+off the training set,
+
+323
+00:14:22,338 --> 00:14:25,131
+but that was actually
+not what we found at all.
+
+324
+00:14:25,131 --> 00:14:28,017
+We found that many different
+models would misclassify
+
+325
+00:14:28,017 --> 00:14:30,533
+the same adversarial examples,
+
+326
+00:14:30,533 --> 00:14:33,271
+and they would assign
+the same class to them.
+
+327
+00:14:33,271 --> 00:14:36,191
+We also found that if
+we took the difference
+
+328
+00:14:36,191 --> 00:14:40,429
+between an original example
+and an adversarial example
+
+329
+00:14:40,429 --> 00:14:43,226
+then we had a direction in input space
+
+330
+00:14:43,226 --> 00:14:46,719
+and we could add that same offset vector
+
+331
+00:14:46,719 --> 00:14:49,234
+to any clean example, and
+we would almost always
+
+332
+00:14:49,234 --> 00:14:52,067
+get an adversarial example as a result.
+
+333
+00:14:52,067 --> 00:14:52,935
+So we started to realize
+
+334
+00:14:52,935 --> 00:14:55,283
+that there was systematic
+effect going on here,
+
+335
+00:14:55,283 --> 00:14:57,842
+not just a random effect.
+
+336
+00:14:57,842 --> 00:14:59,368
+That led us to another idea
+
+337
+00:14:59,368 --> 00:15:01,317
+which is that adversarial examples
+
+338
+00:15:01,317 --> 00:15:03,537
+might actually be more like underfitting
+
+339
+00:15:03,537 --> 00:15:05,538
+rather than overfitting.
+
+340
+00:15:05,538 --> 00:15:09,141
+They might actually come from
+the model being too linear.
+
+341
+00:15:09,141 --> 00:15:11,267
+Here I draw the same task again
+
+342
+00:15:11,267 --> 00:15:13,655
+where we have the same manifold of O's
+
+343
+00:15:13,655 --> 00:15:15,929
+and the same line of X's,
+
+344
+00:15:15,929 --> 00:15:19,205
+and this time I fit a
+linear model to the data set
+
+345
+00:15:19,205 --> 00:15:23,772
+rather than fitting a high
+capacity, non-linear model to it.
+
+346
+00:15:23,772 --> 00:15:26,103
+We see that we get a dividing hyperplane
+
+347
+00:15:26,103 --> 00:15:29,082
+running in between the two classes.
+
+348
+00:15:29,082 --> 00:15:30,877
+This hyperplane doesn't really capture
+
+349
+00:15:30,877 --> 00:15:33,803
+the true structure of the classes.
+
+350
+00:15:33,803 --> 00:15:37,167
+The O's are clearly arranged
+in a C-shaped manifold.
+
+351
+00:15:37,167 --> 00:15:40,310
+If we keep walking past
+the end of the O's,
+
+352
+00:15:40,310 --> 00:15:43,734
+we've crossed the decision
+boundary and we've drawn a red O
+
+353
+00:15:43,734 --> 00:15:46,432
+where even though we're very
+near the decision boundary
+
+354
+00:15:46,432 --> 00:15:49,688
+and near other O's we
+believe that it is now an X.
+
+355
+00:15:49,688 --> 00:15:53,036
+Similarly we can take
+steps that go from near X's
+
+356
+00:15:53,036 --> 00:15:57,646
+to just over the line that
+are classified as O's.
+
+357
+00:15:57,646 --> 00:15:59,638
+Another thing that's somewhat
+unusual about this plot
+
+358
+00:15:59,638 --> 00:16:03,208
+is that if we look at the lower
+left or upper right corners
+
+359
+00:16:03,208 --> 00:16:05,428
+these corners are very
+confidently classified
+
+360
+00:16:05,428 --> 00:16:09,538
+as being X's on the lower
+left or O's on the upper right
+
+361
+00:16:09,538 --> 00:16:12,498
+even though we've never seen
+any data over there at all.
+
+362
+00:16:12,498 --> 00:16:14,710
+The linear model family forces the model
+
+363
+00:16:14,710 --> 00:16:17,604
+to have very high
+confidence in these regions
+
+364
+00:16:17,604 --> 00:16:21,354
+that are very far from
+the decision boundary.
+
+365
+00:16:22,757 --> 00:16:25,923
+We've seen that linear
+models can actually assign
+
+366
+00:16:25,923 --> 00:16:28,478
+really unusual confidence
+as you move very far
+
+367
+00:16:28,478 --> 00:16:30,016
+from the decision boundary,
+
+368
+00:16:30,016 --> 00:16:31,828
+even if there isn't any data there,
+
+369
+00:16:31,828 --> 00:16:34,106
+but are deep neural networks actually
+
+370
+00:16:34,106 --> 00:16:36,326
+anything like linear models?
+
+371
+00:16:36,326 --> 00:16:38,598
+Could linear models
+actually explain anything
+
+372
+00:16:38,598 --> 00:16:41,190
+about how it is that
+deep neural nets fail?
+
+373
+00:16:41,190 --> 00:16:43,114
+It turns out that modern deep neural nets
+
+374
+00:16:43,114 --> 00:16:45,482
+are actually very piecewise linear,
+
+375
+00:16:45,482 --> 00:16:47,648
+so rather than being a
+single linear function
+
+376
+00:16:47,648 --> 00:16:49,162
+they are piecewise linear
+
+377
+00:16:49,162 --> 00:16:52,412
+with maybe not that many linear pieces.
+
+378
+00:16:53,588 --> 00:16:55,378
+If we use rectified linear units
+
+379
+00:16:55,378 --> 00:16:59,545
+then the mapping from the input
+image to the output logits
+
+380
+00:17:00,460 --> 00:17:03,662
+is literally a piecewise linear function.
+
+381
+00:17:03,662 --> 00:17:06,750
+By the logits I mean the
+un-normalized log probabilities
+
+382
+00:17:06,750 --> 00:17:11,701
+before we apply the softmax
+op at the output of the model.
+
+383
+00:17:11,701 --> 00:17:13,161
+There are other neural networks
+
+384
+00:17:13,161 --> 00:17:14,955
+like maxout networks that are also
+
+385
+00:17:14,955 --> 00:17:17,145
+literally piecewise linear.
+
+386
+00:17:17,146 --> 00:17:19,915
+And then there are several
+that become very close to it.
+
+387
+00:17:19,915 --> 00:17:22,627
+Before rectified linear
+units became popular
+
+388
+00:17:22,627 --> 00:17:27,019
+most people used to use sigmoid
+units of one form or another
+
+389
+00:17:27,019 --> 00:17:30,369
+either logistic sigmoid or
+hyperbolic tangent units.
+
+390
+00:17:30,369 --> 00:17:33,624
+These sigmoidal units have
+to be carefully tuned,
+
+391
+00:17:33,624 --> 00:17:35,715
+especially at initialization
+
+392
+00:17:35,715 --> 00:17:37,936
+so that you spend most of your time
+
+393
+00:17:37,936 --> 00:17:40,396
+near the center of the sigmoid
+
+394
+00:17:40,396 --> 00:17:43,527
+where the sigmoid is approximately linear.
+
+395
+00:17:43,527 --> 00:17:46,578
+Then finally, the LSTM, a
+kind of recurrent network
+
+396
+00:17:46,578 --> 00:17:49,641
+that is one of the most popular
+recurrent networks today,
+
+397
+00:17:49,641 --> 00:17:52,769
+uses addition from one
+time step to the next
+
+398
+00:17:52,769 --> 00:17:56,859
+in order to accumulate and
+remember information over time.
+
+399
+00:17:56,859 --> 00:18:00,021
+Addition is a particularly
+simple form of linearity,
+
+400
+00:18:00,021 --> 00:18:01,501
+so we can see that the interaction
+
+401
+00:18:01,501 --> 00:18:06,055
+from a very distant time step
+in the past and the present
+
+402
+00:18:06,055 --> 00:18:09,330
+is highly linear within an LSTM.
+
+403
+00:18:09,330 --> 00:18:11,647
+Now to be clear, I'm
+speaking about the mapping
+
+404
+00:18:11,647 --> 00:18:14,417
+from the input of the model
+to the output of the model.
+
+405
+00:18:14,417 --> 00:18:17,155
+That's what I'm saying
+is close to being linear
+
+406
+00:18:17,155 --> 00:18:21,128
+or is piecewise linear
+with relatively few pieces.
+
+407
+00:18:21,128 --> 00:18:23,351
+The mapping from the
+parameters of the network
+
+408
+00:18:23,351 --> 00:18:26,125
+to the output of the network is non-linear
+
+409
+00:18:26,125 --> 00:18:29,345
+because the weight matrices
+at each layer of the network
+
+410
+00:18:29,345 --> 00:18:31,394
+are multiplied together.
+
+411
+00:18:31,394 --> 00:18:34,249
+So we actually get extremely
+non-linear reactions
+
+412
+00:18:34,249 --> 00:18:36,434
+between parameters and the output.
+
+413
+00:18:36,434 --> 00:18:39,348
+That's what makes training a
+neural network so difficult.
+
+414
+00:18:39,348 --> 00:18:42,315
+But the mapping from
+the input to the output
+
+415
+00:18:42,315 --> 00:18:45,177
+is much more linear and predictable,
+
+416
+00:18:45,177 --> 00:18:47,347
+and it means that optimization problems
+
+417
+00:18:47,347 --> 00:18:50,938
+that aim to optimize
+the input to the model
+
+418
+00:18:50,938 --> 00:18:53,600
+are much easier than optimization problems
+
+419
+00:18:53,600 --> 00:18:57,169
+that aim to optimize the parameters.
+
+420
+00:18:57,169 --> 00:18:59,631
+If we go and look for
+this happening in practice
+
+421
+00:18:59,631 --> 00:19:01,870
+we can take a convolutional network
+
+422
+00:19:01,870 --> 00:19:04,273
+and trace out a one-dimensional path
+
+423
+00:19:04,273 --> 00:19:07,013
+through its input space.
+
+424
+00:19:07,013 --> 00:19:09,818
+So what we're doing here is
+we're choosing a clean example.
+
+425
+00:19:09,818 --> 00:19:12,763
+It's an image of a white
+car on a red background,
+
+426
+00:19:12,763 --> 00:19:14,856
+and we are choosing a direction
+
+427
+00:19:14,856 --> 00:19:16,623
+that will travel through space.
+
+428
+00:19:16,623 --> 00:19:19,403
+We are going to have a coefficient epsilon
+
+429
+00:19:19,403 --> 00:19:21,273
+that we multiply by this direction.
+
+430
+00:19:21,273 --> 00:19:22,848
+When epsilon is negative 30,
+
+431
+00:19:22,848 --> 00:19:24,544
+like at the left end of the plot,
+
+432
+00:19:24,544 --> 00:19:28,266
+we're subtracting off a lot
+of this unit vector direction.
+
+433
+00:19:28,266 --> 00:19:30,945
+When epsilon is zero, like
+in the middle of the plot,
+
+434
+00:19:30,945 --> 00:19:33,964
+we're visiting the original
+image from the data set,
+
+435
+00:19:33,964 --> 00:19:36,074
+and when epsilon is positive 30,
+
+436
+00:19:36,074 --> 00:19:37,645
+like at the right end of the plot,
+
+437
+00:19:37,645 --> 00:19:41,228
+we're adding this
+direction onto the input.
+
+438
+00:19:42,622 --> 00:19:45,079
+In the panel on the left,
+I show you an animation
+
+439
+00:19:45,079 --> 00:19:47,666
+where we move from
+epsilon equals negative 30
+
+440
+00:19:47,666 --> 00:19:50,820
+as up to epsilon equals positive 30.
+
+441
+00:19:50,820 --> 00:19:53,581
+You read the animation left
+to right, top to bottom,
+
+442
+00:19:53,581 --> 00:19:56,031
+and everywhere that there's a yellow box
+
+443
+00:19:56,031 --> 00:20:00,198
+the input has correctly
+recognized as being a car.
+
+444
+00:20:01,379 --> 00:20:04,354
+On the upper left, you see
+that it looks mostly blue.
+
+445
+00:20:04,354 --> 00:20:07,817
+On the lower right, it's
+hard to tell what's going on.
+
+446
+00:20:07,817 --> 00:20:10,381
+It's kind of reddish and so on.
+
+447
+00:20:10,381 --> 00:20:13,772
+In the middle row, just after
+where the yellow boxes end
+
+448
+00:20:13,772 --> 00:20:14,995
+you can see pretty clearly
+
+449
+00:20:14,995 --> 00:20:17,324
+that it's a car on a red background,
+
+450
+00:20:17,324 --> 00:20:20,747
+though the image is small on these slides.
+
+451
+00:20:20,747 --> 00:20:23,780
+What's interesting to
+look at here is the logits
+
+452
+00:20:23,780 --> 00:20:25,168
+that the model outputs.
+
+453
+00:20:25,168 --> 00:20:30,115
+This is a deep convolutional
+rectified linear unit network.
+
+454
+00:20:30,115 --> 00:20:32,326
+Because it uses rectified linear units,
+
+455
+00:20:32,326 --> 00:20:36,160
+we know that the output is
+a piecewise linear function
+
+456
+00:20:36,160 --> 00:20:38,559
+of the input to the model.
+
+457
+00:20:38,559 --> 00:20:40,835
+The main question we're
+asking by making this plot
+
+458
+00:20:40,835 --> 00:20:42,820
+is how many different pieces
+
+459
+00:20:42,820 --> 00:20:45,628
+does this piecewise linear function have
+
+460
+00:20:45,628 --> 00:20:48,552
+if we look at one
+particular cross section.
+
+461
+00:20:48,552 --> 00:20:50,835
+You might think that maybe a deep net
+
+462
+00:20:50,835 --> 00:20:52,135
+is going to represent some extremely
+
+463
+00:20:52,135 --> 00:20:54,749
+wiggly complicated
+function with lots and lots
+
+464
+00:20:54,749 --> 00:20:58,326
+of linear pieces no matter
+which cross section you look in.
+
+465
+00:20:58,326 --> 00:21:01,408
+Or we might find that it
+has more or less two pieces
+
+466
+00:21:01,408 --> 00:21:03,825
+for each function we look at.
+
+467
+00:21:04,667 --> 00:21:07,201
+Each of the different curves on this plot
+
+468
+00:21:07,201 --> 00:21:10,245
+is the logits for a different class.
+
+469
+00:21:10,245 --> 00:21:13,864
+We see that out at the tails of the plot
+
+470
+00:21:13,864 --> 00:21:16,528
+that the frog class is the most likely,
+
+471
+00:21:16,528 --> 00:21:18,846
+and the frog class basically looks like
+
+472
+00:21:18,846 --> 00:21:20,846
+a big v-shaped function.
+
+473
+00:21:21,928 --> 00:21:24,193
+The logits for the frog
+class become very high
+
+474
+00:21:24,193 --> 00:21:27,270
+when epsilon is negative
+30 or positive 30,
+
+475
+00:21:27,270 --> 00:21:29,253
+and they drop down and
+become a little bit negative
+
+476
+00:21:29,253 --> 00:21:31,003
+when epsilon is zero.
+
+477
+00:21:32,833 --> 00:21:36,250
+The car class, listed as automobile here,
+
+478
+00:21:37,764 --> 00:21:39,856
+it's actually high in the middle,
+
+479
+00:21:39,856 --> 00:21:42,950
+and the car is correctly recognized.
+
+480
+00:21:42,950 --> 00:21:44,944
+As we sweep out to very negative epsilon,
+
+481
+00:21:44,944 --> 00:21:47,397
+the logits for the car class do increase,
+
+482
+00:21:47,397 --> 00:21:49,033
+but they don't increase nearly as quickly
+
+483
+00:21:49,033 --> 00:21:51,553
+as the logits for the frog class.
+
+484
+00:21:51,553 --> 00:21:52,811
+So, we've found a direction
+
+485
+00:21:52,811 --> 00:21:54,793
+that's associated with the frog class
+
+486
+00:21:54,793 --> 00:21:59,041
+and as we follow it out to a
+relatively large perturbation,
+
+487
+00:21:59,041 --> 00:22:02,334
+we find that the model
+extrapolates linearly
+
+488
+00:22:02,334 --> 00:22:04,873
+and begins to make a very
+unreasonable prediction
+
+489
+00:22:04,873 --> 00:22:07,984
+that the frog class is extremely likely
+
+490
+00:22:07,984 --> 00:22:09,971
+just because we've moved for a long time
+
+491
+00:22:09,971 --> 00:22:12,073
+in this direction that
+was locally associated
+
+492
+00:22:12,073 --> 00:22:15,240
+with the frog class being more likely.
+
+493
+00:22:17,550 --> 00:22:20,694
+When we actually go and
+construct adversarial examples,
+
+494
+00:22:20,694 --> 00:22:23,200
+we need to remember that we're able to get
+
+495
+00:22:23,200 --> 00:22:24,784
+quite a large perturbation
+
+496
+00:22:24,784 --> 00:22:26,829
+without changing the image very much
+
+497
+00:22:26,829 --> 00:22:29,912
+as far as a human being is concerned.
+
+498
+00:22:30,882 --> 00:22:33,852
+So here I show you a
+handwritten digit three,
+
+499
+00:22:33,852 --> 00:22:36,395
+and I'm going to change it
+in several different ways,
+
+500
+00:22:36,395 --> 00:22:37,923
+and all of these changes have
+
+501
+00:22:37,923 --> 00:22:40,806
+the same L2 norm perturbation.
+
+502
+00:22:40,806 --> 00:22:44,421
+In the top row, I'm going to
+change the three into a seven
+
+503
+00:22:44,421 --> 00:22:47,752
+just by looking for the nearest
+seven in the training set.
+
+504
+00:22:47,752 --> 00:22:49,518
+The difference between those two
+
+505
+00:22:49,518 --> 00:22:53,527
+is this image that looks a
+little bit like the seven
+
+506
+00:22:53,527 --> 00:22:55,187
+wrapped in some black lines.
+
+507
+00:22:55,187 --> 00:22:57,813
+So here white pixels in the middle image
+
+508
+00:22:57,813 --> 00:22:59,808
+in the perturbation column,
+
+509
+00:22:59,808 --> 00:23:02,184
+the white pixels
+represent adding something
+
+510
+00:23:02,184 --> 00:23:04,830
+and black pixels represent
+subtracting something
+
+511
+00:23:04,830 --> 00:23:08,142
+as you move from the left
+column to the right column.
+
+512
+00:23:08,142 --> 00:23:11,401
+So when we take the three and
+we apply this perturbation
+
+513
+00:23:11,401 --> 00:23:13,417
+that transforms it into a seven,
+
+514
+00:23:13,417 --> 00:23:16,531
+we can measure the L2
+norm of that perturbation.
+
+515
+00:23:16,531 --> 00:23:20,236
+And it turns out to
+have an L2 norm of 3.96.
+
+516
+00:23:20,236 --> 00:23:21,818
+That gives you kind of a reference
+
+517
+00:23:21,818 --> 00:23:24,790
+for how big these perturbations can be.
+
+518
+00:23:24,790 --> 00:23:26,521
+In the middle row, we apply a perturbation
+
+519
+00:23:26,521 --> 00:23:28,302
+of exactly the same size,
+
+520
+00:23:28,302 --> 00:23:30,500
+but with the direction chosen randomly.
+
+521
+00:23:30,500 --> 00:23:32,065
+In this case we don't actually change
+
+522
+00:23:32,065 --> 00:23:33,720
+the class of the three at all,
+
+523
+00:23:33,720 --> 00:23:35,377
+we just get some random noise
+
+524
+00:23:35,377 --> 00:23:37,825
+that didn't really change the class.
+
+525
+00:23:37,825 --> 00:23:41,373
+A human could still easily
+read it as being a three.
+
+526
+00:23:41,373 --> 00:23:44,285
+And then finally at the very bottom row,
+
+527
+00:23:44,285 --> 00:23:46,230
+we take the three and we
+just erase a piece of it
+
+528
+00:23:46,230 --> 00:23:48,011
+with a perturbation of the same norm
+
+529
+00:23:48,011 --> 00:23:50,334
+and we turn it into something
+
+530
+00:23:50,334 --> 00:23:52,422
+that doesn't have any class at all.
+
+531
+00:23:52,422 --> 00:23:53,714
+It's not a three, it's not a seven,
+
+532
+00:23:53,714 --> 00:23:56,254
+it's just a defective input.
+
+533
+00:23:56,254 --> 00:23:57,568
+All of these changes can happen
+
+534
+00:23:57,568 --> 00:24:00,664
+with the same L2 norm perturbation.
+
+535
+00:24:00,664 --> 00:24:03,025
+And actually a lot of the time
+with adversarial examples,
+
+536
+00:24:03,025 --> 00:24:06,011
+you make perturbations that
+have an even larger L2 norm.
+
+537
+00:24:06,011 --> 00:24:07,216
+What's going on is that
+
+538
+00:24:07,216 --> 00:24:09,143
+there are several different
+pixels in the image,
+
+539
+00:24:09,143 --> 00:24:12,131
+and so small changes to individual pixels
+
+540
+00:24:12,131 --> 00:24:15,227
+can add up to relatively large vectors.
+
+541
+00:24:15,227 --> 00:24:17,566
+For larger datasets like ImageNet,
+
+542
+00:24:17,566 --> 00:24:18,990
+where there's even more pixels,
+
+543
+00:24:18,990 --> 00:24:21,184
+you can make very small
+changes to each pixel
+
+544
+00:24:21,184 --> 00:24:24,174
+that travel very far in vector space
+
+545
+00:24:24,174 --> 00:24:26,368
+as measured by the L2 norm.
+
+546
+00:24:26,368 --> 00:24:28,505
+That means that you can
+actually make changes
+
+547
+00:24:28,505 --> 00:24:30,093
+that are almost imperceptible
+
+548
+00:24:30,093 --> 00:24:31,605
+but actually move you really far
+
+549
+00:24:31,605 --> 00:24:33,477
+and get a large dot product
+
+550
+00:24:33,477 --> 00:24:36,137
+with the coefficients
+of the linear function
+
+551
+00:24:36,137 --> 00:24:38,695
+that the model represents.
+
+552
+00:24:38,695 --> 00:24:39,832
+It also means that when
+
+553
+00:24:39,832 --> 00:24:41,467
+we're constructing adversarial examples,
+
+554
+00:24:41,467 --> 00:24:44,838
+we need to make sure that the
+adversarial example procedure
+
+555
+00:24:44,838 --> 00:24:46,022
+isn't able to do what happened
+
+556
+00:24:46,022 --> 00:24:48,240
+in the top row of this slide here.
+
+557
+00:24:48,240 --> 00:24:49,627
+So in the top row of this slide,
+
+558
+00:24:49,627 --> 00:24:50,756
+we took the three and we actually
+
+559
+00:24:50,756 --> 00:24:52,454
+just changed it into a seven.
+
+560
+00:24:52,454 --> 00:24:53,856
+So when the model says that the image
+
+561
+00:24:53,856 --> 00:24:56,232
+in the upper right is a
+seven, it's not a mistake.
+
+562
+00:24:56,232 --> 00:24:59,145
+We actually just changed the input class.
+
+563
+00:24:59,145 --> 00:25:00,499
+When we build adversarial examples,
+
+564
+00:25:00,499 --> 00:25:02,928
+we want to make sure that
+we're measuring real mistakes.
+
+565
+00:25:02,928 --> 00:25:04,459
+If we're experimenters studying
+
+566
+00:25:04,459 --> 00:25:06,259
+how easy a network is to fool,
+
+567
+00:25:06,259 --> 00:25:08,146
+we want to make sure that
+we're actually fooling it
+
+568
+00:25:08,146 --> 00:25:11,515
+and not just changing the input class.
+
+569
+00:25:11,515 --> 00:25:13,535
+And if we're an attacker, we
+actually want to make sure
+
+570
+00:25:13,535 --> 00:25:17,457
+that we're causing
+misbehavior in the system.
+
+571
+00:25:17,457 --> 00:25:19,689
+To do that, when we build
+adversarial examples,
+
+572
+00:25:19,689 --> 00:25:24,134
+we use the maxnorm to
+constrain the perturbation.
+
+573
+00:25:24,134 --> 00:25:26,726
+Basically this says
+that no pixel can change
+
+574
+00:25:26,726 --> 00:25:28,812
+by more than some amount epsilon.
+
+575
+00:25:28,812 --> 00:25:30,991
+So the L2 norm can get really big,
+
+576
+00:25:30,991 --> 00:25:33,335
+but you can't concentrate all the changes
+
+577
+00:25:33,335 --> 00:25:35,908
+for that L2 norm to erase
+pieces of the digit,
+
+578
+00:25:35,908 --> 00:25:39,701
+like in the bottom row here
+we erased the top of a three.
+
+579
+00:25:39,701 --> 00:25:42,604
+One very fast way to build
+an adversarial example
+
+580
+00:25:42,604 --> 00:25:45,503
+is just to take the gradient of the cost
+
+581
+00:25:45,503 --> 00:25:47,140
+that you used to train the network
+
+582
+00:25:47,140 --> 00:25:48,663
+with respect to the input,
+
+583
+00:25:48,663 --> 00:25:51,312
+and then take the sign of that gradient.
+
+584
+00:25:51,312 --> 00:25:55,708
+The sign is essentially
+enforcing the maxnorm constraint.
+
+585
+00:25:55,708 --> 00:25:58,550
+You're only allowed to change the input by
+
+586
+00:25:58,550 --> 00:26:00,690
+up to epsilon at each pixel,
+
+587
+00:26:00,690 --> 00:26:02,381
+so if you just take the sign it tells you
+
+588
+00:26:02,381 --> 00:26:04,761
+whether you want to add
+epsilon or subtract epsilon
+
+589
+00:26:04,761 --> 00:26:07,010
+in order to hurt the network.
+
+590
+00:26:07,010 --> 00:26:08,844
+You can view this as
+taking the observation
+
+591
+00:26:08,844 --> 00:26:10,790
+that the network is more or less linear,
+
+592
+00:26:10,790 --> 00:26:12,211
+as we showed on this slide,
+
+593
+00:26:12,211 --> 00:26:14,265
+and using that to motivate
+
+594
+00:26:14,265 --> 00:26:17,918
+building a first order
+Taylor series approximation
+
+595
+00:26:17,918 --> 00:26:21,105
+of the neural network's cost.
+
+596
+00:26:21,105 --> 00:26:24,508
+And then subject to that
+Taylor series approximation,
+
+597
+00:26:24,508 --> 00:26:26,106
+we want to maximize the cost
+
+598
+00:26:26,106 --> 00:26:28,898
+following this maxnorm constraint.
+
+599
+00:26:28,898 --> 00:26:30,590
+And that gives us this
+technique that we call
+
+600
+00:26:30,590 --> 00:26:32,785
+the fast gradient sign method.
+
+601
+00:26:32,785 --> 00:26:34,350
+If you want to just get your hands dirty
+
+602
+00:26:34,350 --> 00:26:36,835
+and start making adversarial
+examples really quickly,
+
+603
+00:26:36,835 --> 00:26:38,764
+or if you have an algorithm
+where you want to train
+
+604
+00:26:38,764 --> 00:26:41,534
+on adversarial examples in
+the inner loop of learning,
+
+605
+00:26:41,534 --> 00:26:43,402
+this method will make
+adversarial examples for you
+
+606
+00:26:43,402 --> 00:26:45,134
+very, very quickly.
+
+607
+00:26:45,134 --> 00:26:47,942
+In practice you should
+also use other methods,
+
+608
+00:26:47,942 --> 00:26:50,353
+like Nicholas Carlini's attack based on
+
+609
+00:26:50,353 --> 00:26:52,660
+multiple steps of the Adam optimizer,
+
+610
+00:26:52,660 --> 00:26:55,212
+to make sure that you
+have a very strong attack
+
+611
+00:26:55,212 --> 00:26:57,359
+that you bring out when
+you think you have a model
+
+612
+00:26:57,359 --> 00:26:59,678
+that might be more powerful.
+
+613
+00:26:59,678 --> 00:27:02,145
+A lot of the time people
+find that they can defeat
+
+614
+00:27:02,145 --> 00:27:03,460
+the fast gradient sign method
+
+615
+00:27:03,460 --> 00:27:05,740
+and think that they've
+built a successful defense,
+
+616
+00:27:05,740 --> 00:27:08,769
+but then when you bring
+out a more powerful method
+
+617
+00:27:08,769 --> 00:27:10,444
+that takes longer to evaluate,
+
+618
+00:27:10,444 --> 00:27:12,566
+they find that they can't overcome
+
+619
+00:27:12,566 --> 00:27:16,066
+the more computationally expensive attack.
+
+620
+00:27:18,043 --> 00:27:20,090
+I've told you that
+adversarial examples happen
+
+621
+00:27:20,090 --> 00:27:22,036
+because the model is very linear.
+
+622
+00:27:22,036 --> 00:27:23,529
+And then I told you that we could
+
+623
+00:27:23,529 --> 00:27:25,132
+use this linearity assumption
+
+624
+00:27:25,132 --> 00:27:28,694
+to build this attack, the
+fast gradient sign method.
+
+625
+00:27:28,694 --> 00:27:31,900
+This method, when applied
+to a regular neural network
+
+626
+00:27:31,900 --> 00:27:34,079
+that doesn't have any special defenses,
+
+627
+00:27:34,079 --> 00:27:38,328
+will get over a 99% attack success rate.
+
+628
+00:27:38,328 --> 00:27:40,377
+So that seems to confirm, somewhat,
+
+629
+00:27:40,377 --> 00:27:42,936
+this hypothesis that adversarial examples
+
+630
+00:27:42,936 --> 00:27:45,054
+come from the model being far too linear
+
+631
+00:27:45,054 --> 00:27:48,964
+and extrapolating in linear
+fashions when it shouldn't.
+
+632
+00:27:48,964 --> 00:27:51,514
+Well we can actually go
+looking for some more evidence.
+
+633
+00:27:51,514 --> 00:27:54,417
+My friend David Warde-Farley
+and I built these maps
+
+634
+00:27:54,417 --> 00:27:57,172
+of the decision boundaries
+of neural networks.
+
+635
+00:27:57,172 --> 00:27:58,809
+And we found that they are consistent
+
+636
+00:27:58,809 --> 00:28:02,140
+with the linearity hypothesis.
+
+637
+00:28:02,140 --> 00:28:04,478
+So the FGSM is that attack method
+
+638
+00:28:04,478 --> 00:28:06,244
+that I described in the previous slide,
+
+639
+00:28:06,244 --> 00:28:08,260
+where we take the sign of the gradient.
+
+640
+00:28:08,260 --> 00:28:09,537
+We'd like to build a map
+
+641
+00:28:09,537 --> 00:28:13,353
+of a two-dimensional cross
+section of input space
+
+642
+00:28:13,353 --> 00:28:15,760
+and show which classes are assigned
+
+643
+00:28:15,760 --> 00:28:18,556
+to the data at each point.
+
+644
+00:28:18,556 --> 00:28:21,397
+In the grid on the right,
+each different cell,
+
+645
+00:28:21,397 --> 00:28:23,308
+each little square within the grid,
+
+646
+00:28:23,308 --> 00:28:27,715
+is a map of a CIFAR-10
+classifier's decision boundary,
+
+647
+00:28:27,715 --> 00:28:29,932
+with each cell
+corresponding to a different
+
+648
+00:28:29,932 --> 00:28:32,668
+CIFAR-10 testing sample.
+
+649
+00:28:32,668 --> 00:28:34,624
+On the left I show you a little legend
+
+650
+00:28:34,624 --> 00:28:37,867
+where you can understand
+what each cell means.
+
+651
+00:28:37,867 --> 00:28:40,927
+The very center of each
+cell corresponds to
+
+652
+00:28:40,927 --> 00:28:43,338
+the original example
+from the CIFAR-10 dataset
+
+653
+00:28:43,338 --> 00:28:45,590
+with no modification.
+
+654
+00:28:45,590 --> 00:28:47,534
+As we move left to right in the cell,
+
+655
+00:28:47,534 --> 00:28:48,561
+we're moving in the direction
+
+656
+00:28:48,561 --> 00:28:50,918
+of the fast gradient sign method attack.
+
+657
+00:28:50,918 --> 00:28:53,076
+So just the sign of the gradient.
+
+658
+00:28:53,076 --> 00:28:54,897
+As we move up and down within the cell,
+
+659
+00:28:54,897 --> 00:28:58,243
+we're moving in a random
+direction that's orthogonal to
+
+660
+00:28:58,243 --> 00:29:00,907
+the fast gradient sign method direction.
+
+661
+00:29:00,907 --> 00:29:04,204
+So we get to see a cross
+section, a 2D cross section
+
+662
+00:29:04,204 --> 00:29:06,454
+of CIFAR-10 decision space.
+
+663
+00:29:07,455 --> 00:29:09,604
+At each pixel within this map,
+
+664
+00:29:09,604 --> 00:29:13,291
+we plot a color that tells us
+which class is assigned there.
+
+665
+00:29:13,291 --> 00:29:15,199
+We use white pixels to indicate that
+
+666
+00:29:15,199 --> 00:29:17,174
+the correct class was chosen,
+
+667
+00:29:17,174 --> 00:29:19,538
+and then we used different
+colors to represent
+
+668
+00:29:19,538 --> 00:29:21,931
+all of the other incorrect classes.
+
+669
+00:29:21,931 --> 00:29:23,908
+You can see that in nearly all
+
+670
+00:29:23,908 --> 00:29:25,641
+of the grid cells on the right,
+
+671
+00:29:25,641 --> 00:29:29,222
+roughly the left half
+of the image is white.
+
+672
+00:29:29,222 --> 00:29:31,564
+So roughly the left half of the image
+
+673
+00:29:31,564 --> 00:29:33,648
+has been correctly classified.
+
+674
+00:29:33,648 --> 00:29:36,761
+As we move to the right, we
+see that there is usually
+
+675
+00:29:36,761 --> 00:29:39,537
+a different color on the right half.
+
+676
+00:29:39,537 --> 00:29:41,441
+And the boundaries between these regions
+
+677
+00:29:41,441 --> 00:29:43,118
+are approximately linear.
+
+678
+00:29:43,118 --> 00:29:45,153
+What's going on here is that
+the fast gradient sign method
+
+679
+00:29:45,153 --> 00:29:47,116
+has identified a direction
+
+680
+00:29:47,116 --> 00:29:50,283
+where if we get a large dot
+product with that direction
+
+681
+00:29:50,283 --> 00:29:52,694
+we can get an adversarial example.
+
+682
+00:29:52,694 --> 00:29:54,729
+And from this we can see
+that adversarial examples
+
+683
+00:29:54,729 --> 00:29:57,896
+live more or less in linear subspaces.
+
+684
+00:29:59,299 --> 00:30:01,334
+When we first discovered
+adversarial examples,
+
+685
+00:30:01,334 --> 00:30:04,358
+we thought that they might
+live in little tiny pockets.
+
+686
+00:30:04,358 --> 00:30:06,643
+In the first paper we
+actually speculated that
+
+687
+00:30:06,643 --> 00:30:09,057
+maybe they're a little bit
+like the rational numbers,
+
+688
+00:30:09,057 --> 00:30:11,956
+hiding out finely tiled
+among the real numbers,
+
+689
+00:30:11,956 --> 00:30:15,862
+with nearly every real number
+being near a rational number.
+
+690
+00:30:15,862 --> 00:30:17,212
+We thought that because
+we were able to find
+
+691
+00:30:17,212 --> 00:30:18,940
+an adversarial example corresponding
+
+692
+00:30:18,940 --> 00:30:22,147
+to every clean example that
+we loaded into the network.
+
+693
+00:30:22,147 --> 00:30:23,620
+After doing this further analysis,
+
+694
+00:30:23,620 --> 00:30:27,216
+we found that what's happening
+is that every real example
+
+695
+00:30:27,216 --> 00:30:29,688
+is near one of these
+linear decision boundaries
+
+696
+00:30:29,688 --> 00:30:32,908
+where you cross over into
+an adversarial subspace.
+
+697
+00:30:32,908 --> 00:30:35,193
+And once you're in that
+adversarial subspace,
+
+698
+00:30:35,193 --> 00:30:38,738
+all the other points nearby
+are also adversarial examples
+
+699
+00:30:38,738 --> 00:30:40,790
+that will be misclassified.
+
+700
+00:30:40,790 --> 00:30:42,412
+This has security implications
+
+701
+00:30:42,412 --> 00:30:46,154
+because it means you only need
+to get the direction right.
+
+702
+00:30:46,154 --> 00:30:48,854
+You don't need to find an
+exact coordinate in space.
+
+703
+00:30:48,854 --> 00:30:50,640
+You just need to find a direction
+
+704
+00:30:50,640 --> 00:30:54,382
+that has a large dot product
+with the sign of the gradient.
+
+705
+00:30:54,382 --> 00:30:56,308
+And once you move more
+or less approximately
+
+706
+00:30:56,308 --> 00:30:59,808
+in that direction, you can fool the model.
+
+707
+00:31:01,161 --> 00:31:02,726
+We also made another cross section
+
+708
+00:31:02,726 --> 00:31:05,659
+where after using the left-right axis
+
+709
+00:31:05,659 --> 00:31:07,564
+as the fast gradient sign method,
+
+710
+00:31:07,564 --> 00:31:09,187
+we looked for a second direction
+
+711
+00:31:09,187 --> 00:31:11,884
+that has high dot
+product with the gradient
+
+712
+00:31:11,884 --> 00:31:14,966
+so we could make both axes adversarial.
+
+713
+00:31:14,966 --> 00:31:16,363
+And in this case you see that we get
+
+714
+00:31:16,363 --> 00:31:18,038
+linear decision boundaries.
+
+715
+00:31:18,038 --> 00:31:21,475
+They're now oriented diagonally
+rather than vertically,
+
+716
+00:31:21,475 --> 00:31:23,207
+but you can see that there's actually
+
+717
+00:31:23,207 --> 00:31:24,609
+this two-dimensional subspace
+
+718
+00:31:24,609 --> 00:31:29,217
+of adversarial examples
+that we can cross into.
+
+719
+00:31:29,217 --> 00:31:30,854
+Finally it's important to remember
+
+720
+00:31:30,854 --> 00:31:33,158
+that adversarial examples are not noise.
+
+721
+00:31:33,158 --> 00:31:35,284
+You can add a lot of noise
+to an adversarial example
+
+722
+00:31:35,284 --> 00:31:37,334
+and it will stay adversarial.
+
+723
+00:31:37,334 --> 00:31:39,460
+You can add a lot of
+noise to a clean example
+
+724
+00:31:39,460 --> 00:31:40,877
+and it will stay clean.
+
+725
+00:31:40,877 --> 00:31:42,355
+Here we make random cross sections
+
+726
+00:31:42,355 --> 00:31:45,417
+where both axes are
+randomly chosen directions.
+
+727
+00:31:45,417 --> 00:31:47,177
+And you see that on CIFAR-10,
+
+728
+00:31:47,177 --> 00:31:49,229
+most of the cells are completely white,
+
+729
+00:31:49,229 --> 00:31:51,916
+meaning that they're correctly
+classified to start with,
+
+730
+00:31:51,916 --> 00:31:54,993
+and when you add noise they
+stay correctly classified.
+
+731
+00:31:54,993 --> 00:31:56,953
+We also see that the
+model makes some mistakes
+
+732
+00:31:56,953 --> 00:31:58,915
+because this is the test set.
+
+733
+00:31:58,915 --> 00:32:01,651
+And generally if a test example
+starts out misclassified,
+
+734
+00:32:01,651 --> 00:32:03,724
+adding the noise doesn't change it.
+
+735
+00:32:03,724 --> 00:32:05,861
+There are a few exceptions where,
+
+736
+00:32:05,861 --> 00:32:08,889
+if you look in the
+third row, third column,
+
+737
+00:32:08,889 --> 00:32:12,633
+noise actually can make the
+model misclassify the example
+
+738
+00:32:12,633 --> 00:32:14,918
+for especially large noise values.
+
+739
+00:32:14,918 --> 00:32:17,881
+And there's even some where,
+
+740
+00:32:17,881 --> 00:32:20,227
+in the top row there's one
+example you can see where
+
+741
+00:32:20,227 --> 00:32:23,553
+the model is misclassifying
+the test example to start with
+
+742
+00:32:23,553 --> 00:32:26,745
+but then noise can change it
+to be correctly classified.
+
+743
+00:32:26,745 --> 00:32:28,742
+For the most part, noise
+has very little effect
+
+744
+00:32:28,742 --> 00:32:31,248
+on the classification decision
+
+745
+00:32:31,248 --> 00:32:33,461
+compared to adversarial examples.
+
+746
+00:32:33,461 --> 00:32:36,628
+What's going on here is that
+in high dimensional spaces,
+
+747
+00:32:36,628 --> 00:32:38,860
+if you choose some reference vector
+
+748
+00:32:38,860 --> 00:32:41,194
+and then you choose a random vector
+
+749
+00:32:41,194 --> 00:32:42,873
+in that high dimensional space,
+
+750
+00:32:42,873 --> 00:32:45,321
+the random vector will, on average,
+
+751
+00:32:45,321 --> 00:32:49,982
+have zero dot product
+with the reference vector.
+
+752
+00:32:49,982 --> 00:32:51,257
+So if you think about making
+
+753
+00:32:51,257 --> 00:32:54,497
+a first order Taylor series
+approximation of your cost,
+
+754
+00:32:54,497 --> 00:32:57,430
+and thinking about how your
+Taylor series approximation
+
+755
+00:32:57,430 --> 00:33:00,852
+predicts that random vectors
+will change your cost.
+
+756
+00:33:00,852 --> 00:33:02,580
+You see that random vectors on average
+
+757
+00:33:02,580 --> 00:33:04,793
+have no effect on the cost.
+
+758
+00:33:04,793 --> 00:33:08,960
+But adversarial examples
+are chosen to maximize it.
+
+759
+00:33:10,246 --> 00:33:13,505
+In these plots we looked
+in two dimensions.
+
+760
+00:33:13,505 --> 00:33:16,260
+More recently, Florian
+Tramer here at Stanford
+
+761
+00:33:16,260 --> 00:33:17,720
+got interested in finding out
+
+762
+00:33:17,720 --> 00:33:20,702
+just how many dimensions
+there are to these subspaces
+
+763
+00:33:20,702 --> 00:33:22,702
+where the adversarial examples
+
+764
+00:33:22,702 --> 00:33:25,908
+lie in a thick contiguous region.
+
+765
+00:33:25,908 --> 00:33:28,716
+And we came up with an algorithm together
+
+766
+00:33:28,716 --> 00:33:30,513
+where you actually look for
+
+767
+00:33:30,513 --> 00:33:32,259
+several different orthogonal vectors
+
+768
+00:33:32,259 --> 00:33:35,878
+that all have a large dot
+product with the gradient.
+
+769
+00:33:35,878 --> 00:33:38,019
+By looking in several different
+
+770
+00:33:38,019 --> 00:33:40,256
+orthogonal directions simultaneously,
+
+771
+00:33:40,256 --> 00:33:42,684
+we can map out this kind of polytope
+
+772
+00:33:42,684 --> 00:33:45,833
+where many different
+adversarial examples live.
+
+773
+00:33:45,833 --> 00:33:47,974
+We found out that this adversarial region
+
+774
+00:33:47,974 --> 00:33:51,592
+has on average about 25 dimensions.
+
+775
+00:33:51,592 --> 00:33:53,389
+If you look at different
+examples you'll find
+
+776
+00:33:53,389 --> 00:33:56,043
+different numbers of
+adversarial dimensions.
+
+777
+00:33:56,043 --> 00:33:59,526
+But on average on MNIST
+we found it was about 25.
+
+778
+00:33:59,526 --> 00:34:02,181
+So what's interesting
+here is the dimensionality
+
+779
+00:34:02,181 --> 00:34:04,137
+actually tells you something about
+
+780
+00:34:04,137 --> 00:34:06,782
+how likely you are to find
+an adversarial example
+
+781
+00:34:06,782 --> 00:34:09,350
+by generating random noise.
+
+782
+00:34:09,350 --> 00:34:12,288
+If every direction were adversarial,
+
+783
+00:34:12,288 --> 00:34:15,657
+then any change would
+cause a misclassification.
+
+784
+00:34:15,657 --> 00:34:17,692
+If most of the directions
+were adversarial,
+
+785
+00:34:17,692 --> 00:34:20,443
+then random directions would
+end up being adversarial
+
+786
+00:34:20,443 --> 00:34:22,731
+just by accident most of the time.
+
+787
+00:34:22,731 --> 00:34:25,879
+And then if there was only
+one adversarial direction,
+
+788
+00:34:25,879 --> 00:34:28,237
+you'd almost never find that direction
+
+789
+00:34:28,237 --> 00:34:30,219
+just by adding random noise.
+
+790
+00:34:30,219 --> 00:34:34,088
+When there's 25 you have a
+chance of doing it sometimes.
+
+791
+00:34:34,089 --> 00:34:36,321
+Another interesting thing
+is that different models
+
+792
+00:34:36,321 --> 00:34:39,724
+will often misclassify the
+same adversarial examples.
+
+793
+00:34:39,724 --> 00:34:43,592
+The subspace dimensionality
+of the adversarial subspace
+
+794
+00:34:43,592 --> 00:34:46,275
+relates to that transfer property.
+
+795
+00:34:46,275 --> 00:34:48,992
+The larger the dimensionality
+of the subspace,
+
+796
+00:34:48,993 --> 00:34:50,505
+the more likely it is that the subspaces
+
+797
+00:34:50,505 --> 00:34:52,929
+for two models will intersect.
+
+798
+00:34:52,929 --> 00:34:55,237
+So if you have two different models
+
+799
+00:34:55,237 --> 00:34:57,220
+that have a very large
+adversarial subspace,
+
+800
+00:34:57,220 --> 00:34:58,742
+you know that you can probably transfer
+
+801
+00:34:58,742 --> 00:35:01,161
+adversarial examples
+from one to the other.
+
+802
+00:35:01,161 --> 00:35:03,609
+But if the adversarial
+subspace is very small,
+
+803
+00:35:03,609 --> 00:35:06,796
+then unless there's some kind
+of really systematic effect
+
+804
+00:35:06,796 --> 00:35:09,603
+forcing them to share
+exactly the same subspace,
+
+805
+00:35:09,603 --> 00:35:11,548
+it seems less likely that
+you'll be able to transfer
+
+806
+00:35:11,548 --> 00:35:15,715
+examples just due to the
+subspaces randomly aligning.
+
+807
+00:35:17,716 --> 00:35:20,563
+A lot of the time in
+the adversarial example
+
+808
+00:35:20,563 --> 00:35:21,786
+research community,
+
+809
+00:35:21,786 --> 00:35:25,080
+we refer back to the story of Clever Hans.
+
+810
+00:35:25,080 --> 00:35:28,176
+This comes from an essay
+by Bob Sturm called
+
+811
+00:35:28,176 --> 00:35:30,408
+Clever Hans, Clever Algorithms.
+
+812
+00:35:30,408 --> 00:35:32,764
+Because Clever Hans is
+a pretty good metaphor
+
+813
+00:35:32,764 --> 00:35:35,679
+for what's happening with
+machine learning algorithms.
+
+814
+00:35:35,679 --> 00:35:39,446
+So Clever Hans was a horse
+that lived in the early 1900s.
+
+815
+00:35:39,446 --> 00:35:43,171
+His owner trained him to
+do arithmetic problems.
+
+816
+00:35:43,171 --> 00:35:45,494
+So you could ask him, "Clever Hans,
+
+817
+00:35:45,494 --> 00:35:47,092
+"what's two plus one?"
+
+818
+00:35:47,092 --> 00:35:50,425
+And he would answer by tapping his hoof.
+
+819
+00:35:52,566 --> 00:35:54,873
+And after the third tap,
+everybody would start
+
+820
+00:35:54,873 --> 00:35:56,976
+cheering and clapping and looking excited
+
+821
+00:35:56,976 --> 00:35:59,958
+because he'd actually done
+an arithmetic problem.
+
+822
+00:35:59,958 --> 00:36:01,151
+Well it turned out that
+
+823
+00:36:01,151 --> 00:36:03,254
+he hadn't actually
+learned to do arithmetic.
+
+824
+00:36:03,254 --> 00:36:05,256
+But it was actually
+pretty hard to figure out
+
+825
+00:36:05,256 --> 00:36:06,638
+what was going on.
+
+826
+00:36:06,638 --> 00:36:10,924
+His owner was not trying
+to defraud anybody,
+
+827
+00:36:10,924 --> 00:36:13,588
+his owner actually believed
+he could do arithmetic.
+
+828
+00:36:13,588 --> 00:36:15,782
+And presumably Clever Hans himself
+
+829
+00:36:15,782 --> 00:36:18,067
+was not trying to trick anybody.
+
+830
+00:36:18,067 --> 00:36:20,390
+But eventually a psychologist examined him
+
+831
+00:36:20,390 --> 00:36:23,832
+and found that if he
+was put in a room alone
+
+832
+00:36:23,832 --> 00:36:25,358
+without an audience,
+
+833
+00:36:25,358 --> 00:36:29,137
+and the person asking the
+questions wore a mask,
+
+834
+00:36:29,137 --> 00:36:31,156
+he couldn't figure out
+when to stop tapping.
+
+835
+00:36:31,156 --> 00:36:32,505
+You'd ask him, "Clever Hans,
+
+836
+00:36:32,505 --> 00:36:33,994
+"what's one plus one?"
+
+837
+00:36:33,994 --> 00:36:37,411
+And he'd just [knocking]
+
+838
+00:36:38,642 --> 00:36:40,084
+keep staring at your face, waiting for you
+
+839
+00:36:40,084 --> 00:36:42,710
+to give him some sign
+that he was done tapping.
+
+840
+00:36:42,710 --> 00:36:44,784
+So everybody in this situation
+
+841
+00:36:44,784 --> 00:36:46,975
+was trying to do the right thing.
+
+842
+00:36:46,975 --> 00:36:48,776
+Clever Hans was trying
+to do whatever it took
+
+843
+00:36:48,776 --> 00:36:51,478
+to get the apple that
+his owner would give him
+
+844
+00:36:51,478 --> 00:36:53,275
+when he answered an arithmetic problem.
+
+845
+00:36:53,275 --> 00:36:56,155
+His owner did his best
+to train him correctly
+
+846
+00:36:56,155 --> 00:36:57,861
+with real arithmetic questions
+
+847
+00:36:57,861 --> 00:37:00,957
+and real rewards for correct answers.
+
+848
+00:37:00,957 --> 00:37:03,787
+And what happened was that Clever Hans
+
+849
+00:37:03,787 --> 00:37:07,118
+inadvertently focused on the wrong cue.
+
+850
+00:37:07,118 --> 00:37:09,801
+He found this cue of
+people's social reactions
+
+851
+00:37:09,801 --> 00:37:12,912
+that could reliably help
+him solve the problem,
+
+852
+00:37:12,912 --> 00:37:15,231
+but then it didn't
+generalize to a test set
+
+853
+00:37:15,231 --> 00:37:18,060
+where you intentionally
+took that cue away.
+
+854
+00:37:18,060 --> 00:37:21,177
+It did generalize to a
+naturally occurring test set,
+
+855
+00:37:21,177 --> 00:37:22,958
+where he had an audience.
+
+856
+00:37:22,958 --> 00:37:24,633
+So that's more or less what's happening
+
+857
+00:37:24,633 --> 00:37:26,289
+with machine learning algorithms.
+
+858
+00:37:26,289 --> 00:37:28,305
+They've found these very linear patterns
+
+859
+00:37:28,305 --> 00:37:30,590
+that can fit the training data,
+
+860
+00:37:30,590 --> 00:37:34,384
+and these linear patterns even
+generalize to the test data.
+
+861
+00:37:34,384 --> 00:37:36,907
+They've learned to handle
+any example that comes from
+
+862
+00:37:36,907 --> 00:37:40,415
+the same distribution
+as their training data.
+
+863
+00:37:40,415 --> 00:37:42,163
+But then if you shift the distribution
+
+864
+00:37:42,163 --> 00:37:43,603
+that you test them on,
+
+865
+00:37:43,603 --> 00:37:46,934
+if a malicious adversary
+actually creates examples
+
+866
+00:37:46,934 --> 00:37:48,570
+that are intended to fool them,
+
+867
+00:37:48,570 --> 00:37:50,820
+they're very easily fooled.
+
+868
+00:37:51,686 --> 00:37:54,316
+In fact we find that modern
+machine learning algorithms
+
+869
+00:37:54,316 --> 00:37:56,726
+are wrong almost everywhere.
+
+870
+00:37:56,726 --> 00:37:59,606
+We tend to think of them as
+being correct most of the time,
+
+871
+00:37:59,606 --> 00:38:02,073
+because when we run them on
+naturally occurring inputs
+
+872
+00:38:02,073 --> 00:38:06,048
+they achieve very high
+accuracy percentages.
+
+873
+00:38:06,048 --> 00:38:08,440
+But if we look instead
+of as the percentage
+
+874
+00:38:08,440 --> 00:38:11,107
+of samples from an IID test set,
+
+875
+00:38:12,007 --> 00:38:15,628
+if we look at the percentage
+of the space in RN
+
+876
+00:38:15,628 --> 00:38:17,655
+that is correctly classified,
+
+877
+00:38:17,655 --> 00:38:20,649
+we find that they
+misclassify almost everything
+
+878
+00:38:20,649 --> 00:38:24,158
+and they behave reasonably
+only on a very thin manifold
+
+879
+00:38:24,158 --> 00:38:27,489
+surrounding the data
+that we train them on.
+
+880
+00:38:27,489 --> 00:38:30,187
+In this plot, I show you
+several different examples
+
+881
+00:38:30,187 --> 00:38:32,006
+of Gaussian noise
+
+882
+00:38:32,006 --> 00:38:35,075
+that I've run through
+a CIFAR-10 classifier.
+
+883
+00:38:35,075 --> 00:38:37,100
+Everywhere that there is a pink box,
+
+884
+00:38:37,100 --> 00:38:39,213
+the classifier thinks
+that there is something
+
+885
+00:38:39,213 --> 00:38:40,780
+rather than nothing.
+
+886
+00:38:40,780 --> 00:38:43,030
+I'll come back to what
+that means in a second.
+
+887
+00:38:43,030 --> 00:38:45,227
+Everywhere that there is a yellow box,
+
+888
+00:38:45,227 --> 00:38:47,622
+one step of the fast gradient sign method
+
+889
+00:38:47,622 --> 00:38:50,132
+was able to persuade the
+model that it was looking
+
+890
+00:38:50,132 --> 00:38:52,395
+specifically at an airplane.
+
+891
+00:38:52,395 --> 00:38:53,731
+I chose the airplane class
+
+892
+00:38:53,731 --> 00:38:56,254
+because it was the one with
+the lowest success rate.
+
+893
+00:38:56,254 --> 00:38:58,671
+It had about a 25% success rate.
+
+894
+00:38:58,671 --> 00:39:01,898
+That means an attacker
+would need four chances
+
+895
+00:39:01,898 --> 00:39:06,291
+to get noise recognized as
+an airplane on this model.
+
+896
+00:39:06,291 --> 00:39:08,494
+An interesting thing,
+and appropriate enough
+
+897
+00:39:08,494 --> 00:39:09,994
+given the story of Clever Hans,
+
+898
+00:39:09,994 --> 00:39:12,903
+is that this model found
+that about 70% of RN
+
+899
+00:39:12,903 --> 00:39:15,070
+was classified as a horse.
+
+900
+00:39:17,510 --> 00:39:20,194
+So I mentioned that this model will say
+
+901
+00:39:20,194 --> 00:39:22,606
+that noise is something
+rather than nothing.
+
+902
+00:39:22,606 --> 00:39:24,450
+And it's actually kind of
+important to think about
+
+903
+00:39:24,450 --> 00:39:26,401
+how we evaluate that.
+
+904
+00:39:26,401 --> 00:39:28,498
+If you have a softmax classifier,
+
+905
+00:39:28,498 --> 00:39:30,529
+it has to give you a distribution
+
+906
+00:39:30,529 --> 00:39:34,158
+over the n different classes
+that you train it on.
+
+907
+00:39:34,158 --> 00:39:35,825
+So there's a few ways that you can argue
+
+908
+00:39:35,825 --> 00:39:37,119
+that the model is telling you
+
+909
+00:39:37,119 --> 00:39:39,138
+that there's something
+rather than nothing.
+
+910
+00:39:39,138 --> 00:39:42,026
+One is you can say, if it
+assigns something like 90%
+
+911
+00:39:42,026 --> 00:39:43,698
+to one particular class,
+
+912
+00:39:43,698 --> 00:39:46,373
+that seems to be voting
+for that class being there.
+
+913
+00:39:46,373 --> 00:39:47,705
+We'd much rather see it give us
+
+914
+00:39:47,705 --> 00:39:50,018
+something like a uniform
+distribution saying
+
+915
+00:39:50,018 --> 00:39:52,833
+this noise doesn't look like
+anything in the training set
+
+916
+00:39:52,833 --> 00:39:56,177
+so it's equally likely
+to be a horse or a car.
+
+917
+00:39:56,177 --> 00:39:58,075
+And that's not what the model does.
+
+918
+00:39:58,075 --> 00:40:01,028
+It'll say, this is very
+definitely a horse.
+
+919
+00:40:01,028 --> 00:40:03,395
+Another thing that you
+can do is you can replace
+
+920
+00:40:03,395 --> 00:40:05,186
+the last layer of the model.
+
+921
+00:40:05,186 --> 00:40:10,009
+For example, you can use a
+sigmoid output for each class.
+
+922
+00:40:10,009 --> 00:40:11,754
+And then the model is actually
+capable of telling you
+
+923
+00:40:11,754 --> 00:40:14,407
+that any subset of classes is present.
+
+924
+00:40:14,407 --> 00:40:15,777
+It could actually tell you that an image
+
+925
+00:40:15,777 --> 00:40:17,250
+is both a horse and a car.
+
+926
+00:40:17,250 --> 00:40:19,292
+And what we would like
+it to do for the noise
+
+927
+00:40:19,292 --> 00:40:21,962
+is tell us that none of
+the classes is present,
+
+928
+00:40:21,962 --> 00:40:23,585
+that all of the sigmoids
+should have a value
+
+929
+00:40:23,585 --> 00:40:25,346
+of less than 1/2.
+
+930
+00:40:25,346 --> 00:40:29,479
+And 1/2 isn't even
+particularly a low threshold.
+
+931
+00:40:29,479 --> 00:40:32,034
+We could reasonably expect that
+all of the sigmoids would be
+
+932
+00:40:32,034 --> 00:40:35,982
+less than 0.01 for such a
+defective input as this.
+
+933
+00:40:35,982 --> 00:40:38,226
+But what we find instead
+is that the sigmoids
+
+934
+00:40:38,226 --> 00:40:40,177
+tend to have at least one class present
+
+935
+00:40:40,177 --> 00:40:42,122
+just when we run Gaussian noise
+
+936
+00:40:42,122 --> 00:40:45,205
+of sufficient norm through the model.
+
+937
+00:40:48,050 --> 00:40:50,269
+We've also found that we
+can do adversarial examples
+
+938
+00:40:50,269 --> 00:40:51,946
+for reinforcement learning.
+
+939
+00:40:51,946 --> 00:40:53,329
+And there's a video for this.
+
+940
+00:40:53,329 --> 00:40:54,946
+I'll upload the slides after the talk
+
+941
+00:40:54,946 --> 00:40:56,202
+and you can follow the link.
+
+942
+00:40:56,202 --> 00:40:58,082
+Unfortunately I wasn't able
+to get the WiFi to work
+
+943
+00:40:58,082 --> 00:41:00,245
+so I can't show you the video animated.
+
+944
+00:41:00,245 --> 00:41:01,482
+But I can describe
+basically what's going on
+
+945
+00:41:01,482 --> 00:41:03,232
+from this still here.
+
+946
+00:41:05,258 --> 00:41:08,149
+There's a game Seaquest on Atari
+
+947
+00:41:08,149 --> 00:41:09,897
+where you can train
+reinforcement learning agents
+
+948
+00:41:09,897 --> 00:41:11,110
+to play that game.
+
+949
+00:41:11,110 --> 00:41:14,270
+And you can take the raw input pixels
+
+950
+00:41:14,270 --> 00:41:18,242
+and you can take the
+fast gradient sign method
+
+951
+00:41:18,242 --> 00:41:21,642
+or other attacks that use other
+norms besides the max norm,
+
+952
+00:41:21,642 --> 00:41:24,586
+and compute perturbations
+that are intended
+
+953
+00:41:24,586 --> 00:41:27,646
+to change the action that
+the policy would select.
+
+954
+00:41:27,646 --> 00:41:29,566
+So the reinforcement learning policy,
+
+955
+00:41:29,566 --> 00:41:31,350
+you can think of it as just
+being like a classifier
+
+956
+00:41:31,350 --> 00:41:33,211
+that looks at a frame.
+
+957
+00:41:33,211 --> 00:41:35,550
+And instead of categorizing the input
+
+958
+00:41:35,550 --> 00:41:37,126
+into a particular category,
+
+959
+00:41:37,126 --> 00:41:40,753
+it gives you a softmax
+distribution over actions to take.
+
+960
+00:41:40,753 --> 00:41:43,427
+So if we just take that and
+say that the most likely action
+
+961
+00:41:43,427 --> 00:41:47,482
+should have its accuracy be
+decreased by the adversary.
+
+962
+00:41:47,482 --> 00:41:49,261
+Sorry, to have its probability
+
+963
+00:41:49,261 --> 00:41:51,034
+be decreased by the adversary,
+
+964
+00:41:51,034 --> 00:41:53,030
+you'll get these
+perturbations of input frames
+
+965
+00:41:53,030 --> 00:41:55,762
+that you can then apply
+and cause the agent
+
+966
+00:41:55,762 --> 00:41:58,670
+to play different actions
+than it would have otherwise.
+
+967
+00:41:58,670 --> 00:42:00,268
+And using this you can make the agent
+
+968
+00:42:00,268 --> 00:42:02,851
+play Seaquest very, very badly.
+
+969
+00:42:03,786 --> 00:42:06,179
+It's maybe not the most
+interesting possible thing.
+
+970
+00:42:06,179 --> 00:42:07,767
+What we'd really like is an environment
+
+971
+00:42:07,767 --> 00:42:09,993
+where there are many different
+reward functions available
+
+972
+00:42:09,993 --> 00:42:11,238
+for us to study.
+
+973
+00:42:11,238 --> 00:42:14,071
+So for example, if you had a robot
+
+974
+00:42:15,092 --> 00:42:17,579
+that was intended to cook scrambled eggs,
+
+975
+00:42:17,579 --> 00:42:18,865
+and you had a reward function measuring
+
+976
+00:42:18,865 --> 00:42:20,610
+how well it's cooking scrambled eggs,
+
+977
+00:42:20,610 --> 00:42:22,397
+and you had another reward function
+
+978
+00:42:22,397 --> 00:42:25,649
+measuring how well it's
+cooking chocolate cake,
+
+979
+00:42:25,649 --> 00:42:27,849
+it would be really
+interesting if we could make
+
+980
+00:42:27,849 --> 00:42:29,925
+adversarial examples that cause the robot
+
+981
+00:42:29,925 --> 00:42:31,501
+to make a chocolate cake
+
+982
+00:42:31,501 --> 00:42:35,017
+when the user intended for
+it to make scrambled eggs.
+
+983
+00:42:35,017 --> 00:42:37,581
+That's because it's very
+difficult to succeed at something
+
+984
+00:42:37,581 --> 00:42:40,393
+and it's relatively straightforward
+to make a system fail.
+
+985
+00:42:40,393 --> 00:42:42,400
+So right now, adversarial examples for RL
+
+986
+00:42:42,400 --> 00:42:45,049
+are very good at showing that
+we can make RL agents fail.
+
+987
+00:42:45,049 --> 00:42:47,827
+But we haven't yet been
+able to hijack them
+
+988
+00:42:47,827 --> 00:42:49,229
+and make them do a complicated task
+
+989
+00:42:49,229 --> 00:42:51,429
+that's different from
+what their owner intended.
+
+990
+00:42:51,429 --> 00:42:53,405
+Seems like it's one of the next steps
+
+991
+00:42:53,405 --> 00:42:56,655
+in adversarial example research though.
+
+992
+00:42:58,101 --> 00:43:01,078
+If we look at high-dimension
+linear models,
+
+993
+00:43:01,078 --> 00:43:02,479
+we can actually see that a lot of this
+
+994
+00:43:02,479 --> 00:43:04,682
+is very simple and straightforward.
+
+995
+00:43:04,682 --> 00:43:07,585
+Here we have a logistic regression model
+
+996
+00:43:07,585 --> 00:43:10,385
+that classifies sevens and threes.
+
+997
+00:43:10,385 --> 00:43:13,665
+So the whole model can be
+described just by a weight vector
+
+998
+00:43:13,665 --> 00:43:16,807
+and a single scalar bias term.
+
+999
+00:43:16,807 --> 00:43:20,404
+We don't really need to see the
+bias term for this exercise.
+
+1000
+00:43:20,404 --> 00:43:22,063
+If you look on the left
+I've plotted the weights
+
+1001
+00:43:22,063 --> 00:43:24,929
+that we used to discriminate
+sevens and threes.
+
+1002
+00:43:24,929 --> 00:43:27,505
+The weights should look a
+little bit like the difference
+
+1003
+00:43:27,505 --> 00:43:30,098
+between the average seven
+and the average three.
+
+1004
+00:43:30,098 --> 00:43:31,505
+And then down at the bottom we've taken
+
+1005
+00:43:31,505 --> 00:43:33,225
+the sign of the weights.
+
+1006
+00:43:33,225 --> 00:43:35,764
+So the gradient for a
+logistic regression model
+
+1007
+00:43:35,764 --> 00:43:38,529
+is going to be proportional
+to the weights.
+
+1008
+00:43:38,529 --> 00:43:41,505
+And then the sign of the weights gives you
+
+1009
+00:43:41,505 --> 00:43:43,981
+essentially the sign of the gradient.
+
+1010
+00:43:43,981 --> 00:43:46,268
+So we can do the fast gradient sign method
+
+1011
+00:43:46,268 --> 00:43:49,955
+to attack this model just
+by looking at its weights.
+
+1012
+00:43:49,955 --> 00:43:52,619
+In the examples in the panel
+
+1013
+00:43:52,619 --> 00:43:54,327
+that's the second column from the left
+
+1014
+00:43:54,327 --> 00:43:55,981
+we can see clean examples.
+
+1015
+00:43:55,981 --> 00:43:58,302
+And then on the right we've
+just added or subtracted
+
+1016
+00:43:58,302 --> 00:44:00,900
+this image of the sign of
+the weights off of them.
+
+1017
+00:44:00,900 --> 00:44:03,515
+To you and me as human observers,
+
+1018
+00:44:03,515 --> 00:44:06,871
+the sign of the weights
+is just like garbage
+
+1019
+00:44:06,871 --> 00:44:08,204
+that's in the background,
+
+1020
+00:44:08,204 --> 00:44:09,743
+and we more or less filter it out.
+
+1021
+00:44:09,743 --> 00:44:11,868
+It doesn't look particularly
+interesting to us.
+
+1022
+00:44:11,868 --> 00:44:14,364
+It doesn't grab our attention.
+
+1023
+00:44:14,364 --> 00:44:16,001
+To the logistic regression model
+
+1024
+00:44:16,001 --> 00:44:17,607
+this image of the sign of the weights
+
+1025
+00:44:17,607 --> 00:44:20,449
+is the most salient thing
+
+1026
+00:44:20,449 --> 00:44:22,791
+that could ever appear in the image.
+
+1027
+00:44:22,791 --> 00:44:24,567
+When it's positive it looks like
+
+1028
+00:44:24,567 --> 00:44:26,748
+the world's most quintessential seven.
+
+1029
+00:44:26,748 --> 00:44:27,959
+When it's negative it looks like
+
+1030
+00:44:27,959 --> 00:44:29,684
+the world's most quintessential three.
+
+1031
+00:44:29,684 --> 00:44:31,127
+And so the model makes its decision
+
+1032
+00:44:31,127 --> 00:44:33,242
+almost entirely based on this perturbation
+
+1033
+00:44:33,242 --> 00:44:37,409
+we added to the image, rather
+than on the background.
+
+1034
+00:44:38,498 --> 00:44:40,007
+You could also take this same procedure,
+
+1035
+00:44:40,007 --> 00:44:44,174
+and my colleague Andrej at
+OpenAI showed how you can
+
+1036
+00:44:45,271 --> 00:44:49,063
+modify the image on ImageNet
+using this same approach,
+
+1037
+00:44:49,063 --> 00:44:51,706
+and turn this goldfish into a daisy.
+
+1038
+00:44:51,706 --> 00:44:53,831
+Because ImageNet is
+much higher dimensional,
+
+1039
+00:44:53,831 --> 00:44:56,769
+you don't need to use quite
+as large of a coefficient
+
+1040
+00:44:56,769 --> 00:44:58,761
+on the image of the weights.
+
+1041
+00:44:58,761 --> 00:45:03,226
+So we can make a more
+persuasive fooling attack.
+
+1042
+00:45:03,226 --> 00:45:05,249
+You can see that this
+same image of the weights,
+
+1043
+00:45:05,249 --> 00:45:08,631
+when applied to any different input image,
+
+1044
+00:45:08,631 --> 00:45:12,231
+will actually reliably
+cause a misclassification.
+
+1045
+00:45:12,231 --> 00:45:14,951
+What's going on is that there
+are many different classes,
+
+1046
+00:45:14,951 --> 00:45:18,822
+and it means that if
+you choose the weights
+
+1047
+00:45:18,822 --> 00:45:20,504
+for any particular class,
+
+1048
+00:45:20,504 --> 00:45:23,364
+it's very unlikely that a new test image
+
+1049
+00:45:23,364 --> 00:45:25,642
+will belong to that class.
+
+1050
+00:45:25,642 --> 00:45:27,349
+So on ImageNet, if we're using
+
+1051
+00:45:27,349 --> 00:45:29,351
+the weights for the daisy class,
+
+1052
+00:45:29,351 --> 00:45:31,431
+and there are 1,000 different classes,
+
+1053
+00:45:31,431 --> 00:45:33,628
+then we have about a 99.9% chance
+
+1054
+00:45:33,628 --> 00:45:36,122
+that a test image will not be a daisy.
+
+1055
+00:45:36,122 --> 00:45:37,767
+If we then go ahead and add the weights
+
+1056
+00:45:37,767 --> 00:45:39,809
+for the daisy class to that image,
+
+1057
+00:45:39,809 --> 00:45:41,889
+then we get a daisy,
+and because that's not
+
+1058
+00:45:41,889 --> 00:45:45,207
+the correct class, it's
+a misclassification.
+
+1059
+00:45:45,207 --> 00:45:47,068
+So there's a paper at CVPR this year
+
+1060
+00:45:47,068 --> 00:45:48,748
+called Universal Adversarial Perturbations
+
+1061
+00:45:48,748 --> 00:45:51,287
+that expands a lot more
+on this observation
+
+1062
+00:45:51,287 --> 00:45:53,799
+that we had going back in 2014.
+
+1063
+00:45:53,799 --> 00:45:56,647
+But basically these weight vectors,
+
+1064
+00:45:56,647 --> 00:45:59,031
+when applied to many different images,
+
+1065
+00:45:59,031 --> 00:46:02,614
+can cause misclassification
+in all of them.
+
+1066
+00:46:04,647 --> 00:46:06,303
+I've spent a lot of time telling you
+
+1067
+00:46:06,303 --> 00:46:08,508
+that these linear models
+are just terrible,
+
+1068
+00:46:08,508 --> 00:46:11,269
+and at some point you've
+probably been hoping
+
+1069
+00:46:11,269 --> 00:46:13,089
+I would give you some sort
+of a control experiment
+
+1070
+00:46:13,089 --> 00:46:15,468
+to convince you that there's another model
+
+1071
+00:46:15,468 --> 00:46:16,988
+that's not terrible.
+
+1072
+00:46:16,988 --> 00:46:19,351
+So it turns out that some quadratic models
+
+1073
+00:46:19,351 --> 00:46:21,249
+actually perform really well.
+
+1074
+00:46:21,249 --> 00:46:23,927
+In particular a shallow RBF network
+
+1075
+00:46:23,927 --> 00:46:27,687
+is able to resist adversarial
+perturbations very well.
+
+1076
+00:46:27,687 --> 00:46:29,047
+Earlier I showed you an animation
+
+1077
+00:46:29,047 --> 00:46:30,522
+where I took a nine and I turned it into
+
+1078
+00:46:30,522 --> 00:46:32,108
+a zero, one, two, and so on,
+
+1079
+00:46:32,108 --> 00:46:34,884
+without really changing
+its appearance at all.
+
+1080
+00:46:34,884 --> 00:46:36,028
+And I was able to fool
+
+1081
+00:46:36,028 --> 00:46:39,329
+a linear softmax regression classifier.
+
+1082
+00:46:39,329 --> 00:46:40,947
+Here I've got an RBF network
+
+1083
+00:46:40,947 --> 00:46:43,384
+where it outputs a separate probability
+
+1084
+00:46:43,384 --> 00:46:45,388
+of each class being absent or present,
+
+1085
+00:46:45,388 --> 00:46:49,555
+and that probability is given
+by e to the negative square
+
+1086
+00:46:51,111 --> 00:46:53,271
+of the difference between a template image
+
+1087
+00:46:53,271 --> 00:46:55,489
+and the input image.
+
+1088
+00:46:55,489 --> 00:46:59,108
+And if we actually follow the
+gradient of this classifier,
+
+1089
+00:46:59,108 --> 00:47:01,903
+it does actually turn the image into
+
+1090
+00:47:01,903 --> 00:47:04,801
+a zero, a one, a two, a three, and so on,
+
+1091
+00:47:04,801 --> 00:47:07,249
+and we can actually
+recognize those changes.
+
+1092
+00:47:07,249 --> 00:47:09,649
+The problem is, this
+classifier does not get
+
+1093
+00:47:09,649 --> 00:47:12,164
+very good accuracy on the training set.
+
+1094
+00:47:12,164 --> 00:47:13,767
+It's a shallow model.
+
+1095
+00:47:13,767 --> 00:47:15,503
+It's basically just a template matcher.
+
+1096
+00:47:15,503 --> 00:47:17,511
+It is literally a template matcher.
+
+1097
+00:47:17,511 --> 00:47:20,689
+And if you try to make
+it more sophisticated
+
+1098
+00:47:20,689 --> 00:47:22,049
+by making it deeper,
+
+1099
+00:47:22,049 --> 00:47:26,216
+it turns out that the gradient
+of these RBF units is zero,
+
+1100
+00:47:27,648 --> 00:47:30,762
+or very near zero, throughout most of RN.
+
+1101
+00:47:30,762 --> 00:47:32,769
+So they're extremely difficult to train,
+
+1102
+00:47:32,769 --> 00:47:36,289
+even with batch normalization
+and methods like that.
+
+1103
+00:47:36,289 --> 00:47:39,727
+I haven't managed to train
+a deep RBF network yet.
+
+1104
+00:47:39,727 --> 00:47:42,748
+But I think if somebody comes
+up with better hyperparameters
+
+1105
+00:47:42,748 --> 00:47:46,102
+or a new, more powerful
+optimization algorithm,
+
+1106
+00:47:46,102 --> 00:47:47,489
+it might be possible to solve
+
+1107
+00:47:47,489 --> 00:47:49,344
+the adversarial example problem
+
+1108
+00:47:49,344 --> 00:47:51,489
+by training a deep RBF network
+
+1109
+00:47:51,489 --> 00:47:55,985
+where the model is so nonlinear
+and has such wide flat areas
+
+1110
+00:47:55,985 --> 00:47:59,409
+that the adversary is not
+able to push the cost uphill
+
+1111
+00:47:59,409 --> 00:48:03,576
+just by making small changes
+to the model's input.
+
+1112
+00:48:05,242 --> 00:48:06,887
+One of the things that's the most alarming
+
+1113
+00:48:06,887 --> 00:48:08,209
+about adversarial examples
+
+1114
+00:48:08,209 --> 00:48:11,649
+is that they generalize
+from one dataset to another
+
+1115
+00:48:11,649 --> 00:48:13,468
+and one model to another.
+
+1116
+00:48:13,468 --> 00:48:15,329
+Here I've trained two different models
+
+1117
+00:48:15,329 --> 00:48:17,478
+on two different training sets.
+
+1118
+00:48:17,478 --> 00:48:20,145
+The training sets are tiny in both cases.
+
+1119
+00:48:20,145 --> 00:48:23,425
+It's just MNIST three
+versus seven classification,
+
+1120
+00:48:23,425 --> 00:48:26,696
+and this is really just for
+the purpose of making a slide.
+
+1121
+00:48:26,696 --> 00:48:29,207
+If you train a logistic regression model
+
+1122
+00:48:29,207 --> 00:48:32,644
+on the digits shown in the left panel,
+
+1123
+00:48:32,644 --> 00:48:35,903
+you get the weights shown on
+the left in the lower panel.
+
+1124
+00:48:35,903 --> 00:48:37,585
+If you train a logistic regression model
+
+1125
+00:48:37,585 --> 00:48:39,729
+on the digits shown in the upper right,
+
+1126
+00:48:39,729 --> 00:48:42,564
+you get the weights shown on
+the right in the lower panel.
+
+1127
+00:48:42,564 --> 00:48:44,225
+So you've got two different training sets
+
+1128
+00:48:44,225 --> 00:48:45,619
+and we learn weight vectors that look
+
+1129
+00:48:45,619 --> 00:48:47,143
+very similar to each other.
+
+1130
+00:48:47,143 --> 00:48:50,080
+That's just because machine
+learning algorithms generalize.
+
+1131
+00:48:50,080 --> 00:48:51,884
+You want them to learn a function that's
+
+1132
+00:48:51,884 --> 00:48:54,740
+somewhat independent of the
+data that you train them on.
+
+1133
+00:48:54,740 --> 00:48:55,879
+It shouldn't matter which particular
+
+1134
+00:48:55,879 --> 00:48:57,884
+training examples you choose.
+
+1135
+00:48:57,884 --> 00:48:58,924
+If you want to generalize
+
+1136
+00:48:58,924 --> 00:49:00,545
+from the training set to the test set,
+
+1137
+00:49:00,545 --> 00:49:02,781
+you've also got to expect
+that different training sets
+
+1138
+00:49:02,781 --> 00:49:05,002
+will give you more or
+less the same result.
+
+1139
+00:49:05,002 --> 00:49:06,583
+And that means that
+because they've learned
+
+1140
+00:49:06,583 --> 00:49:08,340
+more or less similar functions,
+
+1141
+00:49:08,340 --> 00:49:13,237
+they're vulnerable to
+similar adversarial examples.
+
+1142
+00:49:13,237 --> 00:49:15,723
+An adversary can compute
+an image that fools one
+
+1143
+00:49:15,723 --> 00:49:18,461
+and use it to fool the other.
+
+1144
+00:49:18,461 --> 00:49:20,738
+In fact we can actually
+go ahead and measure
+
+1145
+00:49:20,738 --> 00:49:22,386
+the transfer rate between
+
+1146
+00:49:22,386 --> 00:49:24,684
+several different machine
+learning techniques,
+
+1147
+00:49:24,684 --> 00:49:27,154
+not just different data sets.
+
+1148
+00:49:27,154 --> 00:49:28,881
+Nicolas Papernot and his collaborators
+
+1149
+00:49:28,881 --> 00:49:30,799
+have spent a lot of time exploring
+
+1150
+00:49:30,799 --> 00:49:32,718
+this transferability effect.
+
+1151
+00:49:32,718 --> 00:49:35,965
+And they found that for example,
+
+1152
+00:49:35,965 --> 00:49:38,200
+logistic regression makes
+adversarial examples
+
+1153
+00:49:38,200 --> 00:49:42,367
+that transfer to decision
+trees with 87.4% probability.
+
+1154
+00:49:43,999 --> 00:49:48,058
+Wherever you see dark
+squares in this matrix,
+
+1155
+00:49:48,058 --> 00:49:50,823
+that shows that there's a
+high amount of transfer.
+
+1156
+00:49:50,823 --> 00:49:53,225
+That means that it's very
+possible for an attacker
+
+1157
+00:49:53,225 --> 00:49:55,475
+using the model on the left
+
+1158
+00:49:56,380 --> 00:50:00,547
+to create adversarial examples
+for the model on the right.
+
+1159
+00:50:01,578 --> 00:50:03,324
+The procedure overall is that,
+
+1160
+00:50:03,324 --> 00:50:05,100
+suppose the attacker wants to fool a model
+
+1161
+00:50:05,100 --> 00:50:07,863
+that they don't actually have access to.
+
+1162
+00:50:07,863 --> 00:50:10,364
+They don't know the
+architecture that's used
+
+1163
+00:50:10,364 --> 00:50:11,783
+to train the model.
+
+1164
+00:50:11,783 --> 00:50:13,770
+They may not even know which
+algorithm is being used.
+
+1165
+00:50:13,770 --> 00:50:15,198
+They may not know
+whether they're attacking
+
+1166
+00:50:15,198 --> 00:50:17,260
+a decision tree or a deep neural net.
+
+1167
+00:50:17,260 --> 00:50:20,540
+And they also don't know the parameters
+
+1168
+00:50:20,540 --> 00:50:23,303
+of the model that they're going to attack.
+
+1169
+00:50:23,303 --> 00:50:26,089
+So what they can do is
+train their own model
+
+1170
+00:50:26,089 --> 00:50:29,172
+that they'll use to build the attack.
+
+1171
+00:50:30,272 --> 00:50:32,175
+There's two different ways
+you can train your own model.
+
+1172
+00:50:32,175 --> 00:50:33,703
+One is you can label your own training set
+
+1173
+00:50:33,703 --> 00:50:36,620
+for the same task that you want to attack.
+
+1174
+00:50:36,620 --> 00:50:39,802
+Say that somebody is using
+an ImageNet classifier,
+
+1175
+00:50:39,802 --> 00:50:42,924
+and for whatever reason you
+don't have access to ImageNet,
+
+1176
+00:50:42,924 --> 00:50:44,797
+you can take your own
+photos and label them,
+
+1177
+00:50:44,797 --> 00:50:46,939
+train your own object recognizer.
+
+1178
+00:50:46,939 --> 00:50:48,620
+It's going to share adversarial examples
+
+1179
+00:50:48,620 --> 00:50:50,700
+with an ImageNet model.
+
+1180
+00:50:50,700 --> 00:50:52,384
+The other thing you can do is,
+
+1181
+00:50:52,384 --> 00:50:55,361
+say that you can't afford to
+gather your own training set.
+
+1182
+00:50:55,361 --> 00:50:57,420
+What you can do instead is if you can get
+
+1183
+00:50:57,420 --> 00:50:59,041
+limited access to the model
+
+1184
+00:50:59,041 --> 00:51:02,236
+where you just have the ability
+to send inputs to the model
+
+1185
+00:51:02,236 --> 00:51:03,804
+and observe its outputs,
+
+1186
+00:51:03,804 --> 00:51:06,700
+then you can send those
+inputs, observe the outputs,
+
+1187
+00:51:06,700 --> 00:51:09,361
+and use those as your training set.
+
+1188
+00:51:09,361 --> 00:51:11,201
+This'll work even if the output
+
+1189
+00:51:11,201 --> 00:51:12,740
+that you get from the target model
+
+1190
+00:51:12,740 --> 00:51:15,943
+is only the class label that it chooses.
+
+1191
+00:51:15,943 --> 00:51:17,882
+A lot of people read this and assume that
+
+1192
+00:51:17,882 --> 00:51:19,004
+you need to have access
+
+1193
+00:51:19,004 --> 00:51:21,244
+to all the probability values it outputs.
+
+1194
+00:51:21,244 --> 00:51:24,975
+But even just the class
+labels are sufficient.
+
+1195
+00:51:24,975 --> 00:51:26,684
+So once you've used one
+of these two methods,
+
+1196
+00:51:26,684 --> 00:51:28,204
+either gather your own training set
+
+1197
+00:51:28,204 --> 00:51:31,324
+or observing the outputs
+of a target model,
+
+1198
+00:51:31,324 --> 00:51:32,877
+you can train your own model
+
+1199
+00:51:32,877 --> 00:51:36,444
+and then make adversarial
+examples for your model.
+
+1200
+00:51:36,444 --> 00:51:38,823
+Those adversarial examples
+are very likely to transfer
+
+1201
+00:51:38,823 --> 00:51:41,178
+and affect the target model.
+
+1202
+00:51:41,178 --> 00:51:43,736
+So you can then go and
+send those out and fool it,
+
+1203
+00:51:43,736 --> 00:51:47,569
+even if you didn't have
+access to it directly.
+
+1204
+00:51:48,513 --> 00:51:50,503
+We've also measured the transferability
+
+1205
+00:51:50,503 --> 00:51:52,360
+across different data sets,
+
+1206
+00:51:52,360 --> 00:51:54,583
+and for most models we find that they're
+
+1207
+00:51:54,583 --> 00:51:56,204
+kind of in an intermediate zone
+
+1208
+00:51:56,204 --> 00:51:58,103
+where different data sets will result
+
+1209
+00:51:58,103 --> 00:52:01,476
+in a transfer rate of, like, 60% to 80%.
+
+1210
+00:52:01,476 --> 00:52:04,001
+There's a few models like SVMs
+that are very data dependent
+
+1211
+00:52:04,001 --> 00:52:08,103
+because SVMs end up focusing
+on a very small subset
+
+1212
+00:52:08,103 --> 00:52:10,941
+of the training data to form
+their final decision boundary.
+
+1213
+00:52:10,941 --> 00:52:12,744
+But most models that we care about
+
+1214
+00:52:12,744 --> 00:52:15,994
+are somewhere in the intermediate zone.
+
+1215
+00:52:17,444 --> 00:52:19,554
+Now that's just assuming that you rely
+
+1216
+00:52:19,554 --> 00:52:22,596
+on the transfer happening naturally.
+
+1217
+00:52:22,596 --> 00:52:23,879
+You make an adversarial example
+
+1218
+00:52:23,879 --> 00:52:26,740
+and you hope that it will
+transfer to your target.
+
+1219
+00:52:26,740 --> 00:52:30,353
+What if you do something to
+stack the deck in your favor
+
+1220
+00:52:30,353 --> 00:52:33,211
+and improve the odds that you'll get
+
+1221
+00:52:33,211 --> 00:52:35,860
+your adversarial examples to transfer?
+
+1222
+00:52:35,860 --> 00:52:38,937
+Dawn Song's group at UC
+Berkeley studied this.
+
+1223
+00:52:38,937 --> 00:52:43,060
+They found that if they take
+an ensemble of different models
+
+1224
+00:52:43,060 --> 00:52:46,078
+and they use gradient
+descent to search for
+
+1225
+00:52:46,078 --> 00:52:47,998
+an adversarial example that will fool
+
+1226
+00:52:47,998 --> 00:52:50,297
+every member of their ensemble,
+
+1227
+00:52:50,297 --> 00:52:53,337
+then it's extremely likely
+that it will transfer
+
+1228
+00:52:53,337 --> 00:52:56,958
+and fool a new machine learning model.
+
+1229
+00:52:56,958 --> 00:52:59,131
+So if you have an ensemble of five models,
+
+1230
+00:52:59,131 --> 00:53:00,315
+you can get it to the point where
+
+1231
+00:53:00,315 --> 00:53:02,596
+there's essentially a 100% chance
+
+1232
+00:53:02,596 --> 00:53:04,654
+that you'll fool a sixth model
+
+1233
+00:53:04,654 --> 00:53:07,249
+out of the set of models
+that they compared.
+
+1234
+00:53:07,249 --> 00:53:09,881
+They looked at things like
+ResNets of different depths,
+
+1235
+00:53:09,881 --> 00:53:11,464
+VGG, and GoogLeNet.
+
+1236
+00:53:12,752 --> 00:53:16,055
+So in the labels for each
+of the different rows
+
+1237
+00:53:16,055 --> 00:53:18,201
+you can see that they
+made ensembles that lacked
+
+1238
+00:53:18,201 --> 00:53:19,835
+each of these different models,
+
+1239
+00:53:19,835 --> 00:53:23,321
+and then they would test it on
+the different target models.
+
+1240
+00:53:23,321 --> 00:53:28,137
+So like if you make an
+ensemble that omits GoogLeNet,
+
+1241
+00:53:28,137 --> 00:53:32,076
+you have only about a
+5% chance of GoogLeNet
+
+1242
+00:53:32,076 --> 00:53:34,521
+correctly classifying
+the adversarial example
+
+1243
+00:53:34,521 --> 00:53:37,023
+you make for that ensemble.
+
+1244
+00:53:37,023 --> 00:53:40,507
+If you make an ensemble
+that omits ResNet-152,
+
+1245
+00:53:40,507 --> 00:53:42,353
+in their experiments they found that
+
+1246
+00:53:42,353 --> 00:53:46,520
+there was a 0% chance of
+ResNet-152 resisting that attack.
+
+1247
+00:53:48,531 --> 00:53:50,337
+That probably indicates
+they should have run
+
+1248
+00:53:50,337 --> 00:53:52,004
+some more adversarial examples
+
+1249
+00:53:52,004 --> 00:53:54,697
+until they found a non-zero success rate,
+
+1250
+00:53:54,697 --> 00:53:57,969
+but it does show that the
+attack is very powerful.
+
+1251
+00:53:57,969 --> 00:53:59,770
+And then when you go look into
+
+1252
+00:53:59,770 --> 00:54:01,713
+intentionally cause the transfer effect,
+
+1253
+00:54:01,713 --> 00:54:04,713
+you can really make it quite strong.
+
+1254
+00:54:05,872 --> 00:54:08,241
+A lot of people often
+ask me if the human brain
+
+1255
+00:54:08,241 --> 00:54:10,808
+is vulnerable to adversarial examples.
+
+1256
+00:54:10,808 --> 00:54:14,436
+And for this lecture I can't
+use copyrighted material,
+
+1257
+00:54:14,436 --> 00:54:17,360
+but there's some really
+hilarious things on the Internet
+
+1258
+00:54:17,360 --> 00:54:19,693
+if you go looking for, like,
+
+1259
+00:54:21,329 --> 00:54:23,833
+the fake CAPTCHA with
+images of Mark Hamill,
+
+1260
+00:54:23,833 --> 00:54:27,214
+you'll find something
+that my perception system
+
+1261
+00:54:27,214 --> 00:54:29,015
+definitely can't handle.
+
+1262
+00:54:29,015 --> 00:54:31,708
+So here's another one
+that's actually published
+
+1263
+00:54:31,708 --> 00:54:35,577
+with a license where I was
+confident I'm allowed to use it.
+
+1264
+00:54:35,577 --> 00:54:38,473
+You can look at this image
+of different circles here,
+
+1265
+00:54:38,473 --> 00:54:42,217
+and they appear to be intertwined spirals.
+
+1266
+00:54:42,217 --> 00:54:45,210
+But in fact they are concentric circles.
+
+1267
+00:54:45,210 --> 00:54:47,521
+The orientation of the
+edges of the squares
+
+1268
+00:54:47,521 --> 00:54:51,177
+is interfering with the edge
+detectors in your brain,
+
+1269
+00:54:51,177 --> 00:54:55,468
+making it look like the
+circles are spiraling.
+
+1270
+00:54:55,468 --> 00:54:57,372
+So you can think of
+these optical illusions
+
+1271
+00:54:57,372 --> 00:54:59,847
+as being adversarial
+examples in the human brain.
+
+1272
+00:54:59,847 --> 00:55:01,908
+What's interesting is that
+we don't seem to share
+
+1273
+00:55:01,908 --> 00:55:03,589
+many adversarial examples in common
+
+1274
+00:55:03,589 --> 00:55:05,732
+with machine learning models.
+
+1275
+00:55:05,732 --> 00:55:08,174
+Adversarial examples
+transfer extremely reliably
+
+1276
+00:55:08,174 --> 00:55:09,970
+between different machine learning models,
+
+1277
+00:55:09,970 --> 00:55:11,956
+especially if you use that ensemble trick
+
+1278
+00:55:11,956 --> 00:55:15,492
+that was developed at UC Berkeley.
+
+1279
+00:55:15,492 --> 00:55:18,654
+But those adversarial
+examples don't fool us.
+
+1280
+00:55:18,654 --> 00:55:20,212
+It tells us that we must be using
+
+1281
+00:55:20,212 --> 00:55:22,436
+a very different algorithm or model family
+
+1282
+00:55:22,436 --> 00:55:25,417
+than current convolutional networks.
+
+1283
+00:55:25,417 --> 00:55:27,273
+We don't really know what
+the difference is yet,
+
+1284
+00:55:27,273 --> 00:55:30,023
+but it would be very
+interesting to figure that out.
+
+1285
+00:55:30,023 --> 00:55:32,953
+It seems to suggest that
+studying adversarial examples
+
+1286
+00:55:32,953 --> 00:55:35,353
+could tell us how to significantly improve
+
+1287
+00:55:35,353 --> 00:55:37,854
+our existing machine learning models.
+
+1288
+00:55:37,854 --> 00:55:40,413
+Even if you don't care
+about having an adversary,
+
+1289
+00:55:40,413 --> 00:55:43,113
+we might figure out
+something or other about
+
+1290
+00:55:43,113 --> 00:55:45,111
+how to make machine learning algorithms
+
+1291
+00:55:45,111 --> 00:55:48,116
+deal with ambiguity and unexpected inputs
+
+1292
+00:55:48,116 --> 00:55:50,033
+more like a human does.
+
+1293
+00:55:52,106 --> 00:55:55,594
+If we actually want to go out
+and do attacks in practice,
+
+1294
+00:55:55,594 --> 00:56:00,276
+there's started to be a body
+of research on this subject.
+
+1295
+00:56:00,276 --> 00:56:03,060
+Nicolas Papernot showed that he could use
+
+1296
+00:56:03,060 --> 00:56:05,897
+the transfer effect to fool classifiers
+
+1297
+00:56:05,897 --> 00:56:09,177
+hosted by MetaMind, Amazon, and Google.
+
+1298
+00:56:09,177 --> 00:56:11,452
+So these are all just
+different machine learning APIs
+
+1299
+00:56:11,452 --> 00:56:13,755
+where you can upload a dataset
+
+1300
+00:56:13,755 --> 00:56:16,275
+and the API will train the model for you.
+
+1301
+00:56:16,275 --> 00:56:19,038
+And then you don't actually
+know, in most cases,
+
+1302
+00:56:19,038 --> 00:56:21,316
+which model is trained for you.
+
+1303
+00:56:21,316 --> 00:56:23,714
+You don't have access to its
+weights or anything like that.
+
+1304
+00:56:23,714 --> 00:56:26,168
+So Nicolas would train
+his own copy of the model
+
+1305
+00:56:26,168 --> 00:56:27,553
+using the API,
+
+1306
+00:56:27,553 --> 00:56:31,256
+and then build a model on
+his own personal desktop
+
+1307
+00:56:31,256 --> 00:56:34,169
+where he could fool the API hosted model.
+
+1308
+00:56:34,169 --> 00:56:36,917
+Later, Berkeley showed you
+could fool Clarifai in this way.
+
+1309
+00:56:36,917 --> 00:56:37,750
+Yeah?
+
+1310
+00:56:37,750 --> 00:56:39,273
+- [Man] What did you mean when you said
+
+1311
+00:56:39,273 --> 00:56:41,222
+machine having adversarial
+models don't generally fool us?
+
+1312
+00:56:41,222 --> 00:56:43,054
+Because I thought that
+was part of the point
+
+1313
+00:56:43,054 --> 00:56:46,724
+that we generally do
+machine-generated adversarial models
+
+1314
+00:56:46,724 --> 00:56:48,990
+where just a few pixels change.
+
+1315
+00:56:48,990 --> 00:56:51,990
+- Oh, so if we look at, for example,
+
+1316
+00:56:53,623 --> 00:56:55,070
+like this picture of the panda.
+
+1317
+00:56:55,070 --> 00:56:56,497
+To us it looks like a panda.
+
+1318
+00:56:56,497 --> 00:56:59,837
+To most machine learning
+models it looks like a gibbon.
+
+1319
+00:56:59,837 --> 00:57:02,830
+And so this change isn't
+interfering with our brains,
+
+1320
+00:57:02,830 --> 00:57:04,963
+but it fools reliably
+with lots of different
+
+1321
+00:57:04,963 --> 00:57:06,963
+machine learning models.
+
+1322
+00:57:08,713 --> 00:57:12,836
+I saw somebody actually took
+this image of the perturbation
+
+1323
+00:57:12,836 --> 00:57:15,433
+out of our paper, and they pasted it
+
+1324
+00:57:15,433 --> 00:57:17,396
+on their Facebook profile picture
+
+1325
+00:57:17,396 --> 00:57:20,551
+to see if it could interfere
+with Facebook recognizing them.
+
+1326
+00:57:20,551 --> 00:57:22,713
+And they said that it did.
+
+1327
+00:57:22,713 --> 00:57:25,956
+I don't think that Facebook
+has a gibbon tag though,
+
+1328
+00:57:25,956 --> 00:57:29,644
+so we don't know if they managed to
+
+1329
+00:57:29,644 --> 00:57:32,811
+make it think that they were a gibbon.
+
+1330
+00:57:34,138 --> 00:57:35,977
+And one of the other
+things that you can do
+
+1331
+00:57:35,977 --> 00:57:39,161
+that's of fairly high
+practical significance
+
+1332
+00:57:39,161 --> 00:57:42,238
+is you can actually
+fool malware detectors.
+
+1333
+00:57:42,238 --> 00:57:44,201
+Catherine Gross at the
+University of Saarland
+
+1334
+00:57:44,201 --> 00:57:45,657
+wrote a paper about this.
+
+1335
+00:57:45,657 --> 00:57:47,276
+And there's starting to be a few others.
+
+1336
+00:57:47,276 --> 00:57:50,201
+There's a model called MalGAN
+that actually uses a GAN
+
+1337
+00:57:50,201 --> 00:57:54,815
+to generate adversarial
+examples for malware detectors.
+
+1338
+00:57:54,815 --> 00:57:57,300
+Another thing that matters
+a lot if you are interested
+
+1339
+00:57:57,300 --> 00:57:58,840
+in using these attacks in the real world
+
+1340
+00:57:58,840 --> 00:58:00,724
+and defending against
+them in the real world
+
+1341
+00:58:00,724 --> 00:58:02,956
+is that a lot of the
+time you don't actually
+
+1342
+00:58:02,956 --> 00:58:06,057
+have access to the
+digital input to a model.
+
+1343
+00:58:06,057 --> 00:58:09,017
+If you're interested in
+the perception system
+
+1344
+00:58:09,017 --> 00:58:11,300
+for a self-driving car or a robot,
+
+1345
+00:58:11,300 --> 00:58:14,116
+you probably don't get to
+actually write to the buffer
+
+1346
+00:58:14,116 --> 00:58:15,737
+on the robot itself.
+
+1347
+00:58:15,737 --> 00:58:18,420
+You just get to show the robot objects
+
+1348
+00:58:18,420 --> 00:58:20,500
+that it can see through a camera lens.
+
+1349
+00:58:20,500 --> 00:58:24,445
+So my colleague Alexey
+Kurakin and Samy Bengio and I
+
+1350
+00:58:24,445 --> 00:58:27,806
+wrote a paper where we studied
+if we can actually fool
+
+1351
+00:58:27,806 --> 00:58:30,313
+an object recognition
+system running on a phone,
+
+1352
+00:58:30,313 --> 00:58:33,205
+where it perceives the
+world through a camera.
+
+1353
+00:58:33,205 --> 00:58:35,345
+Our methodology was
+really straightforward.
+
+1354
+00:58:35,345 --> 00:58:36,894
+We just printed out several pictures
+
+1355
+00:58:36,894 --> 00:58:38,654
+of adversarial examples.
+
+1356
+00:58:38,654 --> 00:58:41,988
+And we found that the
+object recognition system
+
+1357
+00:58:41,988 --> 00:58:44,430
+run by the camera was fooled by them.
+
+1358
+00:58:44,430 --> 00:58:46,489
+The system on the camera
+is actually different
+
+1359
+00:58:46,489 --> 00:58:47,886
+from the model that we used
+
+1360
+00:58:47,886 --> 00:58:49,550
+to generate the adversarial examples.
+
+1361
+00:58:49,550 --> 00:58:53,379
+So we're showing not just transfer across
+
+1362
+00:58:53,379 --> 00:58:55,826
+the changes that happen
+when you use the camera,
+
+1363
+00:58:55,826 --> 00:58:58,009
+we're also showing that
+those transfer across
+
+1364
+00:58:58,009 --> 00:59:00,022
+the model that you use.
+
+1365
+00:59:00,022 --> 00:59:02,692
+So the attacker could conceivably fool
+
+1366
+00:59:02,692 --> 00:59:05,267
+a system that's deployed
+in a physical agent,
+
+1367
+00:59:05,267 --> 00:59:07,950
+even if they don't have access
+to the model on that agent
+
+1368
+00:59:07,950 --> 00:59:11,539
+and even if they can't interface
+directly with the agent
+
+1369
+00:59:11,539 --> 00:59:13,372
+but just subtly modify
+
+1370
+00:59:15,566 --> 00:59:19,085
+objects that it can
+see in its environment.
+
+1371
+00:59:19,085 --> 00:59:20,183
+Yeah?
+
+1372
+00:59:20,183 --> 00:59:22,434
+- [Man] Why does the,
+
+1373
+00:59:22,434 --> 00:59:24,408
+for the low quality camera image noise
+
+1374
+00:59:24,408 --> 00:59:26,586
+not affect the adversarial example?
+
+1375
+00:59:26,586 --> 00:59:28,311
+Because that's what one would expect.
+
+1376
+00:59:28,311 --> 00:59:30,023
+- Yeah, so I think a lot of that
+
+1377
+00:59:30,023 --> 00:59:34,071
+comes back to the maps
+that I showed earlier.
+
+1378
+00:59:34,071 --> 00:59:36,614
+If you cross over the
+boundary into the realm
+
+1379
+00:59:36,614 --> 00:59:38,426
+of adversarial examples,
+
+1380
+00:59:38,426 --> 00:59:40,846
+they occupy a pretty wide space
+
+1381
+00:59:40,846 --> 00:59:43,348
+and they're very densely packed in there.
+
+1382
+00:59:43,348 --> 00:59:45,108
+So if you jostle around a little bit,
+
+1383
+00:59:45,108 --> 00:59:48,590
+you're not going to recover
+from the adversarial attack.
+
+1384
+00:59:48,590 --> 00:59:50,628
+If the camera noise, somehow or other,
+
+1385
+00:59:50,628 --> 00:59:53,966
+was aligned with the negative
+gradient of the cost,
+
+1386
+00:59:53,966 --> 00:59:57,383
+then the camera could take a
+gradient descent step downhill
+
+1387
+00:59:57,383 --> 01:00:01,407
+and rescue you from the uphill
+step that the adversary took.
+
+1388
+01:00:01,407 --> 01:00:03,252
+But probably the camera's
+taking more or less
+
+1389
+01:00:03,252 --> 01:00:06,699
+something that you could
+model as a random direction.
+
+1390
+01:00:06,699 --> 01:00:09,324
+Like clearly when you use
+the camera more than once
+
+1391
+01:00:09,324 --> 01:00:11,902
+it's going to do the same thing each time,
+
+1392
+01:00:11,902 --> 01:00:15,129
+but from the point of
+view of how that direction
+
+1393
+01:00:15,129 --> 01:00:18,868
+relates to the image
+classification problem,
+
+1394
+01:00:18,868 --> 01:00:22,281
+it's more or less a random
+variable that you sample once.
+
+1395
+01:00:22,281 --> 01:00:25,025
+And it seems unlikely to align exactly
+
+1396
+01:00:25,025 --> 01:00:28,275
+with the normal to this class boundary.
+
+1397
+01:00:33,238 --> 01:00:36,762
+There's a lot of different
+defenses that we'd like to build.
+
+1398
+01:00:36,762 --> 01:00:39,425
+And it's a little bit disappointing
+
+1399
+01:00:39,425 --> 01:00:41,265
+that I'm mostly here to
+tell you about attacks.
+
+1400
+01:00:41,265 --> 01:00:44,088
+I'd like to tell you how to
+make your systems more robust.
+
+1401
+01:00:44,088 --> 01:00:47,332
+But basically every attack we've tried
+
+1402
+01:00:47,332 --> 01:00:49,192
+has failed pretty badly.
+
+1403
+01:00:49,192 --> 01:00:52,329
+And in fact, even when
+people have published
+
+1404
+01:00:52,329 --> 01:00:54,996
+that they successfully defended.
+
+1405
+01:00:55,927 --> 01:00:57,833
+Well, there's been several papers on arXiv
+
+1406
+01:00:57,833 --> 01:00:59,892
+over the last several months.
+
+1407
+01:00:59,892 --> 01:01:02,873
+Nicholas Carlini at Berkeley
+just released a paper
+
+1408
+01:01:02,873 --> 01:01:07,710
+where he shows that 10 of
+those defenses are broken.
+
+1409
+01:01:07,710 --> 01:01:09,870
+So this is a really, really hard problem.
+
+1410
+01:01:09,870 --> 01:01:11,849
+You can't just make it go away by using
+
+1411
+01:01:11,849 --> 01:01:15,630
+traditional regularization techniques.
+
+1412
+01:01:15,630 --> 01:01:18,328
+Particular, generative
+models are not enough
+
+1413
+01:01:18,328 --> 01:01:19,649
+to solve the problem.
+
+1414
+01:01:19,649 --> 01:01:21,366
+A lot of people say, "Oh the
+problem that's going on here
+
+1415
+01:01:21,366 --> 01:01:22,998
+"is you don't know anything
+about the distribution
+
+1416
+01:01:22,998 --> 01:01:25,343
+"over the input pixels.
+
+1417
+01:01:25,343 --> 01:01:26,577
+"If you could just tell
+
+1418
+01:01:26,577 --> 01:01:28,164
+"whether the input is realistic or not
+
+1419
+01:01:28,164 --> 01:01:31,141
+"then you'd be able to resist it."
+
+1420
+01:01:31,141 --> 01:01:33,469
+It turns out that what's going on here is
+
+1421
+01:01:33,469 --> 01:01:36,284
+what matters more than getting
+the right distributions
+
+1422
+01:01:36,284 --> 01:01:37,566
+over the inputs x,
+
+1423
+01:01:37,566 --> 01:01:39,305
+is getting the right
+posterior distribution
+
+1424
+01:01:39,305 --> 01:01:42,366
+over the class of labels y given inputs x.
+
+1425
+01:01:42,366 --> 01:01:44,665
+So just using a generative model
+
+1426
+01:01:44,665 --> 01:01:46,905
+is not enough to solve the problem.
+
+1427
+01:01:46,905 --> 01:01:49,095
+I think a very carefully
+designed generative model
+
+1428
+01:01:49,095 --> 01:01:51,070
+could possibly do it.
+
+1429
+01:01:51,070 --> 01:01:54,729
+Here I show two different modes
+of a bimodal distribution,
+
+1430
+01:01:54,729 --> 01:01:56,446
+and we have two different
+generative models
+
+1431
+01:01:56,446 --> 01:01:58,948
+that try to capture these modes.
+
+1432
+01:01:58,948 --> 01:02:01,348
+On the left we have a
+mixture of two Gaussians.
+
+1433
+01:02:01,348 --> 01:02:04,148
+On the right we have a
+mixture of two Laplacians.
+
+1434
+01:02:04,148 --> 01:02:06,395
+You can not really tell
+the difference visually
+
+1435
+01:02:06,395 --> 01:02:09,506
+between the distribution
+they impose over x,
+
+1436
+01:02:09,506 --> 01:02:11,601
+and the difference in the
+likelihood they assign
+
+1437
+01:02:11,601 --> 01:02:13,929
+to the training data is negligible.
+
+1438
+01:02:13,929 --> 01:02:16,158
+But the posterior distribution
+they assign over classes
+
+1439
+01:02:16,158 --> 01:02:17,886
+is extremely different.
+
+1440
+01:02:17,886 --> 01:02:20,488
+On the left we get a logistic
+regression classifier
+
+1441
+01:02:20,488 --> 01:02:22,833
+that has very high confidence
+
+1442
+01:02:22,833 --> 01:02:25,143
+out in the tails of the distribution
+
+1443
+01:02:25,143 --> 01:02:27,049
+where there is never any training data.
+
+1444
+01:02:27,049 --> 01:02:29,108
+On the right, with the
+Laplacian distribution,
+
+1445
+01:02:29,108 --> 01:02:32,025
+we level off to more or less 50-50.
+
+1446
+01:02:33,156 --> 01:02:33,989
+Yeah?
+
+1447
+01:02:33,989 --> 01:02:37,156
+[speaker drowned out]
+
+1448
+01:02:44,052 --> 01:02:46,666
+The issue is that it's a
+nonstationary distribution.
+
+1449
+01:02:46,666 --> 01:02:48,052
+So if you train it to recognize
+
+1450
+01:02:48,052 --> 01:02:49,834
+one kind of adversarial example,
+
+1451
+01:02:49,834 --> 01:02:52,170
+then it will become
+vulnerable to another kind
+
+1452
+01:02:52,170 --> 01:02:55,871
+that's designed to fool its detector.
+
+1453
+01:02:55,871 --> 01:02:59,631
+That's one of the category of
+defenses that Nicholas broke
+
+1454
+01:02:59,631 --> 01:03:02,631
+in his latest paper that he put out.
+
+1455
+01:03:04,667 --> 01:03:07,231
+So here basically the choice of exactly
+
+1456
+01:03:07,231 --> 01:03:09,370
+the family of generative
+model has a big effect
+
+1457
+01:03:09,370 --> 01:03:13,537
+in whether the posterior becomes
+deterministic or uniform,
+
+1458
+01:03:14,765 --> 01:03:17,348
+as the model extrapolates.
+
+1459
+01:03:17,348 --> 01:03:21,212
+And if we could design a really
+rich, deep generative model
+
+1460
+01:03:21,212 --> 01:03:24,387
+that can generate
+realistic ImageNet images
+
+1461
+01:03:24,387 --> 01:03:28,012
+and also correctly calculate
+its posterior distribution,
+
+1462
+01:03:28,012 --> 01:03:31,389
+then maybe something like
+this approach could work.
+
+1463
+01:03:31,389 --> 01:03:33,072
+But at the moment it's
+really difficult to get
+
+1464
+01:03:33,072 --> 01:03:36,029
+any of those probabilistic
+calculations correct.
+
+1465
+01:03:36,029 --> 01:03:38,273
+And what usually happens is,
+
+1466
+01:03:38,273 --> 01:03:40,012
+somewhere or other we
+make an approximation
+
+1467
+01:03:40,012 --> 01:03:42,156
+that causes the posterior distribution
+
+1468
+01:03:42,156 --> 01:03:45,553
+to extrapolate very linearly again.
+
+1469
+01:03:45,553 --> 01:03:48,476
+It's been a difficult
+engineering challenge
+
+1470
+01:03:48,476 --> 01:03:50,135
+to build generative models
+
+1471
+01:03:50,135 --> 01:03:54,302
+that actually capture these
+distributions accurately.
+
+1472
+01:03:55,772 --> 01:03:58,681
+The universal approximator
+theorem tells us that
+
+1473
+01:03:58,681 --> 01:04:00,273
+whatever shape we would like
+
+1474
+01:04:00,273 --> 01:04:02,850
+our classification function to have,
+
+1475
+01:04:02,850 --> 01:04:04,375
+a neural net that's big enough
+
+1476
+01:04:04,375 --> 01:04:06,407
+ought to be able to represent it.
+
+1477
+01:04:06,407 --> 01:04:08,505
+It's an open question whether
+we can train the neural net
+
+1478
+01:04:08,505 --> 01:04:09,750
+to have that function,
+
+1479
+01:04:09,750 --> 01:04:11,622
+but we know that we should be able to
+
+1480
+01:04:11,622 --> 01:04:13,340
+at least give the right shape.
+
+1481
+01:04:13,340 --> 01:04:15,188
+So so far we've been getting neural nets
+
+1482
+01:04:15,188 --> 01:04:18,369
+that give us these very
+linear decision functions,
+
+1483
+01:04:18,369 --> 01:04:19,569
+and we'd like to get something
+
+1484
+01:04:19,569 --> 01:04:21,743
+that looks a little bit
+more like a step function.
+
+1485
+01:04:21,743 --> 01:04:25,111
+So what if we actually just
+train on adversarial examples?
+
+1486
+01:04:25,111 --> 01:04:27,545
+For every input x in the training set,
+
+1487
+01:04:27,545 --> 01:04:31,727
+we also say we want you to
+train x plus an attack to map
+
+1488
+01:04:31,727 --> 01:04:34,252
+to the same class label as the original.
+
+1489
+01:04:34,252 --> 01:04:37,187
+It turns out that this sort of works.
+
+1490
+01:04:37,187 --> 01:04:39,111
+You can generally resist
+
+1491
+01:04:39,111 --> 01:04:41,388
+the same kind of attack that you train on.
+
+1492
+01:04:41,388 --> 01:04:43,786
+And an important consideration
+
+1493
+01:04:43,786 --> 01:04:46,151
+is making sure that you could
+run your attack very quickly
+
+1494
+01:04:46,151 --> 01:04:48,508
+so that you can train on lots of examples.
+
+1495
+01:04:48,508 --> 01:04:51,089
+So here the green curve at the very top,
+
+1496
+01:04:51,089 --> 01:04:53,466
+the one that doesn't
+really descend much at all,
+
+1497
+01:04:53,466 --> 01:04:56,188
+that's the test set error
+on adversarial examples
+
+1498
+01:04:56,188 --> 01:04:59,188
+if you train on clean examples only.
+
+1499
+01:05:00,127 --> 01:05:03,889
+The cyan curve that descends
+more or less diagonally
+
+1500
+01:05:03,889 --> 01:05:05,292
+through the middle of the plot,
+
+1501
+01:05:05,292 --> 01:05:07,889
+that's the tester on adversarial examples
+
+1502
+01:05:07,889 --> 01:05:10,746
+if you train on adversarial examples.
+
+1503
+01:05:10,746 --> 01:05:13,649
+You can see that it does
+actually reduce significantly.
+
+1504
+01:05:13,649 --> 01:05:16,711
+It gets down to a little
+bit less than 1% error.
+
+1505
+01:05:16,711 --> 01:05:20,012
+And the important thing to
+keep in mind here is that
+
+1506
+01:05:20,012 --> 01:05:23,524
+this is fast gradient sign
+method adversarial examples.
+
+1507
+01:05:23,524 --> 01:05:24,872
+It's much harder to resist
+
+1508
+01:05:24,872 --> 01:05:27,649
+iterative multi-step adversarial examples
+
+1509
+01:05:27,649 --> 01:05:29,468
+where you run an optimizer for a long time
+
+1510
+01:05:29,468 --> 01:05:31,924
+searching for a vulnerability.
+
+1511
+01:05:31,924 --> 01:05:33,128
+And another thing to keep in mind
+
+1512
+01:05:33,128 --> 01:05:34,063
+is that we're testing on
+
+1513
+01:05:34,063 --> 01:05:36,525
+the same kind of adversarial
+examples that we train on.
+
+1514
+01:05:36,525 --> 01:05:37,772
+It's harder to generalize
+
+1515
+01:05:37,772 --> 01:05:42,141
+from one optimization
+algorithm to another.
+
+1516
+01:05:42,141 --> 01:05:44,558
+By comparison, if you look at
+
+1517
+01:05:46,881 --> 01:05:48,727
+what happens on clean examples,
+
+1518
+01:05:48,727 --> 01:05:50,385
+the blue curve shows what happens
+
+1519
+01:05:50,385 --> 01:05:53,089
+on the clean test set error rate
+
+1520
+01:05:53,089 --> 01:05:55,687
+if you train only on clean examples.
+
+1521
+01:05:55,687 --> 01:05:57,249
+The red curve shows what happens
+
+1522
+01:05:57,249 --> 01:06:01,260
+if you train on both clean
+and adversarial examples.
+
+1523
+01:06:01,260 --> 01:06:02,449
+We see that the red curve
+
+1524
+01:06:02,449 --> 01:06:04,967
+actually drops lower than the blue curve.
+
+1525
+01:06:04,967 --> 01:06:07,445
+So on this task, training
+on adversarial examples
+
+1526
+01:06:07,445 --> 01:06:10,188
+actually helped us to do
+the original task better.
+
+1527
+01:06:10,188 --> 01:06:12,625
+This is because in the original
+task we were overfitting.
+
+1528
+01:06:12,625 --> 01:06:15,544
+Training on adversarial
+examples is good regularizer.
+
+1529
+01:06:15,544 --> 01:06:18,202
+If you're overfitting it
+can make you overfit less.
+
+1530
+01:06:18,202 --> 01:06:21,700
+If you're underfitting it'll
+just make you underfit worse.
+
+1531
+01:06:21,700 --> 01:06:24,562
+Other kinds of models
+besides deep neural nets
+
+1532
+01:06:24,562 --> 01:06:27,287
+don't benefit as much
+from adversarial training.
+
+1533
+01:06:27,287 --> 01:06:29,525
+So when we started this
+whole topic of study
+
+1534
+01:06:29,525 --> 01:06:30,764
+we thought that deep neural nets
+
+1535
+01:06:30,764 --> 01:06:33,338
+might be uniquely vulnerable
+to adversarial examples.
+
+1536
+01:06:33,338 --> 01:06:35,084
+But it turns out that actually
+
+1537
+01:06:35,084 --> 01:06:36,625
+they're one of the few models that has
+
+1538
+01:06:36,625 --> 01:06:38,916
+a clear path to resisting them.
+
+1539
+01:06:38,916 --> 01:06:40,957
+Linear models are just
+always going to be linear.
+
+1540
+01:06:40,957 --> 01:06:44,204
+They don't have much hope of
+resisting adversarial examples.
+
+1541
+01:06:44,204 --> 01:06:46,423
+Deep neural nets can be
+trained to be nonlinear,
+
+1542
+01:06:46,423 --> 01:06:50,955
+and so it seems like there's
+a path to a solution for them.
+
+1543
+01:06:50,955 --> 01:06:52,261
+Even with adversarial training,
+
+1544
+01:06:52,261 --> 01:06:55,418
+we still find that we aren't able to
+
+1545
+01:06:55,418 --> 01:06:57,578
+make models where if
+you optimize the input
+
+1546
+01:06:57,578 --> 01:06:59,063
+to belong to different classes,
+
+1547
+01:06:59,063 --> 01:07:01,129
+you get examples in those classes.
+
+1548
+01:07:01,129 --> 01:07:04,844
+Here I start with a CIFAR-10
+truck and I turn it into
+
+1549
+01:07:04,844 --> 01:07:07,935
+each of the 10 different CIFAR-10 classes.
+
+1550
+01:07:07,935 --> 01:07:09,244
+Toward the middle of the plot
+
+1551
+01:07:09,244 --> 01:07:10,651
+you can see that the truck has started
+
+1552
+01:07:10,651 --> 01:07:12,201
+to look a little bit like a bird.
+
+1553
+01:07:12,201 --> 01:07:13,736
+But the bird class is the only one
+
+1554
+01:07:13,736 --> 01:07:15,897
+that we've come anywhere near hitting.
+
+1555
+01:07:15,897 --> 01:07:17,404
+So even with adversarial training,
+
+1556
+01:07:17,404 --> 01:07:21,876
+we're still very far from
+solving this problem.
+
+1557
+01:07:21,876 --> 01:07:23,180
+When we do adversarial training,
+
+1558
+01:07:23,180 --> 01:07:25,500
+we rely on having labels
+for all the examples.
+
+1559
+01:07:25,500 --> 01:07:27,340
+We have an image that's labeled as a bird.
+
+1560
+01:07:27,340 --> 01:07:28,975
+We make a perturbation that's designed
+
+1561
+01:07:28,975 --> 01:07:30,903
+to decrease the probability
+of the bird class,
+
+1562
+01:07:30,903 --> 01:07:32,161
+and we train the model
+
+1563
+01:07:32,161 --> 01:07:33,863
+that the image should still be a bird.
+
+1564
+01:07:33,863 --> 01:07:35,483
+But what if you don't have labels?
+
+1565
+01:07:35,483 --> 01:07:39,299
+It turns out that you can
+actually train without labels.
+
+1566
+01:07:39,299 --> 01:07:42,700
+You ask the model to predict
+the label of the first image.
+
+1567
+01:07:42,700 --> 01:07:44,298
+So if you've trained for a little while
+
+1568
+01:07:44,298 --> 01:07:45,697
+and your model isn't perfect yet,
+
+1569
+01:07:45,697 --> 01:07:47,804
+it might say, oh, maybe this
+is a bird, maybe it's a plane.
+
+1570
+01:07:47,804 --> 01:07:49,324
+There's some blue sky there,
+
+1571
+01:07:49,324 --> 01:07:51,550
+I'm not sure which of
+these two classes it is.
+
+1572
+01:07:51,550 --> 01:07:53,714
+Then we make an adversarial perturbation
+
+1573
+01:07:53,714 --> 01:07:55,759
+that's intended to change the guess
+
+1574
+01:07:55,759 --> 01:07:58,159
+and we just try to make it
+say, oh this is a truck,
+
+1575
+01:07:58,159 --> 01:07:59,357
+or something like that.
+
+1576
+01:07:59,357 --> 01:08:01,236
+It's not whatever you
+believed it was before.
+
+1577
+01:08:01,236 --> 01:08:02,983
+You can then train it to say
+
+1578
+01:08:02,983 --> 01:08:04,481
+that the distribution of our classes
+
+1579
+01:08:04,481 --> 01:08:06,557
+should still be the same as it was before,
+
+1580
+01:08:06,557 --> 01:08:08,343
+but this should still be considered
+
+1581
+01:08:08,343 --> 01:08:10,600
+probably a bird or a plane.
+
+1582
+01:08:10,600 --> 01:08:12,752
+This technique is called
+virtual adversarial training,
+
+1583
+01:08:12,752 --> 01:08:15,176
+and it was invented by Takeru Miyato.
+
+1584
+01:08:15,176 --> 01:08:18,524
+He was my Intern at Google
+after he did this work.
+
+1585
+01:08:18,524 --> 01:08:22,720
+At Google we invited him to
+come and apply his invention
+
+1586
+01:08:22,720 --> 01:08:24,637
+to text classification,
+
+1587
+01:08:25,783 --> 01:08:29,500
+because this ability to
+learn from unlabeled examples
+
+1588
+01:08:29,500 --> 01:08:32,380
+makes it possible to do
+semi-supervised learning
+
+1589
+01:08:32,380 --> 01:08:35,921
+where you learn from both
+unlabeled and labeled examples.
+
+1590
+01:08:35,921 --> 01:08:38,818
+And there's quite a lot of
+unlabeled text in the world.
+
+1591
+01:08:38,818 --> 01:08:41,142
+So we were able to bring
+down the error rate
+
+1592
+01:08:41,142 --> 01:08:43,761
+on several different
+text classification tasks
+
+1593
+01:08:43,761 --> 01:08:47,804
+by using this virtual
+adversarial training.
+
+1594
+01:08:47,804 --> 01:08:49,761
+Finally, there's a lot of problems where
+
+1595
+01:08:49,761 --> 01:08:52,001
+we'd like to use neural nets
+
+1596
+01:08:52,001 --> 01:08:54,122
+to guide optimization procedures.
+
+1597
+01:08:54,122 --> 01:08:57,243
+If we want to make a very, very fast car,
+
+1598
+01:08:57,243 --> 01:08:59,510
+we could imagine a neural net that looks
+
+1599
+01:08:59,511 --> 01:09:00,996
+at the blueprints for a car
+
+1600
+01:09:00,996 --> 01:09:02,743
+and predicts how fast it will go.
+
+1601
+01:09:02,743 --> 01:09:04,337
+If we could then optimize
+
+1602
+01:09:04,337 --> 01:09:06,379
+with respect to the
+input of the neural net
+
+1603
+01:09:06,380 --> 01:09:07,600
+and find the blueprint
+
+1604
+01:09:07,600 --> 01:09:09,303
+that it predicts would go the fastest,
+
+1605
+01:09:09,303 --> 01:09:11,622
+we could build an incredibly fast car.
+
+1606
+01:09:11,622 --> 01:09:13,473
+Unfortunately, what we get right now
+
+1607
+01:09:13,474 --> 01:09:14,975
+is not a blueprint for a fast car.
+
+1608
+01:09:14,975 --> 01:09:16,959
+We get an adversarial
+example that the model
+
+1609
+01:09:16,959 --> 01:09:18,912
+thinks is going to be very fast.
+
+1610
+01:09:18,912 --> 01:09:21,758
+If we're able to solve the
+adversarial example problem,
+
+1611
+01:09:21,759 --> 01:09:23,063
+we'll be able to solve
+
+1612
+01:09:23,063 --> 01:09:25,201
+this model-based optimization problem.
+
+1613
+01:09:25,201 --> 01:09:27,580
+I like to call model-based optimization
+
+1614
+01:09:27,580 --> 01:09:29,884
+the universal engineering machine.
+
+1615
+01:09:29,884 --> 01:09:32,300
+If we're able to do
+model-based optimization,
+
+1616
+01:09:32,300 --> 01:09:34,060
+we'll be able to write down
+a function that describes
+
+1617
+01:09:34,060 --> 01:09:37,540
+a thing that doesn't exist
+yet but we wish that we had.
+
+1618
+01:09:37,540 --> 01:09:39,622
+And then gradient descent and neural nets
+
+1619
+01:09:39,622 --> 01:09:41,339
+will figure out how to build it for us.
+
+1620
+01:09:41,340 --> 01:09:44,040
+We can use that to design
+new genes and new molecules
+
+1621
+01:09:44,040 --> 01:09:45,420
+for medicinal drugs,
+
+1622
+01:09:45,420 --> 01:09:46,753
+and new circuits
+
+1623
+01:09:48,836 --> 01:09:51,857
+to make GPUs run faster
+and things like that.
+
+1624
+01:09:51,857 --> 01:09:53,697
+So I think overall, solving this problem
+
+1625
+01:09:53,697 --> 01:09:58,060
+could unlock a lot of potential
+technological advances.
+
+1626
+01:09:58,060 --> 01:10:00,439
+In conclusion, attacking
+machine learning models
+
+1627
+01:10:00,439 --> 01:10:01,660
+is extremely easy,
+
+1628
+01:10:01,660 --> 01:10:03,886
+and defending them is extremely difficult.
+
+1629
+01:10:03,886 --> 01:10:06,017
+If you use adversarial training
+
+1630
+01:10:06,017 --> 01:10:07,841
+you can get a little bit of a defense,
+
+1631
+01:10:07,841 --> 01:10:09,297
+but there's still many caveats
+
+1632
+01:10:09,297 --> 01:10:11,079
+associated with that defense.
+
+1633
+01:10:11,079 --> 01:10:13,500
+Adversarial training and
+virtual adversarial training
+
+1634
+01:10:13,500 --> 01:10:16,240
+also make it possible
+to regularize your model
+
+1635
+01:10:16,240 --> 01:10:18,119
+and even learn from unlabeled data
+
+1636
+01:10:18,119 --> 01:10:21,031
+so you can do better on
+regular test examples,
+
+1637
+01:10:21,031 --> 01:10:23,841
+even if you're not concerned
+about facing an adversary.
+
+1638
+01:10:23,841 --> 01:10:26,460
+And finally, if we're able to
+solve all of these problems,
+
+1639
+01:10:26,460 --> 01:10:29,757
+we'll be able to build a black
+box model-based optimization
+
+1640
+01:10:29,757 --> 01:10:32,620
+system that can solve all
+kinds of engineering problems
+
+1641
+01:10:32,620 --> 01:10:35,597
+that are holding us back
+in many different fields.
+
+1642
+01:10:35,597 --> 01:10:39,697
+I think I have a few
+minutes left for questions.
+
+1643
+01:10:39,697 --> 01:10:42,697
+[audience applauds]
+
+1644
+01:10:47,631 --> 01:10:50,798
+[speaker drowned out]
+
+1645
+01:10:57,256 --> 01:10:58,089
+Yeah.
+
+1646
+01:11:15,218 --> 01:11:16,051
+Oh, so,
+
+1647
+01:11:16,973 --> 01:11:18,618
+there's some determinism
+
+1648
+01:11:18,618 --> 01:11:22,493
+to the choice of those 50 directions.
+
+1649
+01:11:22,493 --> 01:11:23,496
+Oh right, yeah.
+
+1650
+01:11:23,496 --> 01:11:24,637
+So repeating the questions.
+
+1651
+01:11:24,637 --> 01:11:26,261
+I've said that the same perturbation
+
+1652
+01:11:26,261 --> 01:11:27,676
+can fool many different models
+
+1653
+01:11:27,676 --> 01:11:29,221
+or the same perturbation can be applied
+
+1654
+01:11:29,221 --> 01:11:31,599
+to many different clean examples.
+
+1655
+01:11:31,599 --> 01:11:33,162
+I've also said that the subspace
+
+1656
+01:11:33,162 --> 01:11:37,141
+of adversarial perturbations
+is only about 50 dimensional,
+
+1657
+01:11:37,141 --> 01:11:40,938
+even if the input dimension
+is 3,000 dimensional.
+
+1658
+01:11:40,938 --> 01:11:43,722
+So how is it that these
+subspaces intersect?
+
+1659
+01:11:43,722 --> 01:11:47,402
+The reason is that the choice
+of the subspace directions
+
+1660
+01:11:47,402 --> 01:11:49,077
+is not completely random.
+
+1661
+01:11:49,077 --> 01:11:51,595
+It's generally going to be something like
+
+1662
+01:11:51,595 --> 01:11:55,525
+pointing from one class centroid
+to another class centroid.
+
+1663
+01:11:55,525 --> 01:11:59,692
+And if you look at that vector
+and visualize it as an image,
+
+1664
+01:12:00,565 --> 01:12:03,138
+it might not be meaningful to a human
+
+1665
+01:12:03,138 --> 01:12:04,362
+just because humans aren't very good
+
+1666
+01:12:04,362 --> 01:12:06,717
+at imagining what class
+centroids look like.
+
+1667
+01:12:06,717 --> 01:12:07,946
+And we're really bad at imagining
+
+1668
+01:12:07,946 --> 01:12:10,140
+differences between centroids.
+
+1669
+01:12:10,140 --> 01:12:12,553
+But there is more or less
+this systematic effect
+
+1670
+01:12:12,553 --> 01:12:14,868
+that causes different models to learn
+
+1671
+01:12:14,868 --> 01:12:17,000
+similar linear functions,
+
+1672
+01:12:17,000 --> 01:12:21,167
+just because they're trying
+to solve the same task.
+
+1673
+01:12:22,282 --> 01:12:25,449
+[speaker drowned out]
+
+1674
+01:12:27,386 --> 01:12:29,359
+Yeah, so the question is,
+is it possible to identify
+
+1675
+01:12:29,359 --> 01:12:33,573
+which layer contributes
+the most to this issue?
+
+1676
+01:12:33,573 --> 01:12:35,656
+One thing is that if you,
+
+1677
+01:12:36,697 --> 01:12:39,002
+the last layer is somewhat important.
+
+1678
+01:12:39,002 --> 01:12:42,653
+Because, say that you
+made a feature extractor
+
+1679
+01:12:42,653 --> 01:12:45,263
+that's completely robust to
+adversarial perturbations
+
+1680
+01:12:45,263 --> 01:12:48,783
+and can shrink them to
+be very, very small,
+
+1681
+01:12:48,783 --> 01:12:51,022
+and then the last layer is still linear.
+
+1682
+01:12:51,022 --> 01:12:53,781
+Then it has all the problems
+that are typically associated
+
+1683
+01:12:53,781 --> 01:12:55,364
+with linear models.
+
+1684
+01:12:57,667 --> 01:13:00,157
+And generally you can
+do adversarial training
+
+1685
+01:13:00,157 --> 01:13:02,157
+where you perturb all
+the different layers,
+
+1686
+01:13:02,157 --> 01:13:04,042
+all the hidden layers
+as well as the input.
+
+1687
+01:13:04,042 --> 01:13:06,379
+In this lecture I only
+described perturbing the input
+
+1688
+01:13:06,379 --> 01:13:07,653
+because it seems like that's where
+
+1689
+01:13:07,653 --> 01:13:09,145
+most of the benefit comes from.
+
+1690
+01:13:09,145 --> 01:13:11,445
+The one thing that you can't
+do with adversarial training
+
+1691
+01:13:11,445 --> 01:13:14,279
+is perturb the very last
+layer before the softmax,
+
+1692
+01:13:14,279 --> 01:13:15,946
+because that linear layer at the end
+
+1693
+01:13:15,946 --> 01:13:18,661
+has no way of learning to
+resist the perturbations.
+
+1694
+01:13:18,661 --> 01:13:20,740
+Doing adversarial training at that layer
+
+1695
+01:13:20,740 --> 01:13:23,410
+usually just breaks the whole process.
+
+1696
+01:13:23,410 --> 01:13:27,896
+But other than that, it
+seems very problem dependent.
+
+1697
+01:13:27,896 --> 01:13:30,741
+There's a paper by Sara
+Sabour and her collaborators
+
+1698
+01:13:30,741 --> 01:13:34,238
+called Adversarial Manipulation
+of Deep Representations,
+
+1699
+01:13:34,238 --> 01:13:36,536
+where they design adversarial examples
+
+1700
+01:13:36,536 --> 01:13:41,439
+that are intended to fool
+different layers of the net.
+
+1701
+01:13:41,439 --> 01:13:43,225
+They report some things about, like,
+
+1702
+01:13:43,225 --> 01:13:45,418
+how large of a perturbation
+is needed at the input
+
+1703
+01:13:45,418 --> 01:13:47,338
+to get different sizes of perturbation
+
+1704
+01:13:47,338 --> 01:13:49,061
+at different hidden layers.
+
+1705
+01:13:49,061 --> 01:13:50,858
+I suspect that if you trained the model
+
+1706
+01:13:50,858 --> 01:13:52,616
+to resist perturbations at one layer,
+
+1707
+01:13:52,616 --> 01:13:54,315
+then another layer would
+become more vulnerable
+
+1708
+01:13:54,315 --> 01:13:57,398
+and it would be like a moving target.
+
+1709
+01:14:00,901 --> 01:14:04,068
+[speaker drowned out]
+
+1710
+01:14:09,775 --> 01:14:10,778
+Yes, so the question is,
+
+1711
+01:14:10,778 --> 01:14:12,197
+how many adversarial examples are needed
+
+1712
+01:14:12,197 --> 01:14:15,797
+to improve the misclassification rate?
+
+1713
+01:14:15,797 --> 01:14:20,200
+Some of our plots we
+include learning curves.
+
+1714
+01:14:20,200 --> 01:14:22,157
+Or some of our papers we
+include learning curves,
+
+1715
+01:14:22,157 --> 01:14:24,157
+so you can actually see,
+
+1716
+01:14:25,138 --> 01:14:26,602
+like in this one here.
+
+1717
+01:14:26,602 --> 01:14:29,874
+Every time we do an epoch
+we've generated the same
+
+1718
+01:14:29,874 --> 01:14:31,503
+number of adversarial examples
+
+1719
+01:14:31,503 --> 01:14:33,525
+as there are training examples.
+
+1720
+01:14:33,525 --> 01:14:37,701
+So every epoch here is
+50,000 adversarial examples.
+
+1721
+01:14:37,701 --> 01:14:41,056
+You can see that adversarial
+training is a very
+
+1722
+01:14:41,056 --> 01:14:43,381
+data hungry process.
+
+1723
+01:14:43,381 --> 01:14:45,861
+You need to make new adversarial examples
+
+1724
+01:14:45,861 --> 01:14:47,781
+every time you update the weights.
+
+1725
+01:14:47,781 --> 01:14:51,112
+And they're constantly
+changing in reaction to
+
+1726
+01:14:51,112 --> 01:14:54,862
+whatever the model has
+learned most recently.
+
+1727
+01:14:55,861 --> 01:14:59,028
+[speaker drowned out]
+
+1728
+01:15:07,264 --> 01:15:10,514
+Oh, the model-based optimization, yeah.
+
+1729
+01:15:11,837 --> 01:15:13,853
+Yeah, so the question is just to
+
+1730
+01:15:13,853 --> 01:15:16,277
+elaborate further on this problem.
+
+1731
+01:15:16,277 --> 01:15:20,341
+So most of the time that we
+have a machine learning model,
+
+1732
+01:15:20,341 --> 01:15:23,701
+it's something like a
+classifier or a regression model
+
+1733
+01:15:23,701 --> 01:15:26,741
+where we give it an
+input from the test set
+
+1734
+01:15:26,741 --> 01:15:29,040
+and it gives us an output.
+
+1735
+01:15:29,040 --> 01:15:31,474
+And usually that input
+is randomly occurring
+
+1736
+01:15:31,474 --> 01:15:34,981
+and comes from the same
+distribution as the training set.
+
+1737
+01:15:34,981 --> 01:15:37,178
+We usually just run the
+model, get its prediction,
+
+1738
+01:15:37,178 --> 01:15:39,435
+and then we're done with it.
+
+1739
+01:15:39,435 --> 01:15:42,019
+Sometimes we have feedback loops,
+
+1740
+01:15:42,019 --> 01:15:44,297
+like for recommender systems.
+
+1741
+01:15:44,297 --> 01:15:47,547
+If you work at Netflix and you recommend
+
+1742
+01:15:47,547 --> 01:15:50,707
+a movie to a viewer,
+then they're more likely
+
+1743
+01:15:50,707 --> 01:15:52,757
+to watch that movie and then rate it,
+
+1744
+01:15:52,757 --> 01:15:54,661
+and then there's going
+to be more ratings of it
+
+1745
+01:15:54,661 --> 01:15:55,658
+in your training set
+
+1746
+01:15:55,658 --> 01:15:57,440
+so you'll recommend it to
+more people in the future.
+
+1747
+01:15:57,440 --> 01:15:58,661
+So there's this feedback loop
+
+1748
+01:15:58,661 --> 01:16:00,936
+from the output of your
+model to the input.
+
+1749
+01:16:00,936 --> 01:16:04,677
+Most of the time when we
+build machine vision systems,
+
+1750
+01:16:04,677 --> 01:16:08,522
+there's no feedback loop from
+their output to their input.
+
+1751
+01:16:08,522 --> 01:16:09,541
+If we imagine a setting
+
+1752
+01:16:09,541 --> 01:16:11,440
+where we start using an
+optimization algorithm
+
+1753
+01:16:11,440 --> 01:16:15,607
+to find inputs that maximize
+some property of the output,
+
+1754
+01:16:17,298 --> 01:16:18,842
+like if we have a model that looks
+
+1755
+01:16:18,842 --> 01:16:20,602
+at the blueprints of a car
+
+1756
+01:16:20,602 --> 01:16:24,122
+and outputs the expected speed of the car,
+
+1757
+01:16:24,122 --> 01:16:27,498
+then we could use gradient ascent
+
+1758
+01:16:27,498 --> 01:16:29,578
+to look for the blueprints that correspond
+
+1759
+01:16:29,578 --> 01:16:31,895
+to the fastest possible car.
+
+1760
+01:16:31,895 --> 01:16:33,674
+Or for example if we're
+designing a medicine,
+
+1761
+01:16:33,674 --> 01:16:36,618
+we could look for the molecular structure
+
+1762
+01:16:36,618 --> 01:16:40,842
+that we think is most likely
+to cure some form of cancer,
+
+1763
+01:16:40,842 --> 01:16:42,720
+or the least likely to cause
+
+1764
+01:16:42,720 --> 01:16:45,976
+some kind of liver toxicity effect.
+
+1765
+01:16:45,976 --> 01:16:49,162
+The problem is that once
+we start using optimization
+
+1766
+01:16:49,162 --> 01:16:50,720
+to look for these inputs
+
+1767
+01:16:50,720 --> 01:16:53,061
+that maximize the output of the model,
+
+1768
+01:16:53,061 --> 01:16:56,761
+the input is no longer
+an independent sample
+
+1769
+01:16:56,761 --> 01:16:58,202
+from the same distribution
+
+1770
+01:16:58,202 --> 01:17:00,557
+as we used at the training set time.
+
+1771
+01:17:00,557 --> 01:17:04,202
+The model is now guiding the process
+
+1772
+01:17:04,202 --> 01:17:06,218
+that generates the data.
+
+1773
+01:17:06,218 --> 01:17:10,385
+So we end up finding essentially
+adversarial examples.
+
+1774
+01:17:11,246 --> 01:17:13,104
+Instead of the model telling us
+
+1775
+01:17:13,104 --> 01:17:15,242
+how we can improve the input,
+
+1776
+01:17:15,242 --> 01:17:16,901
+what we usually find in practice
+
+1777
+01:17:16,901 --> 01:17:19,720
+is that we've got an
+input that fools the model
+
+1778
+01:17:19,720 --> 01:17:23,141
+into thinking that the input
+corresponds to something great.
+
+1779
+01:17:23,141 --> 01:17:26,282
+So we'd find molecules that are very toxic
+
+1780
+01:17:26,282 --> 01:17:28,901
+but the model thinks
+they're very non-toxic.
+
+1781
+01:17:28,901 --> 01:17:30,464
+Or we'd find cars that are very slow
+
+1782
+01:17:30,464 --> 01:17:33,381
+but the model thinks are very fast.
+
+1783
+01:17:35,621 --> 01:17:38,788
+[speaker drowned out]
+
+1784
+01:17:54,678 --> 01:17:56,017
+Yeah, so the question is,
+
+1785
+01:17:56,017 --> 01:17:58,859
+here the frog class is boosted by going
+
+1786
+01:17:58,859 --> 01:18:01,936
+in either the positive or
+negative adversarial direction.
+
+1787
+01:18:01,936 --> 01:18:06,276
+And in some of the other
+slides, like these maps,
+
+1788
+01:18:06,276 --> 01:18:09,217
+you don't get that effect
+where subtracting epsilon off
+
+1789
+01:18:09,217 --> 01:18:12,097
+eventually boosts the adversarial class.
+
+1790
+01:18:12,097 --> 01:18:13,819
+Part of what's going on is
+
+1791
+01:18:13,819 --> 01:18:16,496
+I think I'm using larger epsilon here.
+
+1792
+01:18:16,496 --> 01:18:18,135
+And so you might
+eventually see that effect
+
+1793
+01:18:18,135 --> 01:18:20,038
+if I'd made these maps wider.
+
+1794
+01:18:20,038 --> 01:18:21,627
+I made the maps narrower because
+
+1795
+01:18:21,627 --> 01:18:25,034
+it's like quadratic time to build a 2D map
+
+1796
+01:18:25,034 --> 01:18:29,639
+and it's linear time to
+build a 1D cross section.
+
+1797
+01:18:29,639 --> 01:18:33,197
+So I just didn't afford the GPU time
+
+1798
+01:18:33,197 --> 01:18:35,278
+to make the maps quite as wide.
+
+1799
+01:18:35,278 --> 01:18:37,009
+I also think that this might just be
+
+1800
+01:18:37,009 --> 01:18:39,999
+a weird effect that happened
+randomly on this one example.
+
+1801
+01:18:39,999 --> 01:18:42,742
+It's not something that I
+remember being used to seeing
+
+1802
+01:18:42,742 --> 01:18:43,878
+a lot of the time.
+
+1803
+01:18:43,878 --> 01:18:45,441
+Most things that I observe
+
+1804
+01:18:45,441 --> 01:18:47,495
+don't happen perfectly consistently.
+
+1805
+01:18:47,495 --> 01:18:50,582
+But if they happen, like, 80% of the time
+
+1806
+01:18:50,582 --> 01:18:52,598
+then I'll put them in my slide.
+
+1807
+01:18:52,598 --> 01:18:54,823
+A lot of what we're doing is
+trying trying to figure out
+
+1808
+01:18:54,823 --> 01:18:56,118
+more or less what's going on,
+
+1809
+01:18:56,118 --> 01:18:58,641
+and so if we find that something
+happens 80% of the time,
+
+1810
+01:18:58,641 --> 01:19:02,198
+then I consider it to be
+the dominant phenomenon
+
+1811
+01:19:02,198 --> 01:19:03,934
+that we're trying to explain.
+
+1812
+01:19:03,934 --> 01:19:06,102
+And after we've got a
+better explanation for that
+
+1813
+01:19:06,102 --> 01:19:07,739
+then I might start to try to explain
+
+1814
+01:19:07,739 --> 01:19:09,276
+some of the weirder things that happen,
+
+1815
+01:19:09,276 --> 01:19:13,109
+like the frog happening
+with negative epsilon.
+
+1816
+01:19:15,415 --> 01:19:18,582
+[speaker drowned out]
+
+1817
+01:19:22,436 --> 01:19:24,062
+I didn't fully understand the question.
+
+1818
+01:19:24,062 --> 01:19:28,145
+It's about the dimensionality
+of the adversarial?
+
+1819
+01:19:34,484 --> 01:19:35,801
+Oh, okay.
+
+1820
+01:19:35,801 --> 01:19:37,504
+So the question is, how is the dimension
+
+1821
+01:19:37,504 --> 01:19:39,243
+of the adversarial subspace related
+
+1822
+01:19:39,243 --> 01:19:40,827
+to the dimension of the input?
+
+1823
+01:19:40,827 --> 01:19:44,078
+And my answer is somewhat embarrassing,
+
+1824
+01:19:44,078 --> 01:19:47,042
+which is that we've only run
+this method on two datasets,
+
+1825
+01:19:47,042 --> 01:19:49,926
+so we actually don't have a good idea yet.
+
+1826
+01:19:49,926 --> 01:19:53,526
+But I think it's something
+interesting to study.
+
+1827
+01:19:53,526 --> 01:19:57,104
+If I remember correctly, my
+coauthors open sourced our code.
+
+1828
+01:19:57,104 --> 01:19:59,323
+So you could probably run it on ImageNet
+
+1829
+01:19:59,323 --> 01:20:01,406
+without too much trouble.
+
+1830
+01:20:02,261 --> 01:20:04,150
+My contribution to that paper was in
+
+1831
+01:20:04,150 --> 01:20:06,066
+the week that I was unemployed
+
+1832
+01:20:06,066 --> 01:20:09,417
+between working at OpenAI
+and working at Google,
+
+1833
+01:20:09,417 --> 01:20:11,030
+so I had access to no GPUS
+
+1834
+01:20:11,030 --> 01:20:14,288
+and I ran that experiment
+on my laptop on CPU,
+
+1835
+01:20:14,288 --> 01:20:18,455
+so it's only really small
+datasets. [chuckles]
+
+1836
+01:20:19,766 --> 01:20:22,933
+[speaker drowned out]
+
+1837
+01:20:40,233 --> 01:20:44,248
+Oh, so the question is,
+do we end up perturbing
+
+1838
+01:20:44,248 --> 01:20:47,695
+clean examples to low
+confidence adversarial examples?
+
+1839
+01:20:47,695 --> 01:20:50,633
+Yeah, in practice we usually find that
+
+1840
+01:20:50,633 --> 01:20:53,843
+we can get very high confidence
+on the output examples.
+
+1841
+01:20:53,843 --> 01:20:57,156
+One thing in high dimensions
+that's a little bit unintuitive
+
+1842
+01:20:57,156 --> 01:21:00,313
+is that just getting the sign right
+
+1843
+01:21:00,313 --> 01:21:03,353
+on very many of the input pixels
+
+1844
+01:21:03,353 --> 01:21:06,516
+is enough to get a really strong response.
+
+1845
+01:21:06,516 --> 01:21:09,845
+So the angle between the weight vector
+
+1846
+01:21:09,845 --> 01:21:13,492
+matters a lot more than
+the exact coordinates
+
+1847
+01:21:13,492 --> 01:21:15,825
+in high dimensional systems.
+
+1848
+01:21:18,255 --> 01:21:20,087
+Does that make enough sense?
+
+1849
+01:21:20,087 --> 01:21:21,004
+Yeah, okay.
+
+1850
+01:21:21,868 --> 01:21:23,673
+- [Man] So we're actually
+going to [mumbles].
+
+1851
+01:21:23,673 --> 01:21:26,095
+So if you guys need to leave, that's fine.
+
+1852
+01:21:26,095 --> 01:21:28,175
+But let's thank our speaker one more time
+
+1853
+01:21:28,175 --> 00:00:00,000
+for getting--
+[audience applauds]
+

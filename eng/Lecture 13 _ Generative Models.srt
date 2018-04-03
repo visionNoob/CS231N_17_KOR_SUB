@@ -1,0 +1,6854 @@
+1
+00:00:11,077 --> 00:00:14,258
+- Okay we have a lot to cover
+today so let's get started.
+
+2
+00:00:14,258 --> 00:00:17,454
+Today we'll be talking
+about Generative Models.
+
+3
+00:00:17,454 --> 00:00:20,484
+And before we start, a few
+administrative details.
+
+4
+00:00:20,484 --> 00:00:23,522
+So midterm grades will be
+released on Gradescope this week
+
+5
+00:00:23,522 --> 00:00:27,730
+A reminder that A3 is
+due next Friday May 26th.
+
+6
+00:00:27,730 --> 00:00:30,376
+The HyperQuest deadline for
+extra credit you can do this
+
+7
+00:00:30,376 --> 00:00:32,709
+still until Sunday May 21st.
+
+8
+00:00:33,632 --> 00:00:37,799
+And our poster session is
+June 6th from 12 to 3 P.M..
+
+9
+00:00:40,812 --> 00:00:43,095
+Okay so an overview of what
+we're going to talk about today
+
+10
+00:00:43,095 --> 00:00:44,646
+we're going to switch gears a little bit
+
+11
+00:00:44,646 --> 00:00:47,759
+and take a look at
+unsupervised learning today.
+
+12
+00:00:47,759 --> 00:00:50,686
+And in particular we're going
+to talk about generative
+
+13
+00:00:50,686 --> 00:00:54,103
+models which is a type
+of unsupervised learning.
+
+14
+00:00:54,103 --> 00:00:57,112
+And we'll look at three
+types of generative models.
+
+15
+00:00:57,112 --> 00:01:01,174
+So pixelRNNs and pixelCNNs
+variational autoencoders
+
+16
+00:01:01,174 --> 00:01:04,174
+and Generative Adversarial networks.
+
+17
+00:01:05,571 --> 00:01:07,847
+So so far in this class we've
+talked a lot about supervised
+
+18
+00:01:07,847 --> 00:01:09,672
+learning and different kinds
+
+19
+00:01:09,672 --> 00:01:11,168
+of supervised learning problems.
+
+20
+00:01:11,168 --> 00:01:14,247
+So in the supervised learning
+set up we have our data X and
+
+21
+00:01:14,247 --> 00:01:16,078
+then we have some labels Y.
+
+22
+00:01:16,078 --> 00:01:19,063
+And our goal is to learn
+a function that's mapping
+
+23
+00:01:19,063 --> 00:01:21,417
+from our data X to our labels Y.
+
+24
+00:01:21,417 --> 00:01:26,237
+And these labels can take
+many different types of forms.
+
+25
+00:01:26,237 --> 00:01:28,390
+So for example, we've
+looked at classification
+
+26
+00:01:28,390 --> 00:01:30,303
+where our input is an image
+
+27
+00:01:30,303 --> 00:01:34,934
+and we want to output Y, a
+class label for the category.
+
+28
+00:01:34,934 --> 00:01:37,214
+We've talked about object
+detection where now our input
+
+29
+00:01:37,214 --> 00:01:39,926
+is still an image but
+here we want to output the
+
+30
+00:01:39,926 --> 00:01:44,093
+bounding boxes of instances of
+up to multiple dogs or cats.
+
+31
+00:01:46,138 --> 00:01:48,532
+We've talked about semantic
+segmentation where here we have
+
+32
+00:01:48,532 --> 00:01:51,069
+a label for every pixel the
+category that every pixel
+
+33
+00:01:51,069 --> 00:01:51,986
+belongs to.
+
+34
+00:01:53,572 --> 00:01:55,298
+And we've also talked
+about image captioning
+
+35
+00:01:55,298 --> 00:01:58,961
+where here our label is now a sentence
+
+36
+00:01:58,961 --> 00:02:02,961
+and so it's now in the
+form of natural language.
+
+37
+00:02:03,998 --> 00:02:06,534
+So unsupervised learning in this set up,
+
+38
+00:02:06,534 --> 00:02:08,095
+it's a type of learning where here we have
+
+39
+00:02:08,095 --> 00:02:11,520
+unlabeled training data and
+our goal now is to learn some
+
+40
+00:02:11,520 --> 00:02:15,661
+underlying hidden structure of the data.
+
+41
+00:02:15,661 --> 00:02:17,439
+Right, so an example of
+this can be something like
+
+42
+00:02:17,439 --> 00:02:20,370
+clustering which you guys
+might have seen before
+
+43
+00:02:20,370 --> 00:02:22,534
+where here the goal is to
+find groups within the data
+
+44
+00:02:22,534 --> 00:02:25,029
+that are similar through
+some type of metric.
+
+45
+00:02:25,029 --> 00:02:27,187
+For example, K means clustering.
+
+46
+00:02:27,187 --> 00:02:30,371
+Another example of an
+unsupervised learning task
+
+47
+00:02:30,371 --> 00:02:32,871
+is a dimensionality reduction.
+
+48
+00:02:33,777 --> 00:02:36,634
+So in this problem want
+to find axes along which
+
+49
+00:02:36,634 --> 00:02:38,939
+our training data has the most variation,
+
+50
+00:02:38,939 --> 00:02:42,298
+and so these axes are part
+of the underlying structure
+
+51
+00:02:42,298 --> 00:02:43,537
+of the data.
+
+52
+00:02:43,537 --> 00:02:45,685
+And then we can use this
+to reduce of dimensionality
+
+53
+00:02:45,685 --> 00:02:48,918
+of the data such that the
+data has significant variation
+
+54
+00:02:48,918 --> 00:02:51,095
+among each of the remaining dimensions.
+
+55
+00:02:51,095 --> 00:02:52,938
+Right, so this example
+here we start off with data
+
+56
+00:02:52,938 --> 00:02:56,014
+in three dimensions and
+we're going to find two
+
+57
+00:02:56,014 --> 00:02:57,842
+axes of variation in this case
+
+58
+00:02:57,842 --> 00:03:01,259
+and reduce our data projected down to 2D.
+
+59
+00:03:04,205 --> 00:03:06,214
+Another example of unsupervised learning
+
+60
+00:03:06,214 --> 00:03:09,964
+is learning feature
+representations for data.
+
+61
+00:03:11,006 --> 00:03:14,137
+We've seen how to do this
+in supervised ways before
+
+62
+00:03:14,137 --> 00:03:15,645
+where we used the supervised loss,
+
+63
+00:03:15,645 --> 00:03:17,209
+for example classification.
+
+64
+00:03:17,209 --> 00:03:19,743
+Where we have the classification label.
+
+65
+00:03:19,743 --> 00:03:21,617
+We have something like a Softmax loss
+
+66
+00:03:21,617 --> 00:03:23,671
+And we can train a neural network where
+
+67
+00:03:23,671 --> 00:03:25,635
+we can interpret activations for example
+
+68
+00:03:25,635 --> 00:03:27,723
+our FC7 layers as some kind of future
+
+69
+00:03:27,723 --> 00:03:29,869
+representation for the data.
+
+70
+00:03:29,869 --> 00:03:31,791
+And in an unsupervised setting,
+
+71
+00:03:31,791 --> 00:03:34,492
+for example here
+autoencoders which we'll talk
+
+72
+00:03:34,492 --> 00:03:35,742
+more about later
+
+73
+00:03:35,742 --> 00:03:38,349
+In this case our loss is now trying to
+
+74
+00:03:38,349 --> 00:03:41,962
+reconstruct the input data to basically,
+
+75
+00:03:41,962 --> 00:03:44,685
+you have a good reconstruction
+of our input data
+
+76
+00:03:44,685 --> 00:03:46,872
+and use this to learn features.
+
+77
+00:03:46,872 --> 00:03:49,162
+So we're learning a feature
+representation without
+
+78
+00:03:49,162 --> 00:03:52,245
+using any additional external labels.
+
+79
+00:03:53,471 --> 00:03:56,411
+And finally another example
+of unsupervised learning
+
+80
+00:03:56,411 --> 00:03:59,585
+is density estimation where
+in this case we want to
+
+81
+00:03:59,585 --> 00:04:02,884
+estimate the underlying
+distribution of our data.
+
+82
+00:04:02,884 --> 00:04:05,581
+So for example in this top case over here,
+
+83
+00:04:05,581 --> 00:04:08,432
+we have points in 1-d and we can try
+
+84
+00:04:08,432 --> 00:04:10,811
+and fit a Gaussian into this density
+
+85
+00:04:10,811 --> 00:04:13,757
+and in this bottom example
+over here it's 2D data
+
+86
+00:04:13,757 --> 00:04:16,605
+and here again we're trying
+to estimate the density and
+
+87
+00:04:16,605 --> 00:04:18,750
+we can model this density.
+
+88
+00:04:18,750 --> 00:04:20,988
+We want to fit a model such
+that the density is higher
+
+89
+00:04:20,988 --> 00:04:24,239
+where there's more points concentrated.
+
+90
+00:04:26,100 --> 00:04:29,377
+And so to summarize the
+differences in unsupervised
+
+91
+00:04:29,377 --> 00:04:32,069
+learning which we've looked a lot so far,
+
+92
+00:04:32,069 --> 00:04:33,657
+we want to use label data to learn
+
+93
+00:04:33,657 --> 00:04:35,990
+a function mapping from X to Y
+
+94
+00:04:35,990 --> 00:04:38,515
+and an unsupervised
+learning we use no labels
+
+95
+00:04:38,515 --> 00:04:40,716
+and instead we try to learn
+some underlying hidden
+
+96
+00:04:40,716 --> 00:04:44,124
+structure of the data,
+whether this is grouping,
+
+97
+00:04:44,124 --> 00:04:48,291
+acts as a variation or
+underlying density estimation.
+
+98
+00:04:49,662 --> 00:04:51,855
+And unsupervised learning is a huge
+
+99
+00:04:51,855 --> 00:04:54,113
+and really exciting area of research and
+
+100
+00:04:54,113 --> 00:04:57,074
+and some of the reasons are
+that training data is really
+
+101
+00:04:57,074 --> 00:04:59,898
+cheap, it doesn't use labels
+so we're able to learn
+
+102
+00:04:59,898 --> 00:05:04,339
+from a lot of data at one time
+and basically utilize a lot
+
+103
+00:05:04,339 --> 00:05:07,672
+more data than if we required annotating
+
+104
+00:05:07,672 --> 00:05:09,977
+or finding labels for data.
+
+105
+00:05:09,977 --> 00:05:13,345
+And unsupervised learning
+is still relatively
+
+106
+00:05:13,345 --> 00:05:15,758
+unsolved research area by comparison.
+
+107
+00:05:15,758 --> 00:05:17,823
+There's a lot of open problems in this,
+
+108
+00:05:17,823 --> 00:05:20,483
+but it also, it holds the potential of
+
+109
+00:05:20,483 --> 00:05:22,029
+if you're able to successfully learn
+
+110
+00:05:22,029 --> 00:05:24,669
+and represent a lot of
+the underlying structure
+
+111
+00:05:24,669 --> 00:05:26,434
+in the data then this also takes you a
+
+112
+00:05:26,434 --> 00:05:30,229
+long way towards the Holy Grail
+of trying to understand the
+
+113
+00:05:30,229 --> 00:05:32,729
+structure of the visual world.
+
+114
+00:05:35,026 --> 00:05:38,222
+So that's a little bit of kind
+of a high-level big picture
+
+115
+00:05:38,222 --> 00:05:40,432
+view of unsupervised learning.
+
+116
+00:05:40,432 --> 00:05:44,155
+And today will focus more
+specifically on generative models
+
+117
+00:05:44,155 --> 00:05:46,996
+which is a class of
+models for unsupervised
+
+118
+00:05:46,996 --> 00:05:50,369
+learning where given training
+data our goal is to try and
+
+119
+00:05:50,369 --> 00:05:52,933
+generate new samples from
+the same distribution.
+
+120
+00:05:52,933 --> 00:05:55,441
+Right, so we have training
+data over here generated
+
+121
+00:05:55,441 --> 00:05:57,686
+from some distribution P data
+
+122
+00:05:57,686 --> 00:06:00,769
+and we want to learn a model, P model
+
+123
+00:06:01,872 --> 00:06:04,955
+to generate samples from
+the same distribution
+
+124
+00:06:04,955 --> 00:06:09,854
+and so we want to learn P
+model to be similar to P data.
+
+125
+00:06:09,854 --> 00:06:12,636
+And generative models
+address density estimations.
+
+126
+00:06:12,636 --> 00:06:14,551
+So this problem that we
+saw earlier of trying
+
+127
+00:06:14,551 --> 00:06:18,217
+to estimate the underlying
+distribution of your
+
+128
+00:06:18,217 --> 00:06:20,093
+training data which is a core problem
+
+129
+00:06:20,093 --> 00:06:22,180
+in unsupervised learning.
+
+130
+00:06:22,180 --> 00:06:25,190
+And we'll see that there's
+several flavors of this.
+
+131
+00:06:25,190 --> 00:06:28,461
+We can use generative models
+to do explicit density
+
+132
+00:06:28,461 --> 00:06:31,270
+estimation where we're
+going to explicitly define
+
+133
+00:06:31,270 --> 00:06:33,353
+and solve for our P model
+
+134
+00:06:35,045 --> 00:06:37,610
+or we can also do implicit
+density estimation
+
+135
+00:06:37,610 --> 00:06:40,868
+where in this case we'll
+learn a model that can
+
+136
+00:06:40,868 --> 00:06:45,035
+produce samples from P model
+without explicitly defining it.
+
+137
+00:06:47,700 --> 00:06:50,016
+So, why do we care
+about generative models?
+
+138
+00:06:50,016 --> 00:06:52,584
+Why is this a really
+interesting core problem
+
+139
+00:06:52,584 --> 00:06:54,096
+in unsupervised learning?
+
+140
+00:06:54,096 --> 00:06:55,868
+Well there's a lot of
+things that we can do
+
+141
+00:06:55,868 --> 00:06:57,451
+with generative models.
+
+142
+00:06:57,451 --> 00:07:01,243
+If we're able to create
+realistic samples from the data
+
+143
+00:07:01,243 --> 00:07:03,826
+distributions that we want
+we can do really cool things
+
+144
+00:07:03,826 --> 00:07:04,659
+with this, right?
+
+145
+00:07:04,659 --> 00:07:07,143
+We can generate just
+beautiful samples to start
+
+146
+00:07:07,143 --> 00:07:11,334
+with so on the left you can
+see a completely new samples of
+
+147
+00:07:11,334 --> 00:07:14,568
+just generated by these generative models.
+
+148
+00:07:14,568 --> 00:07:17,387
+Also in the center here
+generated samples of
+
+149
+00:07:17,387 --> 00:07:21,042
+images we can also do tasks
+like super resolution,
+
+150
+00:07:21,042 --> 00:07:25,232
+colorization so hallucinating
+or filling in these edges
+
+151
+00:07:25,232 --> 00:07:27,732
+with generated ideas of colors
+
+152
+00:07:30,078 --> 00:07:32,145
+and what the purse should look like.
+
+153
+00:07:32,145 --> 00:07:36,022
+We can also use generative
+models of time series data
+
+154
+00:07:36,022 --> 00:07:39,147
+for simulation and planning
+and so this will be useful in
+
+155
+00:07:39,147 --> 00:07:41,619
+for reinforcement learning applications
+
+156
+00:07:41,619 --> 00:07:43,558
+which we'll talk a bit more
+about reinforcement learning
+
+157
+00:07:43,558 --> 00:07:45,089
+in a later lecture.
+
+158
+00:07:45,089 --> 00:07:48,190
+And training generative
+models can also enable
+
+159
+00:07:48,190 --> 00:07:50,261
+inference of latent representations.
+
+160
+00:07:50,261 --> 00:07:54,018
+Learning latent features
+that can be useful
+
+161
+00:07:54,018 --> 00:07:57,435
+as general features for downstream tasks.
+
+162
+00:07:59,059 --> 00:08:02,188
+So if we look at types
+of generative models
+
+163
+00:08:02,188 --> 00:08:05,688
+these can be organized
+into the taxonomy here
+
+164
+00:08:05,688 --> 00:08:08,789
+where we have these two major
+branches that we talked about,
+
+165
+00:08:08,789 --> 00:08:13,180
+explicit density models and
+implicit density models.
+
+166
+00:08:13,180 --> 00:08:16,202
+And then we can also get down into many
+
+167
+00:08:16,202 --> 00:08:19,062
+of these other sub categories.
+
+168
+00:08:19,062 --> 00:08:23,423
+And well we can refer to
+this figure is adapted
+
+169
+00:08:23,423 --> 00:08:27,814
+from a tutorial on GANs
+from Ian Goodfellow
+
+170
+00:08:27,814 --> 00:08:29,713
+and so if you're interested in some
+
+171
+00:08:29,713 --> 00:08:32,501
+of these different taxonomy
+and categorizations of
+
+172
+00:08:32,501 --> 00:08:35,749
+generative models this is a
+good resource that you can take
+
+173
+00:08:35,749 --> 00:08:36,861
+a look at.
+
+174
+00:08:36,861 --> 00:08:39,052
+But today we're going to
+discuss three of the most
+
+175
+00:08:39,052 --> 00:08:43,259
+popular types of generative
+models that are in use
+
+176
+00:08:43,259 --> 00:08:45,645
+and in research today.
+
+177
+00:08:45,645 --> 00:08:49,475
+And so we'll talk first briefly
+about pixelRNNs and CNNs
+
+178
+00:08:49,475 --> 00:08:52,162
+And then we'll talk about
+variational autoencoders.
+
+179
+00:08:52,162 --> 00:08:55,661
+These are both types of
+explicit density models.
+
+180
+00:08:55,661 --> 00:08:57,494
+One that's using a tractable density
+
+181
+00:08:57,494 --> 00:09:01,312
+and another that's using
+an approximate density
+
+182
+00:09:01,312 --> 00:09:05,614
+And then we'll talk about
+generative adversarial networks,
+
+183
+00:09:05,614 --> 00:09:09,781
+GANs which are a type of
+implicit density estimation.
+
+184
+00:09:12,152 --> 00:09:16,304
+So let's first talk
+about pixelRNNs and CNNs.
+
+185
+00:09:16,304 --> 00:09:20,015
+So these are a type of fully
+visible belief networks
+
+186
+00:09:20,015 --> 00:09:22,432
+which are modeling a density explicitly
+
+187
+00:09:22,432 --> 00:09:25,966
+so in this case what
+they do is we have this
+
+188
+00:09:25,966 --> 00:09:28,958
+image data X that we have
+and we want to model the
+
+189
+00:09:28,958 --> 00:09:32,236
+probability or likelihood
+of this image P of X.
+
+190
+00:09:32,236 --> 00:09:34,941
+Right and so in this case,
+for these kinds of models,
+
+191
+00:09:34,941 --> 00:09:37,646
+we use the chain rule to
+decompose this likelihood
+
+192
+00:09:37,646 --> 00:09:40,384
+into a product of one
+dimensional distribution.
+
+193
+00:09:40,384 --> 00:09:43,493
+So we have here the
+probability of each pixel X I
+
+194
+00:09:43,493 --> 00:09:47,871
+conditioned on all previous
+pixels X1 through XI - 1.
+
+195
+00:09:47,871 --> 00:09:50,495
+and your likelihood all
+right, your joint likelihood
+
+196
+00:09:50,495 --> 00:09:53,416
+of all the pixels in your image
+is going to be the product
+
+197
+00:09:53,416 --> 00:09:55,474
+of all of these pixels together,
+
+198
+00:09:55,474 --> 00:09:58,073
+all of these likelihoods together.
+
+199
+00:09:58,073 --> 00:10:00,690
+And then once we define this likelihood,
+
+200
+00:10:00,690 --> 00:10:04,428
+in order to train this
+model we can just maximize
+
+201
+00:10:04,428 --> 00:10:06,688
+the likelihood of our training data
+
+202
+00:10:06,688 --> 00:10:08,938
+under this defined density.
+
+203
+00:10:10,980 --> 00:10:14,334
+So if we look at this this
+distribution over pixel values
+
+204
+00:10:14,334 --> 00:10:17,319
+right, we have this P of
+XI given all the previous
+
+205
+00:10:17,319 --> 00:10:20,833
+pixel values, well this is a
+really complex distribution.
+
+206
+00:10:20,833 --> 00:10:22,700
+So how can we model this?
+
+207
+00:10:22,700 --> 00:10:25,478
+Well we've seen before that
+if we want to have complex
+
+208
+00:10:25,478 --> 00:10:29,042
+transformations we can do
+these using neural networks.
+
+209
+00:10:29,042 --> 00:10:31,766
+Neural networks are a good
+way to express complex
+
+210
+00:10:31,766 --> 00:10:32,828
+transformations.
+
+211
+00:10:32,828 --> 00:10:36,189
+And so what we'll do is
+we'll use a neural network
+
+212
+00:10:36,189 --> 00:10:40,633
+to express this complex
+function that we have
+
+213
+00:10:40,633 --> 00:10:42,300
+of the distribution.
+
+214
+00:10:43,235 --> 00:10:44,796
+And one thing you'll see here is that,
+
+215
+00:10:44,796 --> 00:10:47,379
+okay even if we're going to
+use a neural network for this
+
+216
+00:10:47,379 --> 00:10:50,379
+another thing we have to take
+care of is how do we order
+
+217
+00:10:50,379 --> 00:10:51,212
+the pixels.
+
+218
+00:10:51,212 --> 00:10:54,009
+Right, I said here that
+we have a distribution
+
+219
+00:10:54,009 --> 00:10:56,577
+for P of XI given all previous pixels
+
+220
+00:10:56,577 --> 00:10:58,886
+but what does all
+previous the pixels mean?
+
+221
+00:10:58,886 --> 00:11:01,303
+So we'll take a look at that.
+
+222
+00:11:03,336 --> 00:11:06,669
+So PixelRNN was a model proposed in 2016
+
+223
+00:11:07,595 --> 00:11:11,762
+that basically defines a way
+for setting up and optimizing
+
+224
+00:11:14,949 --> 00:11:17,657
+this problem and so
+how this model works is
+
+225
+00:11:17,657 --> 00:11:19,479
+that we're going to
+generate pixels starting
+
+226
+00:11:19,479 --> 00:11:21,187
+in a corner of the image.
+
+227
+00:11:21,187 --> 00:11:25,767
+So we can look at this grid
+as basically the pixels
+
+228
+00:11:25,767 --> 00:11:28,039
+of your image and so what
+we're going to do is start
+
+229
+00:11:28,039 --> 00:11:31,050
+from the pixel in the
+upper left-hand corner
+
+230
+00:11:31,050 --> 00:11:34,548
+and then we're going to
+sequentially generate pixels based
+
+231
+00:11:34,548 --> 00:11:36,131
+on these connections from the arrows
+
+232
+00:11:36,131 --> 00:11:37,195
+that you can see here.
+
+233
+00:11:37,195 --> 00:11:39,962
+And each of the dependencies
+on the previous pixels
+
+234
+00:11:39,962 --> 00:11:44,332
+in this ordering is going
+to be modeled using an RNN
+
+235
+00:11:44,332 --> 00:11:47,114
+or more specifically an
+LSTM which we've seen before
+
+236
+00:11:47,114 --> 00:11:48,092
+in lecture.
+
+237
+00:11:48,092 --> 00:11:51,385
+Right so using this we can
+basically continue to move
+
+238
+00:11:51,385 --> 00:11:55,242
+forward just moving
+down a long is diagonal
+
+239
+00:11:55,242 --> 00:11:57,860
+and generating all of these
+pixel values dependent
+
+240
+00:11:57,860 --> 00:12:01,244
+on the pixels that they're connected to.
+
+241
+00:12:01,244 --> 00:12:03,925
+And so this works really
+well but the drawback here
+
+242
+00:12:03,925 --> 00:12:05,908
+is that this sequential generation, right,
+
+243
+00:12:05,908 --> 00:12:08,736
+so it's actually quite slow to do this.
+
+244
+00:12:08,736 --> 00:12:10,869
+You can imagine you know if
+you're going to generate a new
+
+245
+00:12:10,869 --> 00:12:13,334
+image instead of all of these
+feed forward networks that we
+
+246
+00:12:13,334 --> 00:12:15,061
+see, we've seen with CNNs.
+
+247
+00:12:15,061 --> 00:12:16,952
+Here we're going to have
+to iteratively go through
+
+248
+00:12:16,952 --> 00:12:20,952
+and generate all these
+images, all these pixels.
+
+249
+00:12:24,044 --> 00:12:27,499
+So a little bit later, after a pixelRNN,
+
+250
+00:12:27,499 --> 00:12:30,575
+another model called
+pixelCNN was introduced.
+
+251
+00:12:30,575 --> 00:12:34,570
+And this has very
+similar setup as pixelCNN
+
+252
+00:12:34,570 --> 00:12:36,887
+and we're still going to
+do this image generation
+
+253
+00:12:36,887 --> 00:12:39,801
+starting from the corner of
+the of the image and expanding
+
+254
+00:12:39,801 --> 00:12:43,074
+outwards but the difference now
+is that now instead of using
+ 
+255
+00:12:43,074 --> 00:12:45,480
+an RNN to model all these dependencies
+
+255
+00:12:45,480 --> 00:12:47,752
+we're going to use the CNN instead.
+
+256
+00:12:47,752 --> 00:12:52,179
+And we're now going to use a
+CNN over a a context region
+
+257
+00:12:52,179 --> 00:12:54,761
+that you can see here around
+in the particular pixel
+
+258
+00:12:54,761 --> 00:12:56,384
+that we're going to generate now.
+
+259
+00:12:56,384 --> 00:12:58,127
+Right so we take the pixels around it,
+
+260
+00:12:58,127 --> 00:13:02,843
+this gray area within the
+region that's already been
+
+261
+00:13:02,843 --> 00:13:05,480
+generated and then we can
+pass this through a CNN
+
+262
+00:13:05,480 --> 00:13:09,313
+and use that to generate
+our next pixel value.
+
+263
+00:13:11,041 --> 00:13:14,466
+And so what this is going to
+give is this is going to give
+
+264
+00:13:14,466 --> 00:13:18,055
+This is a CNN, a neural
+network at each pixel location
+
+265
+00:13:18,055 --> 00:13:20,176
+right and so the output of
+this is going to be a soft
+
+266
+00:13:20,176 --> 00:13:22,967
+max loss over the pixel values here.
+
+267
+00:13:22,967 --> 00:13:27,443
+In this case we have a 0 to
+255 and then we can train this
+
+268
+00:13:27,443 --> 00:13:31,193
+by maximizing the likelihood
+of the training images.
+
+269
+00:13:31,193 --> 00:13:35,810
+Right so we say that basically
+we want to take a training
+
+270
+00:13:35,810 --> 00:13:38,659
+image we're going to do
+this generation process
+
+271
+00:13:38,659 --> 00:13:43,482
+and at each pixel location
+we have the ground truth
+
+272
+00:13:43,482 --> 00:13:45,742
+training data image
+value that we have here
+
+273
+00:13:45,742 --> 00:13:48,541
+and this is a quick basically the label
+
+274
+00:13:48,541 --> 00:13:51,384
+or the the the classification
+label that we want
+
+275
+00:13:51,384 --> 00:13:53,976
+our pixel to be which of these 255 values
+
+276
+00:13:53,976 --> 00:13:56,723
+and we can train this
+using a Softmax loss.
+
+277
+00:13:56,723 --> 00:13:59,155
+Right and so basically
+the effect of doing this
+
+278
+00:13:59,155 --> 00:14:01,285
+is that we're going to
+maximize the likelihood
+
+279
+00:14:01,285 --> 00:14:05,597
+of our training data
+pixels being generated.
+
+280
+00:14:05,597 --> 00:14:06,981
+Okay any questions about this?
+
+281
+00:14:06,981 --> 00:14:08,413
+Yes.
+
+282
+00:14:08,413 --> 00:14:12,159
+[student's words obscured
+due to lack of microphone]
+
+283
+00:14:12,159 --> 00:14:14,117
+Yeah, so the question is,
+I thought we were talking
+
+284
+00:14:14,117 --> 00:14:16,606
+about unsupervised learning,
+why do we have basically
+
+285
+00:14:16,606 --> 00:14:18,675
+a classification label here?
+
+286
+00:14:18,675 --> 00:14:22,833
+The reason is that this loss,
+this output that we have
+
+287
+00:14:22,833 --> 00:14:24,970
+is the value of the input training data.
+
+288
+00:14:24,970 --> 00:14:26,983
+So we have no external labels, right?
+
+289
+00:14:26,983 --> 00:14:31,645
+We didn't go and have to
+manually collect any labels
+
+290
+00:14:31,645 --> 00:14:34,366
+for this, we're just taking our input data
+
+291
+00:14:34,366 --> 00:14:38,533
+and saying that this is what
+we used for the last function.
+
+292
+00:14:41,199 --> 00:14:45,366
+[student's words obscured
+due to lack of microphone]
+
+293
+00:14:47,998 --> 00:14:50,746
+The question is, is
+this like bag of words?
+
+294
+00:14:50,746 --> 00:14:53,109
+I would say it's not really bag of words,
+
+295
+00:14:53,109 --> 00:14:55,784
+it's more saying that we
+want where we're outputting
+
+296
+00:14:55,784 --> 00:14:58,724
+a distribution over pixel
+values at each location
+
+297
+00:14:58,724 --> 00:15:01,466
+of our image right, and what we want to do
+
+298
+00:15:01,466 --> 00:15:06,444
+is we want to maximize the
+likelihood of our input,
+
+299
+00:15:06,444 --> 00:15:10,442
+our training data being
+produced, being generated.
+
+300
+00:15:10,442 --> 00:15:13,761
+Right so, in that sense, this
+is why it's using our input
+
+301
+00:15:13,761 --> 00:15:15,761
+data to create our loss.
+
+302
+00:15:21,006 --> 00:15:24,904
+So using pixelCNN training
+is faster than pixelRNN
+
+303
+00:15:24,904 --> 00:15:28,275
+because here now right
+at every pixel location
+
+304
+00:15:28,275 --> 00:15:31,249
+we want to maximize the value of our,
+
+305
+00:15:31,249 --> 00:15:34,301
+we want to maximize the
+likelihood of our training data
+
+306
+00:15:34,301 --> 00:15:38,035
+showing up and so we have all
+of these values already right,
+
+307
+00:15:38,035 --> 00:15:40,739
+just from our training data
+and so we can do this much
+
+308
+00:15:40,739 --> 00:15:44,340
+faster but a generation time
+for a test time we want to
+
+309
+00:15:44,340 --> 00:15:47,296
+generate a completely new
+image right, just starting from
+
+310
+00:15:47,296 --> 00:15:50,545
+the corner and we're not,
+we're not trying to do any type
+
+311
+00:15:50,545 --> 00:15:52,572
+of learning so in that
+generation time we still
+
+312
+00:15:52,572 --> 00:15:56,609
+have to generate each
+of these pixel locations
+
+313
+00:15:56,609 --> 00:15:59,197
+before we can generate the next location.
+
+314
+00:15:59,197 --> 00:16:01,695
+And so generation time here
+it still slow even though
+
+315
+00:16:01,695 --> 00:16:03,025
+training time is faster.
+
+316
+00:16:03,025 --> 00:16:04,204
+Question.
+
+317
+00:16:04,204 --> 00:16:08,365
+[student's words obscured
+due to lack of microphone]
+
+318
+00:16:08,365 --> 00:16:10,517
+So the question is, is
+this training a sensitive
+
+319
+00:16:10,517 --> 00:16:14,077
+distribution to what you
+pick for the first pixel?
+
+320
+00:16:14,077 --> 00:16:17,376
+Yeah, so it is dependent on
+what you have as the initial
+
+321
+00:16:17,376 --> 00:16:20,041
+pixel distribution and then
+everything is conditioned
+
+322
+00:16:20,041 --> 00:16:21,208
+based on that.
+
+323
+00:16:23,203 --> 00:16:26,667
+So again, how do you
+pick this distribution?
+
+324
+00:16:26,667 --> 00:16:29,428
+So at training time you
+have these distributions
+
+325
+00:16:29,428 --> 00:16:32,171
+from your training data
+and then at generation time
+
+326
+00:16:32,171 --> 00:16:35,305
+you can just initialize
+this with either uniform
+
+327
+00:16:35,305 --> 00:16:38,368
+or from your training
+data, however you want.
+
+328
+00:16:38,368 --> 00:16:40,612
+And then once you have that
+everything else is conditioned
+
+329
+00:16:40,612 --> 00:16:42,553
+based on that.
+
+330
+00:16:42,553 --> 00:16:43,912
+Question.
+
+331
+00:16:43,912 --> 00:16:48,079
+[student's words obscured
+due to lack of microphone]
+
+332
+00:17:07,415 --> 00:17:09,761
+Yeah so the question is is
+there a way that we define
+
+333
+00:17:09,761 --> 00:17:12,469
+this in this chain rule
+fashion instead of predicting
+
+334
+00:17:12,469 --> 00:17:14,146
+all the pixels at one time?
+
+335
+00:17:14,146 --> 00:17:17,884
+And so we'll see, we'll see
+models later that do do this,
+
+336
+00:17:17,884 --> 00:17:20,164
+but what the chain rule allows
+us to do is it allows us
+
+337
+00:17:20,164 --> 00:17:23,701
+to find this very tractable
+density that we can then
+
+338
+00:17:23,701 --> 00:17:27,868
+basically optimize and do,
+directly optimizes likelihood
+
+339
+00:17:31,864 --> 00:17:34,982
+Okay so these are some
+examples of generations
+
+340
+00:17:34,982 --> 00:17:39,606
+from this model and so here
+on the left you can see
+
+341
+00:17:39,606 --> 00:17:42,742
+generations where the
+training data is CIFAR-10,
+
+342
+00:17:42,742 --> 00:17:43,995
+CIFAR-10 dataset.
+
+343
+00:17:43,995 --> 00:17:46,115
+And so you can see that in
+general they are starting
+
+344
+00:17:46,115 --> 00:17:48,846
+to capture statistics of natural images.
+
+345
+00:17:48,846 --> 00:17:51,931
+You can see general types of blobs
+
+346
+00:17:51,931 --> 00:17:55,879
+and kind of things that look
+like parts of natural images
+
+347
+00:17:55,879 --> 00:17:56,848
+coming out.
+
+348
+00:17:56,848 --> 00:17:59,647
+On the right here it's ImageNet,
+we can again see samples
+
+349
+00:17:59,647 --> 00:18:00,730
+from here and
+
+350
+00:18:03,022 --> 00:18:05,060
+these are starting to
+look like natural images
+
+351
+00:18:05,060 --> 00:18:09,966
+but they're still not, there's
+still room for improvement.
+
+352
+00:18:09,966 --> 00:18:12,634
+You can still see that there
+are differences obviously
+
+353
+00:18:12,634 --> 00:18:15,226
+with regional training images
+and some of the semantics
+
+354
+00:18:15,226 --> 00:18:17,059
+are not clear in here.
+
+355
+00:18:19,371 --> 00:18:23,508
+So, to summarize this,
+pixelRNNs and CNNs allow you
+
+356
+00:18:23,508 --> 00:18:27,020
+to explicitly compute likelihood P of X.
+
+357
+00:18:27,020 --> 00:18:29,297
+It's an explicit density
+that we can optimize.
+
+358
+00:18:29,297 --> 00:18:31,585
+And being able to do this
+also has another benefit
+
+359
+00:18:31,585 --> 00:18:34,043
+of giving a good evaluation metric.
+
+360
+00:18:34,043 --> 00:18:36,934
+You know you can kind of measure
+how good your samples are
+
+361
+00:18:36,934 --> 00:18:40,958
+by this likelihood of the
+data that you can compute.
+
+362
+00:18:40,958 --> 00:18:44,009
+And it's able to produce
+pretty good samples
+
+363
+00:18:44,009 --> 00:18:47,043
+but it's still an active area of research
+
+364
+00:18:47,043 --> 00:18:50,401
+and the main disadvantage
+of these methods is that
+
+365
+00:18:50,401 --> 00:18:53,760
+the generation is sequential
+and so it can be pretty slow.
+
+366
+00:18:53,760 --> 00:18:56,534
+And these kinds of methods
+have also been used
+
+367
+00:18:56,534 --> 00:18:59,324
+for generating audio for example.
+
+368
+00:18:59,324 --> 00:19:02,724
+And you can look online for
+some pretty interesting examples
+
+369
+00:19:02,724 --> 00:19:05,460
+of this, but again the drawback
+is that it takes a long time
+
+370
+00:19:05,460 --> 00:19:08,170
+to generate these samples.
+
+371
+00:19:08,170 --> 00:19:11,856
+And so there's a lot of work,
+has been work since then
+
+372
+00:19:11,856 --> 00:19:14,565
+on still on improving pixelCNN performance
+
+373
+00:19:14,565 --> 00:19:17,964
+And so all kinds of different
+you know architecture changes
+
+374
+00:19:17,964 --> 00:19:20,641
+add the loss function
+formulating this differently
+
+375
+00:19:20,641 --> 00:19:22,346
+on different types of training tricks
+
+376
+00:19:22,346 --> 00:19:25,914
+And so if you're interested
+in learning more about this
+
+377
+00:19:25,914 --> 00:19:29,495
+you can look at some of
+these papers on PixelCNN
+
+378
+00:19:29,495 --> 00:19:33,115
+and then other pixelCNN plus
+plus better improved version
+
+379
+00:19:33,115 --> 00:19:35,115
+that came out this year.
+
+380
+00:19:37,455 --> 00:19:39,748
+Okay so now we're going
+to talk about another type
+
+381
+00:19:39,748 --> 00:19:44,321
+of generative models call
+variational autoencoders.
+
+382
+00:19:44,321 --> 00:19:48,263
+And so far we saw that
+pixelCNNs defined a tractable
+
+383
+00:19:48,263 --> 00:19:52,204
+density function, right,
+using this this definition
+
+384
+00:19:52,204 --> 00:19:55,365
+and based on that we can
+optimize directly optimize
+
+385
+00:19:55,365 --> 00:19:58,365
+the likelihood of the training data.
+
+386
+00:19:59,419 --> 00:20:02,409
+So with variational autoencoders
+now we're going to define
+
+387
+00:20:02,409 --> 00:20:04,195
+an intractable density function.
+
+388
+00:20:04,195 --> 00:20:06,833
+We're now going to model this
+with an additional latent
+
+389
+00:20:06,833 --> 00:20:09,492
+variable Z and we'll talk in more detail
+
+390
+00:20:09,492 --> 00:20:10,769
+about how this looks.
+
+391
+00:20:10,769 --> 00:20:14,936
+And so our data likelihood
+P of X is now basically
+
+392
+00:20:16,257 --> 00:20:17,886
+has to be this integral right,
+
+393
+00:20:17,886 --> 00:20:21,422
+taking the expectation over
+all possible values of Z.
+
+394
+00:20:21,422 --> 00:20:24,016
+And so this now is going to be a problem.
+
+395
+00:20:24,016 --> 00:20:26,909
+We'll see that we cannot
+optimize this directly.
+
+396
+00:20:26,909 --> 00:20:29,349
+And so instead what we have
+to do is we have to derive
+
+397
+00:20:29,349 --> 00:20:33,706
+and optimize a lower bound
+on the likelihood instead.
+
+398
+00:20:33,706 --> 00:20:34,956
+Yeah, question.
+
+399
+00:20:35,864 --> 00:20:37,592
+So the question is is what is Z?
+
+400
+00:20:37,592 --> 00:20:41,195
+Z is a latent variable
+and I'll go through this
+
+401
+00:20:41,195 --> 00:20:42,862
+in much more detail.
+
+402
+00:20:44,479 --> 00:20:48,538
+So let's talk about some background first.
+
+403
+00:20:48,538 --> 00:20:52,071
+Variational autoencoders
+are related to a type of
+
+404
+00:20:52,071 --> 00:20:54,733
+unsupervised learning
+model called autoencoders.
+
+405
+00:20:54,733 --> 00:20:58,267
+And so we'll talk little bit
+more first about autoencoders
+
+406
+00:20:58,267 --> 00:21:00,965
+and what they are and then
+I'll explain how variational
+
+407
+00:21:00,965 --> 00:21:04,332
+autoencoders are related
+and build off of this
+
+408
+00:21:04,332 --> 00:21:05,851
+and allow you to generate data.
+
+409
+00:21:05,851 --> 00:21:09,168
+So with autoencoders we don't
+use this to generate data,
+
+410
+00:21:09,168 --> 00:21:12,132
+but it's an unsupervised
+approach for learning a lower
+
+411
+00:21:12,132 --> 00:21:13,769
+dimensional feature representation
+
+412
+00:21:13,769 --> 00:21:15,719
+from unlabeled training data.
+
+413
+00:21:15,719 --> 00:21:18,399
+All right so in this case
+we have our input data X
+
+414
+00:21:18,399 --> 00:21:20,300
+and then we're going to
+want to learn some features
+
+415
+00:21:20,300 --> 00:21:21,550
+that we call Z.
+
+416
+00:21:22,541 --> 00:21:25,708
+And then we'll have an encoder
+that's going to be a mapping,
+
+417
+00:21:25,708 --> 00:21:28,188
+a function mapping
+from this input data
+
+418
+00:21:28,188 --> 00:21:29,605
+to our feature Z.
+
+419
+00:21:30,911 --> 00:21:33,905
+And this encoder can take
+many different forms right,
+
+420
+00:21:33,905 --> 00:21:37,070
+they would generally use
+neural networks so originally
+
+421
+00:21:37,070 --> 00:21:38,981
+these models have been
+around, autoencoders have been
+
+422
+00:21:38,981 --> 00:21:41,239
+around for a long time.
+
+423
+00:21:41,239 --> 00:21:45,803
+So in the 2000s we used linear
+layers of non-linearities,
+
+424
+00:21:45,803 --> 00:21:49,650
+then later on we had fully
+connected deeper networks
+
+425
+00:21:49,650 --> 00:21:53,556
+and then after that we moved
+on to using CNNs for these
+
+426
+00:21:53,556 --> 00:21:54,389
+encoders.
+
+427
+00:21:55,385 --> 00:21:59,995
+So we take our input data
+X and then we map this
+
+428
+00:21:59,995 --> 00:22:01,351
+to some feature Z.
+
+429
+00:22:01,351 --> 00:22:05,249
+And Z we usually have as,
+we usually specify this
+
+430
+00:22:05,249 --> 00:22:09,138
+to be smaller than X and we
+perform basically dimensionality
+
+431
+00:22:09,138 --> 00:22:11,817
+reduction because of that.
+
+432
+00:22:11,817 --> 00:22:16,189
+So the question who has an
+idea of why do we want to do
+
+433
+00:22:16,189 --> 00:22:17,729
+dimensionality reduction here?
+
+434
+00:22:17,729 --> 00:22:20,896
+Why do we want Z to be smaller than X?
+
+435
+00:22:22,114 --> 00:22:23,415
+Yeah.
+
+436
+00:22:23,415 --> 00:22:25,497
+[student's words obscured
+due to lack of microphone]
+
+437
+00:22:25,497 --> 00:22:28,074
+So the answer I heard is Z
+should represent the most
+
+438
+00:22:28,074 --> 00:22:31,657
+important features in
+X and that's correct.
+
+439
+00:22:32,634 --> 00:22:36,517
+So we want Z to be able to
+learn features that can capture
+
+440
+00:22:36,517 --> 00:22:38,758
+meaningful factors of
+variation in the data.
+
+441
+00:22:38,758 --> 00:22:41,758
+Right this makes them good features.
+
+442
+00:22:42,833 --> 00:22:46,717
+So how can we learn this
+feature representation?
+
+443
+00:22:46,717 --> 00:22:50,570
+Well the way autoencoders
+do this is that we train
+
+444
+00:22:50,570 --> 00:22:54,513
+the model such that the features
+can be used to reconstruct
+
+445
+00:22:54,513 --> 00:22:55,944
+our original data.
+
+446
+00:22:55,944 --> 00:22:59,563
+So what we want is we want to
+have input data that we use
+
+447
+00:22:59,563 --> 00:23:03,730
+an encoder to map it to some
+lower dimensional features Z.
+
+448
+00:23:05,320 --> 00:23:06,926
+This is the output of the encoder network,
+
+449
+00:23:06,926 --> 00:23:09,178
+and we want to be able to
+take these features that were
+
+450
+00:23:09,178 --> 00:23:13,125
+produced based on this input
+data and then use a decoder
+
+451
+00:23:13,125 --> 00:23:16,554
+a second network and be
+able to output now something
+
+452
+00:23:16,554 --> 00:23:21,466
+of the same size dimensionality
+as X and have it be similar
+
+453
+00:23:21,466 --> 00:23:24,032
+to X right so we want to be
+able to reconstruct the original
+
+454
+00:23:24,032 --> 00:23:24,865
+data.
+
+455
+00:23:26,387 --> 00:23:31,228
+And again for the decoder we
+are basically using same types
+
+456
+00:23:31,228 --> 00:23:33,375
+of networks as encoders so
+it's usually a little bit
+
+457
+00:23:33,375 --> 00:23:37,083
+symmetric and now we can use CNN networks
+
+458
+00:23:37,083 --> 00:23:38,583
+for most of these.
+
+459
+00:23:41,675 --> 00:23:44,145
+Okay so the process is going
+to be we're going to take
+
+460
+00:23:44,145 --> 00:23:48,720
+our input data right we pass
+it through our encoder first
+
+461
+00:23:48,720 --> 00:23:51,045
+which is going to be something
+for example like a four layer
+
+462
+00:23:51,045 --> 00:23:53,996
+convolutional network and
+then we're going to pass it,
+
+463
+00:23:53,996 --> 00:23:56,698
+get these features and then
+we're going to pass it through
+
+464
+00:23:56,698 --> 00:24:00,323
+a decoder which is a four layer
+for example upconvolutional
+
+465
+00:24:00,323 --> 00:24:03,314
+network and then get a
+reconstructed data out at the end
+
+466
+00:24:03,314 --> 00:24:04,196
+of this.
+
+467
+00:24:04,196 --> 00:24:07,447
+Right in the reason why we
+have a convolutional network
+
+468
+00:24:07,447 --> 00:24:09,659
+for the encoder and an
+upconvolutional network
+
+469
+00:24:09,659 --> 00:24:14,409
+for the decoder is because at
+the encoder we're basically
+
+470
+00:24:14,409 --> 00:24:16,890
+taking it from this high
+dimensional input to these lower
+
+471
+00:24:16,890 --> 00:24:20,394
+dimensional features and now
+we want to go the other way
+
+472
+00:24:20,394 --> 00:24:22,810
+go from our low dimensional
+features back out to our
+
+473
+00:24:22,810 --> 00:24:25,893
+high dimensional reconstructed input.
+
+474
+00:24:28,906 --> 00:24:33,248
+And so in order to get this
+effect that we said we wanted
+
+475
+00:24:33,248 --> 00:24:36,602
+before of being able to
+reconstruct our input data
+
+476
+00:24:36,602 --> 00:24:39,071
+we'll use something like
+an L2 loss function.
+
+477
+00:24:39,071 --> 00:24:42,220
+Right that basically just
+says let me make my pixels
+
+478
+00:24:42,220 --> 00:24:44,764
+of my input data to be the same as my,
+
+479
+00:24:44,764 --> 00:24:46,723
+my pixels in my reconstructed
+data to be the same
+
+480
+00:24:46,723 --> 00:24:49,306
+as the pixels of my input data.
+
+481
+00:24:51,078 --> 00:24:53,032
+An important thing to notice here,
+
+482
+00:24:53,032 --> 00:24:55,147
+this relates back to a
+question that we had earlier,
+
+483
+00:24:55,147 --> 00:24:58,599
+is that even though we have
+this loss function here,
+
+484
+00:24:58,599 --> 00:25:01,431
+there's no, there's no external
+labels that are being used
+
+485
+00:25:01,431 --> 00:25:02,515
+in training this.
+
+486
+00:25:02,515 --> 00:25:06,337
+All we have is our training
+data that we're going to use
+
+487
+00:25:06,337 --> 00:25:09,361
+both to pass through the
+network as well as to compute
+
+488
+00:25:09,361 --> 00:25:10,861
+our loss function.
+
+489
+00:25:13,346 --> 00:25:17,082
+So once we have this
+after training this model
+
+490
+00:25:17,082 --> 00:25:19,021
+what we can do is we can
+throw away this decoder.
+
+491
+00:25:19,021 --> 00:25:22,627
+All this was used was too
+to be able to produce our
+
+492
+00:25:22,627 --> 00:25:24,937
+reconstruction input and
+be able to compute our loss
+
+493
+00:25:24,937 --> 00:25:26,108
+function.
+
+494
+00:25:26,108 --> 00:25:29,526
+And we can use the encoder
+that we have which produces our
+
+495
+00:25:29,526 --> 00:25:32,960
+feature mapping and we
+can use this to initialize
+
+496
+00:25:32,960 --> 00:25:34,819
+a supervised model.
+
+497
+00:25:34,819 --> 00:25:37,647
+Right and so for example we
+can now go from this input
+
+498
+00:25:37,647 --> 00:25:42,447
+to our features and then
+have an additional classifier
+
+499
+00:25:42,447 --> 00:25:45,773
+network on top of this that
+now we can use to output
+
+500
+00:25:45,773 --> 00:25:49,901
+a class label for example for
+classification problem
+
+501
+00:25:49,901 --> 00:25:52,808
+we can have external labels from here
+
+502
+00:25:52,808 --> 00:25:55,601
+and use our standard loss
+functions like Softmax.
+
+503
+00:25:55,601 --> 00:25:58,157
+And so the value of this is
+that we basically were able
+
+504
+00:25:58,157 --> 00:26:01,046
+to use a lot of unlabeled
+training data to try and learn
+
+505
+00:26:01,046 --> 00:26:04,449
+good general feature representations.
+
+506
+00:26:04,449 --> 00:26:08,107
+Right, and now we can use this
+to initialize a supervised
+
+507
+00:26:08,107 --> 00:26:10,834
+learning problem where sometimes
+we don't have so much data
+
+508
+00:26:10,834 --> 00:26:12,363
+we only have small data.
+
+509
+00:26:12,363 --> 00:26:16,363
+And we've seen in previous
+homeworks and classes
+
+510
+00:26:17,336 --> 00:26:19,697
+that with small data it's
+hard to learn a model, right?
+
+511
+00:26:19,697 --> 00:26:22,563
+You can have over fitting
+and all kinds of problems
+
+512
+00:26:22,563 --> 00:26:25,790
+and so this allows you to
+initialize your model first
+
+513
+00:26:25,790 --> 00:26:27,540
+with better features.
+
+514
+00:26:31,371 --> 00:26:34,489
+Okay so we saw that autoencoders
+are able to reconstruct
+
+515
+00:26:34,489 --> 00:26:38,518
+data and are able to, as
+a result, learn features
+
+516
+00:26:38,518 --> 00:26:41,243
+to initialize, that we can
+use to initialize a supervised
+
+517
+00:26:41,243 --> 00:26:42,329
+model.
+
+518
+00:26:42,329 --> 00:26:44,453
+And we saw that these
+features that we learned
+
+519
+00:26:44,453 --> 00:26:47,474
+have this intuition of being
+able to capture factors
+
+520
+00:26:47,474 --> 00:26:50,133
+of variation in the training data.
+
+521
+00:26:50,133 --> 00:26:53,262
+All right so based on this
+intuition of okay these,
+
+522
+00:26:53,262 --> 00:26:56,953
+we can have this latent
+this vector Z which has
+
+523
+00:26:56,953 --> 00:26:58,941
+factors of variation in our training data.
+
+524
+00:26:58,941 --> 00:27:02,290
+Now a natural question is
+well can we use a similar type
+
+525
+00:27:02,290 --> 00:27:04,957
+of setup to generate new images?
+
+526
+00:27:06,922 --> 00:27:09,502
+And so now we will talk about
+variational autoencoders
+
+527
+00:27:09,502 --> 00:27:11,828
+which is a probabillstic spin
+on autoencoders that will let
+
+528
+00:27:11,828 --> 00:27:15,987
+us sample from the model in
+order to generate new data.
+
+529
+00:27:15,987 --> 00:27:19,404
+Okay any questions on autoencoders first?
+
+530
+00:27:20,796 --> 00:27:22,828
+Okay, so variational autoencoders.
+
+531
+00:27:22,828 --> 00:27:26,414
+All right so here we assume
+that our training data
+
+532
+00:27:26,414 --> 00:27:28,914
+that we have X I from one to N
+
+533
+00:27:30,255 --> 00:27:32,751
+is generated from some
+underlying, unobserved
+
+534
+00:27:32,751 --> 00:27:34,812
+latent representation Z.
+
+535
+00:27:34,812 --> 00:27:38,357
+Right, so it's this intuition
+that Z is some vector
+
+536
+00:27:38,357 --> 00:27:41,891
+right which element of Z
+is capturing how little
+
+537
+00:27:41,891 --> 00:27:45,319
+or how much of some factor
+of variation that we have
+
+538
+00:27:45,319 --> 00:27:47,069
+in our training data.
+
+539
+00:27:48,491 --> 00:27:51,118
+Right so the intuition is,
+you know, maybe these could
+
+540
+00:27:51,118 --> 00:27:52,971
+be something like different
+kinds of attributes.
+
+541
+00:27:52,971 --> 00:27:54,811
+Let's say we're trying to generate faces,
+
+542
+00:27:54,811 --> 00:27:57,791
+it could be how much of
+a smile is on the face,
+
+543
+00:27:57,791 --> 00:28:00,236
+it could be position of the eyebrows hair
+
+544
+00:28:00,236 --> 00:28:02,608
+orientation of the head.
+
+545
+00:28:02,608 --> 00:28:07,270
+These are all possible
+types of latent factors
+
+546
+00:28:07,270 --> 00:28:08,772
+that could be learned.
+
+547
+00:28:08,772 --> 00:28:11,282
+Right, and so our generation
+process is that we're going to
+
+548
+00:28:11,282 --> 00:28:13,901
+sample from a prior over Z.
+
+549
+00:28:13,901 --> 00:28:17,299
+Right so for each of these
+attributes for example,
+
+550
+00:28:17,299 --> 00:28:19,202
+you know, how much smile that there is,
+
+551
+00:28:19,202 --> 00:28:22,172
+we can have a prior over
+what sort of distribution
+
+552
+00:28:22,172 --> 00:28:25,014
+we think that there should be for this so,
+
+553
+00:28:25,014 --> 00:28:28,035
+a gaussian is something
+that's a natural prior
+
+554
+00:28:28,035 --> 00:28:31,571
+that we can use for each
+of these factors of Z
+
+555
+00:28:31,571 --> 00:28:34,345
+and then we're going
+to generate our data X
+
+556
+00:28:34,345 --> 00:28:38,416
+by sampling from a conditional,
+conditional distribution
+
+557
+00:28:38,416 --> 00:28:40,140
+P of X given Z.
+
+558
+00:28:40,140 --> 00:28:43,019
+So we sample Z first, we sample
+a value for each of these
+
+559
+00:28:43,019 --> 00:28:46,112
+latent factors and then we'll use that
+
+560
+00:28:46,112 --> 00:28:48,862
+and sample our image X from here.
+
+561
+00:28:51,409 --> 00:28:54,665
+And so the true parameters
+of this generation process
+
+562
+00:28:54,665 --> 00:28:57,667
+are theta, theta star right?
+
+563
+00:28:57,667 --> 00:28:59,961
+So we have the parameters of our prior
+
+564
+00:28:59,961 --> 00:29:03,158
+and our conditional distributions
+
+565
+00:29:03,158 --> 00:29:06,102
+and what we want to do is in
+order to have a generative
+
+566
+00:29:06,102 --> 00:29:07,560
+model be able to generate new data
+
+567
+00:29:07,560 --> 00:29:11,727
+we want to estimate these
+parameters of our true parameters
+
+568
+00:29:14,790 --> 00:29:16,694
+Okay so let's first talk
+about how should we represent
+
+569
+00:29:16,694 --> 00:29:17,611
+this model.
+
+570
+00:29:20,282 --> 00:29:22,252
+All right, so if we're going to
+have a model for this generator
+
+571
+00:29:22,252 --> 00:29:25,021
+process, well we've already
+said before that we can choose
+
+572
+00:29:25,021 --> 00:29:27,317
+our prior P of Z to be something simple.
+
+573
+00:29:27,317 --> 00:29:28,919
+Something like a Gaussian, right?
+
+574
+00:29:28,919 --> 00:29:30,880
+And this is the reasonable
+thing to choose for
+
+575
+00:29:30,880 --> 00:29:32,713
+for latent attributes.
+
+576
+00:29:35,696 --> 00:29:39,260
+Now for our conditional
+distribution P of X given Z
+
+577
+00:29:39,260 --> 00:29:40,840
+this is much more complex right,
+
+578
+00:29:40,840 --> 00:29:43,410
+because we need to use
+this to generate an image
+
+579
+00:29:43,410 --> 00:29:46,918
+and so for P of X given
+Z, well as we saw before,
+
+580
+00:29:46,918 --> 00:29:49,395
+when we have some type of
+complex function that we want
+
+581
+00:29:49,395 --> 00:29:53,062
+to represent we can represent
+this with a neural network.
+
+582
+00:29:53,062 --> 00:29:55,176
+And so that's a natural
+choice for let's try and model
+
+583
+00:29:55,176 --> 00:29:58,259
+P of X given Z with a neural network.
+
+584
+00:30:00,308 --> 00:30:02,345
+And we're going to call
+this the decoder network.
+
+585
+00:30:02,345 --> 00:30:04,756
+Right, so we're going to
+think about taking some latent
+
+586
+00:30:04,756 --> 00:30:08,327
+representation and trying to
+decode this into the image
+
+587
+00:30:08,327 --> 00:30:10,167
+that it's specifying.
+
+588
+00:30:10,167 --> 00:30:13,765
+So now how can we train this model?
+
+589
+00:30:13,765 --> 00:30:15,699
+Right, we want to be able to
+train this model so that we can
+
+590
+00:30:15,699 --> 00:30:19,419
+learn an estimate of these parameters.
+
+591
+00:30:19,419 --> 00:30:21,985
+So if we remember our strategy
+from training generative
+
+592
+00:30:21,985 --> 00:30:24,668
+models, back from are fully
+visible belief networks,
+
+593
+00:30:24,668 --> 00:30:26,668
+our pixelRNNs and CNNs,
+
+594
+00:30:28,577 --> 00:30:30,492
+a straightforward natural
+strategy is to try
+
+595
+00:30:30,492 --> 00:30:33,809
+and learn these model
+parameters in order to maximize
+
+596
+00:30:33,809 --> 00:30:35,498
+the likelihood of the training data.
+
+597
+00:30:35,498 --> 00:30:36,850
+Right, so we saw earlier
+that in this case,
+
+598
+00:30:36,850 --> 00:30:39,346
+with our latent variable
+Z, we're going to have
+
+599
+00:30:39,346 --> 00:30:42,771
+to write out P of X taking
+expectation over all possible
+
+600
+00:30:42,771 --> 00:30:45,311
+values of Z which is
+continuous and so we get this
+
+601
+00:30:45,311 --> 00:30:46,886
+expression here.
+
+602
+00:30:46,886 --> 00:30:49,884
+Right so now we have it with this latent Z
+
+603
+00:30:49,884 --> 00:30:53,658
+and now if we're going to, if
+you want to try and maximize
+
+604
+00:30:53,658 --> 00:30:55,759
+its likelihood, well what's the problem?
+
+605
+00:30:55,759 --> 00:30:59,301
+Can we just take this take
+gradients and maximize
+
+606
+00:30:59,301 --> 00:31:01,372
+this likelihood?
+
+607
+00:31:01,372 --> 00:31:04,358
+[student's words obscured
+due to lack of microphone]
+
+608
+00:31:04,358 --> 00:31:07,274
+Right, so this integral is
+not going to be tractable,
+
+609
+00:31:07,274 --> 00:31:08,524
+that's correct.
+
+610
+00:31:10,199 --> 00:31:12,547
+So let's take a look at this
+in a little bit more detail.
+
+611
+00:31:12,547 --> 00:31:15,911
+Right, so we have our
+data likelihood term here.
+
+612
+00:31:15,911 --> 00:31:18,772
+And the first time is P of Z.
+
+613
+00:31:18,772 --> 00:31:20,921
+And here we already said
+earlier, we can just choose this
+
+614
+00:31:20,921 --> 00:31:24,847
+to be a simple Gaussian
+prior, so this is fine.
+
+615
+00:31:24,847 --> 00:31:26,532
+P of X given Z, well we
+said we were going to
+
+616
+00:31:26,532 --> 00:31:29,031
+specify a decoder neural network.
+
+617
+00:31:29,031 --> 00:31:32,774
+So given any Z, we can get
+P of X given Z from here.
+
+618
+00:31:32,774 --> 00:31:35,721
+It's the output of our neural network.
+
+619
+00:31:35,721 --> 00:31:38,147
+But then what's the problem here?
+
+620
+00:31:38,147 --> 00:31:42,450
+Okay this was supposed to
+be a different unhappy face
+
+621
+00:31:42,450 --> 00:31:44,495
+but somehow I don't know what happened,
+
+622
+00:31:44,495 --> 00:31:45,518
+in the process of translation,
+
+623
+00:31:45,518 --> 00:31:48,435
+it turned into a crying black ghost
+
+624
+00:31:49,298 --> 00:31:53,465
+but what this is symbolizing
+is that basically if we want
+
+625
+00:31:54,393 --> 00:31:55,855
+to compute P of X given Z
+
+626
+00:31:55,855 --> 00:31:59,519
+for every Z this is now intractable right,
+
+627
+00:31:59,519 --> 00:32:02,186
+we cannot compute this integral.
+
+628
+00:32:04,794 --> 00:32:06,591
+So data likelihood is intractable
+
+629
+00:32:06,591 --> 00:32:10,486
+and it turns out that if
+we look at other terms
+
+630
+00:32:10,486 --> 00:32:12,901
+in this model if we look
+at our posterior density,
+
+631
+00:32:12,901 --> 00:32:15,818
+So P of our posterior of Z given X,
+
+632
+00:32:16,921 --> 00:32:19,639
+then this is going to be P of X given Z
+
+633
+00:32:19,639 --> 00:32:23,712
+times P of Z over P of X by Bayes' rule
+
+634
+00:32:23,712 --> 00:32:25,740
+and this is also going
+to be intractable, right.
+
+635
+00:32:25,740 --> 00:32:28,230
+We have P of X given Z
+is okay, P of Z is okay,
+
+636
+00:32:28,230 --> 00:32:31,476
+but we have this P of X our likelihood
+
+637
+00:32:31,476 --> 00:32:35,143
+which has the integral
+and it's intractable.
+
+638
+00:32:36,027 --> 00:32:37,993
+So we can't directly optimizes this.
+
+639
+00:32:37,993 --> 00:32:40,493
+but we'll see that a solution,
+
+640
+00:32:42,463 --> 00:32:45,230
+a solution that will enable
+us to learn this model
+
+641
+00:32:45,230 --> 00:32:48,153
+is if in addition to
+using a decoder network
+
+642
+00:32:48,153 --> 00:32:50,997
+defining this neural network
+to model P of X given Z.
+
+643
+00:32:50,997 --> 00:32:54,824
+If we now define an
+additional encoder network
+
+644
+00:32:54,824 --> 00:32:57,887
+Q of Z given X we're going
+to call this an encoder
+
+645
+00:32:57,887 --> 00:33:01,776
+because we want to turn our input X into,
+
+646
+00:33:01,776 --> 00:33:04,414
+get the likelihood of Z given X,
+
+647
+00:33:04,414 --> 00:33:06,652
+we're going to encode this into Z.
+
+648
+00:33:06,652 --> 00:33:08,746
+And defined this network to approximate
+
+649
+00:33:08,746 --> 00:33:10,329
+the P of Z given X.
+
+650
+00:33:12,388 --> 00:33:14,517
+Right this was posterior
+density term now is also
+
+651
+00:33:14,517 --> 00:33:15,688
+intractable.
+
+652
+00:33:15,688 --> 00:33:20,396
+If we use this additional
+network to approximate this
+
+653
+00:33:20,396 --> 00:33:22,866
+then we'll see that this will
+actually allow us to derive
+
+654
+00:33:22,866 --> 00:33:25,319
+a lower bound on the data
+likelihood that is tractable
+
+655
+00:33:25,319 --> 00:33:27,486
+and which we can optimize.
+
+656
+00:33:29,308 --> 00:33:31,229
+Okay so first just to be a
+little bit more concrete about
+
+657
+00:33:31,229 --> 00:33:35,396
+these encoder and decoder
+networks that I specified,
+
+658
+00:33:36,579 --> 00:33:39,156
+in variational autoencoders we
+want the model probabilistic
+
+659
+00:33:39,156 --> 00:33:40,695
+generation of data.
+
+660
+00:33:40,695 --> 00:33:42,334
+So in autoencoders we already talked
+
+661
+00:33:42,334 --> 00:33:45,647
+about this concept of having
+an encoder going from input X
+
+662
+00:33:45,647 --> 00:33:49,447
+to some feature Z and a
+decoder network going from Z
+
+663
+00:33:49,447 --> 00:33:51,530
+back out to some image X.
+
+664
+00:33:53,294 --> 00:33:55,927
+And so here we go to again
+have an encoder network
+
+665
+00:33:55,927 --> 00:33:57,462
+and a decoder network but we're going
+
+666
+00:33:57,462 --> 00:33:58,907
+to make these probabilistic.
+
+667
+00:33:58,907 --> 00:34:02,433
+So now our encoder network
+Q of Z given X with
+
+668
+00:34:02,433 --> 00:34:06,134
+parameters phi are going to output a mean
+
+669
+00:34:06,134 --> 00:34:09,467
+and a diagonal covariance and from here,
+
+670
+00:34:11,411 --> 00:34:13,433
+this will be the direct
+outputs of our encoder
+
+671
+00:34:13,434 --> 00:34:14,795
+network and the same thing for our
+
+672
+00:34:14,795 --> 00:34:17,637
+decoder network which
+is going to start from Z
+
+673
+00:34:17,637 --> 00:34:19,600
+and now it's going to output the mean
+
+674
+00:34:19,600 --> 00:34:23,109
+and the diagonal covariance of some X,
+
+675
+00:34:23,109 --> 00:34:26,725
+same dimension as the input given Z
+
+676
+00:34:26,725 --> 00:34:28,645
+And then this decoder network
+has different parameters
+
+677
+00:34:28,645 --> 00:34:29,478
+theta.
+
+678
+00:34:31,136 --> 00:34:35,053
+And now in order to
+actually get our Z and our,
+
+679
+00:34:36,494 --> 00:34:40,436
+This should be Z given X and X given Z.
+
+680
+00:34:40,436 --> 00:34:42,058
+We'll sample from these distributions.
+
+681
+00:34:42,058 --> 00:34:44,387
+So now our encoder and our decoder network
+
+682
+00:34:44,387 --> 00:34:49,072
+are producing distributions
+over Z and X respectively
+
+683
+00:34:49,072 --> 00:34:50,706
+and will sample from this distribution
+
+684
+00:34:50,706 --> 00:34:52,409
+in order to get a value from here.
+
+685
+00:34:52,409 --> 00:34:54,641
+So you can see how this is
+taking us on the direction
+
+686
+00:34:54,641 --> 00:34:59,630
+towards being able to sample
+and generate new data.
+
+687
+00:34:59,630 --> 00:35:00,983
+And just one thing to note is that
+
+688
+00:35:00,983 --> 00:35:02,855
+these encoder and decoder networks,
+
+689
+00:35:02,855 --> 00:35:05,041
+you'll also hear different terms for them.
+
+690
+00:35:05,041 --> 00:35:07,944
+The encoder network can
+also be kind of recognition
+
+691
+00:35:07,944 --> 00:35:09,138
+or inference network because
+
+692
+00:35:09,138 --> 00:35:12,888
+we're trying to form
+inference of this latent
+
+693
+00:35:12,888 --> 00:35:15,913
+representation of Z given
+X and then for the decoder
+
+694
+00:35:15,913 --> 00:35:18,826
+network, this is what we'll
+use to perform generation.
+
+695
+00:35:18,826 --> 00:35:22,993
+Right so you also hear
+generation network being used.
+
+696
+00:35:24,410 --> 00:35:28,186
+Okay so now equipped with our
+encoder and decoder networks,
+
+697
+00:35:28,186 --> 00:35:31,899
+let's try and work out
+the data likelihood again.
+
+698
+00:35:31,899 --> 00:35:35,117
+and we'll use the log of
+the data likelihood here.
+
+699
+00:35:35,117 --> 00:35:38,833
+So we'll see that if we
+want the log of P of X right
+
+700
+00:35:38,833 --> 00:35:40,957
+we can write this out as like a P of X but
+
+701
+00:35:40,957 --> 00:35:44,988
+take the expectation with respect to Z.
+
+702
+00:35:44,988 --> 00:35:46,738
+So Z samples from our
+
+703
+00:35:48,291 --> 00:35:50,801
+distribution of Q of Z given
+X that we've now defined
+
+704
+00:35:50,801 --> 00:35:52,606
+using the encoder network.
+
+705
+00:35:52,606 --> 00:35:55,477
+And we can do this because
+P of X doesn't depend on Z.
+
+706
+00:35:55,477 --> 00:35:58,254
+Right 'cause Z is not part of that.
+
+707
+00:35:58,254 --> 00:36:01,461
+And so we'll see that taking
+the expectation with respect
+
+708
+00:36:01,461 --> 00:36:04,794
+to Z is going to come in handy later on.
+
+709
+00:36:06,255 --> 00:36:10,350
+Okay so now from this
+original expression we can
+
+710
+00:36:10,350 --> 00:36:14,332
+now expand it out to be
+log of P of X given Z,
+
+711
+00:36:14,332 --> 00:36:17,576
+P of Z over P of Z given
+X using Bayes' rule.
+
+712
+00:36:17,576 --> 00:36:20,564
+And so this is just
+directly writing this out.
+
+713
+00:36:20,564 --> 00:36:23,763
+And then taking this we
+can also now multiply it
+
+714
+00:36:23,763 --> 00:36:24,996
+by a constant.
+
+715
+00:36:24,996 --> 00:36:28,937
+Right, so Q of Z given
+X over Q of Z given X.
+
+716
+00:36:28,937 --> 00:36:30,874
+This is one we can do this.
+
+717
+00:36:30,874 --> 00:36:33,847
+It doesn't change it but it's
+going to be helpful later on.
+
+718
+00:36:33,847 --> 00:36:36,899
+So given that what we'll
+do is we'll write it
+
+719
+00:36:36,899 --> 00:36:39,444
+out into these three separate terms.
+
+720
+00:36:39,444 --> 00:36:41,567
+And you can work out this
+math later on by yourself
+
+721
+00:36:41,567 --> 00:36:44,703
+but it's essentially just
+using logarithm rules
+
+722
+00:36:44,703 --> 00:36:47,449
+taking all of these
+terms that we had in the
+
+723
+00:36:47,449 --> 00:36:50,561
+line above and just separating it out into
+
+724
+00:36:50,561 --> 00:36:54,728
+these three different terms
+that will have nice meanings.
+
+725
+00:36:56,431 --> 00:36:58,758
+Right so if we look at this,
+the first term that we get
+
+726
+00:36:58,758 --> 00:37:02,754
+separated out is log of P
+given X and then expectation
+
+727
+00:37:02,754 --> 00:37:05,560
+of log of P given X and
+then we're going to have
+
+728
+00:37:05,560 --> 00:37:07,210
+two KL terms, right.
+
+729
+00:37:07,210 --> 00:37:10,210
+This is basically KL divergence term
+
+730
+00:37:11,619 --> 00:37:14,400
+to say how close these two distributions are.
+
+731
+00:37:14,400 --> 00:37:18,567
+So how close is a distribution
+Q of Z given X to P of Z.
+
+732
+00:37:19,489 --> 00:37:24,287
+So it's just the, it's exactly
+this expectation term above.
+
+733
+00:37:24,287 --> 00:37:28,454
+And it's just a distance
+metric for distributions.
+
+734
+00:37:30,908 --> 00:37:33,332
+And so we'll see that,
+right, we saw that these are
+
+735
+00:37:33,332 --> 00:37:36,183
+nice KL terms that we can write out.
+
+736
+00:37:36,183 --> 00:37:39,290
+And now if we look at these
+three terms that we have here,
+
+737
+00:37:39,290 --> 00:37:43,806
+the first term is P of X
+given Z, which is provided
+
+738
+00:37:43,806 --> 00:37:45,819
+by our decoder network.
+
+739
+00:37:45,819 --> 00:37:48,873
+And we're able to compute
+an estimate of these term
+
+740
+00:37:48,873 --> 00:37:52,042
+through sampling and we'll see that we can
+
+741
+00:37:52,042 --> 00:37:54,160
+do a sampling that's
+differentiable through something
+
+742
+00:37:54,160 --> 00:37:56,099
+called the re-parametrization
+trick which is a
+
+743
+00:37:56,099 --> 00:37:58,932
+detail that you can look
+at this paper if you're
+
+744
+00:37:58,932 --> 00:37:59,920
+interested.
+
+745
+00:37:59,920 --> 00:38:02,479
+But basically we can
+now compute this term.
+
+746
+00:38:02,479 --> 00:38:06,398
+And then these KL terms,
+the second KL term
+
+747
+00:38:06,398 --> 00:38:08,600
+is a KL between two Gaussians,
+
+748
+00:38:08,600 --> 00:38:11,964
+so our Q of Z given X,
+remember our encoder produced
+
+749
+00:38:11,964 --> 00:38:14,608
+this distribution which had
+a mean and a covariance,
+
+750
+00:38:14,608 --> 00:38:16,079
+it was a nice Gaussian.
+
+751
+00:38:16,079 --> 00:38:19,892
+And then also our prior P of
+Z which is also a Gaussian.
+
+752
+00:38:19,892 --> 00:38:22,058
+And so this has a nice, when you have a KL
+
+753
+00:38:22,058 --> 00:38:24,513
+of two Gaussians you have
+a nice closed form solution
+
+754
+00:38:24,513 --> 00:38:25,628
+that you can have.
+
+755
+00:38:25,628 --> 00:38:27,324
+And then this third KL term now,
+
+756
+00:38:27,324 --> 00:38:31,324
+this is a KL of Q given
+X with a P of Z given X.
+
+757
+00:38:32,303 --> 00:38:35,311
+But we know that P of Z
+given X was this intractable
+
+758
+00:38:35,311 --> 00:38:36,766
+posterior that we saw earlier, right?
+
+759
+00:38:36,766 --> 00:38:38,922
+That we didn't want to
+compute that's why we had
+
+760
+00:38:38,922 --> 00:38:41,794
+this approximation using Q.
+
+761
+00:38:41,794 --> 00:38:44,625
+And so this term is still is a problem.
+
+762
+00:38:44,625 --> 00:38:47,102
+But one thing we do know
+about this term is that KL
+
+763
+00:38:47,102 --> 00:38:50,609
+divergence, it's a distance
+between two distributions
+
+764
+00:38:50,609 --> 00:38:54,776
+is always greater than or
+equal to zero by definition.
+
+765
+00:38:57,060 --> 00:38:59,058
+And so what we can do with this is that,
+
+766
+00:38:59,058 --> 00:39:01,257
+well what we have here, the
+two terms that we can work
+
+767
+00:39:01,257 --> 00:39:03,396
+nicely with, this is a,
+
+768
+00:39:03,396 --> 00:39:06,935
+this is a tractable lower
+bound which we can actually
+
+769
+00:39:06,935 --> 00:39:10,023
+take gradient of and optimize.
+
+770
+00:39:10,023 --> 00:39:12,781
+P of X given Z is
+differentiable and the KL terms
+
+771
+00:39:12,781 --> 00:39:16,652
+are also, the close form
+solution is also differentiable.
+
+772
+00:39:16,652 --> 00:39:19,213
+And this is a lower bound
+because we know that the KL
+
+773
+00:39:19,213 --> 00:39:22,686
+term on the right, the
+ugly one is greater than
+
+774
+00:39:22,686 --> 00:39:24,168
+or equal it zero.
+
+775
+00:39:24,168 --> 00:39:26,251
+So we have a lower bound.
+
+776
+00:39:27,273 --> 00:39:32,224
+And so what we'll do to train
+a variational autoencoder
+
+777
+00:39:32,224 --> 00:39:35,155
+is that we take this
+lower bound and we instead
+
+778
+00:39:35,155 --> 00:39:37,699
+optimize and maximize
+this lower bound instead.
+
+779
+00:39:37,699 --> 00:39:40,777
+So we're optimizing a lower
+bound on the likelihood
+
+780
+00:39:40,777 --> 00:39:42,251
+of our data.
+
+781
+00:39:42,251 --> 00:39:45,031
+So that means that our data
+is always going to have
+
+782
+00:39:45,031 --> 00:39:47,554
+a likelihood that's at
+least as high as this lower
+
+783
+00:39:47,554 --> 00:39:49,940
+bound that we're maximizing.
+
+784
+00:39:49,940 --> 00:39:53,607
+And so we want to find
+the parameters theta,
+
+785
+00:39:54,875 --> 00:39:59,042
+estimate parameters theta
+and phi that allows us to
+
+786
+00:40:00,162 --> 00:40:01,329
+maximize this.
+
+787
+00:40:03,169 --> 00:40:06,412
+And then one last sort of
+intuition about this lower bound
+
+788
+00:40:06,412 --> 00:40:09,132
+that we have is that this first term
+
+789
+00:40:09,132 --> 00:40:12,796
+is expectation over all samples of Z
+
+790
+00:40:12,796 --> 00:40:16,963
+sampled from passing our X
+through the encoder network
+
+791
+00:40:18,267 --> 00:40:21,836
+sampling Z taking expectation
+over all of these samples
+
+792
+00:40:21,836 --> 00:40:24,003
+of likelihood of X given Z
+
+793
+00:40:24,963 --> 00:40:26,854
+and so this is a reconstruction, right?
+
+794
+00:40:26,854 --> 00:40:29,196
+This is basically saying,
+if I want this to be big
+
+795
+00:40:29,196 --> 00:40:33,300
+I want this likelihood P
+of X given Z to be high,
+
+796
+00:40:33,300 --> 00:40:36,168
+so it's kind of like
+trying to do a good job
+
+797
+00:40:36,168 --> 00:40:37,756
+reconstructing the data.
+
+798
+00:40:37,756 --> 00:40:40,528
+So similar to what we had
+from our autoencoder before.
+
+799
+00:40:40,528 --> 00:40:44,695
+But the second term here is
+saying make this KL small.
+
+800
+00:40:46,161 --> 00:40:48,832
+Make our approximate
+posterior distribution close
+
+801
+00:40:48,832 --> 00:40:51,283
+to our prior distribution.
+
+802
+00:40:51,283 --> 00:40:55,450
+And this basically is
+saying that well we want our
+
+803
+00:40:56,633 --> 00:40:59,883
+latent variable Z to be following this,
+
+804
+00:41:01,980 --> 00:41:05,338
+have this distribution
+type, distribution shape
+
+805
+00:41:05,338 --> 00:41:07,838
+that we would like it to have.
+
+806
+00:41:08,974 --> 00:41:12,058
+Okay so any questions about this?
+
+807
+00:41:12,058 --> 00:41:14,486
+I think this is a lot
+of math that if you guys
+
+808
+00:41:14,486 --> 00:41:17,440
+are interested you should go
+back and kind of work through
+
+809
+00:41:17,440 --> 00:41:19,128
+all of the derivations yourself.
+
+810
+00:41:19,128 --> 00:41:19,961
+Yeah.
+
+811
+00:41:20,883 --> 00:41:23,669
+[student's words obscured
+due to lack of microphone]
+
+812
+00:41:23,669 --> 00:41:26,928
+So the question is why
+do we specify the prior
+
+813
+00:41:26,928 --> 00:41:29,373
+and the latent variables as Gaussian?
+
+814
+00:41:29,373 --> 00:41:31,523
+And the reason is that well we're defining
+
+815
+00:41:31,523 --> 00:41:33,512
+some sort of generative process right,
+
+816
+00:41:33,512 --> 00:41:35,930
+of sampling Z first and
+then sampling X first.
+
+817
+00:41:35,930 --> 00:41:39,444
+And defining it as a
+Gaussian is a reasonable type
+
+818
+00:41:39,444 --> 00:41:43,611
+of prior that we can say
+makes sense for these types
+
+819
+00:41:44,668 --> 00:41:47,619
+of latent attributes to
+be distributed according
+
+820
+00:41:47,619 --> 00:41:51,724
+to some sort of Gaussian, and
+then this lets us now then
+
+821
+00:41:51,724 --> 00:41:53,307
+optimize our model.
+
+822
+00:41:55,988 --> 00:42:00,211
+Okay, so we talked about how
+we can deride this lower bound
+
+823
+00:42:00,211 --> 00:42:03,725
+and now let's put this all
+together and walk through
+
+824
+00:42:03,725 --> 00:42:06,053
+the process of the training of the AE.
+
+825
+00:42:06,053 --> 00:42:08,802
+Right so here's the bound
+that we want to optimize,
+
+826
+00:42:08,802 --> 00:42:10,008
+to maximize.
+
+827
+00:42:10,008 --> 00:42:12,057
+And now for a forward pass.
+
+828
+00:42:12,057 --> 00:42:14,864
+We're going to proceed
+in the following manner.
+
+829
+00:42:14,864 --> 00:42:18,134
+We have our input data
+X, so we'll a mini batch
+
+830
+00:42:18,134 --> 00:42:19,301
+of input data.
+
+831
+00:42:20,845 --> 00:42:24,211
+And then we'll pass it
+through our encoder network
+
+832
+00:42:24,211 --> 00:42:26,544
+so we'll get Q of Z given X.
+
+833
+00:42:28,439 --> 00:42:33,384
+And from this Q of Z given
+X, this'll be the terms
+
+834
+00:42:33,384 --> 00:42:35,805
+that we use to compute the KL term.
+
+835
+00:42:35,805 --> 00:42:40,606
+And then from here we'll
+sample Z from this distribution
+
+836
+00:42:40,606 --> 00:42:44,773
+of Z given X so we have a
+sample of the latent factors
+
+837
+00:42:46,120 --> 00:42:48,203
+that we can infer from X.
+
+838
+00:42:50,721 --> 00:42:52,543
+And then from here we're
+going to pass a Z through
+
+839
+00:42:52,543 --> 00:42:54,889
+another, our second decoder network.
+
+840
+00:42:54,889 --> 00:42:56,999
+And from the decoder network
+we'll get this output
+
+841
+00:42:56,999 --> 00:43:00,150
+for the mean and variance
+on our distribution for
+
+842
+00:43:00,150 --> 00:43:03,817
+X given Z and then
+finally we can sample now
+
+843
+00:43:04,821 --> 00:43:07,686
+our X given Z from this distribution
+
+844
+00:43:07,686 --> 00:43:12,155
+and here this will produce
+some sample output.
+
+845
+00:43:12,155 --> 00:43:13,676
+And when we're training
+we're going to take this
+
+846
+00:43:13,676 --> 00:43:16,500
+distribution and say well
+our loss term is going to be
+
+847
+00:43:16,500 --> 00:43:20,417
+log of our training image
+pixel values given Z.
+
+848
+00:43:23,612 --> 00:43:26,517
+So our loss functions going
+to say let's maximize the
+
+849
+00:43:26,517 --> 00:43:30,684
+likelihood of this original
+input being reconstructed.
+
+850
+00:43:32,020 --> 00:43:34,086
+And so now for every mini batch of input
+
+851
+00:43:34,086 --> 00:43:35,919
+we're going to compute this forward pass.
+
+852
+00:43:35,919 --> 00:43:37,770
+Get all these terms that we need
+
+853
+00:43:37,770 --> 00:43:40,290
+and then this is all
+differentiable so then we just
+
+854
+00:43:40,290 --> 00:43:43,837
+backprop though all of this
+and then get our gradient,
+
+855
+00:43:43,837 --> 00:43:47,194
+we update our model and
+we use this to continuously
+
+856
+00:43:47,194 --> 00:43:50,763
+update our parameters,
+our generator and decoder
+
+857
+00:43:50,763 --> 00:43:54,123
+network parameters theta
+and phi in order to maximize
+
+858
+00:43:54,123 --> 00:43:57,040
+the likelihood of the trained data.
+
+859
+00:43:58,408 --> 00:44:01,084
+Okay so once we've trained our VAE,
+
+860
+00:44:01,084 --> 00:44:03,508
+so now to generate data,
+what we can do is we can
+
+861
+00:44:03,508 --> 00:44:05,547
+use just the decoder network.
+
+862
+00:44:05,547 --> 00:44:07,919
+All right, so from here
+we can sample Z now,
+
+863
+00:44:07,919 --> 00:44:10,947
+instead of sampling Z from
+this posterior that we had
+
+864
+00:44:10,947 --> 00:44:13,805
+during training, while
+during generation we sample
+
+865
+00:44:13,805 --> 00:44:15,504
+from our true generative process.
+
+866
+00:44:15,504 --> 00:44:18,673
+So we sample from our
+prior that we specify.
+
+867
+00:44:18,673 --> 00:44:22,840
+And then we're going to then
+sample our data X from here.
+
+868
+00:44:25,281 --> 00:44:27,606
+And we'll see that this
+can produce, in this case,
+
+869
+00:44:27,606 --> 00:44:32,465
+train on MNIST, these are
+samples of digits generated
+
+870
+00:44:32,465 --> 00:44:34,798
+from a VAE trained on MNIST.
+
+871
+00:44:36,058 --> 00:44:38,842
+And you can see that, you
+know, we talked about this idea
+
+872
+00:44:38,842 --> 00:44:43,796
+of Z representing these
+latent factors where we can
+
+873
+00:44:43,796 --> 00:44:46,440
+bury Z right according to
+our sample from different
+
+874
+00:44:46,440 --> 00:44:50,464
+parts of our prior and
+then get different kind of
+
+875
+00:44:50,464 --> 00:44:52,625
+interpretable meanings from here.
+
+876
+00:44:52,625 --> 00:44:54,207
+So here we can see that this is
+
+877
+00:44:54,207 --> 00:44:57,142
+the data manifold for two dimensional Z.
+
+878
+00:44:57,142 --> 00:44:59,718
+So if we have a two dimensional
+Z and we take Z and let's
+
+879
+00:44:59,718 --> 00:45:04,110
+say some range from you know,
+from different percentiles
+
+880
+00:45:04,110 --> 00:45:08,568
+of the distribution, and
+we vary Z1 and we vary Z2,
+
+881
+00:45:08,568 --> 00:45:13,038
+then you can see how the
+image generated from every
+
+882
+00:45:13,038 --> 00:45:16,300
+combination of Z1 and
+Z2 that we have here,
+
+883
+00:45:16,300 --> 00:45:19,587
+you can see it's transitioning
+smoothly across all
+
+884
+00:45:19,587 --> 00:45:22,087
+of these different variations.
+
+885
+00:45:24,051 --> 00:45:27,808
+And you know our prior on
+Z was, it was diagonal,
+
+886
+00:45:27,808 --> 00:45:30,387
+so we chose this in order
+to encourage this to be
+
+887
+00:45:30,387 --> 00:45:34,568
+independent latent variables
+that can then encode
+
+888
+00:45:34,568 --> 00:45:37,372
+interpretable factors of variation.
+
+889
+00:45:37,372 --> 00:45:39,731
+So because of this now we'll
+have different dimensions
+
+890
+00:45:39,731 --> 00:45:41,923
+of Z, encoding different
+interpretable factors
+
+891
+00:45:41,923 --> 00:45:43,006
+of variation.
+
+892
+00:45:44,477 --> 00:45:47,674
+So, in this example train now on Faces,
+
+893
+00:45:47,674 --> 00:45:52,020
+we'll see as we vary
+Z1, going up and down,
+
+894
+00:45:52,020 --> 00:45:54,771
+you'll see the amount of smile changing.
+
+895
+00:45:54,771 --> 00:45:56,892
+So from a frown at the
+top to like a big smile
+
+896
+00:45:56,892 --> 00:46:00,225
+at the bottom and then as we go vary Z2,
+
+897
+00:46:01,997 --> 00:46:04,192
+from left to right, you can
+see the head pose changing.
+
+898
+00:46:04,192 --> 00:46:07,859
+From one direction all
+the way to the other.
+
+899
+00:46:09,883 --> 00:46:12,020
+And so one additional
+thing I want to point out
+
+900
+00:46:12,020 --> 00:46:13,964
+is that as a result of doing this,
+
+901
+00:46:13,964 --> 00:46:17,214
+these Z variables are also good feature
+
+902
+00:46:18,198 --> 00:46:19,510
+representations.
+
+903
+00:46:19,510 --> 00:46:23,355
+Because they encode how
+much of these different
+
+904
+00:46:23,355 --> 00:46:26,376
+these different interpretable
+semantics that we have.
+
+905
+00:46:26,376 --> 00:46:29,466
+And so we can use our Q of Z given X,
+
+906
+00:46:29,466 --> 00:46:32,296
+the encoder that we've
+learned and give it an input
+
+907
+00:46:32,296 --> 00:46:36,213
+images X, we can map this
+to Z and use the Z as
+
+908
+00:46:38,121 --> 00:46:40,198
+features that we can
+use for downstream tasks
+
+909
+00:46:40,198 --> 00:46:43,157
+like supervision, or
+like classification or
+
+910
+00:46:43,157 --> 00:46:44,157
+other tasks.
+
+911
+00:46:47,348 --> 00:46:49,947
+Okay so just another
+couple of examples of data
+
+912
+00:46:49,947 --> 00:46:51,434
+generated from VAEs.
+
+913
+00:46:51,434 --> 00:46:55,694
+So on the left here we have
+data generated on CIFAR-10,
+
+914
+00:46:55,694 --> 00:46:58,729
+trained on CIFAR-10, and
+then on the right we have
+
+915
+00:46:58,729 --> 00:47:02,231
+data trained and generated on Faces.
+
+916
+00:47:02,231 --> 00:47:05,043
+And we'll see so we can
+see that in general VAEs
+
+917
+00:47:05,043 --> 00:47:08,737
+are able to generate recognizable data.
+
+918
+00:47:08,737 --> 00:47:11,796
+One of the main drawbacks
+of VAEs is that they tend
+
+919
+00:47:11,796 --> 00:47:15,493
+to still have a bit of
+a blurry aspect to them.
+
+920
+00:47:15,493 --> 00:47:18,270
+You can see this in the
+faces and so this is still
+
+921
+00:47:18,270 --> 00:47:20,520
+an active area of research.
+
+922
+00:47:22,008 --> 00:47:24,944
+Okay so to summarize VAEs,
+
+923
+00:47:24,944 --> 00:47:28,030
+they're a probabilistic spin
+on traditional autoencoders.
+
+924
+00:47:28,030 --> 00:47:31,895
+So instead of deterministically
+taking your input X
+
+925
+00:47:31,895 --> 00:47:36,077
+and going to Z, feature Z and
+then back to reconstructing X,
+
+926
+00:47:36,077 --> 00:47:40,585
+now we have this idea of
+distributions and sampling
+
+927
+00:47:40,585 --> 00:47:43,023
+involved which allows us to generate data.
+
+928
+00:47:43,023 --> 00:47:46,928
+And in order to train
+this, VAEs are defining an
+
+929
+00:47:46,928 --> 00:47:48,435
+intractable density.
+
+930
+00:47:48,435 --> 00:47:51,101
+So we can derive and
+optimize a lower bound,
+
+931
+00:47:51,101 --> 00:47:55,938
+a variational lower bound, so
+variational means basically
+
+932
+00:47:55,938 --> 00:47:58,621
+using approximations to handle
+these types of intractable
+
+933
+00:47:58,621 --> 00:47:59,718
+expressions.
+
+934
+00:47:59,718 --> 00:48:03,577
+And so this is why this is
+called a variational autoencoder.
+
+935
+00:48:03,577 --> 00:48:07,188
+And so some of the
+advantages of this approach
+
+936
+00:48:07,188 --> 00:48:10,249
+is that VAEs are, they're
+a principled approach
+
+937
+00:48:10,249 --> 00:48:14,230
+to generative models and they
+also allow this inference
+
+938
+00:48:14,230 --> 00:48:17,628
+query so being able to infer
+things like Q of Z given X.
+
+939
+00:48:17,628 --> 00:48:20,221
+That we said could be useful
+feature representations
+
+940
+00:48:20,221 --> 00:48:21,554
+for other tasks.
+
+941
+00:48:23,101 --> 00:48:27,081
+So disadvantages of VAEs are
+that while we're maximizing
+
+942
+00:48:27,081 --> 00:48:29,548
+the lower bound of the
+likelihood, which is okay
+
+943
+00:48:29,548 --> 00:48:32,303
+like you know in general this
+is still pushing us in the
+
+944
+00:48:32,303 --> 00:48:33,967
+right direction and there's
+
+945
+00:48:33,967 --> 00:48:37,782
+more other theoretical analysis of this.
+
+946
+00:48:37,782 --> 00:48:41,700
+So you know, it's doing okay,
+but it's maybe not still
+
+947
+00:48:41,700 --> 00:48:46,042
+as direct an optimization
+and evaluation as the pixel
+
+948
+00:48:46,042 --> 00:48:48,378
+RNNs and CNNs that we saw earlier,
+
+949
+00:48:48,378 --> 00:48:50,378
+but which had, and then,
+
+950
+00:48:51,857 --> 00:48:55,431
+also the VAE samples are
+tending to be a little bit
+
+951
+00:48:55,431 --> 00:48:59,235
+blurrier and of lower quality
+compared to state of the art
+
+952
+00:48:59,235 --> 00:49:01,967
+samples that we can see
+from other generative models
+
+953
+00:49:01,967 --> 00:49:04,827
+such as GANs that we'll talk about next.
+
+954
+00:49:04,827 --> 00:49:07,230
+And so VAEs now are still,
+they're still an active
+
+955
+00:49:07,230 --> 00:49:08,647
+area of research.
+
+956
+00:49:11,044 --> 00:49:13,447
+People are working on more
+flexible approximations,
+
+957
+00:49:13,447 --> 00:49:15,565
+so richer approximate posteriors,
+
+958
+00:49:15,565 --> 00:49:19,611
+so instead of just a
+diagonal Gaussian some richer
+
+959
+00:49:19,611 --> 00:49:20,881
+functions for this.
+
+960
+00:49:20,881 --> 00:49:23,977
+And then also, another area
+that people have been working
+
+961
+00:49:23,977 --> 00:49:26,159
+on is incorporating more
+structure in these latent
+
+962
+00:49:26,159 --> 00:49:26,992
+variables.
+
+963
+00:49:26,992 --> 00:49:31,282
+So now we had all of these
+independent latent variables
+
+964
+00:49:31,282 --> 00:49:34,327
+but people are working on
+having modeling structure
+
+965
+00:49:34,327 --> 00:49:38,077
+in here, groupings,
+other types of structure.
+
+966
+00:49:41,106 --> 00:49:43,106
+Okay, so yeah, question.
+
+967
+00:49:44,404 --> 00:49:47,529
+[student's words obscured
+due to lack of microphone]
+
+968
+00:49:47,529 --> 00:49:49,810
+Yeah, so the question is we're
+deciding the dimensionality
+
+969
+00:49:49,810 --> 00:49:51,394
+of the latent variable.
+
+970
+00:49:51,394 --> 00:49:54,727
+Yeah, that's something that you specify.
+
+971
+00:49:55,874 --> 00:50:00,041
+Okay, so we've talked so
+far about pixelCNNs and VAEs
+
+972
+00:50:01,082 --> 00:50:05,439
+and now we'll take a look
+at a third and very popular
+
+973
+00:50:05,439 --> 00:50:08,522
+type of generative model called GANs.
+
+974
+00:50:10,019 --> 00:50:13,378
+So the models that we've seen
+so far, pixelCNNs and RNNs
+
+975
+00:50:13,378 --> 00:50:15,713
+define a tractable density function.
+
+976
+00:50:15,713 --> 00:50:19,752
+And they optimize the
+likelihood of the trained data.
+
+977
+00:50:19,752 --> 00:50:24,174
+And then VAEs in contrast to
+that now have this additional
+
+978
+00:50:24,174 --> 00:50:26,675
+latent variable Z that they
+define in the generative
+
+979
+00:50:26,675 --> 00:50:27,752
+process.
+
+980
+00:50:27,752 --> 00:50:31,206
+And so having the Z has
+a lot of nice properties
+
+981
+00:50:31,206 --> 00:50:34,242
+that we talked about, but
+they are also cause us to have
+
+982
+00:50:34,242 --> 00:50:36,858
+this intractable density
+function that we can't
+
+983
+00:50:36,858 --> 00:50:39,813
+optimize directly and so
+we derive and optimize
+
+984
+00:50:39,813 --> 00:50:43,934
+a lower bound on the likelihood instead.
+
+985
+00:50:43,934 --> 00:50:46,405
+And so now what if we
+just give up on explicitly
+
+986
+00:50:46,405 --> 00:50:48,486
+modeling this density at all?
+
+987
+00:50:48,486 --> 00:50:51,100
+And we say well what we
+want is just the ability
+
+988
+00:50:51,100 --> 00:50:55,267
+to sample and to have nice
+samples from our distribution.
+
+989
+00:50:56,501 --> 00:50:59,175
+So this is the approach that GANs take.
+
+990
+00:50:59,175 --> 00:51:02,637
+So in GANs we don't work with
+an explicit density function,
+
+991
+00:51:02,637 --> 00:51:05,642
+but instead we're going to
+take a game-theoretic approach
+
+992
+00:51:05,642 --> 00:51:08,018
+and we're going to learn to
+generate from our training
+
+993
+00:51:08,018 --> 00:51:10,422
+distribution through a set
+up of a two player game,
+
+994
+00:51:10,422 --> 00:51:13,839
+and we'll talk about this in more detail.
+
+995
+00:51:15,255 --> 00:51:18,654
+So, in the GAN set up we're
+saying, okay well what we want,
+
+996
+00:51:18,654 --> 00:51:21,354
+what we care about is we
+want to be able to sample
+
+997
+00:51:21,354 --> 00:51:24,681
+from a complex high dimensional
+training distribution.
+
+998
+00:51:24,681 --> 00:51:27,339
+So if we think about well
+we want to produce samples
+
+999
+00:51:27,339 --> 00:51:29,885
+from this distribution,
+there's no direct way
+
+1000
+00:51:29,885 --> 00:51:31,170
+that we can do this.
+
+1001
+00:51:31,170 --> 00:51:32,560
+We have this very complex distribution,
+
+1002
+00:51:32,560 --> 00:51:35,078
+we can't just take samples from here.
+
+1003
+00:51:35,078 --> 00:51:38,956
+So the solution that we're
+going to take is that we can,
+
+1004
+00:51:38,956 --> 00:51:42,895
+however, sample from
+simpler distributions.
+
+1005
+00:51:42,895 --> 00:51:44,687
+For example random noise, right?
+
+1006
+00:51:44,687 --> 00:51:46,875
+Gaussians are, these we can sample from.
+
+1007
+00:51:46,875 --> 00:51:49,414
+And so what we're going to
+do is we're going to learn
+
+1008
+00:51:49,414 --> 00:51:52,622
+a transformation from
+these simple distributions
+
+1009
+00:51:52,622 --> 00:51:56,789
+directly to the training
+distribution that we want.
+
+1010
+00:51:58,790 --> 00:52:03,221
+So the question, what can we
+used to represent this complex
+
+1011
+00:52:03,221 --> 00:52:04,304
+distribution?
+
+1012
+00:52:06,120 --> 00:52:07,718
+Neural network, I heard the answer.
+
+1013
+00:52:07,718 --> 00:52:10,362
+So when we want to model
+some kind of complex function
+
+1014
+00:52:10,362 --> 00:52:14,373
+or transformation we use a neural network.
+
+1015
+00:52:14,373 --> 00:52:17,478
+Okay so what we're going to
+do is we're going to take
+
+1016
+00:52:17,478 --> 00:52:19,702
+in the GAN set up, we're
+going to take some input
+
+1017
+00:52:19,702 --> 00:52:23,297
+which is a vector of some
+dimension that we specify
+
+1018
+00:52:23,297 --> 00:52:26,060
+of random noise and then we're
+going to pass this through
+
+1019
+00:52:26,060 --> 00:52:29,015
+a generator network, and then
+we're going to get as output
+
+1020
+00:52:29,015 --> 00:52:33,628
+directly a sample from
+the training distribution.
+
+1021
+00:52:33,628 --> 00:52:36,821
+So every input of random
+noise we want to correspond to
+
+1022
+00:52:36,821 --> 00:52:40,154
+a sample from the training distribution.
+
+1023
+00:52:41,278 --> 00:52:44,763
+And so the way we're going to
+train and learn this network
+
+1024
+00:52:44,763 --> 00:52:48,737
+is that we're going to look
+at this as a two player game.
+
+1025
+00:52:48,737 --> 00:52:50,721
+So we have two players, a
+generator network as well
+
+1026
+00:52:50,721 --> 00:52:54,595
+as an additional discriminator
+network that I'll show next.
+
+1027
+00:52:54,595 --> 00:52:59,080
+And our generator network is
+going to try to, as player one,
+
+1028
+00:52:59,080 --> 00:53:02,584
+it's going to try to fool the
+discriminator by generating
+
+1029
+00:53:02,584 --> 00:53:04,320
+real looking images.
+
+1030
+00:53:04,320 --> 00:53:07,089
+And then our second player,
+our discriminator network
+
+1031
+00:53:07,089 --> 00:53:11,629
+is then going to try to
+distinguish between real and fake
+
+1032
+00:53:11,629 --> 00:53:12,462
+images.
+
+1033
+00:53:12,462 --> 00:53:16,950
+So it wants to do as good
+a job as possible of trying
+
+1034
+00:53:16,950 --> 00:53:19,740
+to determine which of these
+images are counterfeit
+
+1035
+00:53:19,740 --> 00:53:23,323
+or fake images generated
+by this generator.
+
+1036
+00:53:25,425 --> 00:53:27,324
+Okay so what this looks like is,
+
+1037
+00:53:27,324 --> 00:53:31,203
+we have our random noise going
+to our generator network,
+
+1038
+00:53:31,203 --> 00:53:33,678
+generator network is generating
+these images that we're
+
+1039
+00:53:33,678 --> 00:53:36,121
+going to call, they're
+fake from our generator.
+
+1040
+00:53:36,121 --> 00:53:38,738
+And then we're going to also
+have real images that we
+
+1041
+00:53:38,738 --> 00:53:42,439
+take from our training
+set and then we want the
+
+1042
+00:53:42,439 --> 00:53:46,356
+discriminator to be able
+to distinguish between
+
+1043
+00:53:48,358 --> 00:53:50,881
+real and fake images.
+
+1044
+00:53:50,881 --> 00:53:52,849
+Output real and fake for each images.
+
+1045
+00:53:52,849 --> 00:53:55,779
+So the idea is if we're
+able to have a very good
+
+1046
+00:53:55,779 --> 00:53:57,910
+discriminator, we want to
+train a good discriminator,
+
+1047
+00:53:57,910 --> 00:54:01,638
+if it can do a good job of
+discriminating real versus fake,
+
+1048
+00:54:01,638 --> 00:54:05,760
+and then if our generator
+network is able to generate,
+
+1049
+00:54:05,760 --> 00:54:08,227
+if it's able to do well
+and generate fake images
+
+1050
+00:54:08,227 --> 00:54:11,140
+that can successfully
+fool this discriminator,
+
+1051
+00:54:11,140 --> 00:54:13,135
+then we have a good generative model.
+
+1052
+00:54:13,135 --> 00:54:16,348
+We're generating images that
+look like images from the
+
+1053
+00:54:16,348 --> 00:54:17,431
+training set.
+
+1054
+00:54:19,482 --> 00:54:22,421
+Okay, so we have these two
+players and so we're going to
+
+1055
+00:54:22,421 --> 00:54:25,548
+train this jointly in a
+minimax game formulation.
+
+1056
+00:54:25,548 --> 00:54:28,941
+So this minimax objective
+function is what we have here.
+
+1057
+00:54:28,941 --> 00:54:33,108
+We're going to take, it's going
+to be minimum over theta G
+
+1058
+00:54:34,791 --> 00:54:37,399
+our parameters of our generator network G,
+
+1059
+00:54:37,399 --> 00:54:41,431
+and maximum over parameter Zeta
+of our Discriminator network
+
+1060
+00:54:41,431 --> 00:54:44,848
+D, of this objective, right, these terms.
+
+1061
+00:54:47,177 --> 00:54:49,624
+And so if we look at these
+terms, what this is saying
+
+1062
+00:54:49,624 --> 00:54:53,243
+is well this first thing,
+expectation over data
+
+1063
+00:54:53,243 --> 00:54:54,910
+of log of D given X.
+
+1064
+00:54:56,094 --> 00:54:59,496
+This log of D of X is
+the discriminator output
+
+1065
+00:54:59,496 --> 00:55:01,151
+for real data X.
+
+1066
+00:55:01,151 --> 00:55:05,318
+This is going to be likelihood
+of real data being real
+
+1067
+00:55:06,978 --> 00:55:09,309
+from the data distribution P data.
+
+1068
+00:55:09,309 --> 00:55:12,963
+And then the second term
+here, expectation of Z drawn
+
+1069
+00:55:12,963 --> 00:55:16,882
+from P of Z, Z drawn from
+P of Z means samples from
+
+1070
+00:55:16,882 --> 00:55:21,049
+our generator network and
+this term D of G of Z that
+
+1071
+00:55:22,581 --> 00:55:25,875
+we have here is the output
+of our discriminator
+
+1072
+00:55:25,875 --> 00:55:29,109
+for generated fake data for our,
+
+1073
+00:55:29,109 --> 00:55:32,602
+what does the discriminator
+output of G of Z which is
+
+1074
+00:55:32,602 --> 00:55:33,769
+our fake data.
+
+1075
+00:55:36,311 --> 00:55:39,678
+And so if we think about
+this is trying to do,
+
+1076
+00:55:39,678 --> 00:55:43,105
+our discriminator wants to
+maximize this objective, right,
+
+1077
+00:55:43,105 --> 00:55:47,272
+it's a max over theta D such
+that D of X is close to one.
+
+1078
+00:55:49,271 --> 00:55:53,278
+It's close to real, it's
+high for the real data.
+
+1079
+00:55:53,278 --> 00:55:57,445
+And then D of G of X, what
+it thinks of the fake data
+
+1080
+00:55:58,696 --> 00:56:02,679
+on the left here is small, we
+want this to be close to zero.
+
+1081
+00:56:02,679 --> 00:56:06,341
+So if we're able to maximize
+this, this means discriminator
+
+1082
+00:56:06,341 --> 00:56:09,237
+is doing a good job of
+distinguishing between real and zero.
+
+1083
+00:56:09,237 --> 00:56:13,449
+Basically classifying
+between real and fake data.
+
+1084
+00:56:13,449 --> 00:56:17,092
+And then our generator, here
+we want the generator to
+
+1085
+00:56:17,092 --> 00:56:21,542
+minimize this objective such
+that D of G of Z is close
+
+1086
+00:56:21,542 --> 00:56:22,375
+to one.
+
+1087
+00:56:22,375 --> 00:56:26,329
+So if this D of G of Z is
+close to one over here,
+
+1088
+00:56:26,329 --> 00:56:31,319
+then the one minus side is
+small and basically we want to,
+
+1089
+00:56:31,319 --> 00:56:35,236
+if we minimize this term
+then, then it's having
+
+1090
+00:56:36,768 --> 00:56:39,175
+discriminator think that our
+fake data's actually real.
+
+1091
+00:56:39,175 --> 00:56:44,087
+So that means that our generator
+is producing real samples.
+
+1092
+00:56:44,087 --> 00:56:46,893
+Okay so this is the
+important objective of GANs
+
+1093
+00:56:46,893 --> 00:56:51,139
+to try and understand so are
+there any questions about this?
+
+1094
+00:56:51,139 --> 00:56:55,306
+[student's words obscured
+due to lack of microphone]
+
+1095
+00:57:02,342 --> 00:57:04,229
+I'm not sure I understand
+your question, can you,
+
+1096
+00:57:04,229 --> 00:57:08,396
+[student's words obscured
+due to lack of microphone]
+
+1097
+00:57:12,334 --> 00:57:15,377
+Yeah, so the question is
+is this basically trying
+
+1098
+00:57:15,377 --> 00:57:19,544
+to have the first network
+produce real looking images
+
+1099
+00:57:20,761 --> 00:57:22,617
+that our second network,
+the discriminator cannot
+
+1100
+00:57:22,617 --> 00:57:24,284
+distinguish between.
+
+1101
+00:57:30,474 --> 00:57:34,174
+Okay, so the question is how
+do we actually label the data
+
+1102
+00:57:34,174 --> 00:57:36,809
+or do the training for these networks.
+
+1103
+00:57:36,809 --> 00:57:39,364
+We'll see how to train the networks next.
+
+1104
+00:57:39,364 --> 00:57:43,530
+But in terms of like what
+is the data label basically,
+
+1105
+00:57:43,530 --> 00:57:46,180
+this is unsupervised, so
+there's no data labeling.
+
+1106
+00:57:46,180 --> 00:57:49,541
+But data generated from
+the generator network,
+
+1107
+00:57:49,541 --> 00:57:52,805
+the fake images have a label
+of basically zero or fake.
+
+1108
+00:57:52,805 --> 00:57:56,913
+And we can take training
+images that are real images
+
+1109
+00:57:56,913 --> 00:58:00,344
+and this basically has
+a label of one or real.
+
+1110
+00:58:00,344 --> 00:58:03,692
+So when we have, the loss
+function for our discriminator
+
+1111
+00:58:03,692 --> 00:58:04,866
+is using this.
+
+1112
+00:58:04,866 --> 00:58:08,157
+It's trying to output a zero
+for the generator images
+
+1113
+00:58:08,157 --> 00:58:09,819
+and a one for the real images.
+
+1114
+00:58:09,819 --> 00:58:12,048
+So there's no external labels.
+
+1115
+00:58:12,048 --> 00:58:15,136
+[student's words obscured
+due to lack of microphone]
+
+1116
+00:58:15,136 --> 00:58:17,554
+So the question is the label
+for the generator network
+
+1117
+00:58:17,554 --> 00:58:22,119
+will be the output for
+the discriminator network.
+
+1118
+00:58:22,119 --> 00:58:25,534
+The generator is not really doing,
+
+1119
+00:58:25,534 --> 00:58:29,321
+it's not really doing
+classifications necessarily.
+
+1120
+00:58:29,321 --> 00:58:32,744
+What it's objective is
+is here, D of G of Z,
+
+1121
+00:58:32,744 --> 00:58:35,536
+it wants this to be high.
+
+1122
+00:58:35,536 --> 00:58:40,228
+So given a fixed discriminator,
+it wants to learn the
+
+1123
+00:58:40,228 --> 00:58:42,487
+generator parameter
+such that this is high.
+
+1124
+00:58:42,487 --> 00:58:46,169
+So we'll take the fixed
+discriminator output and use that
+
+1125
+00:58:46,169 --> 00:58:47,752
+to do the backprop.
+
+1126
+00:58:51,447 --> 00:58:54,219
+Okay so in order to train
+this, what we're going to do
+
+1127
+00:58:54,219 --> 00:58:57,714
+is we're going to alternate
+between gradient ascent
+
+1128
+00:58:57,714 --> 00:59:02,401
+on our discriminator, so we're
+trying to learn theta beta
+
+1129
+00:59:02,401 --> 00:59:05,222
+to maximizing this objective.
+
+1130
+00:59:05,222 --> 00:59:08,059
+And then gradient
+descent on the generator.
+
+1131
+00:59:08,059 --> 00:59:12,247
+So taking gradient ascent
+on these parameters theta G
+
+1132
+00:59:12,247 --> 00:59:15,698
+such that we're minimizing
+this and this objective.
+
+1133
+00:59:15,698 --> 00:59:18,413
+And here we are only taking
+this right part over here
+
+1134
+00:59:18,413 --> 00:59:22,165
+because that's the only
+part that's dependent on
+
+1135
+00:59:22,165 --> 00:59:23,748
+theta G parameters.
+
+1136
+00:59:26,574 --> 00:59:30,603
+Okay so this is how we can train this GAN.
+
+1137
+00:59:30,603 --> 00:59:32,527
+We can alternate between
+training our discriminator
+
+1138
+00:59:32,527 --> 00:59:35,716
+and our generator in this
+game, each trying to fool
+
+1139
+00:59:35,716 --> 00:59:40,561
+the other or generator trying
+to fool the discriminator.
+
+1140
+00:59:40,561 --> 00:59:44,027
+But one thing that is important
+to note is that in practice
+
+1141
+00:59:44,027 --> 00:59:48,802
+this generator objective as
+we've just defined actually
+
+1142
+00:59:48,802 --> 00:59:50,478
+doesn't work that well.
+
+1143
+00:59:50,478 --> 00:59:54,169
+And the reason for this is
+we have to look at the loss
+
+1144
+00:59:54,169 --> 00:59:55,309
+landscape.
+
+1145
+00:59:55,309 --> 01:00:00,059
+So if we look at the loss
+landscape over here for
+
+1146
+01:00:00,059 --> 01:00:01,059
+D of G of X,
+
+1147
+01:00:02,858 --> 01:00:06,279
+if we apply here one minus D of G of X
+
+1148
+01:00:06,279 --> 01:00:08,737
+which is what we want to
+minimize for the generator,
+
+1149
+01:00:08,737 --> 01:00:10,654
+it has this shape here.
+
+1150
+01:00:12,748 --> 01:00:16,406
+So we want to minimize this
+and it turns out the slope
+
+1151
+01:00:16,406 --> 01:00:21,119
+of this loss is actually going
+to be higher towards the right.
+
+1152
+01:00:21,119 --> 01:00:24,369
+High when D of G of Z is closer to one.
+
+1153
+01:00:26,915 --> 01:00:31,082
+So that means that when our
+generator is doing a good job
+
+1154
+01:00:31,082 --> 01:00:33,409
+of fooling the discriminator,
+we're going to have
+
+1155
+01:00:33,409 --> 01:00:36,837
+a high gradient, more
+higher gradient terms.
+
+1156
+01:00:36,837 --> 01:00:39,636
+And on the other hand
+when we have bad samples,
+
+1157
+01:00:39,636 --> 01:00:43,068
+our generator has not
+learned a good job yet,
+
+1158
+01:00:43,068 --> 01:00:44,794
+it's not good at generating yet,
+
+1159
+01:00:44,794 --> 01:00:47,992
+then this is when the
+discriminator can easily tell
+
+1160
+01:00:47,992 --> 01:00:52,159
+it's now closer to this
+zero region on the X axis.
+
+1161
+01:00:53,002 --> 01:00:55,482
+Then here the gradient's relatively flat.
+
+1162
+01:00:55,482 --> 01:00:59,065
+And so what this actually
+means is that our
+
+1163
+01:01:00,288 --> 01:01:03,185
+our gradient signal is
+dominated by region where the
+
+1164
+01:01:03,185 --> 01:01:05,200
+sample is already pretty good.
+
+1165
+01:01:05,200 --> 01:01:08,011
+Whereas we actually want it to
+learn a lot when the samples
+
+1166
+01:01:08,011 --> 01:01:08,927
+are bad, right?
+
+1167
+01:01:08,927 --> 01:01:12,624
+These are training samples
+that we want to learn from.
+
+1168
+01:01:12,624 --> 01:01:17,570
+And so in order to, so this
+basically makes it hard
+
+1169
+01:01:17,570 --> 01:01:21,664
+to learn and so in order
+to improve learning,
+
+1170
+01:01:21,664 --> 01:01:23,767
+what we're going to do
+is define a different,
+
+1171
+01:01:23,767 --> 01:01:26,320
+slightly different objective
+function for the gradient.
+
+1172
+01:01:26,320 --> 01:01:30,145
+Where now we're going to
+do gradient ascent instead.
+
+1173
+01:01:30,145 --> 01:01:32,229
+And so instead of minimizing
+the likelihood of our
+
+1174
+01:01:32,229 --> 01:01:35,748
+discriminator being correct,
+which is what we had earlier,
+
+1175
+01:01:35,748 --> 01:01:38,147
+now we'll kind of flip
+it and say let's maximize
+
+1176
+01:01:38,147 --> 01:01:40,908
+the likelihood of our
+discriminator being wrong.
+
+1177
+01:01:40,908 --> 01:01:45,075
+And so this will produce this
+objective here of maximizing,
+
+1178
+01:01:47,220 --> 01:01:49,720
+maximizing log of D of G of X.
+
+1179
+01:01:50,767 --> 01:01:52,517
+And so, now basically
+
+1180
+01:01:56,575 --> 01:01:58,327
+we want to, there should be a negative
+
+1181
+01:01:58,327 --> 01:01:59,160
+sign here.
+
+1182
+01:01:59,160 --> 01:02:03,327
+But basically we want to now
+maximize this flip objective
+
+1183
+01:02:04,492 --> 01:02:08,659
+instead and what this now does
+is if we plot this function
+
+1184
+01:02:10,118 --> 01:02:13,263
+on the right here, then we
+have a high gradient signal
+
+1185
+01:02:13,263 --> 01:02:16,149
+in this region on the left
+where we have bad samples,
+
+1186
+01:02:16,149 --> 01:02:20,316
+and now the flatter region
+is to the right where we
+
+1187
+01:02:21,566 --> 01:02:23,242
+would have good samples.
+
+1188
+01:02:23,242 --> 01:02:25,582
+So now we're going to
+learn more from regions
+
+1189
+01:02:25,582 --> 01:02:26,571
+of bad samples.
+
+1190
+01:02:26,571 --> 01:02:29,059
+And so this has the same
+objective of fooling
+
+1191
+01:02:29,059 --> 01:02:31,995
+the discriminator but it
+actually works much better
+
+1192
+01:02:31,995 --> 01:02:35,990
+in practice and for a lot
+of work on GANs that are
+
+1193
+01:02:35,990 --> 01:02:38,742
+using these kind of
+vanilla GAN formulation
+
+1194
+01:02:38,742 --> 01:02:41,492
+is actually using this objective.
+
+1195
+01:02:44,220 --> 01:02:48,387
+Okay so just an aside on
+that is that jointly training
+
+1196
+01:02:49,444 --> 01:02:53,964
+these two networks is
+challenging and can be unstable.
+
+1197
+01:02:53,964 --> 01:02:56,222
+So as we saw here, like
+we're alternating between
+
+1198
+01:02:56,222 --> 01:02:59,079
+training a discriminator
+and training a generator.
+
+1199
+01:02:59,079 --> 01:03:03,246
+This type of alternation is,
+basically it's hard to learn
+
+1200
+01:03:04,418 --> 01:03:08,398
+two networks at once and
+there's also this issue
+
+1201
+01:03:08,398 --> 01:03:11,131
+of depending on what our
+loss landscape looks at,
+
+1202
+01:03:11,131 --> 01:03:13,815
+it can affect our training dynamics.
+
+1203
+01:03:13,815 --> 01:03:17,735
+So an active area of research
+still is how can we choose
+
+1204
+01:03:17,735 --> 01:03:20,592
+objectives with better loss
+landscapes that can help
+
+1205
+01:03:20,592 --> 01:03:23,342
+training and make it more stable?
+
+1206
+01:03:26,516 --> 01:03:29,257
+Okay so now let's put this
+all together and look at the
+
+1207
+01:03:29,257 --> 01:03:31,152
+full GAN training algorithm.
+
+1208
+01:03:31,152 --> 01:03:34,366
+So what we're going to do is
+for each iteration of training
+
+1209
+01:03:34,366 --> 01:03:37,674
+we're going to first train the generation,
+
+1210
+01:03:37,674 --> 01:03:39,145
+train the discriminator network a bit
+
+1211
+01:03:39,145 --> 01:03:41,078
+and then train the generator network.
+
+1212
+01:03:41,078 --> 01:03:43,959
+So for k steps of training
+the discriminator network
+
+1213
+01:03:43,959 --> 01:03:47,861
+we'll sample a mini batch
+of noise samples from our
+
+1214
+01:03:47,861 --> 01:03:52,442
+noise prior Z and then
+also sample a mini batch
+
+1215
+01:03:52,442 --> 01:03:55,859
+of real samples from our training data X.
+
+1216
+01:03:57,366 --> 01:04:01,410
+So what we'll do is we'll
+pass the noise through our
+
+1217
+01:04:01,410 --> 01:04:04,519
+generator, we'll get our fake images out.
+
+1218
+01:04:04,519 --> 01:04:07,019
+So we have a mini batch of
+fake images and mini batch
+
+1219
+01:04:07,019 --> 01:04:08,052
+of real images.
+
+1220
+01:04:08,052 --> 01:04:11,554
+And then we'll pick a gradient
+step on the discriminator
+
+1221
+01:04:11,554 --> 01:04:15,041
+using this mini batch, our
+fake and our real images
+
+1222
+01:04:15,041 --> 01:04:17,891
+and then update our
+discriminator parameters.
+
+1223
+01:04:17,891 --> 01:04:21,318
+And use this and do this a
+certain number of iterations
+
+1224
+01:04:21,318 --> 01:04:24,313
+to train the discriminator
+for a bit basically.
+
+1225
+01:04:24,313 --> 01:04:26,452
+And then after that we'll
+go to our second step
+
+1226
+01:04:26,452 --> 01:04:28,803
+which is training the generator.
+
+1227
+01:04:28,803 --> 01:04:32,544
+And so here we'll sample just
+a mini batch of noise samples.
+
+1228
+01:04:32,544 --> 01:04:36,205
+We'll pass this through our
+generator and then now we
+
+1229
+01:04:36,205 --> 01:04:40,288
+want to do backpop on this
+to basically optimize our
+
+1230
+01:04:42,264 --> 01:04:45,078
+generator objective that we saw earlier.
+
+1231
+01:04:45,078 --> 01:04:48,038
+So we want to have our
+generator fool our discriminator
+
+1232
+01:04:48,038 --> 01:04:49,705
+as much as possible.
+
+1233
+01:04:50,773 --> 01:04:54,940
+And so we're going to alternate
+between these two steps
+
+1234
+01:04:56,041 --> 01:04:58,410
+of taking gradient steps
+for our discriminator
+
+1235
+01:04:58,410 --> 01:04:59,996
+and for the generator.
+
+1236
+01:04:59,996 --> 01:05:02,579
+And I said for k steps up here,
+
+1237
+01:05:03,474 --> 01:05:06,306
+for training the discriminator
+and so this is kind
+
+1238
+01:05:06,306 --> 01:05:08,604
+of a topic of debate.
+
+1239
+01:05:08,604 --> 01:05:11,612
+Some people think just having
+one iteration of discriminator
+
+1240
+01:05:11,612 --> 01:05:15,391
+one type of discriminator,
+one type of generator is best.
+
+1241
+01:05:15,391 --> 01:05:18,259
+Some people think it's better
+to train the discriminator
+
+1242
+01:05:18,259 --> 01:05:20,744
+for a little bit longer before
+switching to the generator.
+
+1243
+01:05:20,744 --> 01:05:24,771
+There's no real clear rule
+and it's something that
+
+1244
+01:05:24,771 --> 01:05:28,552
+people have found different
+things to work better
+
+1245
+01:05:28,552 --> 01:05:30,732
+depending on the problem.
+
+1246
+01:05:30,732 --> 01:05:33,693
+And one thing I want to point
+out is that there's been
+
+1247
+01:05:33,693 --> 01:05:37,838
+a lot of recent work that
+alleviates this problem
+
+1248
+01:05:37,838 --> 01:05:41,580
+and makes it so you don't
+have to spend so much effort
+
+1249
+01:05:41,580 --> 01:05:45,028
+trying to balance how the
+training of these two networks.
+
+1250
+01:05:45,028 --> 01:05:47,880
+It'll have more stable training
+and give better results.
+
+1251
+01:05:47,880 --> 01:05:51,822
+And so Wasserstein GAN
+is an example of a paper
+
+1252
+01:05:51,822 --> 01:05:55,655
+that was an important
+work towards doing this.
+
+1253
+01:06:00,313 --> 01:06:04,417
+Okay so looking at the whole
+picture we've now trained,
+
+1254
+01:06:04,417 --> 01:06:06,548
+we have our network setup,
+we've trained both our
+
+1255
+01:06:06,548 --> 01:06:09,767
+generator network and
+our discriminator network
+
+1256
+01:06:09,767 --> 01:06:11,785
+and now after training for generation,
+
+1257
+01:06:11,785 --> 01:06:15,009
+we can just take our generator
+network and use this to
+
+1258
+01:06:15,009 --> 01:06:16,899
+generate new images.
+
+1259
+01:06:16,899 --> 01:06:19,687
+So we just take noise Z and
+pass this through and generate
+
+1260
+01:06:19,687 --> 01:06:21,520
+fake images from here.
+
+1261
+01:06:23,636 --> 01:06:27,352
+Okay and so now let's look
+at some generated samples
+
+1262
+01:06:27,352 --> 01:06:28,351
+from these GANs.
+
+1263
+01:06:28,351 --> 01:06:31,093
+So here's an example of trained on MNIST
+
+1264
+01:06:31,093 --> 01:06:33,099
+and then on the right on Faces.
+
+1265
+01:06:33,099 --> 01:06:36,195
+And for each of these you can also see,
+
+1266
+01:06:36,195 --> 01:06:39,765
+just for visualization
+the closest, on the right,
+
+1267
+01:06:39,765 --> 01:06:42,349
+the nearest neighbor from the
+training set to the column
+
+1268
+01:06:42,349 --> 01:06:43,849
+right next to it.
+
+1269
+01:06:43,849 --> 01:06:45,426
+And so you can see that
+we're able to generate
+
+1270
+01:06:45,426 --> 01:06:47,810
+very realistic samples and
+it never directly memorizes
+
+1271
+01:06:47,810 --> 01:06:49,227
+the training set.
+
+1272
+01:06:51,264 --> 01:06:54,003
+And here are some examples
+from the original GAN paper
+
+1273
+01:06:54,003 --> 01:06:56,061
+on CIFAR images.
+
+1274
+01:06:56,061 --> 01:06:59,960
+And these are still fairly,
+not such good quality yet,
+
+1275
+01:06:59,960 --> 01:07:03,200
+these were, the original
+work is from 2014,
+
+1276
+01:07:03,200 --> 01:07:07,374
+so these are some older, simpler networks.
+
+1277
+01:07:07,374 --> 01:07:11,541
+And these were using simple,
+fully connected networks.
+
+1278
+01:07:12,550 --> 01:07:14,518
+And so since that time
+there's been a lot of work
+
+1279
+01:07:14,518 --> 01:07:16,018
+on improving GANs.
+
+1280
+01:07:18,120 --> 01:07:20,905
+One example of a work that
+really took a big step
+
+1281
+01:07:20,905 --> 01:07:24,645
+towards improving the quality
+of samples is this work
+
+1282
+01:07:24,645 --> 01:07:29,555
+from Alex Radford in ICLR
+2016 on adding convolutional
+
+1283
+01:07:29,555 --> 01:07:31,388
+architectures to GANs.
+
+1284
+01:07:33,806 --> 01:07:37,663
+In this paper there was
+a whole set of guidelines
+
+1285
+01:07:37,663 --> 01:07:41,926
+on architectures for helping
+GANs to produce better
+
+1286
+01:07:41,926 --> 01:07:42,958
+samples.
+
+1287
+01:07:42,958 --> 01:07:46,517
+So you can look at this for more details.
+
+1288
+01:07:46,517 --> 01:07:49,217
+This is an example of a
+convolutional architecture
+
+1289
+01:07:49,217 --> 01:07:52,669
+that they're using which
+is going from our input Z
+
+1290
+01:07:52,669 --> 01:07:55,944
+noise vector Z and
+transforming this all the way
+
+1291
+01:07:55,944 --> 01:07:57,694
+to the output sample.
+
+1292
+01:08:00,527 --> 01:08:03,437
+So now from this large
+convolutional architecture
+
+1293
+01:08:03,437 --> 01:08:06,446
+we'll see that the samples
+from this model are really
+
+1294
+01:08:06,446 --> 01:08:08,251
+starting to look very good.
+
+1295
+01:08:08,251 --> 01:08:11,408
+So this is trained on
+a dataset of bedrooms
+
+1296
+01:08:11,408 --> 01:08:15,575
+and we can see all kinds of
+very realistic fancy looking
+
+1297
+01:08:16,783 --> 01:08:20,950
+bedrooms with windows and night
+stands and other furniture
+
+1298
+01:08:22,926 --> 01:08:26,063
+around there so these are
+some really pretty samples.
+
+1299
+01:08:26,064 --> 01:08:29,828
+And we can also try and
+interpret a little bit of what
+
+1300
+01:08:29,828 --> 01:08:32,346
+these GANs are doing.
+
+1301
+01:08:32,346 --> 01:08:36,151
+So in this example here what
+we can do is we can take
+
+1302
+01:08:36,152 --> 01:08:40,038
+two points of Z, two
+different random noise vectors
+
+1303
+01:08:40,038 --> 01:08:42,817
+and let's just interpolate
+between these points.
+
+1304
+01:08:42,818 --> 01:08:45,245
+And each row across here
+is an interpolation from
+
+1305
+01:08:45,245 --> 01:08:50,142
+one random noise Z to
+another random noise vector Z
+
+1306
+01:08:50,142 --> 01:08:53,207
+and you can see that as it's changing,
+
+1307
+01:08:53,207 --> 01:08:55,655
+it's smoothly interpolating
+the image as well
+
+1308
+01:08:55,656 --> 01:08:57,073
+all the way over.
+
+1309
+01:08:59,286 --> 01:09:02,067
+And so something else that
+we can do is we can see that,
+
+1310
+01:09:02,067 --> 01:09:06,584
+well, let's try to analyze
+further what these vectors Z
+
+1311
+01:09:06,584 --> 01:09:10,313
+mean, and so we can try
+and do vector math on here.
+
+1312
+01:09:10,313 --> 01:09:13,563
+So what this experiment does is it says
+
+1313
+01:09:14,888 --> 01:09:17,828
+okay, let's take some images of smiling,
+
+1314
+01:09:17,828 --> 01:09:22,099
+samples of smiling women
+images and then let's take some
+
+1315
+01:09:22,100 --> 01:09:25,379
+samples of neutral women
+and then also some samples
+
+1316
+01:09:25,379 --> 01:09:26,629
+of neutral men.
+
+1317
+01:09:28,341 --> 01:09:32,049
+And so let's try and do take
+the average of the Z vectors
+
+1318
+01:09:32,050 --> 01:09:34,920
+that produced each of
+these samples and if we,
+
+1319
+01:09:34,920 --> 01:09:38,184
+Say we take this, mean
+vector for the smiling women,
+
+1320
+01:09:38,184 --> 01:09:40,783
+subtract the mean vector
+for the neutral women
+
+1321
+01:09:40,783 --> 01:09:43,786
+and add the mean vector
+for the neutral man,
+
+1322
+01:09:43,787 --> 01:09:45,037
+what do we get?
+
+1323
+01:09:46,651 --> 01:09:49,884
+And we get samples of smiling man.
+
+1324
+01:09:49,884 --> 01:09:52,200
+So we can take the Z
+vector produced there,
+
+1325
+01:09:52,200 --> 01:09:56,200
+generate samples and get
+samples of smiling men.
+
+1326
+01:09:57,190 --> 01:09:59,712
+And we can have another example of this.
+
+1327
+01:09:59,712 --> 01:10:03,879
+Of glasses man minus no glasses
+man and plus glasses women.
+
+1328
+01:10:05,918 --> 01:10:08,763
+And get women with glasses.
+
+1329
+01:10:08,763 --> 01:10:12,483
+So here you can see that
+basically the Z has this type
+
+1330
+01:10:12,483 --> 01:10:16,191
+of interpretability that
+you can use this to generate
+
+1331
+01:10:16,191 --> 01:10:18,358
+some pretty cool examples.
+
+1332
+01:10:20,026 --> 01:10:22,300
+Okay so this year, 2017 has really been
+
+1333
+01:10:22,300 --> 01:10:23,967
+the year of the GAN.
+
+1334
+01:10:24,842 --> 01:10:28,309
+There's been tons and tons of work on GANs
+
+1335
+01:10:28,309 --> 01:10:31,737
+and it's really sort of
+exploded and gotten some really
+
+1336
+01:10:31,737 --> 01:10:33,261
+cool results.
+
+1337
+01:10:33,261 --> 01:10:37,017
+So on the left here you
+can see people working on
+
+1338
+01:10:37,017 --> 01:10:38,680
+better training and generation.
+
+1339
+01:10:38,680 --> 01:10:41,454
+So we talked about improving
+the loss functions,
+
+1340
+01:10:41,454 --> 01:10:45,621
+more stable training and this
+was able to get really nice
+
+1341
+01:10:47,216 --> 01:10:50,173
+generations here of different
+types of architectures
+
+1342
+01:10:50,173 --> 01:10:54,326
+on the bottom here really
+crisp high resolution faces.
+
+1343
+01:10:54,326 --> 01:10:58,918
+With GANs you can also do,
+there's also been models on
+
+1344
+01:10:58,918 --> 01:11:01,742
+source to try to domain
+transfer and conditional GANs.
+
+1345
+01:11:01,742 --> 01:11:04,394
+And so here, this is an
+example of source to try to
+
+1346
+01:11:04,394 --> 01:11:08,363
+get domain transfer where,
+for example in the upper part
+
+1347
+01:11:08,363 --> 01:11:12,540
+here we are trying to go
+from source domain of horses
+
+1348
+01:11:12,540 --> 01:11:14,703
+to an output domain of zebras.
+
+1349
+01:11:14,703 --> 01:11:18,692
+So we can take an image
+of horses and train a GAN
+
+1350
+01:11:18,692 --> 01:11:21,646
+such that the output is
+going to be the same thing
+
+1351
+01:11:21,646 --> 01:11:25,813
+but now zebras in the same
+image setting as the horses
+
+1352
+01:11:28,408 --> 01:11:29,915
+and go the other way around.
+
+1353
+01:11:29,915 --> 01:11:33,124
+We can transform apples into oranges.
+
+1354
+01:11:33,124 --> 01:11:35,128
+And also the other way around.
+
+1355
+01:11:35,128 --> 01:11:38,608
+We can also use this to
+do photo enhancement.
+
+1356
+01:11:38,608 --> 01:11:41,676
+So producing these, really
+taking a standard photo
+
+1357
+01:11:41,676 --> 01:11:46,218
+and trying to make really
+nice, as if you had,
+
+1358
+01:11:46,218 --> 01:11:48,717
+pretending that you have a
+really nice expensive camera.
+
+1359
+01:11:48,717 --> 01:11:52,379
+That you can get the nice blur effects.
+
+1360
+01:11:52,379 --> 01:11:55,987
+On the bottom here we have scene changing,
+
+1361
+01:11:55,987 --> 01:11:59,733
+so transforming an image
+of Yosemite from the image
+
+1362
+01:11:59,733 --> 01:12:03,750
+in winter time to the
+image in summer time.
+
+1363
+01:12:03,750 --> 01:12:05,753
+And there's really tons of applications.
+
+1364
+01:12:05,753 --> 01:12:08,430
+So on the right here there's more.
+
+1365
+01:12:08,430 --> 01:12:11,930
+There's also going from a text description
+
+1366
+01:12:13,900 --> 01:12:15,839
+and having a GAN that's now
+conditioned on this text
+
+1367
+01:12:15,839 --> 01:12:18,343
+description and producing an image.
+
+1368
+01:12:18,343 --> 01:12:21,572
+So there's something
+here about a small bird
+
+1369
+01:12:21,572 --> 01:12:25,094
+with a pink breast and crown
+and now we're going to generate
+
+1370
+01:12:25,094 --> 01:12:26,421
+images of this.
+
+1371
+01:12:26,421 --> 01:12:30,588
+And there's also examples
+down here of filling in edges.
+
+1372
+01:12:31,808 --> 01:12:34,436
+So given conditions on some sketch that we have,
+
+1373
+01:12:34,436 --> 01:12:38,603
+can we fill in a color version
+of what this would look like.
+
+1374
+01:12:40,848 --> 01:12:45,015
+Can we take a Google, a
+map grid and put something
+
+1375
+01:12:47,127 --> 01:12:49,033
+that looks like Google Earth on,
+
+1376
+01:12:49,033 --> 01:12:52,528
+and turn it into something
+that looks like Google Earth.
+
+1377
+01:12:52,528 --> 01:12:55,492
+Go in and hallucinate all
+of these buildings and trees
+
+1378
+01:12:55,492 --> 01:12:56,767
+and so on.
+
+1379
+01:12:56,767 --> 01:12:59,825
+And so there's lots of
+really cool examples of this.
+
+1380
+01:12:59,825 --> 01:13:03,575
+And there's also this
+website for pics to pics
+
+1381
+01:13:04,591 --> 01:13:06,869
+which did a lot of these
+kind of conditional GAN type
+
+1382
+01:13:06,869 --> 01:13:08,077
+examples.
+
+1383
+01:13:08,077 --> 01:13:12,244
+I encourage you to go look
+at for more interesting
+
+1384
+01:13:13,450 --> 01:13:17,549
+applications that people
+have done with GANs.
+
+1385
+01:13:17,549 --> 01:13:20,473
+And in terms of research
+papers there's also
+
+1386
+01:13:20,473 --> 01:13:24,640
+there's a huge number of papers
+about GANs this year now.
+
+1387
+01:13:26,047 --> 01:13:29,528
+There's a website called
+the GAN Zoo that kind of is
+
+1388
+01:13:29,528 --> 01:13:31,365
+trying to compile a whole list of these.
+
+1389
+01:13:31,365 --> 01:13:35,036
+And so here this has only
+taken me from A through C
+
+1390
+01:13:35,036 --> 01:13:37,690
+on the left here and
+through like L on the right.
+
+1391
+01:13:37,690 --> 01:13:40,076
+So it won't even fit on the slide.
+
+1392
+01:13:40,076 --> 01:13:42,446
+There's tons of papers as
+well that you can look at
+
+1393
+01:13:42,446 --> 01:13:44,794
+if you're interested.
+
+1394
+01:13:44,794 --> 01:13:48,961
+And then one last pointer
+is also for tips and tricks
+
+1395
+01:13:49,927 --> 01:13:53,348
+for training GANs, here's
+a nice little website
+
+1396
+01:13:53,348 --> 01:13:57,259
+that has pointers if you're
+trying to train these GANs
+
+1397
+01:13:57,259 --> 01:13:58,342
+in practice.
+
+1398
+01:14:01,313 --> 01:14:03,396
+Okay, so summary of GANs.
+
+1399
+01:14:04,336 --> 01:14:06,915
+GANs don't work with an
+explicit density function.
+
+1400
+01:14:06,915 --> 01:14:10,036
+Instead we're going to represent
+this implicitly through
+
+1401
+01:14:10,036 --> 01:14:13,989
+samples and they take a
+game-theoretic approach to training
+
+1402
+01:14:13,989 --> 01:14:16,092
+so we're going to learn to
+generate from our training
+
+1403
+01:14:16,092 --> 01:14:18,973
+distribution through a
+two player game setup.
+
+1404
+01:14:18,973 --> 01:14:21,947
+And the pros of GANs are
+that they're really having
+
+1405
+01:14:21,947 --> 01:14:24,934
+gorgeous state of the art
+samples and you can do a lot
+
+1406
+01:14:24,934 --> 01:14:26,212
+with these.
+
+1407
+01:14:26,212 --> 01:14:29,580
+The cons are that they are
+trickier and more unstable
+
+1408
+01:14:29,580 --> 01:14:33,247
+to train, we're not
+just directly optimizing
+
+1409
+01:14:36,499 --> 01:14:40,054
+a one objective function
+that we can just do backpop
+
+1410
+01:14:40,054 --> 01:14:41,830
+and train easily.
+
+1411
+01:14:41,830 --> 01:14:44,648
+Instead we have these two
+networks that we're trying
+
+1412
+01:14:44,648 --> 01:14:47,710
+to balance training with so
+it can be a bit more unstable.
+
+1413
+01:14:47,710 --> 01:14:50,979
+And we also can lose out
+on not being able to do
+
+1414
+01:14:50,979 --> 01:14:54,915
+some of the inference queries,
+P of X, P of Z given X
+
+1415
+01:14:54,915 --> 01:14:57,629
+that we had for example in our VAE.
+
+1416
+01:14:57,629 --> 01:15:00,051
+And GANs are still an
+active area of research,
+
+1417
+01:15:00,051 --> 01:15:04,427
+this is a relatively new type
+of model that we're starting
+
+1418
+01:15:04,427 --> 01:15:07,040
+to see a lot of and you'll
+be seeing a lot more of.
+
+1419
+01:15:07,040 --> 01:15:11,556
+And so people are still working
+now on better loss functions
+
+1420
+01:15:11,556 --> 01:15:14,994
+more stable training, so Wasserstein GAN
+
+1421
+01:15:14,994 --> 01:15:18,994
+for those of you who are
+interested is basically
+
+1422
+01:15:20,585 --> 01:15:22,224
+an improvement in this direction.
+
+1423
+01:15:22,224 --> 01:15:25,099
+That now a lot of people are
+also using and basing models
+
+1424
+01:15:25,099 --> 01:15:26,387
+off of.
+
+1425
+01:15:26,387 --> 01:15:29,759
+There's also other works
+like LSGAN, Least Square's GAN,
+
+1426
+01:15:29,759 --> 01:15:31,489
+Least Square's GAN and others.
+
+1427
+01:15:31,489 --> 01:15:32,871
+So you can look into this more.
+
+1428
+01:15:32,871 --> 01:15:35,285
+And a lot of times for these new models
+
+1429
+01:15:35,285 --> 01:15:37,108
+in terms of actually implementing this,
+
+1430
+01:15:37,108 --> 01:15:39,307
+they're not necessarily big changes.
+
+1431
+01:15:39,307 --> 01:15:41,622
+They're different loss
+functions that you can change
+
+1432
+01:15:41,622 --> 01:15:43,407
+a little bit and get
+like a big improvement
+
+1433
+01:15:43,407 --> 01:15:44,279
+in training.
+
+1434
+01:15:44,279 --> 01:15:47,159
+And so this is, some of
+these are worth looking into
+
+1435
+01:15:47,159 --> 01:15:50,115
+and you'll also get some
+practice on your homework
+
+1436
+01:15:50,115 --> 01:15:51,500
+assignment.
+
+1437
+01:15:51,500 --> 01:15:54,410
+And there's also a lot of
+work on different types of
+
+1438
+01:15:54,410 --> 01:15:57,279
+conditional GANs and GANs
+for all kinds of different
+
+1439
+01:15:57,279 --> 01:15:59,946
+problem setups and applications.
+
+1440
+01:16:01,648 --> 01:16:03,507
+Okay so a recap of today.
+
+1441
+01:16:03,507 --> 01:16:05,807
+We talked about generative models.
+
+1442
+01:16:05,807 --> 01:16:08,538
+We talked about three of the
+most common kinds of generative
+
+1443
+01:16:08,538 --> 01:16:12,329
+models that people are using
+and doing research on today.
+
+1444
+01:16:12,329 --> 01:16:15,098
+So we talked first about
+pixelRNN and pixelCNN,
+
+1445
+01:16:15,098 --> 01:16:17,588
+which is an explicit density model.
+
+1446
+01:16:17,588 --> 01:16:20,710
+It optimizes the exact
+likelihood and it produces good
+
+1447
+01:16:20,710 --> 01:16:24,607
+samples but it's pretty
+inefficient because of the
+
+1448
+01:16:24,607 --> 01:16:26,981
+sequential generation.
+
+1449
+01:16:26,981 --> 01:16:29,902
+We looked at VAE which
+optimizes a variational or lower
+
+1450
+01:16:29,902 --> 01:16:32,696
+bound on the likelihood
+and this also produces
+
+1451
+01:16:32,696 --> 01:16:35,090
+useful a latent representation.
+
+1452
+01:16:35,090 --> 01:16:36,890
+You can do inference queries.
+
+1453
+01:16:36,890 --> 01:16:40,305
+But the example quality
+is still not the best.
+
+1454
+01:16:40,305 --> 01:16:42,715
+So even though it has a
+lot of promise, it's still
+
+1455
+01:16:42,715 --> 01:16:46,583
+a very active area of
+research and has a lot of
+
+1456
+01:16:46,583 --> 01:16:47,657
+open problems.
+
+1457
+01:16:47,657 --> 01:16:51,654
+And then GANs we talked
+about is a game-theoretic
+
+1458
+01:16:51,654 --> 01:16:55,089
+approach for training and
+it's what currently achieves
+
+1459
+01:16:55,089 --> 01:16:57,375
+the best state of the art examples.
+
+1460
+01:16:57,375 --> 01:17:00,253
+But it can also be tricky
+and unstable to train
+
+1461
+01:17:00,253 --> 01:17:05,047
+and it loses out a bit
+on the inference queries.
+
+1462
+01:17:05,047 --> 01:17:08,108
+And so what you'll also
+see is a lot of recent work
+
+1463
+01:17:08,108 --> 01:17:10,239
+on combinations of these kinds of models.
+
+1464
+01:17:10,239 --> 01:17:12,733
+So for example adversarial autoencoders.
+
+1465
+01:17:12,733 --> 01:17:14,865
+Something like a VAE
+trained with an additional
+
+1466
+01:17:14,865 --> 01:17:18,478
+adversarial loss on top which
+improves the sample quality.
+
+1467
+01:17:18,478 --> 01:17:21,517
+There's also things like
+pixelVAE is now a combination
+
+1468
+01:17:21,517 --> 01:17:23,848
+of pixelCNN and VAE so
+there's a lot of combinations
+
+1469
+01:17:23,848 --> 01:17:28,015
+basically trying to take
+the best of all these worlds
+
+1470
+01:17:29,808 --> 01:17:32,444
+and put them together.
+
+1471
+01:17:32,444 --> 01:17:35,000
+Okay so today we talked
+about generative models
+
+1472
+01:17:35,000 --> 01:17:38,449
+and next time we'll talk
+about reinforcement learning.
+
+1473
+01:17:38,449 --> 00:00:00,000
+Thanks.
+

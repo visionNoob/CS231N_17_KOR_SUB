@@ -1,0 +1,8695 @@
+1
+00:00:09,739 --> 00:00:10,898
+- Hello?
+
+2
+00:00:10,898 --> 00:00:13,891
+Okay, it's after 12, so
+I want to get started.
+
+3
+00:00:13,891 --> 00:00:16,151
+So today, lecture eight,
+we're going to talk about
+
+4
+00:00:16,151 --> 00:00:17,822
+deep learning software.
+
+5
+00:00:17,822 --> 00:00:19,593
+This is a super exciting
+topic because it changes
+
+6
+00:00:19,593 --> 00:00:21,283
+a lot every year.
+
+7
+00:00:21,283 --> 00:00:23,156
+But also means it's a lot
+of work to give this lecture
+
+8
+00:00:23,156 --> 00:00:25,621
+'cause it changes a lot every year.
+
+9
+00:00:25,621 --> 00:00:28,302
+But as usual, a couple
+administrative notes
+
+10
+00:00:28,302 --> 00:00:30,024
+before we dive into the material.
+
+11
+00:00:30,024 --> 00:00:32,323
+So as a reminder the
+project proposals for your
+
+12
+00:00:32,323 --> 00:00:34,563
+course projects were due on Tuesday.
+
+13
+00:00:34,563 --> 00:00:37,405
+So hopefully you all turned that in,
+
+14
+00:00:37,405 --> 00:00:39,704
+and hopefully you all
+have a somewhat good idea
+
+15
+00:00:39,704 --> 00:00:41,566
+of what kind of projects
+you want to work on
+
+16
+00:00:41,566 --> 00:00:42,766
+for the class.
+
+17
+00:00:42,766 --> 00:00:45,852
+So we're in the process of
+assigning TA's to projects
+
+18
+00:00:45,852 --> 00:00:47,979
+based on what the project area is
+
+19
+00:00:47,979 --> 00:00:50,217
+and the expertise of the TA's.
+
+20
+00:00:50,217 --> 00:00:52,546
+So we'll have some more
+information about that
+
+21
+00:00:52,546 --> 00:00:54,264
+in the next couple days I think.
+
+22
+00:00:54,264 --> 00:00:56,563
+We're also in the process
+of grading assignment one,
+
+23
+00:00:56,563 --> 00:00:59,724
+so stay tuned and we'll get
+those grades back to you
+
+24
+00:00:59,724 --> 00:01:00,942
+as soon as we can.
+
+25
+00:01:00,942 --> 00:01:03,464
+Another reminder is that
+assignment two has been out
+
+26
+00:01:03,464 --> 00:01:04,449
+for a while.
+
+27
+00:01:04,449 --> 00:01:08,680
+That's going to be due next week,
+a week from today, Thursday.
+
+28
+00:01:08,680 --> 00:01:10,848
+And again, when working on assignment two,
+
+29
+00:01:10,848 --> 00:01:12,846
+remember to stop your
+Google Cloud instances
+
+30
+00:01:12,846 --> 00:01:16,231
+when you're not working to
+try to preserve your credits.
+
+31
+00:01:16,231 --> 00:01:18,264
+And another bit of
+confusion, I just wanted to
+
+32
+00:01:18,264 --> 00:01:21,326
+re-emphasize is that for
+assignment two you really
+
+33
+00:01:21,326 --> 00:01:24,812
+only need to use GPU instances
+for the last notebook.
+
+34
+00:01:24,812 --> 00:01:29,021
+For all of the several
+notebooks it's just in Python
+
+35
+00:01:29,021 --> 00:01:32,250
+and Numpy so you don't need
+any GPUs for those questions.
+
+36
+00:01:32,250 --> 00:01:34,414
+So again, conserve your credits,
+
+37
+00:01:34,414 --> 00:01:36,701
+only use GPUs when you need them.
+
+38
+00:01:36,701 --> 00:01:39,973
+And the final reminder is
+that the midterm is coming up.
+
+39
+00:01:39,973 --> 00:01:41,516
+It's kind of hard to
+believe we're there already,
+
+40
+00:01:41,516 --> 00:01:45,683
+but the midterm will be in
+class on Tuesday, five nine.
+
+41
+00:01:45,683 --> 00:01:47,901
+So the midterm will be more theoretical.
+
+42
+00:01:47,901 --> 00:01:51,018
+It'll be sort of pen and paper
+working through different
+
+43
+00:01:51,018 --> 00:01:54,137
+kinds of, slightly more
+theoretical questions
+
+44
+00:01:54,137 --> 00:01:55,450
+to check your understanding
+of the material that we've
+
+45
+00:01:55,450 --> 00:01:57,071
+covered so far.
+
+46
+00:01:57,071 --> 00:01:59,652
+And I think we'll probably
+post at least a short sort of
+
+47
+00:01:59,652 --> 00:02:02,506
+sample of the types of
+questions to expect.
+
+48
+00:02:02,506 --> 00:02:03,695
+Question?
+
+49
+00:02:03,695 --> 00:02:05,310
+[student's words obscured
+due to lack of microphone]
+
+50
+00:02:05,310 --> 00:02:08,233
+Oh yeah, question is
+whether it's open-book,
+
+51
+00:02:08,233 --> 00:02:10,675
+so we're going to say
+closed note, closed book.
+
+52
+00:02:10,675 --> 00:02:12,037
+So just,
+
+53
+00:02:12,037 --> 00:02:13,757
+Yeah, yeah, so that's what
+we've done in the past
+
+54
+00:02:13,757 --> 00:02:15,671
+is just closed note,
+closed book, relatively
+
+55
+00:02:15,671 --> 00:02:17,568
+just like want to check
+that you understand
+
+56
+00:02:17,568 --> 00:02:21,735
+the intuition behind most of
+the stuff we've presented.
+
+57
+00:02:23,618 --> 00:02:26,015
+So, a quick recap as a reminder
+of what we were talking
+
+58
+00:02:26,015 --> 00:02:27,577
+about last time.
+
+59
+00:02:27,577 --> 00:02:29,737
+Last time we talked about
+fancier optimization algorithms
+
+60
+00:02:29,737 --> 00:02:33,162
+for deep learning models
+including SGD Momentum,
+
+61
+00:02:33,162 --> 00:02:34,975
+Nesterov, RMSProp and Adam.
+
+62
+00:02:34,975 --> 00:02:37,257
+And we saw that these
+relatively small tweaks
+
+63
+00:02:37,257 --> 00:02:42,139
+on top of vanilla SGD, are
+relatively easy to implement
+
+64
+00:02:42,139 --> 00:02:45,492
+but can make your networks
+converge a bit faster.
+
+65
+00:02:45,492 --> 00:02:46,955
+We also talked about regularization,
+
+66
+00:02:46,955 --> 00:02:48,529
+especially dropout.
+
+67
+00:02:48,529 --> 00:02:50,666
+So remember dropout, you're
+kind of randomly setting
+
+68
+00:02:50,666 --> 00:02:52,586
+parts of the network to zero
+during the forward pass,
+
+69
+00:02:52,586 --> 00:02:54,959
+and then you kind of
+marginalize out over that noise
+
+70
+00:02:54,959 --> 00:02:56,975
+in the back at test time.
+
+71
+00:02:56,975 --> 00:02:58,575
+And we saw that this was
+kind of a general pattern
+
+72
+00:02:58,575 --> 00:03:00,676
+across many different
+types of regularization
+
+73
+00:03:00,676 --> 00:03:02,805
+in deep learning, where
+you might add some kind
+
+74
+00:03:02,805 --> 00:03:05,132
+of noise during training,
+but then marginalize out
+
+75
+00:03:05,132 --> 00:03:07,037
+that noise at test time
+so it's not stochastic
+
+76
+00:03:07,037 --> 00:03:08,415
+at test time.
+
+77
+00:03:08,415 --> 00:03:10,156
+We also talked about
+transfer learning where you
+
+78
+00:03:10,156 --> 00:03:12,533
+can maybe download big
+networks that were pre-trained
+
+79
+00:03:12,533 --> 00:03:14,354
+on some dataset and then
+fine tune them for your
+
+80
+00:03:14,354 --> 00:03:15,376
+own problem.
+
+81
+00:03:15,376 --> 00:03:17,577
+And this is one way that you
+can attack a lot of problems
+
+82
+00:03:17,577 --> 00:03:19,647
+in deep learning, even
+if you don't have a huge
+
+83
+00:03:19,647 --> 00:03:21,314
+dataset of your own.
+
+84
+00:03:22,781 --> 00:03:24,239
+So today we're going to
+shift gears a little bit
+
+85
+00:03:24,239 --> 00:03:25,947
+and talk about some of the nuts and bolts
+
+86
+00:03:25,947 --> 00:03:29,615
+about writing software and
+how the hardware works.
+
+87
+00:03:29,615 --> 00:03:31,956
+And a little bit, diving
+into a lot of details
+
+88
+00:03:31,956 --> 00:03:33,973
+about what the software
+looks like that you actually
+
+89
+00:03:33,973 --> 00:03:36,276
+use to train these things in practice.
+
+90
+00:03:36,276 --> 00:03:39,203
+So we'll talk a little
+bit about CPUs and GPUs
+
+91
+00:03:39,203 --> 00:03:41,476
+and then we'll talk about
+several of the major
+
+92
+00:03:41,476 --> 00:03:43,050
+deep learning frameworks
+that are out there in use
+
+93
+00:03:43,050 --> 00:03:43,967
+these days.
+
+94
+00:03:45,471 --> 00:03:48,174
+So first, we've sort of
+mentioned this off hand
+
+95
+00:03:48,174 --> 00:03:49,890
+a bunch of different times,
+
+96
+00:03:49,890 --> 00:03:52,961
+that computers have CPUs,
+computers have GPUs.
+
+97
+00:03:52,961 --> 00:03:55,257
+Deep learning uses GPUs,
+but we weren't really
+
+98
+00:03:55,257 --> 00:03:57,455
+too explicit up to this
+point about what exactly
+
+99
+00:03:57,455 --> 00:03:59,726
+these things are and
+why one might be better
+
+100
+00:03:59,726 --> 00:04:02,655
+than another for different tasks.
+
+101
+00:04:02,655 --> 00:04:04,655
+So, who's built a computer before?
+
+102
+00:04:04,655 --> 00:04:06,472
+Just kind of show of hands.
+
+103
+00:04:06,472 --> 00:04:09,039
+So, maybe about a third
+of you, half of you,
+
+104
+00:04:09,039 --> 00:04:10,965
+somewhere around that ballpark.
+
+105
+00:04:10,965 --> 00:04:14,119
+So this is a shot of my computer at home
+
+106
+00:04:14,119 --> 00:04:15,174
+that I built.
+
+107
+00:04:15,174 --> 00:04:17,839
+And you can see that there's
+a lot of stuff going on
+
+108
+00:04:17,839 --> 00:04:20,095
+inside the computer,
+maybe, hopefully you know
+
+109
+00:04:20,095 --> 00:04:22,261
+what most of these parts are.
+
+110
+00:04:22,261 --> 00:04:25,594
+And the CPU is the
+Central Processing Unit.
+
+111
+00:04:25,594 --> 00:04:28,419
+That's this little chip
+hidden under this cooling fan
+
+112
+00:04:28,419 --> 00:04:31,391
+right here near the top of the case.
+
+113
+00:04:31,391 --> 00:04:34,217
+And the CPU is actually
+relatively small piece.
+
+114
+00:04:34,217 --> 00:04:36,617
+It's a relatively small
+thing inside the case.
+
+115
+00:04:36,617 --> 00:04:39,555
+It's not taking up a lot of space.
+
+116
+00:04:39,555 --> 00:04:42,204
+And the GPUs are these
+two big monster things
+
+117
+00:04:42,204 --> 00:04:44,845
+that are taking up a
+gigantic amount of space
+
+118
+00:04:44,845 --> 00:04:46,221
+in the case.
+
+119
+00:04:46,221 --> 00:04:47,411
+They have their own cooling,
+
+120
+00:04:47,411 --> 00:04:48,760
+they're taking a lot of power.
+
+121
+00:04:48,760 --> 00:04:50,296
+They're quite large.
+
+122
+00:04:50,296 --> 00:04:53,539
+So, just in terms of how
+much power they're using,
+
+123
+00:04:53,539 --> 00:04:55,906
+in terms of how big they
+are, the GPUs are kind of
+
+124
+00:04:55,906 --> 00:04:57,455
+physically imposing and
+taking up a lot of space
+
+125
+00:04:57,455 --> 00:04:59,139
+in the case.
+
+126
+00:04:59,139 --> 00:05:00,927
+So the question is what are these things
+
+127
+00:05:00,927 --> 00:05:04,516
+and why are they so
+important for deep learning?
+
+128
+00:05:04,516 --> 00:05:07,402
+Well, the GPU is called a graphics card,
+
+129
+00:05:07,402 --> 00:05:08,937
+or Graphics Processing Unit.
+
+130
+00:05:08,937 --> 00:05:12,430
+And these were really developed,
+originally for rendering
+
+131
+00:05:12,430 --> 00:05:14,457
+computer graphics, and
+especially around games
+
+132
+00:05:14,457 --> 00:05:16,166
+and that sort of thing.
+
+133
+00:05:16,166 --> 00:05:20,225
+So another show of hands,
+who plays video games at home
+
+134
+00:05:20,225 --> 00:05:23,247
+sometimes, from time to
+time on their computer?
+
+135
+00:05:23,247 --> 00:05:25,693
+Yeah, so again, maybe
+about half, good fraction.
+
+136
+00:05:25,693 --> 00:05:28,159
+So for those of you who've
+played video games before
+
+137
+00:05:28,159 --> 00:05:29,717
+and who've built your own computers,
+
+138
+00:05:29,717 --> 00:05:32,196
+you probably have your own
+opinions on this debate.
+
+139
+00:05:32,196 --> 00:05:34,095
+[laughs]
+
+140
+00:05:34,095 --> 00:05:37,666
+So this is one of those big
+debates in computer science.
+
+141
+00:05:37,666 --> 00:05:40,349
+You know, there's like Intel versus AMD,
+
+142
+00:05:40,349 --> 00:05:42,620
+NVIDIA versus AMD for graphics cards.
+
+143
+00:05:42,620 --> 00:05:45,394
+It's up there with Vim
+versus Emacs for text editor.
+
+144
+00:05:45,394 --> 00:05:47,660
+And pretty much any gamer
+has their own opinions
+
+145
+00:05:47,660 --> 00:05:50,768
+on which of these two sides they prefer
+
+146
+00:05:50,768 --> 00:05:51,945
+for their own cards.
+
+147
+00:05:51,945 --> 00:05:54,895
+And in deep learning we
+kind of have mostly picked
+
+148
+00:05:54,895 --> 00:05:59,116
+one side of this fight, and that's NVIDIA.
+
+149
+00:05:59,116 --> 00:06:00,816
+So if you guys have AMD cards,
+
+150
+00:06:00,816 --> 00:06:03,026
+you might be in a little
+bit more trouble if you want
+
+151
+00:06:03,026 --> 00:06:05,117
+to use those for deep learning.
+
+152
+00:06:05,117 --> 00:06:07,729
+And really, NVIDIA's been
+pushing a lot for deep learning
+
+153
+00:06:07,729 --> 00:06:08,812
+in the last several years.
+
+154
+00:06:08,812 --> 00:06:11,997
+It's been kind of a large focus
+of some of their strategy.
+
+155
+00:06:11,997 --> 00:06:14,017
+And they put in a lot
+effort into engineering
+
+156
+00:06:14,017 --> 00:06:17,647
+sort of good solutions
+to make their hardware
+
+157
+00:06:17,647 --> 00:06:19,354
+better suited for deep learning.
+
+158
+00:06:19,354 --> 00:06:23,855
+So most people in deep learning
+when we talk about GPUs,
+
+159
+00:06:23,855 --> 00:06:27,718
+we're pretty much exclusively
+talking about NVIDIA GPUs.
+
+160
+00:06:27,718 --> 00:06:29,607
+Maybe in the future this'll
+change a little bit,
+
+161
+00:06:29,607 --> 00:06:31,465
+and there might be new players coming up,
+
+162
+00:06:31,465 --> 00:06:35,268
+but at least for now
+NVIDIA is pretty dominant.
+
+163
+00:06:35,268 --> 00:06:37,225
+So to give you an idea of
+like what is the difference
+
+164
+00:06:37,225 --> 00:06:40,163
+between a CPU and a GPU,
+I've kind of made a little
+
+165
+00:06:40,163 --> 00:06:41,705
+spread sheet here.
+
+166
+00:06:41,705 --> 00:06:44,759
+On the top we have two of
+the kind of top end Intel
+
+167
+00:06:44,759 --> 00:06:47,364
+consumer CPUs, and on
+the bottom we have two of
+
+168
+00:06:47,364 --> 00:06:52,079
+NVIDIA's sort of current
+top end consumer GPUs.
+
+169
+00:06:52,079 --> 00:06:55,975
+And there's a couple general
+trends to notice here.
+
+170
+00:06:55,975 --> 00:06:58,445
+Both GPUs and CPUs are
+kind of a general purpose
+
+171
+00:06:58,445 --> 00:07:01,359
+computing machine where
+they can execute programs
+
+172
+00:07:01,359 --> 00:07:03,284
+and do sort of arbitrary instructions,
+
+173
+00:07:03,284 --> 00:07:05,987
+but they're qualitatively
+pretty different.
+
+174
+00:07:05,987 --> 00:07:09,298
+So CPUs tend to have just a few cores,
+
+175
+00:07:09,298 --> 00:07:12,700
+for consumer desktop CPUs these days,
+
+176
+00:07:12,700 --> 00:07:14,941
+they might have something like four or six
+
+177
+00:07:14,941 --> 00:07:16,714
+or maybe up to 10 cores.
+
+178
+00:07:16,714 --> 00:07:20,393
+With hyperthreading technology
+that means they can run,
+
+179
+00:07:20,393 --> 00:07:22,726
+the hardware can physically
+run, like maybe eight
+
+180
+00:07:22,726 --> 00:07:24,893
+or up to 20 threads concurrently.
+
+181
+00:07:24,893 --> 00:07:29,700
+So the CPU can maybe do 20
+things in parallel at once.
+
+182
+00:07:29,700 --> 00:07:31,691
+So that's just not a gigantic number,
+
+183
+00:07:31,691 --> 00:07:34,527
+but those threads for a
+CPU are pretty powerful.
+
+184
+00:07:34,527 --> 00:07:36,084
+They can actually do a lot of things,
+
+185
+00:07:36,084 --> 00:07:37,223
+they're very fast.
+
+186
+00:07:37,223 --> 00:07:39,066
+Every CPU instruction can
+actually do quite a lot
+
+187
+00:07:39,066 --> 00:07:39,899
+of stuff.
+
+188
+00:07:39,899 --> 00:07:43,011
+And they can all work
+pretty independently.
+
+189
+00:07:43,011 --> 00:07:45,303
+For GPUs it's a little bit different.
+
+190
+00:07:45,303 --> 00:07:48,672
+So for GPUs we see that
+these sort of common top end
+
+191
+00:07:48,672 --> 00:07:51,909
+consumer GPUs have thousands of cores.
+
+192
+00:07:51,909 --> 00:07:55,340
+So the NVIDIA Titan XP
+which is the current
+
+193
+00:07:55,340 --> 00:07:59,007
+top of the line consumer
+GPU has 3840 cores.
+
+194
+00:08:00,818 --> 00:08:02,223
+So that's a crazy number.
+
+195
+00:08:02,223 --> 00:08:04,615
+That's like way more than
+the 10 cores that you'll get
+
+196
+00:08:04,615 --> 00:08:06,357
+for a similarly priced CPU.
+
+197
+00:08:06,357 --> 00:08:09,574
+The downside of a GPU is
+that each of those cores,
+
+198
+00:08:09,574 --> 00:08:12,207
+one, it runs at a much slower clock speed.
+
+199
+00:08:12,207 --> 00:08:14,439
+And two they really
+can't do quite as much.
+
+200
+00:08:14,439 --> 00:08:17,441
+You can't really compare
+CPU cores and GPU cores
+
+201
+00:08:17,441 --> 00:08:19,680
+apples to apples.
+
+202
+00:08:19,680 --> 00:08:22,510
+The GPU cores can't really
+operate very independently.
+
+203
+00:08:22,510 --> 00:08:24,460
+They all kind of need to work together
+
+204
+00:08:24,460 --> 00:08:26,589
+and sort of paralyze one
+task across many cores
+
+205
+00:08:26,589 --> 00:08:29,297
+rather than each core
+totally doing its own thing.
+
+206
+00:08:29,297 --> 00:08:32,405
+So you can't really compare
+these numbers directly.
+
+207
+00:08:32,405 --> 00:08:34,708
+But it should give you the sense that due
+
+208
+00:08:34,708 --> 00:08:37,018
+to the large number of
+cores GPUs can sort of,
+
+209
+00:08:37,019 --> 00:08:39,044
+are really good for
+parallel things where you
+
+210
+00:08:39,044 --> 00:08:41,370
+need to do a lot of things
+all at the same time,
+
+211
+00:08:41,370 --> 00:08:44,742
+but those things are all
+pretty much the same flavor.
+
+212
+00:08:44,742 --> 00:08:48,014
+Another thing to point
+out between CPUs and GPUs
+
+213
+00:08:48,014 --> 00:08:49,387
+is this idea of memory.
+
+214
+00:08:49,387 --> 00:08:52,887
+Right, so CPUs have some cache on the CPU,
+
+215
+00:08:53,770 --> 00:08:56,151
+but that's relatively
+small and the majority
+
+216
+00:08:56,151 --> 00:08:58,523
+of the memory for your
+CPU is pulling from your
+
+217
+00:08:58,523 --> 00:09:00,969
+system memory, the RAM,
+which will maybe be like
+
+218
+00:09:00,969 --> 00:09:04,538
+eight, 12, 16, 32 gigabytes
+of RAM on a typical
+
+219
+00:09:04,538 --> 00:09:06,589
+consumer desktop these days.
+
+220
+00:09:06,589 --> 00:09:09,479
+Whereas GPUs actually
+have their own RAM built
+
+221
+00:09:09,479 --> 00:09:10,646
+into the chip.
+
+222
+00:09:12,055 --> 00:09:13,627
+There's a pretty large
+bottleneck communicating
+
+223
+00:09:13,627 --> 00:09:16,434
+between the RAM in your
+system and the GPU,
+
+224
+00:09:16,434 --> 00:09:18,508
+so the GPUs typically have their own
+
+225
+00:09:18,508 --> 00:09:22,675
+relatively large block of
+memory within the card itself.
+
+226
+00:09:23,955 --> 00:09:27,172
+And for the Titan XP, which
+again is maybe the current
+
+227
+00:09:27,172 --> 00:09:29,092
+top of the line consumer card,
+
+228
+00:09:29,092 --> 00:09:33,481
+this thing has 12 gigabytes
+of memory local to the GPU.
+
+229
+00:09:33,481 --> 00:09:35,462
+GPUs also have their own caching system
+
+230
+00:09:35,462 --> 00:09:37,755
+where there are sort of
+multiple hierarchies of caching
+
+231
+00:09:37,755 --> 00:09:40,067
+between the 12 gigabytes of GPU memory
+
+232
+00:09:40,067 --> 00:09:41,790
+and the actual GPU cores.
+
+233
+00:09:41,790 --> 00:09:44,575
+And that's somewhat similar
+to the caching hierarchy
+
+234
+00:09:44,575 --> 00:09:46,908
+that you might see in a CPU.
+
+235
+00:09:47,985 --> 00:09:50,652
+So, CPUs are kind of good for
+general purpose processing.
+
+236
+00:09:50,652 --> 00:09:52,583
+They can do a lot of different things.
+
+237
+00:09:52,583 --> 00:09:54,572
+And GPUs are maybe more
+specialized for these highly
+
+238
+00:09:54,572 --> 00:09:57,089
+paralyzable algorithms.
+
+239
+00:09:57,089 --> 00:09:59,167
+So the prototypical algorithm
+of something that works
+
+240
+00:09:59,167 --> 00:10:01,969
+really really well and
+is like perfectly suited
+
+241
+00:10:01,969 --> 00:10:04,106
+to a GPU is matrix multiplication.
+
+242
+00:10:04,106 --> 00:10:06,733
+So remember in matrix
+multiplication on the left
+
+243
+00:10:06,733 --> 00:10:09,687
+we've got like a matrix
+composed of a bunch of rows.
+
+244
+00:10:09,687 --> 00:10:12,482
+We multiply that on the right
+by another matrix composed
+
+245
+00:10:12,482 --> 00:10:14,348
+of a bunch of columns
+and then this produces
+
+246
+00:10:14,348 --> 00:10:17,498
+another, a final matrix
+where each element in the
+
+247
+00:10:17,498 --> 00:10:20,718
+output matrix is a dot product
+between one of the rows
+
+248
+00:10:20,718 --> 00:10:22,780
+and one of the columns of
+the two input matrices.
+
+249
+00:10:22,780 --> 00:10:25,009
+And these dot products
+are all independent.
+
+250
+00:10:25,009 --> 00:10:27,548
+Like you could imagine,
+for this output matrix
+
+251
+00:10:27,548 --> 00:10:29,202
+you could split it up completely
+
+252
+00:10:29,202 --> 00:10:31,110
+and have each of those different elements
+
+253
+00:10:31,110 --> 00:10:33,653
+of the output matrix all
+being computed in parallel
+
+254
+00:10:33,653 --> 00:10:35,646
+and they all sort of are
+running the same computation
+
+255
+00:10:35,646 --> 00:10:38,289
+which is taking a dot
+product of these two vectors.
+
+256
+00:10:38,289 --> 00:10:40,754
+But exactly where they're
+reading that data from
+
+257
+00:10:40,754 --> 00:10:44,177
+is from different places
+in the two input matrices.
+
+258
+00:10:44,177 --> 00:10:46,092
+So you could imagine that
+for a GPU you can just
+
+259
+00:10:46,092 --> 00:10:48,797
+like blast this out and
+have all of this elements
+
+260
+00:10:48,797 --> 00:10:50,390
+of the output matrix
+all computed in parallel
+
+261
+00:10:50,390 --> 00:10:53,909
+and that could make this thing
+computer super super fast
+
+262
+00:10:53,909 --> 00:10:55,166
+on GPU.
+
+263
+00:10:55,166 --> 00:10:57,985
+So that's kind of the
+prototypical type of problem
+
+264
+00:10:57,985 --> 00:11:00,431
+that like where a GPU
+is really well suited,
+
+265
+00:11:00,431 --> 00:11:02,293
+where a CPU might have
+to go in and step through
+
+266
+00:11:02,293 --> 00:11:04,023
+sequentially and compute
+each of these elements
+
+267
+00:11:04,023 --> 00:11:04,940
+one by one.
+
+268
+00:11:06,337 --> 00:11:09,473
+That picture is a little
+bit of a caricature because
+
+269
+00:11:09,473 --> 00:11:11,648
+CPUs these days have multiple cores,
+
+270
+00:11:11,648 --> 00:11:13,829
+they can do vectorized
+instructions as well,
+
+271
+00:11:13,829 --> 00:11:16,652
+but still, for these like
+massively parallel problems
+
+272
+00:11:16,652 --> 00:11:19,568
+GPUs tend to have much better throughput.
+
+273
+00:11:19,568 --> 00:11:21,350
+Especially when these matrices
+get really really big.
+
+274
+00:11:21,350 --> 00:11:24,265
+And by the way, convolution
+is kind of the same
+
+275
+00:11:24,265 --> 00:11:25,404
+kind of story.
+
+276
+00:11:25,404 --> 00:11:27,827
+Where you know in convolution
+we have this input tensor,
+
+277
+00:11:27,827 --> 00:11:30,128
+we have this weight tensor
+and then every point in the
+
+278
+00:11:30,128 --> 00:11:33,026
+output tensor after a
+convolution is again some inner
+
+279
+00:11:33,026 --> 00:11:35,081
+product between some part of the weights
+
+280
+00:11:35,081 --> 00:11:36,359
+and some part of the input.
+
+281
+00:11:36,359 --> 00:11:38,326
+And you can imagine that a
+GPU could really paralyze
+
+282
+00:11:38,326 --> 00:11:41,693
+this computation, split it
+all up across the many cores
+
+283
+00:11:41,693 --> 00:11:43,354
+and compute it very quickly.
+
+284
+00:11:43,354 --> 00:11:45,746
+So that's kind of the
+general flavor of the types
+
+285
+00:11:45,746 --> 00:11:48,677
+of problems where GPUs give
+you a huge speed advantage
+
+286
+00:11:48,677 --> 00:11:49,510
+over CPUs.
+
+287
+00:11:51,695 --> 00:11:54,023
+So you can actually write
+programs that run directly
+
+288
+00:11:54,023 --> 00:11:55,498
+on GPUs.
+
+289
+00:11:55,498 --> 00:11:58,136
+So NVIDIA has this CUDA
+abstraction that lets you write
+
+290
+00:11:58,136 --> 00:12:00,378
+code that kind of looks like C,
+
+291
+00:12:00,378 --> 00:12:03,614
+but executes directly on the GPUs.
+
+292
+00:12:03,614 --> 00:12:05,484
+But CUDA code is really really tricky.
+
+293
+00:12:05,484 --> 00:12:08,023
+It's actually really tough
+to write CUDA code that's
+
+294
+00:12:08,023 --> 00:12:10,056
+performant and actually
+squeezes all the juice out
+
+295
+00:12:10,056 --> 00:12:12,002
+of these GPUs.
+
+296
+00:12:12,002 --> 00:12:13,842
+You have to be very careful
+managing the memory hierarchy
+
+297
+00:12:13,842 --> 00:12:16,140
+and making sure you
+don't have cache misses
+
+298
+00:12:16,140 --> 00:12:19,163
+and branch mispredictions
+and all that sort of stuff.
+
+299
+00:12:19,163 --> 00:12:21,373
+So it's actually really really
+hard to write performant
+
+300
+00:12:21,373 --> 00:12:22,930
+CUDA code on your own.
+
+301
+00:12:22,930 --> 00:12:25,885
+So as a result NVIDIA has
+released a lot of libraries
+
+302
+00:12:25,885 --> 00:12:29,152
+that implement common
+computational primitives
+
+303
+00:12:29,152 --> 00:12:32,537
+that are very very highly
+optimized for GPUs.
+
+304
+00:12:32,537 --> 00:12:35,938
+So for example NVIDIA has a
+cuBLAS library that implements
+
+305
+00:12:35,938 --> 00:12:38,152
+different kinds of matrix multiplications
+
+306
+00:12:38,152 --> 00:12:40,610
+and different matrix operations
+that are super optimized,
+
+307
+00:12:40,610 --> 00:12:43,517
+run really well on GPU,
+get very close to sort of
+
+308
+00:12:43,517 --> 00:12:46,438
+theoretical peak hardware utilization.
+
+309
+00:12:46,438 --> 00:12:48,817
+Similarly they have a cuDNN
+library which implements
+
+310
+00:12:48,817 --> 00:12:51,964
+things like convolution,
+forward and backward passes,
+
+311
+00:12:51,964 --> 00:12:54,499
+batch normalization, recurrent networks,
+
+312
+00:12:54,499 --> 00:12:56,116
+all these kinds of
+computational primitives
+
+313
+00:12:56,116 --> 00:12:57,454
+that we need in deep learning.
+
+314
+00:12:57,454 --> 00:13:00,053
+NVIDIA has gone in there and
+released their own binaries
+
+315
+00:13:00,053 --> 00:13:02,060
+that compute these
+primitives very efficiently
+
+316
+00:13:02,060 --> 00:13:03,842
+on NVIDIA hardware.
+
+317
+00:13:03,842 --> 00:13:07,777
+So in practice, you tend not
+to end up writing your own
+
+318
+00:13:07,777 --> 00:13:09,624
+CUDA code for deep learning.
+
+319
+00:13:09,624 --> 00:13:12,642
+You typically are just
+mostly calling into existing
+
+320
+00:13:12,642 --> 00:13:14,173
+code that other people have written.
+
+321
+00:13:14,173 --> 00:13:16,493
+Much of which is the stuff
+which has been heavily
+
+322
+00:13:16,493 --> 00:13:19,573
+optimized by NVIDIA already.
+
+323
+00:13:19,573 --> 00:13:22,457
+There's another sort of
+language called OpenCL
+
+324
+00:13:22,457 --> 00:13:23,693
+which is a bit more general.
+
+325
+00:13:23,693 --> 00:13:25,850
+Runs on more than just NVIDIA GPUs,
+
+326
+00:13:25,850 --> 00:13:29,185
+can run on AMD hardware, can run on CPUs,
+
+327
+00:13:29,185 --> 00:13:33,524
+but OpenCL, nobody's really
+spent a really large amount
+
+328
+00:13:33,524 --> 00:13:36,742
+of effort and energy trying
+to get optimized deep learning
+
+329
+00:13:36,742 --> 00:13:39,934
+primitives for OpenCL, so
+it tends to be a lot less
+
+330
+00:13:39,934 --> 00:13:43,938
+performant the super
+optimized versions in CUDA.
+
+331
+00:13:43,938 --> 00:13:46,262
+So maybe in the future we
+might see a bit of a more open
+
+332
+00:13:46,262 --> 00:13:49,008
+standard and we might see
+this across many different
+
+333
+00:13:49,008 --> 00:13:51,839
+more types of platforms,
+but at least for now,
+
+334
+00:13:51,839 --> 00:13:55,488
+NVIDIA's kind of the main game
+in town for deep learning.
+
+335
+00:13:55,488 --> 00:13:58,159
+So you can check, there's a
+lot of different resources
+
+336
+00:13:58,159 --> 00:14:00,853
+for learning about how you can
+do GPU programming yourself.
+
+337
+00:14:00,853 --> 00:14:01,686
+It's kind of fun.
+
+338
+00:14:01,686 --> 00:14:03,919
+It's sort of a different
+paradigm of writing code
+
+339
+00:14:03,919 --> 00:14:05,900
+because it's this massively
+parallel architecture,
+
+340
+00:14:05,900 --> 00:14:08,023
+but that's a bit beyond
+the scope of this course.
+
+341
+00:14:08,023 --> 00:14:10,424
+And again, you don't really
+need to write your own
+
+342
+00:14:10,424 --> 00:14:12,263
+CUDA code much in practice
+for deep learning.
+
+343
+00:14:12,263 --> 00:14:14,872
+And in fact, I've never
+written my own CUDA code
+
+344
+00:14:14,872 --> 00:14:16,600
+for any research project, so,
+
+345
+00:14:16,600 --> 00:14:18,856
+but it is kind of useful
+to know like how it works
+
+346
+00:14:18,856 --> 00:14:20,552
+and what are the basic
+ideas even if you're not
+
+347
+00:14:20,552 --> 00:14:22,219
+writing it yourself.
+
+348
+00:14:23,488 --> 00:14:26,060
+So if you want to look at
+kind of CPU GPU performance
+
+349
+00:14:26,060 --> 00:14:29,168
+in practice, I did some
+benchmarks last summer
+
+350
+00:14:29,168 --> 00:14:31,501
+comparing a decent Intel CPU
+
+351
+00:14:34,183 --> 00:14:36,766
+against a bunch of different
+GPUs that were sort
+
+352
+00:14:36,766 --> 00:14:38,747
+of near top of the line at that time.
+
+353
+00:14:38,747 --> 00:14:41,098
+And these were my own
+benchmarks that you can find
+
+354
+00:14:41,098 --> 00:14:44,787
+more details on GitHub,
+but my findings were that
+
+355
+00:14:44,787 --> 00:14:48,954
+for things like VGG 16 and
+19, ResNets, various ResNets,
+
+356
+00:14:49,830 --> 00:14:53,186
+then you typically see
+something like a 65 to 75 times
+
+357
+00:14:53,186 --> 00:14:57,114
+speed up when running the
+exact same computation
+
+358
+00:14:57,114 --> 00:15:00,984
+on a top of the line GPU, in
+this case a Pascal Titan X,
+
+359
+00:15:00,984 --> 00:15:04,183
+versus a top of the line,
+well, not quite top of the line
+
+360
+00:15:04,183 --> 00:15:08,604
+CPU, which in this case
+was an Intel E5 processor.
+
+361
+00:15:08,604 --> 00:15:12,388
+Although, I'd like to make
+one sort of caveat here
+
+362
+00:15:12,388 --> 00:15:14,194
+is that you always need
+to be super careful
+
+363
+00:15:14,194 --> 00:15:15,550
+whenever you're reading
+any kind of benchmarks
+
+364
+00:15:15,550 --> 00:15:18,040
+about deep learning, because
+it's super easy to be
+
+365
+00:15:18,040 --> 00:15:20,103
+unfair between different things.
+
+366
+00:15:20,103 --> 00:15:22,103
+And you kind of need to know
+a lot of the details about
+
+367
+00:15:22,103 --> 00:15:24,374
+what exactly is being
+benchmarked in order to know
+
+368
+00:15:24,374 --> 00:15:26,339
+whether or not the comparison is fair.
+
+369
+00:15:26,339 --> 00:15:29,068
+So in this case I'll come
+right out and tell you
+
+370
+00:15:29,068 --> 00:15:31,473
+that probably this comparison
+is a little bit unfair
+
+371
+00:15:31,473 --> 00:15:35,855
+to CPU because I didn't
+spend a lot of effort
+
+372
+00:15:35,855 --> 00:15:37,638
+trying to squeeze the maximal performance
+
+373
+00:15:37,638 --> 00:15:38,721
+out of CPUs.
+
+374
+00:15:38,721 --> 00:15:41,065
+I probably could have tuned
+the blast libraries better
+
+375
+00:15:41,065 --> 00:15:42,483
+for the CPU performance.
+
+376
+00:15:42,483 --> 00:15:43,707
+And I probably could
+have gotten these numbers
+
+377
+00:15:43,707 --> 00:15:44,540
+a bit better.
+
+378
+00:15:44,540 --> 00:15:46,540
+This was sort of out
+of the box performance
+
+379
+00:15:46,540 --> 00:15:49,180
+between just installing
+Torch, running it on a CPU,
+
+380
+00:15:49,180 --> 00:15:51,964
+just installing Torch running it on a GPU.
+
+381
+00:15:51,964 --> 00:15:53,884
+So this is kind of out
+of the box performance,
+
+382
+00:15:53,884 --> 00:15:56,277
+but it's not really like
+peak, possible, theoretical
+
+383
+00:15:56,277 --> 00:15:57,872
+throughput on the CPU.
+
+384
+00:15:57,872 --> 00:16:00,263
+But that being said, I
+think there are still pretty
+
+385
+00:16:00,263 --> 00:16:02,422
+substantial speed ups to be had here.
+
+386
+00:16:02,422 --> 00:16:05,660
+Another kind of interesting
+outcome from this benchmarking
+
+387
+00:16:05,660 --> 00:16:09,602
+was comparing these
+optimized cuDNN libraries
+
+388
+00:16:09,602 --> 00:16:12,478
+from NVIDIA for convolution
+and whatnot versus
+
+389
+00:16:12,478 --> 00:16:15,543
+sort of more naive CUDA
+that had been hand written
+
+390
+00:16:15,543 --> 00:16:17,623
+out in the open source community.
+
+391
+00:16:17,623 --> 00:16:19,815
+And you can see that if you
+compare the same networks
+
+392
+00:16:19,815 --> 00:16:22,278
+on the same hardware with
+the same deep learning
+
+393
+00:16:22,278 --> 00:16:24,653
+framework and the only
+difference is swapping out
+
+394
+00:16:24,653 --> 00:16:27,340
+these cuDNN versus sort of
+hand written, less optimized
+
+395
+00:16:27,340 --> 00:16:30,312
+CUDA you can see something
+like nearly a three X speed up
+
+396
+00:16:30,312 --> 00:16:33,714
+across the board when you
+switch from the relatively
+
+397
+00:16:33,714 --> 00:16:35,777
+simple CUDA to these like
+super optimized cuDNN
+
+398
+00:16:35,777 --> 00:16:37,442
+implementations.
+
+399
+00:16:37,442 --> 00:16:40,044
+So in general, whenever
+you're writing code on GPU,
+
+400
+00:16:40,044 --> 00:16:43,143
+you should probably almost
+always like just make sure
+
+401
+00:16:43,143 --> 00:16:45,202
+you're using cuDNN because
+you're leaving probably
+
+402
+00:16:45,202 --> 00:16:47,703
+a three X performance boost
+on the table if you're
+
+403
+00:16:47,703 --> 00:16:51,602
+not calling into cuDNN for your stuff.
+
+404
+00:16:51,602 --> 00:16:53,362
+So another problem that
+comes up in practice,
+
+405
+00:16:53,362 --> 00:16:55,383
+when you're training these things is that
+
+406
+00:16:55,383 --> 00:16:57,564
+you know, your model is
+maybe sitting on the GPU,
+
+407
+00:16:57,564 --> 00:16:59,922
+the weights of the model
+are in that 12 gigabytes
+
+408
+00:16:59,922 --> 00:17:02,882
+of local storage on the
+GPU, but your big dataset
+
+409
+00:17:02,882 --> 00:17:05,202
+is sitting over on the
+right on a hard drive
+
+410
+00:17:05,202 --> 00:17:07,243
+or an SSD or something like that.
+
+411
+00:17:07,243 --> 00:17:10,203
+So if you're not careful
+you can actually bottleneck
+
+412
+00:17:10,204 --> 00:17:12,122
+your training by just
+trying to read the data
+
+413
+00:17:12,122 --> 00:17:13,205
+off the disk.
+
+414
+00:17:14,321 --> 00:17:16,113
+'Cause the GPU is super
+fast, it can compute
+
+415
+00:17:16,114 --> 00:17:18,642
+forward and backward quite
+fast, but if you're reading
+
+416
+00:17:18,642 --> 00:17:20,973
+sequentially off a spinning
+disk, you can actually
+
+417
+00:17:20,973 --> 00:17:23,002
+bottleneck your training quite,
+
+418
+00:17:23,002 --> 00:17:25,699
+and that can be really
+bad and slow you down.
+
+419
+00:17:25,700 --> 00:17:27,180
+So some solutions here
+are that like you know
+
+420
+00:17:27,180 --> 00:17:29,848
+if your dataset's really
+small, sometimes you might just
+
+421
+00:17:29,848 --> 00:17:31,459
+read the whole dataset into RAM.
+
+422
+00:17:31,459 --> 00:17:33,484
+Or even if your dataset isn't so small,
+
+423
+00:17:33,484 --> 00:17:35,005
+but you have a giant
+server with a ton of RAM,
+
+424
+00:17:35,005 --> 00:17:36,479
+you might do that anyway.
+
+425
+00:17:36,479 --> 00:17:38,663
+You can also make sure
+you're using an SSD instead
+
+426
+00:17:38,663 --> 00:17:42,917
+of a hard drive, that can help
+a lot with read throughput.
+
+427
+00:17:42,917 --> 00:17:45,495
+Another common strategy
+is to use multiple threads
+
+428
+00:17:45,495 --> 00:17:49,162
+on the CPU that are
+pre-fetching data off RAM
+
+429
+00:17:49,162 --> 00:17:52,152
+or off disk, buffering it
+in memory, in RAM so that
+
+430
+00:17:52,152 --> 00:17:54,705
+then you can continue
+feeding that buffer data down
+
+431
+00:17:54,705 --> 00:17:57,724
+to the GPU with good performance.
+
+432
+00:17:57,724 --> 00:17:59,107
+This is a little bit painful to set up,
+
+433
+00:17:59,107 --> 00:18:01,826
+but again like, these
+GPU's are so fast that
+
+434
+00:18:01,826 --> 00:18:03,682
+if you're not really
+careful with trying to feed
+
+435
+00:18:03,682 --> 00:18:05,543
+them data as quickly as possible,
+
+436
+00:18:05,543 --> 00:18:07,164
+just reading the data
+can sometimes bottleneck
+
+437
+00:18:07,164 --> 00:18:08,804
+the whole training process.
+
+438
+00:18:08,804 --> 00:18:11,657
+So that's something to be aware of.
+
+439
+00:18:11,657 --> 00:18:13,528
+So that's kind of the
+brief introduction to like
+
+440
+00:18:13,528 --> 00:18:15,900
+sort of GPU CPU hardware
+in practice when it comes
+
+441
+00:18:15,900 --> 00:18:17,432
+to deep learning.
+
+442
+00:18:17,432 --> 00:18:19,215
+And then I wanted to
+switch gears a little bit
+
+443
+00:18:19,215 --> 00:18:21,616
+and talk about the
+software side of things.
+
+444
+00:18:21,616 --> 00:18:23,923
+The various deep learning
+frameworks that people are using
+
+445
+00:18:23,923 --> 00:18:25,006
+in practice.
+
+446
+00:18:25,006 --> 00:18:26,190
+But I guess before I move on,
+
+447
+00:18:26,190 --> 00:18:28,819
+is there any sort of
+questions about CPU GPU?
+
+448
+00:18:28,819 --> 00:18:30,519
+Yeah, question?
+
+449
+00:18:30,519 --> 00:18:34,686
+[student's words obscured
+due to lack of microphone]
+
+450
+00:18:40,961 --> 00:18:42,689
+Yeah, so the question
+is what can you sort of,
+
+451
+00:18:42,689 --> 00:18:44,289
+what can you do mechanically
+when you're coding
+
+452
+00:18:44,289 --> 00:18:45,854
+to avoid these problems?
+
+453
+00:18:45,854 --> 00:18:47,872
+Probably the biggest thing
+you can do in software
+
+454
+00:18:47,872 --> 00:18:50,833
+is set up sort of pre-fetching on the CPU.
+
+455
+00:18:50,833 --> 00:18:53,097
+Like you couldn't like,
+sort of a naive thing
+
+456
+00:18:53,097 --> 00:18:55,054
+would be you have this
+sequential process where you
+
+457
+00:18:55,054 --> 00:18:57,441
+first read data off
+disk, wait for the data,
+
+458
+00:18:57,441 --> 00:18:58,791
+wait for the minibatch to be read,
+
+459
+00:18:58,791 --> 00:19:00,697
+then feed the minibatch to the GPU,
+
+460
+00:19:00,697 --> 00:19:02,458
+then go forward and backward on the GPU,
+
+461
+00:19:02,458 --> 00:19:04,442
+then read another minibatch
+and sort of do this all
+
+462
+00:19:04,442 --> 00:19:05,442
+in sequence.
+
+463
+00:19:06,714 --> 00:19:08,217
+And if you actually have multiple,
+
+464
+00:19:08,217 --> 00:19:10,533
+like instead you might have
+CPU threads running in the
+
+465
+00:19:10,533 --> 00:19:13,277
+background that are
+fetching data off the disk
+
+466
+00:19:13,277 --> 00:19:15,469
+such that while the,
+
+467
+00:19:15,469 --> 00:19:17,076
+you can sort of interleave
+all of these things.
+
+468
+00:19:17,076 --> 00:19:18,794
+Like the GPU is computing,
+
+469
+00:19:18,794 --> 00:19:21,506
+the CPU background threads
+are feeding data off disk
+
+470
+00:19:21,506 --> 00:19:23,499
+and your main thread is kind
+of waiting for these things to,
+
+471
+00:19:23,499 --> 00:19:25,792
+just doing a bit of synchronization
+between these things
+
+472
+00:19:25,792 --> 00:19:28,534
+so they're all happening in parallel.
+
+473
+00:19:28,534 --> 00:19:30,937
+And thankfully if you're using
+some of these deep learning
+
+474
+00:19:30,937 --> 00:19:32,851
+frameworks that we're about to talk about,
+
+475
+00:19:32,851 --> 00:19:34,709
+then some of this work has
+already been done for you
+
+476
+00:19:34,709 --> 00:19:38,016
+'cause it's a little bit painful.
+
+477
+00:19:38,016 --> 00:19:40,110
+So the landscape of
+deep learning frameworks
+
+478
+00:19:40,110 --> 00:19:41,738
+is super fast moving.
+
+479
+00:19:41,738 --> 00:19:44,789
+So last year when I gave
+this lecture I talked mostly
+
+480
+00:19:44,789 --> 00:19:47,915
+about Caffe, Torch, Theano and TensorFlow.
+
+481
+00:19:47,915 --> 00:19:51,449
+And when I last gave this talk,
+again more than a year ago,
+
+482
+00:19:51,449 --> 00:19:53,753
+TensorFlow was relatively new.
+
+483
+00:19:53,753 --> 00:19:57,814
+It had not seen super widespread
+adoption yet at that time.
+
+484
+00:19:57,814 --> 00:20:00,232
+But now I think in the
+last year TensorFlow
+
+485
+00:20:00,232 --> 00:20:01,903
+has gotten much more popular.
+
+486
+00:20:01,903 --> 00:20:04,393
+It's probably the main framework
+of choice for many people.
+
+487
+00:20:04,393 --> 00:20:06,310
+So that's a big change.
+
+488
+00:20:07,342 --> 00:20:09,833
+We've also seen a ton of new frameworks
+
+489
+00:20:09,833 --> 00:20:12,282
+sort of popping up like
+mushrooms in the last year.
+
+490
+00:20:12,282 --> 00:20:15,732
+So in particular Caffe2 and
+PyTorch are new frameworks
+
+491
+00:20:15,732 --> 00:20:18,052
+from Facebook that I think
+are pretty interesting.
+
+492
+00:20:18,052 --> 00:20:20,409
+There's also a ton of other frameworks.
+
+493
+00:20:20,409 --> 00:20:24,089
+Paddle, Baidu has Paddle,
+Microsoft has CNTK,
+
+494
+00:20:24,089 --> 00:20:28,592
+Amazon is mostly using
+MXNet and there's a ton
+
+495
+00:20:28,592 --> 00:20:30,337
+of other frameworks as well,
+but I'm less familiar with,
+
+496
+00:20:30,337 --> 00:20:33,449
+and really don't have time to get into.
+
+497
+00:20:33,449 --> 00:20:37,110
+But one interesting thing to
+point out from this picture
+
+498
+00:20:37,110 --> 00:20:39,757
+is that kind of the first
+generation of deep learning
+
+499
+00:20:39,757 --> 00:20:41,839
+frameworks that really saw wide adoption
+
+500
+00:20:41,839 --> 00:20:43,572
+were built in academia.
+
+501
+00:20:43,572 --> 00:20:45,572
+So Caffe was from Berkeley,
+Torch was developed
+
+502
+00:20:45,572 --> 00:20:49,388
+originally NYU and also in
+collaboration with Facebook.
+
+503
+00:20:49,388 --> 00:20:52,077
+And Theana was mostly build
+at the University of Montreal.
+
+504
+00:20:52,077 --> 00:20:54,491
+But these kind of next
+generation deep learning
+
+505
+00:20:54,491 --> 00:20:56,491
+frameworks all originated in industry.
+
+506
+00:20:56,491 --> 00:20:58,989
+So Caffe2 is from Facebook,
+PyTorch is from Facebook.
+
+507
+00:20:58,989 --> 00:21:00,659
+TensorFlow is from Google.
+
+508
+00:21:00,659 --> 00:21:02,557
+So it's kind of an interesting
+shift that we've seen
+
+509
+00:21:02,557 --> 00:21:04,727
+in the landscape over
+the last couple of years
+
+510
+00:21:04,727 --> 00:21:06,866
+is that these ideas
+have really moved a lot
+
+511
+00:21:06,866 --> 00:21:08,925
+from academia into industry.
+
+512
+00:21:08,925 --> 00:21:10,770
+And now industry is kind of
+giving us these big powerful
+
+513
+00:21:10,770 --> 00:21:13,187
+nice frameworks to work with.
+
+514
+00:21:14,147 --> 00:21:17,092
+So today I wanted to
+mostly talk about PyTorch
+
+515
+00:21:17,092 --> 00:21:19,988
+and TensorFlow 'cause I
+personally think that those
+
+516
+00:21:19,988 --> 00:21:22,601
+are probably the ones you
+should be focusing on for
+
+517
+00:21:22,601 --> 00:21:24,850
+a lot of research type
+problems these days.
+
+518
+00:21:24,850 --> 00:21:28,470
+I'll also talk a bit
+about Caffe and Caffe2.
+
+519
+00:21:28,470 --> 00:21:32,192
+But probably a little bit
+less emphasis on those.
+
+520
+00:21:32,192 --> 00:21:34,341
+And before we move any farther,
+I thought I should make
+
+521
+00:21:34,341 --> 00:21:36,705
+my own biases a little bit more explicit.
+
+522
+00:21:36,705 --> 00:21:39,058
+So I have mostly, I've
+worked with Torch mostly
+
+523
+00:21:39,058 --> 00:21:40,315
+for the last several years.
+
+524
+00:21:40,315 --> 00:21:43,501
+And I've used it quite
+a lot, I like it a lot.
+
+525
+00:21:43,501 --> 00:21:46,306
+And then in the last year I've
+mostly switched to PyTorch
+
+526
+00:21:46,306 --> 00:21:48,568
+as my main research framework.
+
+527
+00:21:48,568 --> 00:21:50,487
+So I have a little bit
+less experience with some
+
+528
+00:21:50,487 --> 00:21:52,306
+of these others, especially TensorFlow,
+
+529
+00:21:52,306 --> 00:21:54,087
+but I'll still try to do
+my best to give you a fair
+
+530
+00:21:54,087 --> 00:21:58,382
+picture and a decent
+overview of these things.
+
+531
+00:21:58,382 --> 00:22:02,507
+So, remember that in the
+last several lectures
+
+532
+00:22:02,507 --> 00:22:04,725
+we've hammered this idea
+of computational graphs in
+
+533
+00:22:04,725 --> 00:22:06,807
+sort of over and over.
+
+534
+00:22:06,807 --> 00:22:08,217
+That whenever you're doing deep learning,
+
+535
+00:22:08,217 --> 00:22:09,970
+you want to think about building
+some computational graph
+
+536
+00:22:09,970 --> 00:22:13,176
+that computes whatever function
+that you want to compute.
+
+537
+00:22:13,176 --> 00:22:15,090
+So in the case of a linear
+classifier you'll combine
+
+538
+00:22:15,090 --> 00:22:18,778
+your data X and your weights
+W with a matrix multiply.
+
+539
+00:22:18,778 --> 00:22:21,554
+You'll do some kind of
+hinge loss to maybe have,
+
+540
+00:22:21,554 --> 00:22:22,832
+compute your loss.
+
+541
+00:22:22,832 --> 00:22:24,386
+You'll have some regularization term
+
+542
+00:22:24,386 --> 00:22:26,397
+and you imagine stitching
+together all these different
+
+543
+00:22:26,397 --> 00:22:28,909
+operations into some graph structure.
+
+544
+00:22:28,909 --> 00:22:31,069
+Remember that these graph
+structures can get pretty
+
+545
+00:22:31,069 --> 00:22:33,191
+complex in the case of a big neural net,
+
+546
+00:22:33,191 --> 00:22:34,680
+now there's many different layers,
+
+547
+00:22:34,680 --> 00:22:36,167
+many different activations.
+
+548
+00:22:36,167 --> 00:22:38,087
+Many different weights
+spread all around in a pretty
+
+549
+00:22:38,087 --> 00:22:39,687
+complex graph.
+
+550
+00:22:39,687 --> 00:22:41,490
+And as you move to things
+like neural turing machines
+
+551
+00:22:41,490 --> 00:22:44,130
+then you can get these really
+crazy computational graphs
+
+552
+00:22:44,130 --> 00:22:45,911
+that you can't even really
+draw because they're
+
+553
+00:22:45,911 --> 00:22:47,328
+so big and messy.
+
+554
+00:22:48,349 --> 00:22:52,127
+So the point of deep learning
+frameworks is really,
+
+555
+00:22:52,127 --> 00:22:54,392
+there's really kind of three
+main reasons why you might
+
+556
+00:22:54,392 --> 00:22:56,425
+want to use one of these
+deep learning frameworks
+
+557
+00:22:56,425 --> 00:22:58,727
+rather than just writing your own code.
+
+558
+00:22:58,727 --> 00:23:01,414
+So the first would be that
+these frameworks enable
+
+559
+00:23:01,414 --> 00:23:03,255
+you to easily build and
+work with these big hairy
+
+560
+00:23:03,255 --> 00:23:05,950
+computational graphs
+without kind of worrying
+
+561
+00:23:05,950 --> 00:23:08,610
+about a lot of those
+bookkeeping details yourself.
+
+562
+00:23:08,610 --> 00:23:10,860
+Another major idea is that,
+
+563
+00:23:11,716 --> 00:23:13,479
+whenever we're working in deep learning
+
+564
+00:23:13,479 --> 00:23:14,812
+we always need to compute gradients.
+
+565
+00:23:14,812 --> 00:23:16,211
+We're always computing some loss,
+
+566
+00:23:16,211 --> 00:23:17,629
+we're always computer
+gradient of our weight
+
+567
+00:23:17,629 --> 00:23:18,900
+with respect to the loss.
+
+568
+00:23:18,900 --> 00:23:22,973
+And we'd like to make this
+automatically computing gradient,
+
+569
+00:23:22,973 --> 00:23:26,115
+you don't want to have to
+write that code yourself.
+
+570
+00:23:26,115 --> 00:23:28,287
+You want that framework to
+handle all these back propagation
+
+571
+00:23:28,287 --> 00:23:30,485
+details for you so you
+can just think about
+
+572
+00:23:30,485 --> 00:23:32,526
+writing down the forward
+pass of your network
+
+573
+00:23:32,526 --> 00:23:34,725
+and have the backward pass
+sort of come out for free
+
+574
+00:23:34,725 --> 00:23:36,539
+without any additional work.
+
+575
+00:23:36,539 --> 00:23:38,905
+And finally you want all
+this stuff to run efficiently
+
+576
+00:23:38,905 --> 00:23:42,000
+on GPUs so you don't have to
+worry too much about these
+
+577
+00:23:42,000 --> 00:23:44,973
+low level hardware details
+about cuBLAS and cuDNN
+
+578
+00:23:44,973 --> 00:23:48,389
+and CUDA and moving data
+between the CPU and GPU memory.
+
+579
+00:23:48,389 --> 00:23:51,030
+You kind of want all those messy
+details to be taken care of
+
+580
+00:23:51,030 --> 00:23:52,439
+for you.
+
+581
+00:23:52,439 --> 00:23:54,483
+So those are kind of
+some of the major reasons
+
+582
+00:23:54,483 --> 00:23:56,930
+why you might choose to
+use frameworks rather than
+
+583
+00:23:56,930 --> 00:23:59,450
+writing your own stuff from scratch.
+
+584
+00:23:59,450 --> 00:24:02,969
+So as kind of a concrete
+example of a computational graph
+
+585
+00:24:02,969 --> 00:24:05,231
+we can maybe write down
+this super simple thing.
+
+586
+00:24:05,231 --> 00:24:08,367
+Where we have three inputs, X, Y, and Z.
+
+587
+00:24:08,367 --> 00:24:09,908
+We're going to combine
+X and Y to produce A.
+
+588
+00:24:09,908 --> 00:24:13,071
+Then we're going to combine
+A and Z to produce B
+
+589
+00:24:13,071 --> 00:24:15,406
+and then finally we're going
+to do some maybe summing out
+
+590
+00:24:15,406 --> 00:24:18,630
+operation on B to give
+some scaler final result C.
+
+591
+00:24:18,630 --> 00:24:21,638
+So you've probably written
+enough Numpy code at this point
+
+592
+00:24:21,638 --> 00:24:24,310
+to realize that it's
+super easy to write down,
+
+593
+00:24:24,310 --> 00:24:27,216
+to implement this computational graph,
+
+594
+00:24:27,216 --> 00:24:30,798
+or rather to implement this
+bit of computation in Numpy,
+
+595
+00:24:30,798 --> 00:24:31,631
+right?
+
+596
+00:24:31,631 --> 00:24:33,724
+You can just kind of write
+down in Numpy that you want to
+
+597
+00:24:33,724 --> 00:24:36,508
+generate some random data, you
+want to multiply two things,
+
+598
+00:24:36,508 --> 00:24:38,547
+you want to add two things, you
+want to sum out a couple things.
+
+599
+00:24:38,547 --> 00:24:41,923
+And it's really easy to do this in Numpy.
+
+600
+00:24:41,923 --> 00:24:44,360
+But then the question is
+like suppose that we want
+
+601
+00:24:44,360 --> 00:24:48,355
+to compute the gradient of C
+with respect to X, Y, and Z.
+
+602
+00:24:48,355 --> 00:24:51,149
+So, if you're working in Numpy,
+you kind of need to write out
+
+603
+00:24:51,149 --> 00:24:52,725
+this backward pass yourself.
+
+604
+00:24:52,725 --> 00:24:54,965
+And you've gotten a lot of
+practice with this on the
+
+605
+00:24:54,965 --> 00:24:58,127
+homeworks, but it can be kind of a pain
+
+606
+00:24:58,127 --> 00:25:00,306
+and a little bit annoying
+and messy once you get to
+
+607
+00:25:00,306 --> 00:25:02,859
+really big complicated things.
+
+608
+00:25:02,859 --> 00:25:04,487
+The other problem with
+Numpy is that it doesn't run
+
+609
+00:25:04,487 --> 00:25:05,675
+on the GPU.
+
+610
+00:25:05,675 --> 00:25:08,189
+So Numpy is definitely CPU only.
+
+611
+00:25:08,189 --> 00:25:10,514
+And you're never going
+to be able to experience
+
+612
+00:25:10,514 --> 00:25:13,112
+or take advantage of these
+GPU accelerated speedups
+
+613
+00:25:13,112 --> 00:25:14,920
+if you're stuck working in Numpy.
+
+614
+00:25:14,920 --> 00:25:17,011
+And it's, again, it's a
+pain to have to compute
+
+615
+00:25:17,011 --> 00:25:19,527
+your own gradients in
+all these situations.
+
+616
+00:25:19,527 --> 00:25:22,807
+So, kind of the goal of most
+deep learning frameworks
+
+617
+00:25:22,807 --> 00:25:26,829
+these days is to let you
+write code in the forward pass
+
+618
+00:25:26,829 --> 00:25:29,047
+that looks very similar to Numpy,
+
+619
+00:25:29,047 --> 00:25:31,170
+but lets you run it on the GPU
+
+620
+00:25:31,170 --> 00:25:33,069
+and lets you automatically
+compute gradients.
+
+621
+00:25:33,069 --> 00:25:34,967
+And that's kind of the big
+picture goal of most of these
+
+622
+00:25:34,967 --> 00:25:36,397
+frameworks.
+
+623
+00:25:36,397 --> 00:25:38,533
+So if you imagine looking
+at, if we look at an example
+
+624
+00:25:38,533 --> 00:25:42,226
+in TensorFlow of the exact
+same computational graph,
+
+625
+00:25:42,226 --> 00:25:44,314
+we now see that in this forward pass,
+
+626
+00:25:44,314 --> 00:25:47,241
+you write this code that ends
+up looking very very similar
+
+627
+00:25:47,241 --> 00:25:49,334
+to the Numpy forward pass
+where you're kind of doing
+
+628
+00:25:49,334 --> 00:25:52,687
+these multiplication and
+these addition operations.
+
+629
+00:25:52,687 --> 00:25:55,669
+But now TensorFlow has
+this magic line that just
+
+630
+00:25:55,669 --> 00:25:57,623
+computes all the gradients for you.
+
+631
+00:25:57,623 --> 00:25:59,686
+So now you don't have go in and
+write your own backward pass
+
+632
+00:25:59,686 --> 00:26:02,235
+and that's much more convenient.
+
+633
+00:26:02,235 --> 00:26:04,095
+The other nice thing about
+TensorFlow is you can really
+
+634
+00:26:04,095 --> 00:26:06,841
+just, like with one line you
+can switch all this computation
+
+635
+00:26:06,841 --> 00:26:08,926
+between CPU and GPU.
+
+636
+00:26:08,926 --> 00:26:11,016
+So here, if you just
+add this with statement
+
+637
+00:26:11,016 --> 00:26:13,037
+before you're doing this forward pass,
+
+638
+00:26:13,037 --> 00:26:14,866
+you just can explicitly
+tell the framework,
+
+639
+00:26:14,866 --> 00:26:16,668
+hey I want to run this code on the CPU.
+
+640
+00:26:16,668 --> 00:26:19,537
+But now if we just change that
+with statement a little bit
+
+641
+00:26:19,537 --> 00:26:21,527
+with just with a one
+character change in this case,
+
+642
+00:26:21,527 --> 00:26:24,866
+changing that C to a G,
+now the code runs on GPU.
+
+643
+00:26:24,866 --> 00:26:27,868
+And now in this little code snippet,
+
+644
+00:26:27,868 --> 00:26:29,539
+we've solved these two problems.
+
+645
+00:26:29,539 --> 00:26:31,388
+We're running our code on the GPU
+
+646
+00:26:31,388 --> 00:26:33,127
+and we're having the framework
+compute all the gradients
+
+647
+00:26:33,127 --> 00:26:35,685
+for us, so that's really nice.
+
+648
+00:26:35,685 --> 00:26:38,459
+And PyTorch kind looks
+almost exactly the same.
+
+649
+00:26:38,459 --> 00:26:40,349
+So again, in PyTorch
+you kind of write down,
+
+650
+00:26:40,349 --> 00:26:42,509
+you define some variables,
+
+651
+00:26:42,509 --> 00:26:45,149
+you have some forward pass
+and the forward pass again
+
+652
+00:26:45,149 --> 00:26:47,640
+looks very similar to like,
+in this case identical
+
+653
+00:26:47,640 --> 00:26:49,262
+to the Numpy code.
+
+654
+00:26:49,262 --> 00:26:52,146
+And then again, you can
+just use PyTorch to compute
+
+655
+00:26:52,146 --> 00:26:56,251
+gradients, all your
+gradients with just one line.
+
+656
+00:26:56,251 --> 00:26:58,084
+And now in PyTorch again,
+it's really easy to switch
+
+657
+00:26:58,084 --> 00:27:00,263
+to GPU, you just need to
+cast all your stuff to the
+
+658
+00:27:00,263 --> 00:27:03,210
+CUDA data type before
+you rung your computation
+
+659
+00:27:03,210 --> 00:27:06,781
+and now everything runs
+transparently on the GPU for you.
+
+660
+00:27:06,781 --> 00:27:09,091
+So if you kind of just look
+at these three examples,
+
+661
+00:27:09,091 --> 00:27:11,321
+these three snippets of code side by side,
+
+662
+00:27:11,321 --> 00:27:13,878
+the Numpy, the TensorFlow and the PyTorch
+
+663
+00:27:13,878 --> 00:27:17,579
+you see that the TensorFlow
+and the PyTorch code
+
+664
+00:27:17,579 --> 00:27:20,564
+in the forward pass looks
+almost exactly like Numpy
+
+665
+00:27:20,564 --> 00:27:23,048
+which is great 'cause
+Numpy has a beautiful API,
+
+666
+00:27:23,048 --> 00:27:24,349
+it's really easy to work with.
+
+667
+00:27:24,349 --> 00:27:26,109
+But we can compute gradients automatically
+
+668
+00:27:26,109 --> 00:27:29,192
+and we can run the GPU automatically.
+
+669
+00:27:30,186 --> 00:27:31,873
+So after that kind of introduction,
+
+670
+00:27:31,873 --> 00:27:33,654
+I wanted to dive in and
+talk in a little bit more
+
+671
+00:27:33,654 --> 00:27:35,758
+detail about kind of
+what's going on inside this
+
+672
+00:27:35,758 --> 00:27:37,502
+TensorFlow example.
+
+673
+00:27:37,502 --> 00:27:40,384
+So as a running example throughout
+the rest of the lecture,
+
+674
+00:27:40,384 --> 00:27:44,028
+I'm going to use the training
+a two-layer fully connected
+
+675
+00:27:44,028 --> 00:27:48,377
+ReLU network on random data
+as kind of a running example
+
+676
+00:27:48,377 --> 00:27:50,662
+throughout the rest of the examples here.
+
+677
+00:27:50,662 --> 00:27:53,353
+And we're going to train this
+thing with an L2 Euclidean
+
+678
+00:27:53,353 --> 00:27:55,289
+loss on random data.
+
+679
+00:27:55,289 --> 00:27:57,633
+So this is kind of a silly
+network, it's not really doing
+
+680
+00:27:57,633 --> 00:27:59,836
+anything useful, but it does give you the,
+
+681
+00:27:59,836 --> 00:28:01,723
+it's relatively small, self contained,
+
+682
+00:28:01,723 --> 00:28:04,444
+the code fits on the slide
+without being too small,
+
+683
+00:28:04,444 --> 00:28:06,428
+and it lets you demonstrate
+kind of a lot of the useful
+
+684
+00:28:06,428 --> 00:28:08,966
+ideas inside these frameworks.
+
+685
+00:28:08,966 --> 00:28:10,814
+So here on the right, oh,
+and then another note,
+
+686
+00:28:10,814 --> 00:28:13,397
+I'm kind of assuming
+that Numpy and TensorFlow
+
+687
+00:28:13,397 --> 00:28:15,900
+have already been imported
+in all these code snippets.
+
+688
+00:28:15,900 --> 00:28:19,308
+So in TensorFlow you would
+typically divide your computation
+
+689
+00:28:19,308 --> 00:28:21,163
+into two major stages.
+
+690
+00:28:21,163 --> 00:28:23,996
+First, we're going to write
+some code that defines
+
+691
+00:28:23,996 --> 00:28:26,852
+our computational graph,
+and that's this red code
+
+692
+00:28:26,852 --> 00:28:28,363
+up in the top half.
+
+693
+00:28:28,363 --> 00:28:30,347
+And then after you define your graph,
+
+694
+00:28:30,347 --> 00:28:32,360
+you're going to run the
+graph over and over again
+
+695
+00:28:32,360 --> 00:28:34,113
+and actually feed data into the graph
+
+696
+00:28:34,113 --> 00:28:36,851
+to perform whatever computation
+you want it to perform.
+
+697
+00:28:36,851 --> 00:28:38,772
+So this is the really,
+this is kind of the big
+
+698
+00:28:38,772 --> 00:28:40,961
+common pattern in TensorFlow.
+
+699
+00:28:40,961 --> 00:28:42,907
+You'll first have a bunch of
+code that builds the graph
+
+700
+00:28:42,907 --> 00:28:45,282
+and then you'll go and
+run the graph and reuse it
+
+701
+00:28:45,282 --> 00:28:46,615
+many many times.
+
+702
+00:28:48,099 --> 00:28:50,827
+So if you kind of dive
+into the code of building
+
+703
+00:28:50,827 --> 00:28:52,763
+the graph in this case.
+
+704
+00:28:52,763 --> 00:28:56,542
+Up at the top you see that
+we're defining this X, Y,
+
+705
+00:28:56,542 --> 00:29:00,709
+w1 and w2, and we're creating
+these tf.placeholder objects.
+
+706
+00:29:01,637 --> 00:29:05,193
+So these are going to be
+input nodes to the graph.
+
+707
+00:29:05,193 --> 00:29:08,360
+These are going to be sort
+of entry points to the graph
+
+708
+00:29:08,360 --> 00:29:11,101
+where when we run the graph,
+we're going to feed in data
+
+709
+00:29:11,101 --> 00:29:13,379
+and put them in through
+these input slots in our
+
+710
+00:29:13,379 --> 00:29:15,379
+computational graph.
+
+711
+00:29:15,379 --> 00:29:17,218
+So this is not actually
+like allocating any memory
+
+712
+00:29:17,218 --> 00:29:18,051
+right now.
+
+713
+00:29:19,044 --> 00:29:20,861
+We're just sort of setting
+up these input slots
+
+714
+00:29:20,861 --> 00:29:21,944
+to the graph.
+
+715
+00:29:23,272 --> 00:29:25,560
+Then we're going to use those
+input slots which are now
+
+716
+00:29:25,560 --> 00:29:28,665
+kind of like these symbolic variables
+
+717
+00:29:28,665 --> 00:29:31,021
+and we're going to perform
+different TensorFlow operations
+
+718
+00:29:31,021 --> 00:29:33,917
+on these symbolic variables
+in order to set up
+
+719
+00:29:33,917 --> 00:29:37,135
+what computation we want
+to run on those variables.
+
+720
+00:29:37,135 --> 00:29:39,379
+So in this case we're doing
+a matrix multiplication
+
+721
+00:29:39,379 --> 00:29:43,904
+between X and w1, we're
+doing some tf.maximum to do a
+
+722
+00:29:43,904 --> 00:29:46,109
+ReLU nonlinearity and
+then we're doing another
+
+723
+00:29:46,109 --> 00:29:49,240
+matrix multiplication to
+compute our output predictions.
+
+724
+00:29:49,240 --> 00:29:50,955
+And then we're again using
+a sort of basic Tensor
+
+725
+00:29:50,955 --> 00:29:53,356
+operations to compute
+our Euclidean distance,
+
+726
+00:29:53,356 --> 00:29:58,175
+our L2 loss between our
+prediction and the target Y.
+
+727
+00:29:58,175 --> 00:30:00,099
+Another thing to point out here is that
+
+728
+00:30:00,099 --> 00:30:03,647
+these lines of code are not
+actually computing anything.
+
+729
+00:30:03,647 --> 00:30:05,824
+There's no data in the system right now.
+
+730
+00:30:05,824 --> 00:30:07,571
+We're just building up this
+computational graph data
+
+731
+00:30:07,571 --> 00:30:10,799
+structure telling
+TensorFlow which operations
+
+732
+00:30:10,799 --> 00:30:15,001
+we want to eventually run
+once we put in real data.
+
+733
+00:30:15,001 --> 00:30:16,393
+So this is just building the graph,
+
+734
+00:30:16,393 --> 00:30:18,648
+this is not actually doing anything.
+
+735
+00:30:18,648 --> 00:30:21,658
+Then we have this magical line
+where after we've computed
+
+736
+00:30:21,658 --> 00:30:24,739
+our loss with these symbolic operations,
+
+737
+00:30:24,739 --> 00:30:27,181
+then we can just ask TensorFlow to compute
+
+738
+00:30:27,181 --> 00:30:31,186
+the gradient of the loss
+with respect to w1 and w2
+
+739
+00:30:31,186 --> 00:30:33,135
+in this one magical, beautiful line.
+
+740
+00:30:33,135 --> 00:30:35,619
+And this avoids you writing
+all your own backprop code
+
+741
+00:30:35,619 --> 00:30:37,981
+that you had to do in the assignments.
+
+742
+00:30:37,981 --> 00:30:40,439
+But again there's no actual
+computation happening here.
+
+743
+00:30:40,439 --> 00:30:42,521
+This is just sort of
+adding extra operations
+
+744
+00:30:42,521 --> 00:30:46,009
+to the computational graph
+where now the computational
+
+745
+00:30:46,009 --> 00:30:47,950
+graph has these additional
+operations which will end up
+
+746
+00:30:47,950 --> 00:30:51,108
+computing these gradients for you.
+
+747
+00:30:51,108 --> 00:30:53,129
+So now at this point we've
+computed our computational
+
+748
+00:30:53,129 --> 00:30:56,638
+graph, we have this big graph
+in this graph data structure
+
+749
+00:30:56,638 --> 00:30:59,039
+in memory that knows what
+operations we want to perform
+
+750
+00:30:59,039 --> 00:31:01,421
+to compute the loss in gradients.
+
+751
+00:31:01,421 --> 00:31:03,705
+And now we enter a TensorFlow
+session to actually run
+
+752
+00:31:03,705 --> 00:31:06,843
+this graph and feed it with data.
+
+753
+00:31:06,843 --> 00:31:09,160
+So then, once we've entered the session,
+
+754
+00:31:09,160 --> 00:31:11,943
+then we actually need to
+construct some concrete values
+
+755
+00:31:11,943 --> 00:31:13,859
+that will be fed to the graph.
+
+756
+00:31:13,859 --> 00:31:17,227
+So TensorFlow just expects
+to receive data from
+
+757
+00:31:17,227 --> 00:31:19,459
+Numpy arrays in most cases.
+
+758
+00:31:19,459 --> 00:31:23,701
+So here we're just creating
+concrete actual values
+
+759
+00:31:23,701 --> 00:31:28,066
+for X, Y, w1 and w2 using
+Numpy and then storing these
+
+760
+00:31:28,066 --> 00:31:30,226
+in some dictionary.
+
+761
+00:31:30,226 --> 00:31:32,743
+And now here is where we're
+actually running the graph.
+
+762
+00:31:32,743 --> 00:31:36,206
+So you can see that we're
+calling a session.run
+
+763
+00:31:36,206 --> 00:31:38,120
+to actually execute
+some part of the graph.
+
+764
+00:31:38,120 --> 00:31:41,603
+The first argument loss, tells
+us which part of the graph
+
+765
+00:31:41,603 --> 00:31:43,899
+do we actually want as output.
+
+766
+00:31:43,899 --> 00:31:45,979
+And that, so we actually want the graph,
+
+767
+00:31:45,979 --> 00:31:47,597
+in this case we need to
+tell it that we actually
+
+768
+00:31:47,597 --> 00:31:50,950
+want to compute loss and grad1 and grad w2
+
+769
+00:31:50,950 --> 00:31:53,880
+and we need to pass in with
+this feed dict parameter
+
+770
+00:31:53,880 --> 00:31:57,140
+the actual concrete values
+that will be fed to the graph.
+
+771
+00:31:57,140 --> 00:32:00,043
+And then after, in this one line,
+
+772
+00:32:00,043 --> 00:32:02,888
+it's going and running the
+graph and then computing
+
+773
+00:32:02,888 --> 00:32:06,541
+those values for loss grad1 to grad w2
+
+774
+00:32:06,541 --> 00:32:09,097
+and then returning the
+actual concrete values
+
+775
+00:32:09,097 --> 00:32:12,003
+for those in Numpy arrays again.
+
+776
+00:32:12,003 --> 00:32:14,398
+So now after you unpack this
+output in the second line,
+
+777
+00:32:14,398 --> 00:32:18,446
+you get Numpy arrays, or you
+get Numpy arrays with the loss
+
+778
+00:32:18,446 --> 00:32:19,859
+and the gradients.
+
+779
+00:32:19,859 --> 00:32:21,720
+So then you can go and
+do whatever you want
+
+780
+00:32:21,720 --> 00:32:23,697
+with these values.
+
+781
+00:32:23,697 --> 00:32:28,655
+So then, this has only run sort
+of one forward and backward
+
+782
+00:32:28,655 --> 00:32:29,599
+pass through our graph,
+
+783
+00:32:29,599 --> 00:32:31,468
+and it only takes a couple
+extra lines if we actually
+
+784
+00:32:31,468 --> 00:32:33,167
+want to train the network.
+
+785
+00:32:33,167 --> 00:32:36,225
+So here we're, now we're
+running the graph many times
+
+786
+00:32:36,225 --> 00:32:38,577
+in a loop so we're doing a four loop
+
+787
+00:32:38,577 --> 00:32:40,739
+and in each iteration of the loop,
+
+788
+00:32:40,739 --> 00:32:43,635
+we're calling session.run
+asking it to compute
+
+789
+00:32:43,635 --> 00:32:45,511
+the loss and the gradients.
+
+790
+00:32:45,511 --> 00:32:48,360
+And now we're doing a
+manual gradient discent step
+
+791
+00:32:48,360 --> 00:32:50,852
+using those computed gradients
+to now update our current
+
+792
+00:32:50,852 --> 00:32:52,291
+values of the weights.
+
+793
+00:32:52,291 --> 00:32:56,159
+So if you actually run this
+code and plot the losses,
+
+794
+00:32:56,159 --> 00:32:57,770
+then you'll see that the loss goes down
+
+795
+00:32:57,770 --> 00:33:00,749
+and the network is training and
+this is working pretty well.
+
+796
+00:33:00,749 --> 00:33:03,449
+So this is kind of like a
+super bare bones example
+
+797
+00:33:03,449 --> 00:33:06,113
+of training a fully connected
+network in TensorFlow.
+
+798
+00:33:06,113 --> 00:33:08,046
+But there's a problem here.
+
+799
+00:33:08,046 --> 00:33:11,437
+So here, remember that
+on the forward pass,
+
+800
+00:33:11,437 --> 00:33:13,256
+every time we execute this graph,
+
+801
+00:33:13,256 --> 00:33:15,086
+we're actually feeding in the weights.
+
+802
+00:33:15,086 --> 00:33:16,659
+We have the weights as Numpy arrays
+
+803
+00:33:16,659 --> 00:33:18,835
+and we're explicitly
+feeding them into the graph.
+
+804
+00:33:18,835 --> 00:33:21,395
+And now when the graph finishes executing
+
+805
+00:33:21,395 --> 00:33:23,230
+it's going to give us these gradients.
+
+806
+00:33:23,230 --> 00:33:24,979
+And remember the gradients
+are the same size
+
+807
+00:33:24,979 --> 00:33:26,339
+as the weights.
+
+808
+00:33:26,339 --> 00:33:28,192
+So this means that every time
+we're running the graph here,
+
+809
+00:33:28,192 --> 00:33:30,675
+we're copying the weights
+from Numpy arrays into
+
+810
+00:33:30,675 --> 00:33:32,665
+TensorFlow then getting the gradients
+
+811
+00:33:32,665 --> 00:33:34,583
+and then copying the
+gradients from TensorFlow
+
+812
+00:33:34,583 --> 00:33:36,419
+back out to Numpy arrays.
+
+813
+00:33:36,419 --> 00:33:37,886
+So if you're just running on CPU,
+
+814
+00:33:37,886 --> 00:33:39,849
+this is maybe not a huge deal,
+
+815
+00:33:39,849 --> 00:33:42,676
+but remember we talked
+about CPU GPU bottleneck
+
+816
+00:33:42,676 --> 00:33:44,867
+and how it's very expensive
+actually to copy data
+
+817
+00:33:44,867 --> 00:33:47,235
+between CPU memory and GPU memory.
+
+818
+00:33:47,235 --> 00:33:49,840
+So if your network is very
+large and your weights
+
+819
+00:33:49,840 --> 00:33:51,096
+and gradients were very big,
+
+820
+00:33:51,096 --> 00:33:52,975
+then doing something like
+this would be super expensive
+
+821
+00:33:52,975 --> 00:33:55,900
+and super slow because we'd
+be copying all kinds of data
+
+822
+00:33:55,900 --> 00:33:58,423
+back and forth between the
+CPU and the GPU at every
+
+823
+00:33:58,423 --> 00:33:59,256
+time step.
+
+824
+00:33:59,256 --> 00:34:00,441
+So that's bad, we don't want to do that.
+
+825
+00:34:00,441 --> 00:34:01,689
+We need to fix that.
+
+826
+00:34:01,689 --> 00:34:06,027
+So, obviously TensorFlow
+has some solution to this.
+
+827
+00:34:06,027 --> 00:34:08,342
+And the idea is that
+now we want our weights,
+
+828
+00:34:08,342 --> 00:34:11,437
+w1 and w2, rather than being
+placeholders where we're
+
+829
+00:34:11,437 --> 00:34:14,456
+going to, where we expect to
+feed them in to the network
+
+830
+00:34:14,456 --> 00:34:17,969
+on every forward pass, instead
+we define them as variables.
+
+831
+00:34:17,969 --> 00:34:20,476
+So a variable is something
+is a value that lives inside
+
+832
+00:34:20,476 --> 00:34:23,175
+the computational graph
+and it's going to persist
+
+833
+00:34:23,176 --> 00:34:25,601
+inside the computational
+graph across different times
+
+834
+00:34:25,601 --> 00:34:27,347
+when you run the same graph.
+
+835
+00:34:27,347 --> 00:34:31,300
+So now instead of declaring
+these w1 and w2 as placeholders,
+
+836
+00:34:31,300 --> 00:34:33,094
+instead we just construct
+them as variables.
+
+837
+00:34:33,094 --> 00:34:35,514
+But now since they live inside the graph,
+
+838
+00:34:35,514 --> 00:34:38,041
+we also need to tell
+TensorFlow how they should be
+
+839
+00:34:38,041 --> 00:34:39,219
+initialized, right?
+
+840
+00:34:39,219 --> 00:34:40,815
+Because in the previous
+case we were feeding in
+
+841
+00:34:40,815 --> 00:34:42,697
+their values from outside the graph,
+
+842
+00:34:42,697 --> 00:34:44,606
+so we initialized them in Numpy,
+
+843
+00:34:44,606 --> 00:34:47,437
+but now because these things
+live inside the graph,
+
+844
+00:34:47,437 --> 00:34:50,569
+TensorFlow is responsible
+for initializing them.
+
+845
+00:34:50,569 --> 00:34:53,149
+So we need to pass in a
+tf.randomnormal operation,
+
+846
+00:34:53,149 --> 00:34:55,688
+which again is not
+actually initializing them
+
+847
+00:34:55,688 --> 00:34:58,220
+when we run this line, this
+is just telling TensorFlow
+
+848
+00:34:58,220 --> 00:35:00,627
+how we want them to be initialized.
+
+849
+00:35:00,627 --> 00:35:02,048
+So it's a little bit of
+confusing misdirection
+
+850
+00:35:02,048 --> 00:35:03,215
+going on here.
+
+851
+00:35:04,869 --> 00:35:07,478
+And now, remember in the previous example
+
+852
+00:35:07,478 --> 00:35:10,207
+we were actually updating
+the weights outside
+
+853
+00:35:10,207 --> 00:35:11,862
+of the computational graph.
+
+854
+00:35:11,862 --> 00:35:14,554
+We, in the previous example,
+we were computing the gradients
+
+855
+00:35:14,554 --> 00:35:17,219
+and then using them to update
+the weights as Numpy arrays
+
+856
+00:35:17,219 --> 00:35:19,431
+and then feeding in the
+updated weights at the next
+
+857
+00:35:19,431 --> 00:35:20,264
+time step.
+
+858
+00:35:20,264 --> 00:35:22,742
+But now because we want
+these weights to live inside
+
+859
+00:35:22,742 --> 00:35:25,818
+the graph, this operation
+of updating the weights
+
+860
+00:35:25,818 --> 00:35:28,004
+needs to also be an operation inside
+
+861
+00:35:28,004 --> 00:35:29,402
+the computational graph.
+
+862
+00:35:29,402 --> 00:35:34,242
+So now we used this assign
+function which mutates
+
+863
+00:35:34,242 --> 00:35:37,020
+these variables inside
+the computational graph
+
+864
+00:35:37,020 --> 00:35:39,407
+and now the mutated value will
+persist across multiple runs
+
+865
+00:35:39,407 --> 00:35:41,487
+of the same graph.
+
+866
+00:35:41,487 --> 00:35:44,195
+So now when we run this graph
+
+867
+00:35:44,195 --> 00:35:45,976
+and when we train the network,
+
+868
+00:35:45,976 --> 00:35:48,420
+now we need to run the graph
+once with a little bit of
+
+869
+00:35:48,420 --> 00:35:50,830
+special incantation to tell
+TensorFlow to set up these
+
+870
+00:35:50,830 --> 00:35:53,825
+variables that are going
+to live inside the graph.
+
+871
+00:35:53,825 --> 00:35:55,779
+And then once we've done
+that initialization,
+
+872
+00:35:55,779 --> 00:35:58,574
+now we can run the graph
+over and over again.
+
+873
+00:35:58,574 --> 00:36:02,149
+And here, we're now only
+feeding in the data and labels
+
+874
+00:36:02,149 --> 00:36:05,091
+X and Y and the weights are
+living inside the graph.
+
+875
+00:36:05,091 --> 00:36:07,035
+And here we've asked the network to,
+
+876
+00:36:07,035 --> 00:36:09,517
+we've asked TensorFlow to
+compute the loss for us.
+
+877
+00:36:09,517 --> 00:36:13,001
+And then you might think that
+this would train the network,
+
+878
+00:36:13,001 --> 00:36:15,627
+but there's actually a bug here.
+
+879
+00:36:15,627 --> 00:36:17,574
+So, if you actually run this code,
+
+880
+00:36:17,574 --> 00:36:19,964
+and you plot the loss, it doesn't train.
+
+881
+00:36:19,964 --> 00:36:23,401
+So that's bad, it's confusing,
+like what's going on?
+
+882
+00:36:23,401 --> 00:36:25,385
+We wrote this assign
+code, we ran the thing,
+
+883
+00:36:25,385 --> 00:36:26,902
+like we computed the
+loss and the gradients
+
+884
+00:36:26,902 --> 00:36:29,957
+and our loss is flat, what's going on?
+
+885
+00:36:29,957 --> 00:36:31,460
+Any ideas?
+
+886
+00:36:31,460 --> 00:36:34,595
+[student's words obscured
+due to lack of microphone]
+
+887
+00:36:34,595 --> 00:36:38,654
+Yeah so one hypothesis is
+that maybe we're accidentally
+
+888
+00:36:38,654 --> 00:36:41,749
+re-initializing the w's
+every time we call the graph.
+
+889
+00:36:41,749 --> 00:36:43,854
+That's a good hypothesis,
+that's actually not the problem
+
+890
+00:36:43,854 --> 00:36:44,979
+in this case.
+
+891
+00:36:44,979 --> 00:36:48,057
+[student's words obscured
+due to lack of microphone]
+
+892
+00:36:48,057 --> 00:36:51,777
+Yeah, so the answer is that
+we actually need to explicitly
+
+893
+00:36:51,777 --> 00:36:54,339
+tell TensorFlow that we
+want to run these new w1
+
+894
+00:36:54,339 --> 00:36:56,318
+and new w2 operations.
+
+895
+00:36:56,318 --> 00:36:58,835
+So we've built up this big
+computational graph data
+
+896
+00:36:58,835 --> 00:37:01,699
+structure in memory and
+now when we call run,
+
+897
+00:37:01,699 --> 00:37:04,894
+we only told TensorFlow that
+we wanted to compute loss.
+
+898
+00:37:04,894 --> 00:37:07,361
+And if you look at the
+dependencies among these different
+
+899
+00:37:07,361 --> 00:37:09,155
+operations inside the graph,
+
+900
+00:37:09,155 --> 00:37:11,277
+you see that in order to compute loss
+
+901
+00:37:11,277 --> 00:37:13,715
+we don't actually need to
+perform this update operation.
+
+902
+00:37:13,715 --> 00:37:16,366
+So TensorFlow is smart and
+it only computes the parts
+
+903
+00:37:16,366 --> 00:37:19,416
+of the graph that are necessary
+for computing the output
+
+904
+00:37:19,416 --> 00:37:21,496
+that you asked it to compute.
+
+905
+00:37:21,496 --> 00:37:24,499
+So that's kind of a nice thing
+because it means it's only
+
+906
+00:37:24,499 --> 00:37:26,656
+doing as much work as it needs to,
+
+907
+00:37:26,656 --> 00:37:29,729
+but in situations like this it
+can be a little bit confusing
+
+908
+00:37:29,729 --> 00:37:32,739
+and lead to behavior
+that you didn't expect.
+
+909
+00:37:32,739 --> 00:37:34,936
+So the solution in this case
+is that we actually need to
+
+910
+00:37:34,936 --> 00:37:37,656
+explicitly tell TensorFlow
+to perform those
+
+911
+00:37:37,656 --> 00:37:39,141
+update operations.
+
+912
+00:37:39,141 --> 00:37:41,475
+So one thing we could do,
+which is what was suggested
+
+913
+00:37:41,475 --> 00:37:45,603
+is we could add new w1
+and new w2 as outputs
+
+914
+00:37:45,603 --> 00:37:47,761
+and just tell TensorFlow
+that we want to produce
+
+915
+00:37:47,761 --> 00:37:49,531
+these values as outputs.
+
+916
+00:37:49,531 --> 00:37:53,199
+But that's a problem
+too because the values,
+
+917
+00:37:53,199 --> 00:37:57,366
+those new w1, new w2 values
+are again these big tensors.
+
+918
+00:37:58,891 --> 00:38:01,123
+So now if we tell TensorFlow
+we want those as output,
+
+919
+00:38:01,123 --> 00:38:03,068
+we're going to again get
+this copying behavior
+
+920
+00:38:03,068 --> 00:38:05,138
+between CPU and GPU at ever iteration.
+
+921
+00:38:05,138 --> 00:38:07,316
+So that's bad, we don't want that.
+
+922
+00:38:07,316 --> 00:38:09,217
+So there's a little
+trick you can do instead.
+
+923
+00:38:09,217 --> 00:38:11,742
+Which is that we add kind of
+a dummy node to the graph.
+
+924
+00:38:11,742 --> 00:38:14,255
+With these fake data dependencies
+
+925
+00:38:14,255 --> 00:38:16,986
+and we just say that
+this dummy node updates,
+
+926
+00:38:16,986 --> 00:38:20,307
+has these data dependencies
+of new w1 and new w2.
+
+927
+00:38:20,307 --> 00:38:22,410
+And now when we actually run the graph,
+
+928
+00:38:22,410 --> 00:38:25,803
+we tell it to compute both
+the loss and this dummy node.
+
+929
+00:38:25,803 --> 00:38:27,840
+And this dummy node
+doesn't actually return
+
+930
+00:38:27,840 --> 00:38:31,169
+any value it just returns
+none, but because of this
+
+931
+00:38:31,169 --> 00:38:33,952
+dependency that we've put
+into the node it ensures
+
+932
+00:38:33,952 --> 00:38:35,980
+that when we run the updates value,
+
+933
+00:38:35,980 --> 00:38:38,468
+we actually also run
+these update operations.
+
+934
+00:38:38,468 --> 00:38:39,551
+So, question?
+
+935
+00:38:40,788 --> 00:38:44,955
+[student's words obscured
+due to lack of microphone]
+
+936
+00:38:45,854 --> 00:38:48,548
+Is there a reason why we didn't
+put X and Y into the graph?
+
+937
+00:38:48,548 --> 00:38:51,370
+And that it stayed as Numpy.
+
+938
+00:38:51,370 --> 00:38:54,725
+So in this example we're
+reusing X and Y on every,
+
+939
+00:38:54,725 --> 00:38:57,151
+we're reusing the same X
+and Y on every iteration.
+
+940
+00:38:57,151 --> 00:38:59,156
+So you're right, we could
+have just also stuck those
+
+941
+00:38:59,156 --> 00:39:02,211
+in the graph, but in a
+more realistic scenario,
+
+942
+00:39:02,211 --> 00:39:05,301
+X and Y will be minibatches
+of data so those will actually
+
+943
+00:39:05,301 --> 00:39:07,526
+change at every iteration
+and we will want to feed
+
+944
+00:39:07,526 --> 00:39:10,122
+different values for
+those at every iteration.
+
+945
+00:39:10,122 --> 00:39:12,190
+So in this case, they could
+have stayed in the graph,
+
+946
+00:39:12,190 --> 00:39:14,330
+but in most cases they will change,
+
+947
+00:39:14,330 --> 00:39:17,913
+so we don't want them
+to live in the graph.
+
+948
+00:39:19,388 --> 00:39:21,290
+Oh, another question?
+
+949
+00:39:21,290 --> 00:39:25,457
+[student's words obscured
+due to lack of microphone]
+
+950
+00:39:37,046 --> 00:39:40,927
+Yeah, so we've told it,
+we had put into TensorFlow
+
+951
+00:39:40,927 --> 00:39:44,305
+that the outputs we want
+are loss and updates.
+
+952
+00:39:44,305 --> 00:39:47,388
+Updates is not actually a real value.
+
+953
+00:39:48,666 --> 00:39:51,801
+So when updates evaluates
+it just returns none.
+
+954
+00:39:51,801 --> 00:39:54,570
+But because of this dependency
+we've told it that updates
+
+955
+00:39:54,570 --> 00:39:57,416
+depends on these assign operations.
+
+956
+00:39:57,416 --> 00:39:59,356
+But these assign operations live inside
+
+957
+00:39:59,356 --> 00:40:02,358
+the computational graph and
+all live inside GPU memory.
+
+958
+00:40:02,358 --> 00:40:04,426
+So then we're doing
+these update operations
+
+959
+00:40:04,426 --> 00:40:07,107
+entirely on the GPU and
+we're no longer copying the
+
+960
+00:40:07,107 --> 00:40:10,190
+updated values back out of the graph.
+
+961
+00:40:11,723 --> 00:40:15,112
+[student's words obscured
+due to lack of microphone]
+
+962
+00:40:15,112 --> 00:40:18,195
+So the question is does
+tf.group return none?
+
+963
+00:40:18,195 --> 00:40:21,824
+So this gets into the
+trickiness of TensorFlow.
+
+964
+00:40:21,824 --> 00:40:25,923
+So tf.group returns some
+crazy TensorFlow value.
+
+965
+00:40:25,923 --> 00:40:29,371
+It sort of returns some like
+internal TensorFlow node
+
+966
+00:40:29,371 --> 00:40:32,658
+operation that we need to
+continue building the graph.
+
+967
+00:40:32,658 --> 00:40:34,266
+But when you execute the graph,
+
+968
+00:40:34,266 --> 00:40:37,417
+and when you tell, inside the session.run,
+
+969
+00:40:37,417 --> 00:40:40,250
+when we told it we want it
+to compute the concrete value
+
+970
+00:40:40,250 --> 00:40:43,333
+from updates, then that returns none.
+
+971
+00:40:43,333 --> 00:40:45,482
+So whenever you're working with TensorFlow
+
+972
+00:40:45,482 --> 00:40:47,907
+you have this funny indirection
+between building the graph
+
+973
+00:40:47,907 --> 00:40:50,781
+and the actual output values
+during building the graph
+
+974
+00:40:50,781 --> 00:40:53,487
+is some funny weird object,
+and then you actually get
+
+975
+00:40:53,487 --> 00:40:55,466
+a concrete value when you run the graph.
+
+976
+00:40:55,466 --> 00:40:58,658
+So here after you run updates,
+then the output is none.
+
+977
+00:40:58,658 --> 00:40:59,967
+Does that clear it up a little bit?
+
+978
+00:40:59,967 --> 00:41:04,134
+[student's words obscured
+due to lack of microphone]
+
+979
+00:41:18,796 --> 00:41:20,792
+So the question is why is loss a value
+
+980
+00:41:20,792 --> 00:41:22,334
+and why is updates none?
+
+981
+00:41:22,334 --> 00:41:24,068
+That's just the way that updates works.
+
+982
+00:41:24,068 --> 00:41:25,988
+So loss is a value when we compute,
+
+983
+00:41:25,988 --> 00:41:28,597
+when we tell TensorFlow
+we want to run a tensor,
+
+984
+00:41:28,597 --> 00:41:30,176
+then we get the concrete value.
+
+985
+00:41:30,176 --> 00:41:33,147
+Updates is this kind of
+special other data type
+
+986
+00:41:33,147 --> 00:41:35,753
+that does not return a value,
+it instead returns none.
+
+987
+00:41:35,753 --> 00:41:38,703
+So it's kind of some TensorFlow
+magic that's going on there.
+
+988
+00:41:38,703 --> 00:41:40,602
+Maybe we can talk offline
+if you're still confused.
+
+989
+00:41:40,602 --> 00:41:42,678
+[student's words obscured
+due to lack of microphone]
+
+990
+00:41:42,678 --> 00:41:46,186
+Yeah, yeah, that behavior is
+coming from the group method.
+
+991
+00:41:46,186 --> 00:41:48,388
+So now, we kind of have
+this weird pattern where we
+
+992
+00:41:48,388 --> 00:41:50,548
+wanted to do these
+different assign operations,
+
+993
+00:41:50,548 --> 00:41:52,492
+we have to use this funny tf.group thing.
+
+994
+00:41:52,492 --> 00:41:56,248
+That's kind of a pain, so
+thankfully TensorFlow gives
+
+995
+00:41:56,248 --> 00:41:58,058
+you some convenience
+operations that kind of do that
+
+996
+00:41:58,058 --> 00:42:00,004
+kind of stuff for you.
+
+997
+00:42:00,004 --> 00:42:01,706
+And that's called an optimizer.
+
+998
+00:42:01,706 --> 00:42:06,047
+So here we're using a
+tf.train.GradientDescentOptimizer
+
+999
+00:42:06,047 --> 00:42:08,458
+and we're telling it what
+learning rate we want to use.
+
+1000
+00:42:08,458 --> 00:42:10,964
+And you can imagine that
+there's, there's RMSprop,
+
+1001
+00:42:10,964 --> 00:42:12,784
+there's all kinds of different
+optimization algorithms here.
+
+1002
+00:42:12,784 --> 00:42:16,284
+And now we call optimizer.minimize of loss
+
+1003
+00:42:17,311 --> 00:42:19,067
+and now this is a pretty magical,
+
+1004
+00:42:19,067 --> 00:42:21,204
+this is a pretty magical thing,
+
+1005
+00:42:21,204 --> 00:42:24,527
+because now this call is
+aware that these variables
+
+1006
+00:42:24,527 --> 00:42:28,106
+w1 and w2 are marked as
+trainable by default,
+
+1007
+00:42:28,106 --> 00:42:30,586
+so then internally, inside
+this optimizer.minimize
+
+1008
+00:42:30,586 --> 00:42:33,104
+it's going in and adding
+nodes to the graph
+
+1009
+00:42:33,104 --> 00:42:35,184
+which will compute gradient
+of loss with respect
+
+1010
+00:42:35,184 --> 00:42:38,159
+to w1 and w2 and then it's
+also performing that update
+
+1011
+00:42:38,159 --> 00:42:40,287
+operation for you and it's
+doing the grouping operation
+
+1012
+00:42:40,287 --> 00:42:42,219
+for you and it's doing the assigns.
+
+1013
+00:42:42,219 --> 00:42:44,206
+It's like doing a lot of
+magical stuff inside there.
+
+1014
+00:42:44,206 --> 00:42:46,506
+But then it ends up giving
+you this magical updates value
+
+1015
+00:42:46,506 --> 00:42:49,542
+which, if you dig through the
+code they're actually using
+
+1016
+00:42:49,542 --> 00:42:52,344
+tf.group so it looks very
+similar internally to what
+
+1017
+00:42:52,344 --> 00:42:53,518
+we saw before.
+
+1018
+00:42:53,518 --> 00:42:55,946
+And now when we run the
+graph inside our loop
+
+1019
+00:42:55,946 --> 00:42:58,607
+we do the same pattern of
+telling it to compute loss
+
+1020
+00:42:58,607 --> 00:43:00,004
+and updates.
+
+1021
+00:43:00,004 --> 00:43:03,444
+And every time we tell the
+graph to compute updates,
+
+1022
+00:43:03,444 --> 00:43:07,450
+then it'll actually go
+and update the graph.
+
+1023
+00:43:07,450 --> 00:43:08,593
+Question?
+
+1024
+00:43:08,593 --> 00:43:10,959
+[student's words obscured
+due to lack of microphone]
+
+1025
+00:43:10,959 --> 00:43:14,249
+Yeah, so what is the
+tf.GlobalVariablesInitializer?
+
+1026
+00:43:14,249 --> 00:43:18,076
+So that's initializing w1
+and w2 because these are
+
+1027
+00:43:18,076 --> 00:43:20,502
+variables which live inside the graph.
+
+1028
+00:43:20,502 --> 00:43:22,823
+So we need to, when we
+saw this, when we create
+
+1029
+00:43:22,823 --> 00:43:25,244
+the tf.variable we have
+this tf.randomnormal
+
+1030
+00:43:25,244 --> 00:43:28,366
+which is this initialization so the
+
+1031
+00:43:28,366 --> 00:43:30,771
+tf.GlobalVariablesInitializer
+is causing the
+
+1032
+00:43:30,771 --> 00:43:34,946
+tf.randomnormal to actually run
+and generate concrete values
+
+1033
+00:43:34,946 --> 00:43:37,733
+to initialize those variables.
+
+1034
+00:43:37,733 --> 00:43:40,794
+[student's words obscured
+due to lack of microphone]
+
+1035
+00:43:40,794 --> 00:43:42,271
+Sorry, what was the question?
+
+1036
+00:43:42,271 --> 00:43:45,233
+[student's words obscured
+due to lack of microphone]
+
+1037
+00:43:45,233 --> 00:43:47,935
+So it knows that a
+placeholder is going to be fed
+
+1038
+00:43:47,935 --> 00:43:49,978
+outside of the graph and a
+variable is something that
+
+1039
+00:43:49,978 --> 00:43:51,385
+lives inside the graph.
+
+1040
+00:43:51,385 --> 00:43:53,770
+So I don't know all the
+details about how it decides,
+
+1041
+00:43:53,770 --> 00:43:56,371
+what exactly it decides
+to run with that call.
+
+1042
+00:43:56,371 --> 00:43:57,680
+I think you'd need to dig
+through the code to figure
+
+1043
+00:43:57,680 --> 00:44:00,384
+that out, or maybe it's
+documented somewhere.
+
+1044
+00:44:00,384 --> 00:44:01,941
+So but now we've kind of got this,
+
+1045
+00:44:01,941 --> 00:44:04,656
+again we've got this full
+example of training a
+
+1046
+00:44:04,656 --> 00:44:06,130
+network in TensorFlow
+and we're kind of adding
+
+1047
+00:44:06,130 --> 00:44:09,328
+bells and whistles to make it
+a little bit more convenient.
+
+1048
+00:44:09,328 --> 00:44:11,893
+So we can also here,
+in the previous example
+
+1049
+00:44:11,893 --> 00:44:14,027
+we were computing the loss
+explicitly using our own
+
+1050
+00:44:14,027 --> 00:44:16,954
+tensor operations, TensorFlow
+you can always do that,
+
+1051
+00:44:16,954 --> 00:44:19,148
+you can use basic tensor
+operations to compute
+
+1052
+00:44:19,148 --> 00:44:20,739
+just about anything you want.
+
+1053
+00:44:20,739 --> 00:44:22,730
+But TensorFlow also gives
+you a bunch of convenience
+
+1054
+00:44:22,730 --> 00:44:25,901
+functions that compute these
+common neural network things
+
+1055
+00:44:25,901 --> 00:44:26,734
+for you.
+
+1056
+00:44:26,734 --> 00:44:30,040
+So in this case we can use
+tf.losses.mean_squared_error
+
+1057
+00:44:30,040 --> 00:44:32,531
+and it just does the L2
+loss for us so we don't have
+
+1058
+00:44:32,531 --> 00:44:36,273
+to compute it ourself in terms
+of basic tensor operations.
+
+1059
+00:44:36,273 --> 00:44:39,194
+So another kind of weirdness
+here is that it was kind of
+
+1060
+00:44:39,194 --> 00:44:42,606
+annoying that we had to
+explicitly define our inputs
+
+1061
+00:44:42,606 --> 00:44:44,729
+and define our weights and
+then like chain them together
+
+1062
+00:44:44,729 --> 00:44:46,667
+in the forward pass
+using a matrix multiply.
+
+1063
+00:44:46,667 --> 00:44:49,958
+And in this example we've
+actually not put biases
+
+1064
+00:44:49,958 --> 00:44:52,820
+in the layer because that
+would be kind of an extra,
+
+1065
+00:44:52,820 --> 00:44:54,291
+then we'd have to initialize biases,
+
+1066
+00:44:54,291 --> 00:44:56,330
+we'd have to get them in the right shape,
+
+1067
+00:44:56,330 --> 00:44:58,494
+we'd have to broadcast the
+biases against the output
+
+1068
+00:44:58,494 --> 00:45:00,568
+of the matrix multiply
+and you can see that that
+
+1069
+00:45:00,568 --> 00:45:01,966
+would kind of be a lot of code.
+
+1070
+00:45:01,966 --> 00:45:03,664
+It would be kind of annoying write.
+
+1071
+00:45:03,664 --> 00:45:05,231
+And once you get to like convolutions
+
+1072
+00:45:05,231 --> 00:45:07,626
+and batch normalizations
+and other types of layers
+
+1073
+00:45:07,626 --> 00:45:09,653
+this kind of basic way of working,
+
+1074
+00:45:09,653 --> 00:45:12,511
+of having these variables,
+having these inputs and outputs
+
+1075
+00:45:12,511 --> 00:45:14,626
+and combining them all together with basic
+
+1076
+00:45:14,626 --> 00:45:17,403
+computational graph operations
+could be a little bit
+
+1077
+00:45:17,403 --> 00:45:19,749
+unwieldy and it could
+be really annoying to
+
+1078
+00:45:19,749 --> 00:45:21,274
+make sure you initialize
+the weights with the right
+
+1079
+00:45:21,274 --> 00:45:22,954
+shapes and all that sort of stuff.
+
+1080
+00:45:22,954 --> 00:45:25,353
+So as a result, there's a
+bunch of sort of higher level
+
+1081
+00:45:25,353 --> 00:45:27,535
+libraries that wrap around TensorFlow
+
+1082
+00:45:27,535 --> 00:45:30,615
+and handle some of these details for you.
+
+1083
+00:45:30,615 --> 00:45:33,190
+So one example that ships with TensorFlow,
+
+1084
+00:45:33,190 --> 00:45:35,965
+is this tf.layers inside.
+
+1085
+00:45:35,965 --> 00:45:38,554
+So now in this code example
+you can see that our code
+
+1086
+00:45:38,554 --> 00:45:41,455
+is only explicitly
+declaring the X and the Y
+
+1087
+00:45:41,455 --> 00:45:44,060
+which are the placeholders
+for the data and the labels.
+
+1088
+00:45:44,060 --> 00:45:48,474
+And now we say that H=tf.layers.dense,
+
+1089
+00:45:48,474 --> 00:45:53,036
+we give it the input X
+and we tell it units=H.
+
+1090
+00:45:53,036 --> 00:45:55,171
+This is again kind of a magical line
+
+1091
+00:45:55,171 --> 00:45:57,782
+because inside this line,
+it's kind of setting up
+
+1092
+00:45:57,782 --> 00:46:02,048
+w1 and b1, the bias, it's
+setting up variables for those
+
+1093
+00:46:02,048 --> 00:46:05,222
+with the right shapes that
+are kind of inside the graph
+
+1094
+00:46:05,222 --> 00:46:07,411
+but a little bit hidden from us.
+
+1095
+00:46:07,411 --> 00:46:10,012
+And it's using this
+xavier initializer object
+
+1096
+00:46:10,012 --> 00:46:12,931
+to set up an initialization
+strategy for those.
+
+1097
+00:46:12,931 --> 00:46:14,730
+So before we were doing
+that explicitly ourselves
+
+1098
+00:46:14,730 --> 00:46:17,200
+with the tf.randomnormal business,
+
+1099
+00:46:17,200 --> 00:46:19,335
+but now here it's kind of
+handling some of those details
+
+1100
+00:46:19,335 --> 00:46:22,266
+for us and it's just spitting out an H,
+
+1101
+00:46:22,266 --> 00:46:23,989
+which is again the same
+sort of H that we saw
+
+1102
+00:46:23,989 --> 00:46:26,265
+in the previous layer, it's
+just doing some of those
+
+1103
+00:46:26,265 --> 00:46:27,515
+details for us.
+
+1104
+00:46:28,487 --> 00:46:30,354
+And you can see here,
+we're also passing an
+
+1105
+00:46:30,354 --> 00:46:33,857
+activation=tf.nn.relu so it's
+even doing the activation,
+
+1106
+00:46:33,857 --> 00:46:36,910
+the relu activation function
+inside this layer for us.
+
+1107
+00:46:36,910 --> 00:46:39,541
+So it's taking care of a
+lot of these architectural
+
+1108
+00:46:39,541 --> 00:46:41,370
+details for us.
+
+1109
+00:46:41,370 --> 00:46:42,784
+Question?
+
+1110
+00:46:42,784 --> 00:46:46,446
+[student's words obscured
+due to lack of microphone]
+
+1111
+00:46:46,446 --> 00:46:49,032
+Question is does the
+xavier initializer default
+
+1112
+00:46:49,032 --> 00:46:51,168
+to particular distribution?
+
+1113
+00:46:51,168 --> 00:46:53,887
+I'm sure it has some default,
+I'm not sure what it is.
+
+1114
+00:46:53,887 --> 00:46:55,850
+I think you'll have to
+look at the documentation.
+
+1115
+00:46:55,850 --> 00:46:58,010
+But it seems to be a
+reasonable strategy, I guess.
+
+1116
+00:46:58,010 --> 00:46:59,625
+And in fact if you run this code,
+
+1117
+00:46:59,625 --> 00:47:01,303
+it converges much faster
+than the previous one
+
+1118
+00:47:01,303 --> 00:47:04,111
+because the initialization is better.
+
+1119
+00:47:04,111 --> 00:47:06,047
+And you can see that
+we're using two calls to
+
+1120
+00:47:06,047 --> 00:47:08,037
+tf.layers and this lets us build our model
+
+1121
+00:47:08,037 --> 00:47:10,465
+without doing all these
+explicit bookkeeping details
+
+1122
+00:47:10,465 --> 00:47:11,911
+ourself.
+
+1123
+00:47:11,911 --> 00:47:14,273
+So this is maybe a little
+bit more convenient.
+
+1124
+00:47:14,273 --> 00:47:18,682
+But tf.contrib.layer is really
+not the only game in town.
+
+1125
+00:47:18,682 --> 00:47:21,260
+There's like a lot of different
+higher level libraries
+
+1126
+00:47:21,260 --> 00:47:23,349
+that people build on top of TensorFlow.
+
+1127
+00:47:23,349 --> 00:47:26,841
+And it's kind of due to this
+basic impotence mis-match
+
+1128
+00:47:26,841 --> 00:47:30,315
+where the computational graph
+is relatively low level thing,
+
+1129
+00:47:30,315 --> 00:47:32,356
+but when we're working
+with neural networks
+
+1130
+00:47:32,356 --> 00:47:34,309
+we have this concept of layers and weights
+
+1131
+00:47:34,309 --> 00:47:36,426
+and some layers have weights
+associated with them,
+
+1132
+00:47:36,426 --> 00:47:38,949
+and we typically think at
+a slightly higher level
+
+1133
+00:47:38,949 --> 00:47:41,866
+of abstraction than this
+raw computational graph.
+
+1134
+00:47:41,866 --> 00:47:44,899
+So that's what these various
+packages are trying to
+
+1135
+00:47:44,899 --> 00:47:46,563
+help you out and let you
+work at this higher layer
+
+1136
+00:47:46,563 --> 00:47:48,503
+of abstraction.
+
+1137
+00:47:48,503 --> 00:47:50,781
+So another very popular
+package that you may have
+
+1138
+00:47:50,781 --> 00:47:52,460
+seen before is Keras.
+
+1139
+00:47:52,460 --> 00:47:56,275
+Keras is a very beautiful,
+nice API that sits on top of
+
+1140
+00:47:56,275 --> 00:47:59,051
+TensorFlow and handles
+sort of building up these
+
+1141
+00:47:59,051 --> 00:48:02,806
+computational graph for
+you up in the back end.
+
+1142
+00:48:02,806 --> 00:48:05,029
+By the way, Keras also
+supports Theano as a back end,
+
+1143
+00:48:05,029 --> 00:48:07,704
+so that's also kind of nice.
+
+1144
+00:48:07,704 --> 00:48:09,693
+And in this example you
+can see we build the model
+
+1145
+00:48:09,693 --> 00:48:10,958
+as a sequence of layers.
+
+1146
+00:48:10,958 --> 00:48:12,738
+We build some optimizer object
+
+1147
+00:48:12,738 --> 00:48:15,589
+and we call model.compile
+and this does a lot of magic
+
+1148
+00:48:15,589 --> 00:48:17,910
+in the back end to build the graph.
+
+1149
+00:48:17,910 --> 00:48:20,759
+And now we can call model.fit
+and that does the whole
+
+1150
+00:48:20,759 --> 00:48:22,797
+training procedure for us magically.
+
+1151
+00:48:22,797 --> 00:48:24,914
+So I don't know all the
+details of how this works,
+
+1152
+00:48:24,914 --> 00:48:26,211
+but I know Keras is very popular,
+
+1153
+00:48:26,211 --> 00:48:27,606
+so you might consider using
+it if you're talking about
+
+1154
+00:48:27,606 --> 00:48:28,523
+TensorFlow.
+
+1155
+00:48:29,797 --> 00:48:31,270
+Question?
+
+1156
+00:48:31,270 --> 00:48:35,437
+[student's words obscured
+due to lack of microphone]
+
+1157
+00:48:41,717 --> 00:48:43,899
+Yeah, so the question is
+like why there's no explicit
+
+1158
+00:48:43,899 --> 00:48:45,525
+CPU, GPU going on here.
+
+1159
+00:48:45,525 --> 00:48:48,409
+So I've kind of left that
+out to keep the code clean.
+
+1160
+00:48:48,409 --> 00:48:50,042
+But you saw at the beginning examples
+
+1161
+00:48:50,042 --> 00:48:52,147
+it was pretty easy to
+flop all these things
+
+1162
+00:48:52,147 --> 00:48:54,607
+between CPU and GPU and there
+was either some global flag
+
+1163
+00:48:54,607 --> 00:48:56,369
+or some different data type
+
+1164
+00:48:56,369 --> 00:48:59,449
+or some with statement and
+it's usually relatively simple
+
+1165
+00:48:59,449 --> 00:49:01,635
+and just about one line
+to swap in each case.
+
+1166
+00:49:01,635 --> 00:49:03,349
+But exactly what that line looks like
+
+1167
+00:49:03,349 --> 00:49:06,149
+differs a bit depending on the situation.
+
+1168
+00:49:06,149 --> 00:49:09,456
+So there's actually like
+this whole large set
+
+1169
+00:49:09,456 --> 00:49:12,527
+of higher level TensorFlow
+wrappers that you might see
+
+1170
+00:49:12,527 --> 00:49:14,186
+out there in the wild.
+
+1171
+00:49:14,186 --> 00:49:17,109
+And it seems that like
+even people within Google
+
+1172
+00:49:17,109 --> 00:49:21,276
+can't really agree on which
+one is the right one to use.
+
+1173
+00:49:22,230 --> 00:49:24,690
+So Keras and TFLearn are
+third party libraries
+
+1174
+00:49:24,690 --> 00:49:26,829
+that are out there on the
+internet by other people.
+
+1175
+00:49:26,829 --> 00:49:29,768
+But there's these three different ones,
+
+1176
+00:49:29,768 --> 00:49:32,563
+tf.layers, TF-Slim and tf.contrib.learn
+
+1177
+00:49:32,563 --> 00:49:35,355
+that all ship with TensorFlow,
+that are all kind of
+
+1178
+00:49:35,355 --> 00:49:37,890
+doing a slightly different version of this
+
+1179
+00:49:37,890 --> 00:49:39,727
+higher level wrapper thing.
+
+1180
+00:49:39,727 --> 00:49:41,765
+There's another framework
+also from Google,
+
+1181
+00:49:41,765 --> 00:49:44,109
+but not shipping with
+TensorFlow called Pretty Tensor
+
+1182
+00:49:44,109 --> 00:49:46,291
+that does the same sort of thing.
+
+1183
+00:49:46,291 --> 00:49:48,599
+And I guess none of these
+were good enough for DeepMind,
+
+1184
+00:49:48,599 --> 00:49:50,269
+because they went ahead a couple weeks ago
+
+1185
+00:49:50,269 --> 00:49:52,488
+and wrote and released
+their very own high level
+
+1186
+00:49:52,488 --> 00:49:54,530
+TensorFlow wrapper called Sonnet.
+
+1187
+00:49:54,530 --> 00:49:57,570
+So I wouldn't begrudge you
+if you were kind of confused
+
+1188
+00:49:57,570 --> 00:49:59,506
+by all these things.
+
+1189
+00:49:59,506 --> 00:50:00,715
+There's a lot of different choices.
+
+1190
+00:50:00,715 --> 00:50:03,113
+They don't always play
+nicely with each other.
+
+1191
+00:50:03,113 --> 00:50:07,423
+But you have a lot of
+options, so that's good.
+
+1192
+00:50:07,423 --> 00:50:09,123
+TensorFlow has pretrained models.
+
+1193
+00:50:09,123 --> 00:50:11,112
+There's some examples in
+TF-Slim, and in Keras.
+
+1194
+00:50:11,112 --> 00:50:14,072
+'Cause remember retrained
+models are super important
+
+1195
+00:50:14,072 --> 00:50:15,874
+when you're training your own things.
+
+1196
+00:50:15,874 --> 00:50:17,931
+There's also this idea of Tensorboard
+
+1197
+00:50:17,931 --> 00:50:19,634
+where you can load up your,
+
+1198
+00:50:19,634 --> 00:50:21,072
+I don't want to get into details,
+
+1199
+00:50:21,072 --> 00:50:22,834
+but Tensorboard you can
+add sort of instrumentation
+
+1200
+00:50:22,834 --> 00:50:24,733
+to your code and then
+plot losses and things
+
+1201
+00:50:24,733 --> 00:50:27,747
+as you go through the training process.
+
+1202
+00:50:27,747 --> 00:50:29,535
+TensorFlow also let's you run distributed
+
+1203
+00:50:29,535 --> 00:50:31,372
+where you can break up
+a computational graph
+
+1204
+00:50:31,372 --> 00:50:32,760
+run on different machines.
+
+1205
+00:50:32,760 --> 00:50:35,222
+That's super cool but I
+think probably not anyone
+
+1206
+00:50:35,222 --> 00:50:37,613
+outside of Google is really
+using that to great success
+
+1207
+00:50:37,613 --> 00:50:40,733
+these days, but if you do
+want to run distributed stuff
+
+1208
+00:50:40,733 --> 00:50:44,193
+probably TensorFlow is the
+main game in town for that.
+
+1209
+00:50:44,193 --> 00:50:46,834
+A side note is that a lot
+of the design of TensorFlow
+
+1210
+00:50:46,834 --> 00:50:49,992
+is kind of spiritually inspired
+by this earlier framework
+
+1211
+00:50:49,992 --> 00:50:51,533
+called Theano from Montreal.
+
+1212
+00:50:51,533 --> 00:50:54,008
+I don't want to go
+through the details here,
+
+1213
+00:50:54,008 --> 00:50:55,933
+just if you go through
+these slides on your own,
+
+1214
+00:50:55,933 --> 00:50:58,127
+you can see that the code
+for Theano ends up looking
+
+1215
+00:50:58,127 --> 00:50:59,979
+very similar to TensorFlow.
+
+1216
+00:50:59,979 --> 00:51:01,420
+Where we define some variables,
+
+1217
+00:51:01,420 --> 00:51:03,512
+we do some forward pass,
+we compute some gradients,
+
+1218
+00:51:03,512 --> 00:51:05,978
+and we compile some function,
+then we run the function
+
+1219
+00:51:05,978 --> 00:51:08,034
+over and over to train the network.
+
+1220
+00:51:08,034 --> 00:51:10,290
+So it kind of looks a lot like TensorFlow.
+
+1221
+00:51:10,290 --> 00:51:13,010
+So we still have a lot to get through,
+
+1222
+00:51:13,010 --> 00:51:14,462
+so I'm going to move on to PyTorch
+
+1223
+00:51:14,462 --> 00:51:16,671
+and maybe take questions at the end.
+
+1224
+00:51:16,671 --> 00:51:20,770
+So, PyTorch from Facebook
+is kind of different from
+
+1225
+00:51:20,770 --> 00:51:22,868
+TensorFlow in that we have
+sort of three explicit
+
+1226
+00:51:22,868 --> 00:51:26,397
+different layers of
+abstraction inside PyTorch.
+
+1227
+00:51:26,397 --> 00:51:29,415
+So PyTorch has this tensor
+object which is just like a
+
+1228
+00:51:29,415 --> 00:51:30,619
+Numpy array.
+
+1229
+00:51:30,619 --> 00:51:33,603
+It's just an imperative array,
+it doesn't know anything
+
+1230
+00:51:33,603 --> 00:51:36,770
+about deep learning,
+but it can run with GPU.
+
+1231
+00:51:36,770 --> 00:51:38,676
+We have this variable
+object which is a node in a
+
+1232
+00:51:38,676 --> 00:51:42,274
+computational graph which
+builds up computational graphs,
+
+1233
+00:51:42,274 --> 00:51:44,093
+lets you compute gradients,
+that sort of thing.
+
+1234
+00:51:44,093 --> 00:51:46,312
+And we have a module object
+which is a neural network
+
+1235
+00:51:46,312 --> 00:51:48,573
+layer that you can compose
+together these modules
+
+1236
+00:51:48,573 --> 00:51:50,766
+to build big networks.
+
+1237
+00:51:50,766 --> 00:51:52,973
+So if you kind of want to
+think about rough equivalents
+
+1238
+00:51:52,973 --> 00:51:55,971
+between PyTorch and TensorFlow
+you can think of the
+
+1239
+00:51:55,971 --> 00:51:58,759
+PyTorch tensor as fulfilling the same role
+
+1240
+00:51:58,759 --> 00:52:01,457
+as the Numpy array in TensorFlow.
+
+1241
+00:52:01,457 --> 00:52:04,602
+The PyTorch variable is similar
+to the TensorFlow tensor
+
+1242
+00:52:04,602 --> 00:52:07,549
+or variable or placeholder,
+which are all sort of nodes
+
+1243
+00:52:07,549 --> 00:52:08,803
+in a computational graph.
+
+1244
+00:52:08,803 --> 00:52:11,970
+And now the PyTorch module
+is kind of equivalent
+
+1245
+00:52:11,970 --> 00:52:16,288
+to these higher level things
+from tf.slim or tf.layers
+
+1246
+00:52:16,288 --> 00:52:18,448
+or sonnet or these other
+higher level frameworks.
+
+1247
+00:52:18,448 --> 00:52:21,102
+So right away one thing
+to notice about PyTorch
+
+1248
+00:52:21,102 --> 00:52:24,072
+is that because it ships with
+this high level abstraction
+
+1249
+00:52:24,072 --> 00:52:26,696
+and like one really nice
+higher level abstraction
+
+1250
+00:52:26,696 --> 00:52:28,947
+called modules on its own,
+there's sort of less choice
+
+1251
+00:52:28,947 --> 00:52:29,780
+involved.
+
+1252
+00:52:29,780 --> 00:52:32,534
+Just stick with nnmodules
+and you'll be good to go.
+
+1253
+00:52:32,534 --> 00:52:35,809
+You don't need to worry about
+which higher level wrapper
+
+1254
+00:52:35,809 --> 00:52:36,642
+to use.
+
+1255
+00:52:37,777 --> 00:52:41,944
+So PyTorch tensors, as I said,
+are just like Numpy arrays
+
+1256
+00:52:43,660 --> 00:52:46,181
+so here on the right we've done
+an entire two layer network
+
+1257
+00:52:46,181 --> 00:52:47,787
+using entirely PyTorch tensors.
+
+1258
+00:52:47,787 --> 00:52:50,279
+One thing to note is that
+we're not importing Numpy here
+
+1259
+00:52:50,279 --> 00:52:51,379
+at all anymore.
+
+1260
+00:52:51,379 --> 00:52:53,910
+We're just doing all these
+operations using PyTorch tensors.
+
+1261
+00:52:53,910 --> 00:52:58,624
+And this code looks exactly
+like the two layer net code
+
+1262
+00:52:58,624 --> 00:53:01,245
+that you wrote in Numpy
+on the first homework.
+
+1263
+00:53:01,245 --> 00:53:05,774
+So you set up some random
+data, you use some operations
+
+1264
+00:53:05,774 --> 00:53:07,127
+to compute the forward pass.
+
+1265
+00:53:07,127 --> 00:53:09,332
+And then we're explicitly
+viewing the backward pass
+
+1266
+00:53:09,332 --> 00:53:10,165
+ourself.
+
+1267
+00:53:10,165 --> 00:53:12,794
+Just sort of backhopping
+through the network,
+
+1268
+00:53:12,794 --> 00:53:15,980
+through the operations, just
+as you did on homework one.
+
+1269
+00:53:15,980 --> 00:53:18,241
+And now we're doing a
+manual update of the weights
+
+1270
+00:53:18,241 --> 00:53:22,672
+using a learning rate and
+using our computed gradients.
+
+1271
+00:53:22,672 --> 00:53:24,681
+But the major difference
+between the PyTorch tensor
+
+1272
+00:53:24,681 --> 00:53:27,785
+and Numpy arrays is that they run on GPU
+
+1273
+00:53:27,785 --> 00:53:30,651
+so all you have to do
+to make this code run on
+
+1274
+00:53:30,651 --> 00:53:33,034
+GPU is use a different data type.
+
+1275
+00:53:33,034 --> 00:53:35,092
+Rather than using torch.FloatTensor,
+
+1276
+00:53:35,092 --> 00:53:39,259
+you do torch.cuda.FloatTensor,
+cast all of your tensors
+
+1277
+00:53:40,152 --> 00:53:42,174
+to this new datatype and
+everything runs magically
+
+1278
+00:53:42,174 --> 00:53:43,709
+on the GPU.
+
+1279
+00:53:43,709 --> 00:53:47,637
+You should think of PyTorch
+tensors as just Numpy plus GPU.
+
+1280
+00:53:47,637 --> 00:53:49,401
+That's exactly what it
+is, nothing specific
+
+1281
+00:53:49,401 --> 00:53:50,818
+to deep learning.
+
+1282
+00:53:52,638 --> 00:53:55,278
+So the next layer of abstraction
+in PyTorch is the variable.
+
+1283
+00:53:55,278 --> 00:53:58,440
+So this is, once we moved
+from tensors to variables
+
+1284
+00:53:58,440 --> 00:54:00,702
+now we're building computational graphs
+
+1285
+00:54:00,702 --> 00:54:02,194
+and we're able to take
+gradients automatically
+
+1286
+00:54:02,194 --> 00:54:03,460
+and everything like that.
+
+1287
+00:54:03,460 --> 00:54:07,627
+So here, if X is a variable,
+then x.data is a tensor
+
+1288
+00:54:08,890 --> 00:54:12,164
+and x.grad is another variable
+containing the gradients
+
+1289
+00:54:12,164 --> 00:54:14,007
+of the loss with respect to that tensor.
+
+1290
+00:54:14,007 --> 00:54:15,913
+So x.grad.data is an
+actual tensor containing
+
+1291
+00:54:15,913 --> 00:54:17,246
+those gradients.
+
+1292
+00:54:18,972 --> 00:54:22,387
+And PyTorch tensors and variables
+have the exact same API.
+
+1293
+00:54:22,387 --> 00:54:25,606
+So any code that worked on
+PyTorch tensors you can just
+
+1294
+00:54:25,606 --> 00:54:28,457
+make them variables instead
+and run the same code,
+
+1295
+00:54:28,457 --> 00:54:30,292
+except now you're building
+up a computational graph
+
+1296
+00:54:30,292 --> 00:54:34,459
+rather than just doing
+these imperative operations.
+
+1297
+00:54:35,943 --> 00:54:38,553
+So here when we create these variables
+
+1298
+00:54:38,553 --> 00:54:41,234
+each call to the variable
+constructor wraps a PyTorch
+
+1299
+00:54:41,234 --> 00:54:43,652
+tensor and then also gives
+a flag whether or not
+
+1300
+00:54:43,652 --> 00:54:47,461
+we want to compute gradients
+with respect to this variable.
+
+1301
+00:54:47,461 --> 00:54:49,412
+And now in the forward
+pass it looks exactly like
+
+1302
+00:54:49,412 --> 00:54:52,012
+it did before in the variable
+in the case with tensors
+
+1303
+00:54:52,012 --> 00:54:54,073
+because they have the same API.
+
+1304
+00:54:54,073 --> 00:54:55,667
+So now we're computing our predictions,
+
+1305
+00:54:55,667 --> 00:54:58,431
+we're computing our loss
+in kind of this imperative
+
+1306
+00:54:58,431 --> 00:54:59,683
+kind of way.
+
+1307
+00:54:59,683 --> 00:55:03,492
+And then we call loss.backwards
+and now all these gradients
+
+1308
+00:55:03,492 --> 00:55:05,251
+come out for us.
+
+1309
+00:55:05,251 --> 00:55:06,790
+And then we can make
+a gradient update step
+
+1310
+00:55:06,790 --> 00:55:09,214
+on our weights using the
+gradients that are now present
+
+1311
+00:55:09,214 --> 00:55:11,528
+in the w1.grad.data.
+
+1312
+00:55:11,528 --> 00:55:16,227
+So this ends up looking
+quite like the Numpy case,
+
+1313
+00:55:16,227 --> 00:55:18,137
+except all the gradients come for free.
+
+1314
+00:55:18,137 --> 00:55:20,596
+One thing to note that's
+kind of different between
+
+1315
+00:55:20,596 --> 00:55:23,353
+PyTorch and TensorFlow is
+that in a TensorFlow case
+
+1316
+00:55:23,353 --> 00:55:25,289
+we were building up this explicit graph,
+
+1317
+00:55:25,289 --> 00:55:27,132
+then running the graph many times.
+
+1318
+00:55:27,132 --> 00:55:30,308
+Here in PyTorch, instead
+we're building up a new graph
+
+1319
+00:55:30,308 --> 00:55:32,152
+every time we do a forward pass.
+
+1320
+00:55:32,152 --> 00:55:33,887
+And this makes the code
+look a bit cleaner.
+
+1321
+00:55:33,887 --> 00:55:35,284
+And it has some other
+implications that we'll
+
+1322
+00:55:35,284 --> 00:55:37,058
+get to in a bit.
+
+1323
+00:55:37,058 --> 00:55:40,630
+So in PyTorch you can define
+your own new autograd functions
+
+1324
+00:55:40,630 --> 00:55:42,933
+by defining the forward and
+backward in terms of tensors.
+
+1325
+00:55:42,933 --> 00:55:45,954
+This ends up looking kind
+of like the module layers
+
+1326
+00:55:45,954 --> 00:55:48,303
+code that you write for homework two.
+
+1327
+00:55:48,303 --> 00:55:50,404
+Where you can implement
+forward and backward using
+
+1328
+00:55:50,404 --> 00:55:52,676
+tensor operations and then
+stick these things inside
+
+1329
+00:55:52,676 --> 00:55:54,433
+computational graph.
+
+1330
+00:55:54,433 --> 00:55:56,297
+So here we're defining our own relu
+
+1331
+00:55:56,297 --> 00:56:00,654
+and then we can actually
+go in and use our own relu
+
+1332
+00:56:00,654 --> 00:56:02,754
+operation and now stick it
+inside our computational graph
+
+1333
+00:56:02,754 --> 00:56:05,214
+and define our own operations this way.
+
+1334
+00:56:05,214 --> 00:56:06,857
+But most of the time you
+will probably not need
+
+1335
+00:56:06,857 --> 00:56:09,097
+to define your own autograd operations.
+
+1336
+00:56:09,097 --> 00:56:10,814
+Most of the times the
+operations you need will
+
+1337
+00:56:10,814 --> 00:56:14,246
+mostly be already implemented for you.
+
+1338
+00:56:14,246 --> 00:56:16,293
+So in TensorFlow we saw,
+
+1339
+00:56:16,293 --> 00:56:19,054
+if we can move to something
+like Keras or TF.Learn
+
+1340
+00:56:19,054 --> 00:56:21,253
+and this gives us a higher
+level API to work with,
+
+1341
+00:56:21,253 --> 00:56:23,349
+rather than this raw computational graphs.
+
+1342
+00:56:23,349 --> 00:56:25,433
+The equivalent in PyTorch
+is the nn package.
+
+1343
+00:56:25,433 --> 00:56:29,448
+Where it provides these high
+level wrappers for working
+
+1344
+00:56:29,448 --> 00:56:30,948
+with these things.
+
+1345
+00:56:31,882 --> 00:56:33,454
+But unlike TensorFlow
+there's only one of them.
+
+1346
+00:56:33,454 --> 00:56:35,837
+And it works pretty well,
+so just use that if you're
+
+1347
+00:56:35,837 --> 00:56:37,772
+using PyTorch.
+
+1348
+00:56:37,772 --> 00:56:39,374
+So here, this ends up
+kind of looking like Keras
+
+1349
+00:56:39,374 --> 00:56:42,196
+where we define our model
+as some sequence of layers.
+
+1350
+00:56:42,196 --> 00:56:44,436
+Our linear and relu operations.
+
+1351
+00:56:44,436 --> 00:56:47,574
+And we use some loss function
+defined in the nn package
+
+1352
+00:56:47,574 --> 00:56:49,816
+that's our mean squared error loss.
+
+1353
+00:56:49,816 --> 00:56:51,593
+And now inside each iteration of our loop
+
+1354
+00:56:51,593 --> 00:56:53,716
+we can run data forward
+through the model to get
+
+1355
+00:56:53,716 --> 00:56:55,214
+our predictions.
+
+1356
+00:56:55,214 --> 00:56:57,511
+We can run the predictions
+forward through the loss function
+
+1357
+00:56:57,511 --> 00:56:59,054
+to get our scale or loss,
+
+1358
+00:56:59,054 --> 00:57:01,177
+then we can call loss.backward,
+get all our gradients
+
+1359
+00:57:01,177 --> 00:57:04,021
+for free and then loop over
+the parameters of the models
+
+1360
+00:57:04,021 --> 00:57:06,143
+and do our explicit gradient
+descent step to update
+
+1361
+00:57:06,143 --> 00:57:07,273
+the models.
+
+1362
+00:57:07,273 --> 00:57:09,054
+And again we see that we're
+sort of building up this
+
+1363
+00:57:09,054 --> 00:57:12,749
+new computational graph every
+time we do a forward pass.
+
+1364
+00:57:12,749 --> 00:57:14,714
+And just like we saw in TensorFlow,
+
+1365
+00:57:14,714 --> 00:57:17,017
+PyTorch provides these
+optimizer operations
+
+1366
+00:57:17,017 --> 00:57:19,655
+that kind of abstract
+away this updating logic
+
+1367
+00:57:19,655 --> 00:57:21,758
+and implement fancier
+update rules like Adam
+
+1368
+00:57:21,758 --> 00:57:23,000
+and whatnot.
+
+1369
+00:57:23,000 --> 00:57:25,038
+So here we're constructing
+an optimizer object
+
+1370
+00:57:25,038 --> 00:57:27,034
+telling it that we want
+it to optimize over the
+
+1371
+00:57:27,034 --> 00:57:28,771
+parameters of the model.
+
+1372
+00:57:28,771 --> 00:57:31,115
+Giving it some learning rate
+under the hyper parameters.
+
+1373
+00:57:31,115 --> 00:57:33,438
+And now after we compute our gradients
+
+1374
+00:57:33,438 --> 00:57:35,356
+we can just call
+optimizer.step and it updates
+
+1375
+00:57:35,356 --> 00:57:39,810
+all the parameters of the
+model for us right here.
+
+1376
+00:57:39,810 --> 00:57:41,951
+So another common thing
+you'll do in PyTorch
+
+1377
+00:57:41,951 --> 00:57:44,714
+a lot is define your own nn modules.
+
+1378
+00:57:44,714 --> 00:57:47,268
+So typically you'll write your own class
+
+1379
+00:57:47,268 --> 00:57:49,961
+which defines you entire model as a single
+
+1380
+00:57:49,961 --> 00:57:51,801
+new nn module class.
+
+1381
+00:57:51,801 --> 00:57:54,979
+And a module is just kind
+of a neural network layer
+
+1382
+00:57:54,979 --> 00:57:57,678
+that can contain either
+other other modules
+
+1383
+00:57:57,678 --> 00:58:01,043
+or trainable weights or
+other other kinds of state.
+
+1384
+00:58:01,043 --> 00:58:04,142
+So in this case we can redo
+the two layer net example
+
+1385
+00:58:04,142 --> 00:58:07,051
+by defining our own nn module class.
+
+1386
+00:58:07,051 --> 00:58:09,925
+So now here in the
+initializer of the class
+
+1387
+00:58:09,925 --> 00:58:11,672
+we're assigning this linear1 and linear2.
+
+1388
+00:58:11,672 --> 00:58:13,853
+We're constructing
+these new module objects
+
+1389
+00:58:13,853 --> 00:58:17,257
+and then store them
+inside of our own class.
+
+1390
+00:58:17,257 --> 00:58:20,335
+And now in the forward pass
+we can use both our own
+
+1391
+00:58:20,335 --> 00:58:22,832
+internal modules as well as
+arbitrary autograd operations
+
+1392
+00:58:22,832 --> 00:58:26,466
+on variables to compute
+the output of our network.
+
+1393
+00:58:26,466 --> 00:58:29,782
+So here we receive the, inside
+this forward method here,
+
+1394
+00:58:29,782 --> 00:58:31,594
+the input acts as a variable,
+
+1395
+00:58:31,594 --> 00:58:34,213
+then we pass the variable
+to our self.linear1
+
+1396
+00:58:34,213 --> 00:58:35,817
+for the first layer.
+
+1397
+00:58:35,817 --> 00:58:38,129
+We use an autograd op
+clamp to complete the relu,
+
+1398
+00:58:38,129 --> 00:58:40,233
+we pass the output of
+that to the second linear
+
+1399
+00:58:40,233 --> 00:58:42,233
+and then that gives us our output.
+
+1400
+00:58:42,233 --> 00:58:44,732
+And now the rest of this
+code for training this thing
+
+1401
+00:58:44,732 --> 00:58:46,633
+looks pretty much the same.
+
+1402
+00:58:46,633 --> 00:58:48,455
+Where we build an optimizer and loop over
+
+1403
+00:58:48,455 --> 00:58:50,916
+and on ever iteration
+feed data to the model,
+
+1404
+00:58:50,916 --> 00:58:52,777
+compute the gradients with loss.backwards,
+
+1405
+00:58:52,777 --> 00:58:54,676
+call optimizer.step.
+
+1406
+00:58:54,676 --> 00:58:57,924
+So this is like relatively characteristic
+
+1407
+00:58:57,924 --> 00:59:00,233
+of what you might see
+in a lot of PyTorch type
+
+1408
+00:59:00,233 --> 00:59:01,817
+training scenarios.
+
+1409
+00:59:01,817 --> 00:59:02,964
+Where you define your own class,
+
+1410
+00:59:02,964 --> 00:59:04,932
+defining your own model
+that contains other modules
+
+1411
+00:59:04,932 --> 00:59:07,103
+and whatnot and then you
+have some explicit training
+
+1412
+00:59:07,103 --> 00:59:11,166
+loop like this that
+runs it and updates it.
+
+1413
+00:59:11,166 --> 00:59:13,353
+One kind of nice quality
+of life thing that you have
+
+1414
+00:59:13,353 --> 00:59:16,057
+in PyTorch is a dataloader.
+
+1415
+00:59:16,057 --> 00:59:18,873
+So a dataloader can handle
+building minibatches for you.
+
+1416
+00:59:18,873 --> 00:59:21,273
+It can handle some of the
+multi-threading that we talked
+
+1417
+00:59:21,273 --> 00:59:23,876
+about for you, where it can
+actually use multiple threads
+
+1418
+00:59:23,876 --> 00:59:25,934
+in the background to
+build many batches for you
+
+1419
+00:59:25,934 --> 00:59:27,273
+and stream off disk.
+
+1420
+00:59:27,273 --> 00:59:30,777
+So here a dataloader wraps
+a dataset and provides
+
+1421
+00:59:30,777 --> 00:59:33,221
+some of these abstractions for you.
+
+1422
+00:59:33,221 --> 00:59:35,562
+And in practice when you
+want to run your own data,
+
+1423
+00:59:35,562 --> 00:59:38,138
+you typically will write
+your own dataset class
+
+1424
+00:59:38,138 --> 00:59:40,208
+which knows how to read
+your particular type of data
+
+1425
+00:59:40,208 --> 00:59:42,251
+off whatever source you
+want and then wrap it in
+
+1426
+00:59:42,251 --> 00:59:44,458
+a data loader and train with that.
+
+1427
+00:59:44,458 --> 00:59:47,631
+So, here we can see that
+now we're iterating over
+
+1428
+00:59:47,631 --> 00:59:50,444
+the dataloader object
+and at every iteration
+
+1429
+00:59:50,444 --> 00:59:52,233
+this is yielding minibatches of data.
+
+1430
+00:59:52,233 --> 00:59:55,527
+And it's internally handling
+the shuffling of the data
+
+1431
+00:59:55,527 --> 00:59:57,576
+and multithreaded dataloading
+and all this sort of stuff
+
+1432
+00:59:57,576 --> 00:59:58,409
+for you.
+
+1433
+00:59:58,409 --> 01:00:00,654
+So this is kind of a
+completely PyTorch example
+
+1434
+01:00:00,654 --> 01:00:02,494
+and a lot of PyTorch
+training code ends up looking
+
+1435
+01:00:02,494 --> 01:00:04,161
+something like this.
+
+1436
+01:00:05,583 --> 01:00:07,587
+PyTorch provides pretrained models.
+
+1437
+01:00:07,587 --> 01:00:09,469
+And this is probably the
+slickest pretrained model
+
+1438
+01:00:09,469 --> 01:00:11,521
+experience I've ever seen.
+
+1439
+01:00:11,521 --> 01:00:14,268
+You just say torchvision.models.alexnet
+pretained=true.
+
+1440
+01:00:14,268 --> 01:00:16,951
+That'll go down in the background,
+download the pretrained
+
+1441
+01:00:16,951 --> 01:00:18,759
+weights for you if you
+don't already have them,
+
+1442
+01:00:18,759 --> 01:00:21,052
+and then it's right
+there, you're good to go.
+
+1443
+01:00:21,052 --> 01:00:24,242
+So this is super easy to use.
+
+1444
+01:00:24,242 --> 01:00:27,094
+PyTorch also has, there's
+also a package called Visdom
+
+1445
+01:00:27,094 --> 01:00:30,253
+that lets you visualize some
+of these loss statistics
+
+1446
+01:00:30,253 --> 01:00:33,600
+somewhat similar to Tensorboard.
+
+1447
+01:00:33,600 --> 01:00:35,168
+So that's kind of nice,
+I haven't actually gotten
+
+1448
+01:00:35,168 --> 01:00:36,934
+a chance to play around with
+this myself so I can't really
+
+1449
+01:00:36,934 --> 01:00:38,569
+speak to how useful it is,
+
+1450
+01:00:38,569 --> 01:00:40,927
+but one of the major
+differences between Tensorboard
+
+1451
+01:00:40,927 --> 01:00:43,769
+and Visdom is that Tensorboard
+actually lets you visualize
+
+1452
+01:00:43,769 --> 01:00:45,907
+the structure of the computational graph.
+
+1453
+01:00:45,907 --> 01:00:47,984
+Which is really cool, a really
+useful debugging strategy.
+
+1454
+01:00:47,984 --> 01:00:50,989
+And Visdom does not have
+that functionality yet.
+
+1455
+01:00:50,989 --> 01:00:53,011
+But I've never really used
+this myself so I can't really
+
+1456
+01:00:53,011 --> 01:00:54,761
+speak to its utility.
+
+1457
+01:00:56,350 --> 01:00:58,627
+As a bit of an aside, PyTorch
+is kind of an evolution of,
+
+1458
+01:00:58,627 --> 01:01:01,747
+kind of a newer updated
+version of an older framework
+
+1459
+01:01:01,747 --> 01:01:04,086
+called Torch which I worked
+with a lot in the last
+
+1460
+01:01:04,086 --> 01:01:05,491
+couple of years.
+
+1461
+01:01:05,491 --> 01:01:07,577
+And I don't want to go
+through the details here,
+
+1462
+01:01:07,577 --> 01:01:10,569
+but PyTorch is pretty much
+better in a lot of ways
+
+1463
+01:01:10,569 --> 01:01:13,280
+than the old Lua Torch, but
+they actually share a lot
+
+1464
+01:01:13,280 --> 01:01:15,657
+of the same back end C code
+for computing with tensors
+
+1465
+01:01:15,657 --> 01:01:18,100
+and GPU operations on tensors and whatnot.
+
+1466
+01:01:18,100 --> 01:01:19,554
+So if you look through this Torch example,
+
+1467
+01:01:19,554 --> 01:01:21,906
+some of it ends up looking
+kind of similar to PyTorch,
+
+1468
+01:01:21,906 --> 01:01:23,369
+some of it's a bit different.
+
+1469
+01:01:23,369 --> 01:01:25,957
+Maybe you can step through this offline.
+
+1470
+01:01:25,957 --> 01:01:28,361
+But kind of the high
+level differences between
+
+1471
+01:01:28,361 --> 01:01:31,229
+Torch and PyTorch are that
+Torch is actually in Lua,
+
+1472
+01:01:31,229 --> 01:01:33,011
+not Python, unlike these other things.
+
+1473
+01:01:33,011 --> 01:01:37,748
+So learning Lua is a bit of
+a turn off for some people.
+
+1474
+01:01:37,748 --> 01:01:40,009
+Torch doesn't have autograd.
+
+1475
+01:01:40,009 --> 01:01:41,710
+Torch is also older, so it's more stable,
+
+1476
+01:01:41,710 --> 01:01:43,491
+less susceptible to bugs,
+there's maybe more example code
+
+1477
+01:01:43,491 --> 01:01:44,324
+for Torch.
+
+1478
+01:01:45,230 --> 01:01:47,214
+They're about the same speeds,
+that's not really a concern.
+
+1479
+01:01:47,214 --> 01:01:49,827
+But in PyTorch it's in
+Python which is great,
+
+1480
+01:01:49,827 --> 01:01:52,270
+you've got autograd which
+makes it a lot simpler
+
+1481
+01:01:52,270 --> 01:01:54,531
+to write complex models.
+
+1482
+01:01:54,531 --> 01:01:56,422
+In Lua Torch you end up
+writing a lot of your own
+
+1483
+01:01:56,422 --> 01:01:59,670
+back prop code sometimes, so
+that's a little bit annoying.
+
+1484
+01:01:59,670 --> 01:02:01,650
+But PyTorch is newer,
+there's less existing code,
+
+1485
+01:02:01,650 --> 01:02:03,689
+it's still subject to change.
+
+1486
+01:02:03,689 --> 01:02:06,051
+So it's a little bit more of an adventure.
+
+1487
+01:02:06,051 --> 01:02:08,145
+But at least for me, I kind of prefer,
+
+1488
+01:02:08,145 --> 01:02:10,162
+I don't really see much reason for myself
+
+1489
+01:02:10,162 --> 01:02:13,228
+to use Torch over PyTorch
+anymore at this time.
+
+1490
+01:02:13,228 --> 01:02:15,848
+So I'm pretty much using
+PyTorch exclusively for
+
+1491
+01:02:15,848 --> 01:02:17,765
+all my work these days.
+
+1492
+01:02:18,606 --> 01:02:20,557
+We talked about this a
+little bit about this idea
+
+1493
+01:02:20,557 --> 01:02:22,531
+of static versus dynamic graphs.
+
+1494
+01:02:22,531 --> 01:02:24,350
+And this is one of the main
+distinguishing features
+
+1495
+01:02:24,350 --> 01:02:26,291
+between PyTorch and TensorFlow.
+
+1496
+01:02:26,291 --> 01:02:29,416
+So we saw in TensorFlow
+you have these two stages
+
+1497
+01:02:29,416 --> 01:02:31,667
+of operation where first you build up this
+
+1498
+01:02:31,667 --> 01:02:34,371
+computational graph, then you
+run the computational graph
+
+1499
+01:02:34,371 --> 01:02:37,246
+over and over again many
+many times reusing that same
+
+1500
+01:02:37,246 --> 01:02:38,145
+graph.
+
+1501
+01:02:38,145 --> 01:02:40,209
+That's called a static
+computational graph 'cause there's
+
+1502
+01:02:40,209 --> 01:02:42,403
+only one of them.
+
+1503
+01:02:42,403 --> 01:02:44,940
+And we saw PyTorch is quite
+different where we're actually
+
+1504
+01:02:44,940 --> 01:02:46,829
+building up this new computational graph,
+
+1505
+01:02:46,829 --> 01:02:48,771
+this new fresh thing
+on every forward pass.
+
+1506
+01:02:48,771 --> 01:02:52,259
+That's called a dynamic
+computational graph.
+
+1507
+01:02:52,259 --> 01:02:54,075
+For kind of simple cases,
+with kind of feed forward
+
+1508
+01:02:54,075 --> 01:02:57,053
+neural networks, it doesn't
+really make a huge difference,
+
+1509
+01:02:57,053 --> 01:02:58,467
+the code ends up kind of similarly
+
+1510
+01:02:58,467 --> 01:03:00,225
+and they work kind of similarly,
+
+1511
+01:03:00,225 --> 01:03:02,079
+but I do want to talk a bit
+about some of the implications
+
+1512
+01:03:02,079 --> 01:03:04,227
+of static versus dynamic.
+
+1513
+01:03:04,227 --> 01:03:07,102
+And what are the tradeoffs of those two.
+
+1514
+01:03:07,102 --> 01:03:08,947
+So one kind of nice
+idea with static graphs
+
+1515
+01:03:08,947 --> 01:03:11,331
+is that because we're
+kind of building up one
+
+1516
+01:03:11,331 --> 01:03:15,286
+computational graph once, and
+then reusing it many times,
+
+1517
+01:03:15,286 --> 01:03:17,355
+the framework might have
+the opportunity to go in
+
+1518
+01:03:17,355 --> 01:03:19,571
+and do optimizations on that graph.
+
+1519
+01:03:19,571 --> 01:03:22,821
+And kind of fuse some operations,
+reorder some operations,
+
+1520
+01:03:22,821 --> 01:03:24,520
+figure out the most
+efficient way to operate
+
+1521
+01:03:24,520 --> 01:03:26,809
+that graph so it can be really efficient.
+
+1522
+01:03:26,809 --> 01:03:28,725
+And because we're going
+to reuse that graph
+
+1523
+01:03:28,725 --> 01:03:31,790
+many times, maybe that
+optimization process
+
+1524
+01:03:31,790 --> 01:03:33,039
+is expensive up front,
+
+1525
+01:03:33,039 --> 01:03:34,947
+but we can amortize that
+cost with the speedups
+
+1526
+01:03:34,947 --> 01:03:37,230
+that we've gotten when we run
+the graph many many times.
+
+1527
+01:03:37,230 --> 01:03:40,162
+So as kind of a concrete example,
+
+1528
+01:03:40,162 --> 01:03:41,814
+maybe if you write some
+graph which has convolution
+
+1529
+01:03:41,814 --> 01:03:44,085
+and relu operations kind
+of one after another,
+
+1530
+01:03:44,085 --> 01:03:48,250
+you might imagine that
+some fancy graph optimizer
+
+1531
+01:03:48,250 --> 01:03:51,865
+could go in and actually
+output, like emit custom code
+
+1532
+01:03:51,865 --> 01:03:54,530
+which has fused operations,
+fusing the convolution
+
+1533
+01:03:54,530 --> 01:03:56,371
+and the relu so now it's
+computing the same thing
+
+1534
+01:03:56,371 --> 01:04:00,525
+as the code you wrote, but
+now might be able to be
+
+1535
+01:04:00,525 --> 01:04:03,445
+executed more efficiently.
+
+1536
+01:04:03,445 --> 01:04:07,909
+So I'm not too sure on exactly
+what the state in practice
+
+1537
+01:04:07,909 --> 01:04:10,419
+of TensorFlow graph
+optimization is right now,
+
+1538
+01:04:10,419 --> 01:04:14,469
+but at least in principle,
+this is one place where
+
+1539
+01:04:14,469 --> 01:04:17,747
+static graph really, you
+can have the potential for
+
+1540
+01:04:17,747 --> 01:04:20,131
+doing this optimization in static graphs
+
+1541
+01:04:20,131 --> 01:04:24,298
+where maybe it would be not so
+tractable for dynamic graphs.
+
+1542
+01:04:25,504 --> 01:04:26,937
+Another kind of subtle point
+about static versus dynamic
+
+1543
+01:04:26,937 --> 01:04:28,931
+is this idea of serialization.
+
+1544
+01:04:28,931 --> 01:04:32,347
+So with a static graph you
+can imagine that you write
+
+1545
+01:04:32,347 --> 01:04:34,026
+this code that builds up the graph
+
+1546
+01:04:34,026 --> 01:04:35,641
+and then once you've built the graph,
+
+1547
+01:04:35,641 --> 01:04:37,667
+you have this data structure
+in memory that represents
+
+1548
+01:04:37,667 --> 01:04:39,571
+the entire structure of your network.
+
+1549
+01:04:39,571 --> 01:04:41,226
+And now you could take that data structure
+
+1550
+01:04:41,226 --> 01:04:42,428
+and just serialize it to disk.
+
+1551
+01:04:42,428 --> 01:04:44,528
+And now you've got the whole
+structure of your network
+
+1552
+01:04:44,528 --> 01:04:45,996
+saved in some file.
+
+1553
+01:04:45,996 --> 01:04:48,711
+And then you could later
+rear load that thing
+
+1554
+01:04:48,711 --> 01:04:51,627
+and then run that computational
+graph without access
+
+1555
+01:04:51,627 --> 01:04:53,630
+to the original code that built it.
+
+1556
+01:04:53,630 --> 01:04:55,450
+So this would be kind of nice
+in a deployment scenario.
+
+1557
+01:04:55,450 --> 01:04:57,606
+You might imagine that you
+might want to train your
+
+1558
+01:04:57,606 --> 01:05:00,424
+network in Python because it's
+maybe easier to work with,
+
+1559
+01:05:00,424 --> 01:05:01,788
+but then after you serialize that network
+
+1560
+01:05:01,788 --> 01:05:04,170
+and then you could deploy
+it now in maybe a C++
+
+1561
+01:05:04,170 --> 01:05:06,409
+environment where you don't
+need to use the original
+
+1562
+01:05:06,409 --> 01:05:07,759
+code that built the graph.
+
+1563
+01:05:07,759 --> 01:05:10,909
+So that's kind of a nice
+advantage of static graphs.
+
+1564
+01:05:10,909 --> 01:05:12,510
+Whereas with a dynamic graph,
+because we're interleaving
+
+1565
+01:05:12,510 --> 01:05:15,793
+these processes of graph
+building and graph execution,
+
+1566
+01:05:15,793 --> 01:05:17,822
+you kind of need the
+original code at all times
+
+1567
+01:05:17,822 --> 01:05:22,012
+if you want to reuse
+that model in the future.
+
+1568
+01:05:22,012 --> 01:05:24,390
+On the other hand, some
+advantages for dynamic graphs
+
+1569
+01:05:24,390 --> 01:05:26,921
+are that it kind of makes,
+it just makes your code
+
+1570
+01:05:26,921 --> 01:05:29,163
+a lot cleaner and a lot
+easier in a lot of scenarios.
+
+1571
+01:05:29,163 --> 01:05:31,264
+So for example, suppose
+that we want to do some
+
+1572
+01:05:31,264 --> 01:05:34,501
+conditional operation where
+depending on the value
+
+1573
+01:05:34,501 --> 01:05:37,541
+of some variable Z, we want
+to do different operations
+
+1574
+01:05:37,541 --> 01:05:38,624
+to compute Y.
+
+1575
+01:05:39,723 --> 01:05:42,123
+Where if Z is positive, we
+want to use one weight matrix,
+
+1576
+01:05:42,123 --> 01:05:45,070
+if Z is negative we want to
+use a different weight matrix.
+
+1577
+01:05:45,070 --> 01:05:47,981
+And we just want to switch off
+between these two alternatives.
+
+1578
+01:05:47,981 --> 01:05:50,720
+In PyTorch because we're
+using dynamic graphs,
+
+1579
+01:05:50,720 --> 01:05:52,011
+it's super simple.
+
+1580
+01:05:52,011 --> 01:05:54,101
+Your code kind of looks
+exactly like you would expect,
+
+1581
+01:05:54,101 --> 01:05:56,400
+exactly what you would do in Numpy.
+
+1582
+01:05:56,400 --> 01:05:58,877
+You can just use normal
+Python control flow
+
+1583
+01:05:58,877 --> 01:06:00,795
+to handle this thing.
+
+1584
+01:06:00,795 --> 01:06:03,264
+And now because we're building
+up the graph each time,
+
+1585
+01:06:03,264 --> 01:06:05,563
+each time we perform this
+operation will take one
+
+1586
+01:06:05,563 --> 01:06:08,021
+of the two paths and build
+up maybe a different graph
+
+1587
+01:06:08,021 --> 01:06:10,864
+on each forward pass, but
+for any graph that we do
+
+1588
+01:06:10,864 --> 01:06:13,104
+end up building up, we can
+back propagate through it
+
+1589
+01:06:13,104 --> 01:06:14,337
+just fine.
+
+1590
+01:06:14,337 --> 01:06:15,941
+And the code is very
+clean, easy to work with.
+
+1591
+01:06:15,941 --> 01:06:18,843
+Now in TensorFlow the
+situations is a little bit more
+
+1592
+01:06:18,843 --> 01:06:23,201
+complicated because we
+build the graph once,
+
+1593
+01:06:23,201 --> 01:06:25,219
+this control flow operator
+kind of needs to be
+
+1594
+01:06:25,219 --> 01:06:28,400
+an explicit operator in
+the TensorFlow graph.
+
+1595
+01:06:28,400 --> 01:06:31,301
+And now, so them you can
+see that we have this
+
+1596
+01:06:31,301 --> 01:06:34,319
+tf.cond call which is kind
+of like a TensorFlow version
+
+1597
+01:06:34,319 --> 01:06:36,818
+of an if statement,
+but now it's baked into
+
+1598
+01:06:36,818 --> 01:06:38,838
+the computational graph
+rather than using sort of
+
+1599
+01:06:38,838 --> 01:06:40,741
+Python control flow.
+
+1600
+01:06:40,741 --> 01:06:43,473
+And the problem is that
+because we only build the graph
+
+1601
+01:06:43,473 --> 01:06:46,123
+once, all the potential
+paths of control flow that
+
+1602
+01:06:46,123 --> 01:06:48,729
+our program might flow
+through need to be baked
+
+1603
+01:06:48,729 --> 01:06:51,200
+into the graph at the time we
+construct it before we ever
+
+1604
+01:06:51,200 --> 01:06:52,523
+run it.
+
+1605
+01:06:52,523 --> 01:06:54,353
+So that means that any kind
+of control flow operators
+
+1606
+01:06:54,353 --> 01:06:58,394
+that you want to have need
+to be not Python control flow
+
+1607
+01:06:58,394 --> 01:07:00,409
+operators, you need to
+use some kind of magic,
+
+1608
+01:07:00,409 --> 01:07:03,360
+special tensor flow
+operations to do control flow.
+
+1609
+01:07:03,360 --> 01:07:05,527
+In this case this tf.cond.
+
+1610
+01:07:06,713 --> 01:07:09,400
+Another kind of similar
+situation happens if you want to
+
+1611
+01:07:09,400 --> 01:07:10,763
+have loops.
+
+1612
+01:07:10,763 --> 01:07:12,684
+So suppose that we want to
+compute some kind of recurrent
+
+1613
+01:07:12,684 --> 01:07:16,607
+relationships where maybe Y
+T is equal to Y T minus one
+
+1614
+01:07:16,607 --> 01:07:19,839
+plus X T times some weight
+matrix W and depending on
+
+1615
+01:07:19,839 --> 01:07:23,077
+each time we do this,
+every time we compute this,
+
+1616
+01:07:23,077 --> 01:07:26,436
+we might have a different
+sized sequence of data.
+
+1617
+01:07:26,436 --> 01:07:28,265
+And no matter the length
+of our sequence of data,
+
+1618
+01:07:28,265 --> 01:07:30,217
+we just want to compute this
+same recurrence relation
+
+1619
+01:07:30,217 --> 01:07:33,371
+no matter the size of the input sequence.
+
+1620
+01:07:33,371 --> 01:07:35,796
+So in PyTorch this is super easy.
+
+1621
+01:07:35,796 --> 01:07:39,489
+We can just kind of use a
+normal for loop in Python
+
+1622
+01:07:39,489 --> 01:07:41,534
+to just loop over the number
+of times that we want to
+
+1623
+01:07:41,534 --> 01:07:44,436
+unroll and now depending on
+the size of the input data,
+
+1624
+01:07:44,436 --> 01:07:47,095
+our computational graph will
+end up as different sizes,
+
+1625
+01:07:47,095 --> 01:07:49,737
+but that's fine, we can
+just back propagate through
+
+1626
+01:07:49,737 --> 01:07:51,694
+each one, one at a time.
+
+1627
+01:07:51,694 --> 01:07:55,782
+Now in TensorFlow this
+becomes a little bit uglier.
+
+1628
+01:07:55,782 --> 01:07:58,494
+And again, because we need
+to construct the graph
+
+1629
+01:07:58,494 --> 01:08:02,398
+all at once up front, this
+control flow looping construct
+
+1630
+01:08:02,398 --> 01:08:06,364
+again needs to be an explicit
+node in the TensorFlow graph.
+
+1631
+01:08:06,364 --> 01:08:08,084
+So I hope you remember
+your functional programming
+
+1632
+01:08:08,084 --> 01:08:10,432
+because you'll have to use
+those kinds of operators
+
+1633
+01:08:10,432 --> 01:08:13,517
+to implement looping
+constructs in TensorFlow.
+
+1634
+01:08:13,517 --> 01:08:16,292
+So in this case, for this
+particular recurrence relationship
+
+1635
+01:08:16,292 --> 01:08:18,857
+you can use a foldl operation and pass in,
+
+1636
+01:08:18,857 --> 01:08:23,024
+sort of implement this particular
+loop in terms of a foldl.
+
+1637
+01:08:24,100 --> 01:08:26,200
+But what this basically means
+is that you have this sense
+
+1638
+01:08:26,201 --> 01:08:28,734
+that TensorFlow is almost
+building its own entire
+
+1639
+01:08:28,734 --> 01:08:31,214
+programming language,
+using the language of
+
+1640
+01:08:31,214 --> 01:08:33,212
+computational graphs.
+
+1641
+01:08:33,212 --> 01:08:34,821
+And any kind of control flow operator,
+
+1642
+01:08:34,821 --> 01:08:37,215
+or any kind of data
+structure needs to be rolled
+
+1643
+01:08:37,215 --> 01:08:40,014
+into the computational graph
+so you can't really utilize
+
+1644
+01:08:40,014 --> 01:08:42,595
+all your favorite paradigms
+for working imperatively
+
+1645
+01:08:42,595 --> 01:08:44,216
+in Python.
+
+1646
+01:08:44,216 --> 01:08:46,195
+You kind of need to relearn
+a whole separate set
+
+1647
+01:08:46,196 --> 01:08:47,956
+of control flow operators.
+
+1648
+01:08:47,956 --> 01:08:49,991
+And if you want to do
+any kinds of control flow
+
+1649
+01:08:49,991 --> 01:08:52,804
+inside your computational
+graph using TensorFlow.
+
+1650
+01:08:52,804 --> 01:08:56,252
+So at least for me, I find
+that kind of confusing,
+
+1651
+01:08:56,252 --> 01:08:58,238
+a little bit hard to wrap
+my head around sometimes,
+
+1652
+01:08:58,238 --> 01:09:01,259
+and I kind of like that
+using PyTorch dynamic graphs,
+
+1653
+01:09:01,259 --> 01:09:03,555
+you can just use your favorite
+imperative programming
+
+1654
+01:09:03,555 --> 01:09:06,722
+constructs and it all works just fine.
+
+1655
+01:09:07,737 --> 01:09:12,051
+By the way, there actually
+is some very new library
+
+1656
+01:09:12,051 --> 01:09:15,732
+called TensorFlow Fold which
+is another one of these
+
+1657
+01:09:15,732 --> 01:09:17,662
+layers on top of TensorFlow
+that lets you implement
+
+1658
+01:09:17,662 --> 01:09:21,579
+dynamic graphs, you kind
+of write your own code
+
+1659
+01:09:22,416 --> 01:09:24,986
+using TensorFlow Fold that
+looks kind of like a dynamic
+
+1660
+01:09:24,986 --> 01:09:27,977
+graph operation and then
+TensorFlow Fold does some magic
+
+1661
+01:09:27,977 --> 01:09:30,617
+for you and somehow implements
+that in terms of the
+
+1662
+01:09:30,617 --> 01:09:32,277
+static TensorFlow graphs.
+
+1663
+01:09:32,277 --> 01:09:35,225
+This is a super new paper
+that's being presented
+
+1664
+01:09:35,225 --> 01:09:37,357
+at ICLR this week in France.
+
+1665
+01:09:37,358 --> 01:09:39,737
+So I haven't had the chance
+to like dive in and play
+
+1666
+01:09:39,737 --> 01:09:41,694
+with this yet.
+
+1667
+01:09:41,694 --> 01:09:44,252
+But my initial impression
+was that it does add some
+
+1668
+01:09:44,252 --> 01:09:46,455
+amount of dynamic graphs to
+TensorFlow but it is still
+
+1669
+01:09:46,455 --> 01:09:48,798
+a bit more awkward to work
+with than the sort of native
+
+1670
+01:09:48,798 --> 01:09:51,952
+dynamic graphs you have in PyTorch.
+
+1671
+01:09:51,952 --> 01:09:54,527
+So then, I thought it
+might be nice to motivate
+
+1672
+01:09:54,527 --> 01:09:57,257
+like why would we care about
+dynamic graphs in general?
+
+1673
+01:09:57,257 --> 01:10:00,257
+So one option is recurrent networks.
+
+1674
+01:10:01,177 --> 01:10:03,256
+So you can see that for
+something like image captioning
+
+1675
+01:10:03,256 --> 01:10:05,715
+we use a recurrent network
+which operates over
+
+1676
+01:10:05,715 --> 01:10:07,612
+sequences of different lengths.
+
+1677
+01:10:07,612 --> 01:10:10,798
+In this case, the sentence
+that we want to generate
+
+1678
+01:10:10,798 --> 01:10:13,337
+as a caption is a sequence
+and that sequence can vary
+
+1679
+01:10:13,337 --> 01:10:15,636
+depending on our input data.
+
+1680
+01:10:15,636 --> 01:10:18,414
+So now you can see that we
+have this dynamism in the thing
+
+1681
+01:10:18,414 --> 01:10:21,694
+where depending on the
+size of the sentence,
+
+1682
+01:10:21,694 --> 01:10:24,136
+our computational graph
+might need to have more
+
+1683
+01:10:24,136 --> 01:10:25,716
+or fewer elements.
+
+1684
+01:10:25,716 --> 01:10:29,920
+So that's one kind of common
+application of dynamic graphs.
+
+1685
+01:10:29,920 --> 01:10:34,115
+For those of you who
+took CS224N last quarter,
+
+1686
+01:10:34,115 --> 01:10:36,377
+you saw this idea of recursive networks
+
+1687
+01:10:36,377 --> 01:10:38,674
+where sometimes in natural
+language processing
+
+1688
+01:10:38,674 --> 01:10:41,316
+you might, for example,
+compute a parsed tree
+
+1689
+01:10:41,316 --> 01:10:43,934
+of a sentence and then
+you want to have a neural
+
+1690
+01:10:43,934 --> 01:10:47,337
+network kind of operate
+recursively up this parse tree.
+
+1691
+01:10:47,337 --> 01:10:49,291
+So having a neural network
+that kind of works,
+
+1692
+01:10:49,291 --> 01:10:51,817
+it's not just a sequential
+sequence of layers,
+
+1693
+01:10:51,817 --> 01:10:54,516
+but instead it's kind of
+working over some graph
+
+1694
+01:10:54,516 --> 01:10:56,856
+or tree structure instead
+where now each data point
+
+1695
+01:10:56,856 --> 01:10:58,732
+might have a different
+graph or tree structure
+
+1696
+01:10:58,732 --> 01:11:00,756
+so the structure of
+the computational graph
+
+1697
+01:11:00,756 --> 01:11:03,194
+then kind of mirrors the
+structure of the input data.
+
+1698
+01:11:03,194 --> 01:11:05,714
+And it could vary from
+data point to data point.
+
+1699
+01:11:05,714 --> 01:11:07,934
+So this type of thing seems
+kind of complicated and
+
+1700
+01:11:07,934 --> 01:11:10,316
+hairy to implement using TensorFlow,
+
+1701
+01:11:10,316 --> 01:11:12,478
+but in PyTorch you can just kind of use
+
+1702
+01:11:12,478 --> 01:11:14,054
+like normal Python control
+flow and it'll work out
+
+1703
+01:11:14,054 --> 01:11:14,887
+just fine.
+
+1704
+01:11:16,574 --> 01:11:19,198
+Another bit of more researchy
+application is this really
+
+1705
+01:11:19,198 --> 01:11:21,614
+cool idea that I like
+called neuromodule networks
+
+1706
+01:11:21,614 --> 01:11:23,678
+for visual question answering.
+
+1707
+01:11:23,678 --> 01:11:26,718
+So here the idea is that we
+want to ask some questions
+
+1708
+01:11:26,718 --> 01:11:29,278
+about images where we
+maybe input this image
+
+1709
+01:11:29,278 --> 01:11:31,737
+of cats and dogs, there's some question,
+
+1710
+01:11:31,737 --> 01:11:34,756
+what color is the cat, and
+then internally the system
+
+1711
+01:11:34,756 --> 01:11:37,614
+can read the question and
+that has these different
+
+1712
+01:11:37,614 --> 01:11:39,758
+specialized neural network
+modules for performing
+
+1713
+01:11:39,758 --> 01:11:43,594
+operations like asking for
+colors and finding cats.
+
+1714
+01:11:43,594 --> 01:11:45,915
+And then depending on
+the text of the question,
+
+1715
+01:11:45,915 --> 01:11:48,193
+it can compile this custom
+architecture for answering
+
+1716
+01:11:48,193 --> 01:11:49,838
+the question.
+
+1717
+01:11:49,838 --> 01:11:52,294
+And now if we asked a different question,
+
+1718
+01:11:52,294 --> 01:11:55,094
+like are there more cats than dogs?
+
+1719
+01:11:55,094 --> 01:11:58,241
+Now we have maybe the
+same basic set of modules
+
+1720
+01:11:58,241 --> 01:12:00,534
+for doing things like finding
+cats and dogs and counting,
+
+1721
+01:12:00,534 --> 01:12:03,076
+but they're arranged in a different order.
+
+1722
+01:12:03,076 --> 01:12:05,177
+So we get this dynamism again
+where different data points
+
+1723
+01:12:05,177 --> 01:12:07,716
+might give rise to different
+computational graphs.
+
+1724
+01:12:07,716 --> 01:12:09,635
+But this is a bit more
+of a researchy thing
+
+1725
+01:12:09,635 --> 01:12:12,574
+and maybe not so main stream right now.
+
+1726
+01:12:12,574 --> 01:12:15,037
+But as kind of a bigger
+point, I think that there's
+
+1727
+01:12:15,037 --> 01:12:17,198
+a lot of cool, creative
+applications that people
+
+1728
+01:12:17,198 --> 01:12:19,214
+could do with dynamic computational graphs
+
+1729
+01:12:19,214 --> 01:12:21,577
+and maybe there aren't so many right now,
+
+1730
+01:12:21,577 --> 01:12:23,471
+just because it's been so
+painful to work with them.
+
+1731
+01:12:23,471 --> 01:12:25,577
+So I think that there's
+a lot of opportunity
+
+1732
+01:12:25,577 --> 01:12:27,396
+for doing cool, creative things with
+
+1733
+01:12:27,396 --> 01:12:30,596
+dynamic computational graphs.
+
+1734
+01:12:30,596 --> 01:12:32,297
+And maybe if you come up with cool ideas,
+
+1735
+01:12:32,297 --> 01:12:34,078
+we'll feature it in lecture next year.
+
+1736
+01:12:34,078 --> 01:12:37,612
+So I wanted to talk
+very briefly about Caffe
+
+1737
+01:12:37,612 --> 01:12:39,854
+which is this framework from Berkeley.
+
+1738
+01:12:39,854 --> 01:12:43,795
+Which Caffe is somewhat
+different from the other
+
+1739
+01:12:43,795 --> 01:12:45,774
+deep learning frameworks
+where you in many cases
+
+1740
+01:12:45,774 --> 01:12:47,454
+you can actually train
+networks without writing
+
+1741
+01:12:47,454 --> 01:12:48,815
+any code yourself.
+
+1742
+01:12:48,815 --> 01:12:50,798
+You kind of just call into
+these pre-existing binaries,
+
+1743
+01:12:50,798 --> 01:12:53,214
+set up some configuration
+files and in many cases
+
+1744
+01:12:53,214 --> 01:12:56,697
+you can train on data without
+writing any of your own code.
+
+1745
+01:12:56,697 --> 01:13:00,078
+So, you may be first,
+you convert your data
+
+1746
+01:13:00,078 --> 01:13:03,054
+into some format like HDF5
+or LMDB and there exists
+
+1747
+01:13:03,054 --> 01:13:06,014
+some scripts inside Caffe
+that can just convert like
+
+1748
+01:13:06,014 --> 01:13:08,638
+folders of images and text files
+into these formats for you.
+
+1749
+01:13:08,638 --> 01:13:12,537
+You need to define, now
+instead of writing code
+
+1750
+01:13:12,537 --> 01:13:14,478
+to define the structure of
+your computational graph,
+
+1751
+01:13:14,478 --> 01:13:17,414
+instead you edit some text
+file called a prototxt
+
+1752
+01:13:17,414 --> 01:13:19,934
+which sets up the structure
+of the computational graph.
+
+1753
+01:13:19,934 --> 01:13:22,997
+Here the structure is that
+we read from some input
+
+1754
+01:13:22,997 --> 01:13:26,537
+HDF5 file, we perform some inner product,
+
+1755
+01:13:26,537 --> 01:13:28,974
+we compute some loss
+and the whole structure
+
+1756
+01:13:28,974 --> 01:13:30,875
+of the graph is set up in this text file.
+
+1757
+01:13:30,875 --> 01:13:33,653
+One kind of downside
+here is that these files
+
+1758
+01:13:33,653 --> 01:13:35,956
+can get really ugly for
+very large networks.
+
+1759
+01:13:35,956 --> 01:13:38,455
+So for something like the
+152 layer ResNet model,
+
+1760
+01:13:38,455 --> 01:13:41,535
+which by the way was
+trained in Caffe originally,
+
+1761
+01:13:41,535 --> 01:13:44,253
+then this prototxt file ends
+up almost 7000 lines long.
+
+1762
+01:13:44,253 --> 01:13:47,278
+So people are not writing these by hand.
+
+1763
+01:13:47,278 --> 01:13:49,887
+People will sometimes will
+like write python scripts
+
+1764
+01:13:49,887 --> 01:13:51,817
+to generate these prototxt files.
+
+1765
+01:13:51,817 --> 01:13:53,275
+[laughter]
+
+1766
+01:13:53,275 --> 01:13:55,154
+Then you're kind in the
+realm of rolling your own
+
+1767
+01:13:55,154 --> 01:13:56,318
+computational graph abstraction.
+
+1768
+01:13:56,318 --> 01:13:58,974
+That's probably not a good
+idea, but I've seen that before.
+
+1769
+01:13:58,974 --> 01:14:02,238
+Then, rather than having
+some optimizer object,
+
+1770
+01:14:02,238 --> 01:14:05,316
+instead there's some solver,
+you define some solver things
+
+1771
+01:14:05,316 --> 01:14:07,497
+inside another prototxt.
+
+1772
+01:14:07,497 --> 01:14:09,118
+This defines your learning rate,
+
+1773
+01:14:09,118 --> 01:14:11,036
+your optimization algorithm and whatnot.
+
+1774
+01:14:11,036 --> 01:14:12,334
+And then once you do all these things,
+
+1775
+01:14:12,334 --> 01:14:14,174
+you can just run the Caffe
+binary with the train command
+
+1776
+01:14:14,174 --> 01:14:17,278
+and it all happens magically.
+
+1777
+01:14:17,278 --> 01:14:19,577
+Cafee has a model zoo with a
+bunch of pretrained models,
+
+1778
+01:14:19,577 --> 01:14:21,294
+that's pretty useful.
+
+1779
+01:14:21,294 --> 01:14:23,454
+Caffe has a Python
+interface but it's not super
+
+1780
+01:14:23,454 --> 01:14:25,438
+well documented.
+
+1781
+01:14:25,438 --> 01:14:27,358
+You kind of need to read the
+source code of the python
+
+1782
+01:14:27,358 --> 01:14:29,017
+interface to see what it can do,
+
+1783
+01:14:29,017 --> 01:14:30,116
+so that's kind of annoying.
+
+1784
+01:14:30,116 --> 01:14:31,455
+But it does work.
+
+1785
+01:14:31,455 --> 01:14:35,622
+So, kind of my general thing
+about Caffe is that it's
+
+1786
+01:14:36,596 --> 01:14:38,334
+maybe good for feed forward models,
+
+1787
+01:14:38,334 --> 01:14:40,174
+it's maybe good for production scenarios,
+
+1788
+01:14:40,174 --> 01:14:42,796
+because it doesn't depend on Python.
+
+1789
+01:14:42,796 --> 01:14:45,075
+But probably for research
+these days, I've seen Caffe
+
+1790
+01:14:45,075 --> 01:14:47,358
+being used maybe a little bit less.
+
+1791
+01:14:47,358 --> 01:14:49,597
+Although I think it is
+still pretty commonly used
+
+1792
+01:14:49,597 --> 01:14:51,417
+in industry again for production.
+
+1793
+01:14:51,417 --> 01:14:54,410
+I promise one slide, one
+or two slides on Caffe 2.
+
+1794
+01:14:54,410 --> 01:14:58,596
+So Caffe 2 is the successor to
+Caffe which is from Facebook.
+
+1795
+01:14:58,596 --> 01:15:02,432
+It's super new, it was
+only released a week ago.
+
+1796
+01:15:02,432 --> 01:15:04,436
+[laughter]
+
+1797
+01:15:04,436 --> 01:15:06,617
+So I really haven't had
+the time to form a super
+
+1798
+01:15:06,617 --> 01:15:09,314
+educated opinion about Caffe 2 yet,
+
+1799
+01:15:09,314 --> 01:15:12,318
+but it uses static graphs
+kind of similar to TensorFlow.
+
+1800
+01:15:12,318 --> 01:15:15,198
+Kind of like Caffe one
+the core is written in C++
+
+1801
+01:15:15,198 --> 01:15:17,817
+and they have some Python interface.
+
+1802
+01:15:17,817 --> 01:15:19,694
+The difference is that
+now you no longer need to
+
+1803
+01:15:19,694 --> 01:15:21,518
+write your own Python scripts
+to generate prototxt files.
+
+1804
+01:15:21,518 --> 01:15:25,312
+You can kind of define your
+computational graph structure
+
+1805
+01:15:25,312 --> 01:15:28,170
+all in Python, kind of
+looking with an API that looks
+
+1806
+01:15:28,170 --> 01:15:29,657
+kind of like TensorFlow.
+
+1807
+01:15:29,657 --> 01:15:31,854
+But then you can spit out,
+you can serialize this
+
+1808
+01:15:31,854 --> 01:15:34,596
+computational graph
+structure to a prototxt file.
+
+1809
+01:15:34,596 --> 01:15:36,777
+And then once your model
+is trained and whatnot,
+
+1810
+01:15:36,777 --> 01:15:38,676
+then we get this benefit that
+we talked about of static
+
+1811
+01:15:38,676 --> 01:15:41,257
+graphs where you can, you
+don't need the original
+
+1812
+01:15:41,257 --> 01:15:43,534
+training code now in order
+to deploy a trained model.
+
+1813
+01:15:43,534 --> 01:15:46,958
+So one interesting thing
+is that you've seen Google
+
+1814
+01:15:46,958 --> 01:15:49,417
+maybe has one major
+deep running framework,
+
+1815
+01:15:49,417 --> 01:15:52,094
+which is TensorFlow, where
+Facebook has these two,
+
+1816
+01:15:52,094 --> 01:15:53,761
+PyTorch and Caffe 2.
+
+1817
+01:15:54,596 --> 01:15:57,252
+So these are kind of
+different philosophies.
+
+1818
+01:15:57,252 --> 01:15:59,751
+Google's kind of trying to
+build one framework to rule
+
+1819
+01:15:59,751 --> 01:16:01,569
+them all that maybe works
+for every possible scenario
+
+1820
+01:16:01,569 --> 01:16:02,847
+for deep learning.
+
+1821
+01:16:02,847 --> 01:16:04,609
+This is kind of nice because
+it consolidates all efforts
+
+1822
+01:16:04,609 --> 01:16:06,209
+onto one framework.
+
+1823
+01:16:06,209 --> 01:16:07,852
+It means you only need to learn one thing
+
+1824
+01:16:07,852 --> 01:16:09,464
+and it'll work across
+many different scenarios
+
+1825
+01:16:09,464 --> 01:16:11,708
+including like distributed
+systems, production,
+
+1826
+01:16:11,708 --> 01:16:13,772
+deployment, mobile, research, everything.
+
+1827
+01:16:13,772 --> 01:16:15,706
+Only need to learn one framework
+to do all these things.
+
+1828
+01:16:15,706 --> 01:16:18,151
+Whereas Facebook is taking a
+bit of a different approach.
+
+1829
+01:16:18,151 --> 01:16:20,849
+Where PyTorch is really more specialized,
+
+1830
+01:16:20,849 --> 01:16:23,591
+more geared towards research
+so in terms of writing
+
+1831
+01:16:23,591 --> 01:16:26,071
+research code and quickly
+iterating on your ideas,
+
+1832
+01:16:26,071 --> 01:16:27,948
+that's super easy in
+PyTorch, but for things like
+
+1833
+01:16:27,948 --> 01:16:30,869
+running in production,
+running on mobile devices,
+
+1834
+01:16:30,869 --> 01:16:32,951
+PyTorch doesn't have a
+lot of great support.
+
+1835
+01:16:32,951 --> 01:16:35,210
+Instead, Caffe 2 is kind
+of geared toward those more
+
+1836
+01:16:35,210 --> 01:16:37,710
+production oriented use cases.
+
+1837
+01:16:39,567 --> 01:16:42,929
+So my kind of general study,
+my general, overall advice
+
+1838
+01:16:42,929 --> 01:16:45,409
+about like which framework
+to use for which problems
+
+1839
+01:16:45,409 --> 01:16:47,350
+is kind of that both,
+
+1840
+01:16:47,350 --> 01:16:50,172
+I think TensorFlow is a
+pretty safe bet for just about
+
+1841
+01:16:50,172 --> 01:16:53,510
+any project that you
+want to start new, right?
+
+1842
+01:16:53,510 --> 01:16:56,168
+Because it is sort of one
+framework to rule them all,
+
+1843
+01:16:56,168 --> 01:16:58,849
+it can be used for just
+about any circumstance.
+
+1844
+01:16:58,849 --> 01:17:01,166
+However, you probably
+need to pair it with a
+
+1845
+01:17:01,166 --> 01:17:03,510
+higher level wrapper and
+if you want dynamic graphs,
+
+1846
+01:17:03,510 --> 01:17:05,207
+you're maybe out of luck.
+
+1847
+01:17:05,207 --> 01:17:07,152
+Some of the code ends up
+looking a little bit uglier
+
+1848
+01:17:07,152 --> 01:17:10,226
+in my opinion, but maybe that's
+kind of a cosmetic detail
+
+1849
+01:17:10,226 --> 01:17:13,190
+and it doesn't really matter that much.
+
+1850
+01:17:13,190 --> 01:17:15,809
+I personally think PyTorch
+is really great for research.
+
+1851
+01:17:15,809 --> 01:17:18,675
+If you're focused on just
+writing research code,
+
+1852
+01:17:18,675 --> 01:17:21,233
+I think PyTorch is a great choice.
+
+1853
+01:17:21,233 --> 01:17:23,830
+But it's a bit newer, has
+less community support,
+
+1854
+01:17:23,830 --> 01:17:25,649
+less code out there, so it
+could be a bit of an adventure.
+
+1855
+01:17:25,649 --> 01:17:28,412
+If you want more of a well
+trodden path, TensorFlow
+
+1856
+01:17:28,412 --> 01:17:29,969
+might be a better choice.
+
+1857
+01:17:29,969 --> 01:17:32,365
+If you're interested in
+production deployment,
+
+1858
+01:17:32,365 --> 01:17:34,710
+you should probably look at
+Caffe, Caffe 2 or TensorFlow.
+
+1859
+01:17:34,710 --> 01:17:37,017
+And if you're really focused
+on mobile deployment,
+
+1860
+01:17:37,017 --> 01:17:39,312
+I think TensorFlow and Caffe
+2 both have some built in
+
+1861
+01:17:39,312 --> 01:17:41,270
+support for that.
+
+1862
+01:17:41,270 --> 01:17:43,325
+So it's kind of unfortunately,
+there's not just like
+
+1863
+01:17:43,325 --> 01:17:45,009
+one global best framework,
+it kind of depends
+
+1864
+01:17:45,009 --> 01:17:47,393
+on what you're actually trying to do,
+
+1865
+01:17:47,393 --> 01:17:49,212
+what applications you anticipate
+but theses are kind of
+
+1866
+01:17:49,212 --> 01:17:52,045
+my general advice on those things.
+
+1867
+01:17:53,169 --> 01:17:55,691
+So next time we'll talk
+about some case studies
+
+1868
+01:17:55,691 --> 00:00:00,000
+about various CNN architectures.
+

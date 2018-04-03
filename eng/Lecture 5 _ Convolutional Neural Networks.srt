@@ -1,0 +1,6229 @@
+1
+00:00:08,435 --> 00:00:10,602
+- Okay, let's get started.
+
+2
+00:00:13,372 --> 00:00:15,936
+Alright, so welcome to lecture five.
+
+3
+00:00:15,936 --> 00:00:18,693
+Today we're going to be getting
+to the title of the class,
+
+4
+00:00:18,693 --> 00:00:21,193
+Convolutional Neural Networks.
+
+5
+00:00:22,493 --> 00:00:24,134
+Okay, so a couple of
+administrative details
+
+6
+00:00:24,134 --> 00:00:25,933
+before we get started.
+
+7
+00:00:25,933 --> 00:00:27,980
+Assignment one is due Thursday,
+
+8
+00:00:27,980 --> 00:00:30,563
+April 20, 11:59 p.m. on Canvas.
+
+9
+00:00:31,440 --> 00:00:35,607
+We're also going to be releasing
+assignment two on Thursday.
+
+10
+00:00:38,320 --> 00:00:40,434
+Okay, so a quick review of last time.
+
+11
+00:00:40,434 --> 00:00:43,679
+We talked about neural
+networks, and how we had
+
+12
+00:00:43,679 --> 00:00:45,755
+the running example of
+the linear score function
+
+13
+00:00:45,755 --> 00:00:48,337
+that we talked about through
+the first few lectures.
+
+14
+00:00:48,337 --> 00:00:50,736
+And then we turned this
+into a neural network
+
+15
+00:00:50,736 --> 00:00:53,808
+by stacking these linear
+layers on top of each other
+
+16
+00:00:53,808 --> 00:00:56,969
+with non-linearities in between.
+
+17
+00:00:56,969 --> 00:00:58,900
+And we also saw that
+this could help address
+
+18
+00:00:58,900 --> 00:01:01,500
+the mode problem where
+we are able to learn
+
+19
+00:01:01,500 --> 00:01:03,807
+intermediate templates
+that are looking for,
+
+20
+00:01:03,807 --> 00:01:06,618
+for example, different
+types of cars, right.
+
+21
+00:01:06,618 --> 00:01:09,006
+A red car versus a yellow car and so on.
+
+22
+00:01:09,006 --> 00:01:11,138
+And to combine these
+together to come up with
+
+23
+00:01:11,138 --> 00:01:14,790
+the final score function for a class.
+
+24
+00:01:14,790 --> 00:01:16,998
+Okay, so today we're going to talk about
+
+25
+00:01:16,998 --> 00:01:18,438
+convolutional neural networks,
+
+26
+00:01:18,438 --> 00:01:20,825
+which is basically the same sort of idea,
+
+27
+00:01:20,825 --> 00:01:23,300
+but now we're going to
+learn convolutional layers
+
+28
+00:01:23,300 --> 00:01:26,134
+that reason on top of basically explicitly
+
+29
+00:01:26,134 --> 00:01:29,217
+trying to maintain spatial structure.
+
+30
+00:01:31,817 --> 00:01:33,397
+So, let's first talk a little bit about
+
+31
+00:01:33,397 --> 00:01:36,070
+the history of neural
+networks, and then also
+
+32
+00:01:36,070 --> 00:01:39,067
+how convolutional neural
+networks were developed.
+
+33
+00:01:39,067 --> 00:01:43,796
+So we can go all the way back
+to 1957 with Frank Rosenblatt,
+
+34
+00:01:43,796 --> 00:01:46,308
+who developed the Mark
+I Perceptron machine,
+
+35
+00:01:46,308 --> 00:01:48,688
+which was the first
+implementation of an algorithm
+
+36
+00:01:48,688 --> 00:01:51,785
+called the perceptron, which
+had sort of the similar idea
+
+37
+00:01:51,785 --> 00:01:55,157
+of getting score functions,
+right, using some,
+
+38
+00:01:55,157 --> 00:01:58,437
+you know, W times X plus a bias.
+
+39
+00:01:58,437 --> 00:02:02,000
+But here the outputs are going
+to be either one or a zero.
+
+40
+00:02:02,000 --> 00:02:04,295
+And then in this case
+we have an update rule,
+
+41
+00:02:04,295 --> 00:02:06,551
+so an update rule for our weights, W,
+
+42
+00:02:06,551 --> 00:02:09,491
+which also look kind of similar
+to the type of update rule
+
+43
+00:02:09,491 --> 00:02:12,304
+that we're also seeing in
+backprop, but in this case
+
+44
+00:02:12,304 --> 00:02:15,889
+there was no principled
+backpropagation technique yet,
+
+45
+00:02:15,889 --> 00:02:18,182
+we just sort of took the
+weights and adjusted them
+
+46
+00:02:18,182 --> 00:02:22,349
+in the direction towards
+the target that we wanted.
+
+47
+00:02:23,771 --> 00:02:26,918
+So in 1960, we had Widrow and Hoff,
+
+48
+00:02:26,918 --> 00:02:29,673
+who developed Adaline and
+Madaline, which was the first time
+
+49
+00:02:29,673 --> 00:02:33,290
+that we were able to
+get, to start to stack
+
+50
+00:02:33,290 --> 00:02:37,457
+these linear layers into
+multilayer perceptron networks.
+
+51
+00:02:38,986 --> 00:02:42,592
+And so this is starting to now
+look kind of like this idea
+
+52
+00:02:42,592 --> 00:02:46,658
+of neural network layers, but
+we still didn't have backprop
+
+53
+00:02:46,658 --> 00:02:50,992
+or any sort of principled
+way to train this.
+
+54
+00:02:50,992 --> 00:02:53,436
+And so the first time
+backprop was really introduced
+
+55
+00:02:53,436 --> 00:02:56,015
+was in 1986 with Rumelhart.
+
+56
+00:02:56,015 --> 00:02:58,676
+And so here we can start
+seeing, you know, these kinds of
+
+57
+00:02:58,676 --> 00:03:00,858
+equations with the chain
+rule and the update rules
+
+58
+00:03:00,858 --> 00:03:03,906
+that we're starting to
+get familiar with, right,
+
+59
+00:03:03,906 --> 00:03:05,318
+and so this is the first time we started
+
+60
+00:03:05,318 --> 00:03:06,791
+to have a principled way to train
+
+61
+00:03:06,791 --> 00:03:09,874
+these kinds of network architectures.
+
+62
+00:03:11,623 --> 00:03:14,961
+And so after that, you know,
+it still wasn't able to scale
+
+63
+00:03:14,961 --> 00:03:18,076
+to very large neural networks,
+and so there was sort of
+
+64
+00:03:18,076 --> 00:03:20,550
+a period in which there wasn't a whole lot
+
+65
+00:03:20,550 --> 00:03:24,450
+of new things happening
+here, or a lot of popular use
+
+66
+00:03:24,450 --> 00:03:26,237
+of these kinds of networks.
+
+67
+00:03:26,237 --> 00:03:28,623
+And so this really started
+being reinvigorated
+
+68
+00:03:28,623 --> 00:03:32,790
+around the 2000s, so in
+2006, there was this paper
+
+69
+00:03:33,641 --> 00:03:37,623
+by Geoff Hinton and Ruslan Salakhutdinov,
+
+70
+00:03:37,623 --> 00:03:39,612
+which basically showed that we could train
+
+71
+00:03:39,612 --> 00:03:40,719
+a deep neural network,
+
+72
+00:03:40,719 --> 00:03:43,212
+and show that we could
+do this effectively.
+
+73
+00:03:43,212 --> 00:03:44,445
+But it was still not quite
+
+74
+00:03:44,445 --> 00:03:47,428
+the sort of modern iteration
+of neural networks.
+
+75
+00:03:47,428 --> 00:03:50,208
+It required really careful initialization
+
+76
+00:03:50,208 --> 00:03:52,439
+in order to be able to do backprop,
+
+77
+00:03:52,439 --> 00:03:54,350
+and so what they had
+here was they would have
+
+78
+00:03:54,350 --> 00:03:57,601
+this first pre-training
+stage, where you model
+
+79
+00:03:57,601 --> 00:03:59,456
+each hidden layer through this kind of,
+
+80
+00:03:59,456 --> 00:04:01,805
+through a restricted Boltzmann machine,
+
+81
+00:04:01,805 --> 00:04:04,180
+and so you're going to get
+some initialized weights
+
+82
+00:04:04,180 --> 00:04:07,331
+by training each of
+these layers iteratively.
+
+83
+00:04:07,331 --> 00:04:09,583
+And so once you get all
+of these hidden layers
+
+84
+00:04:09,583 --> 00:04:13,898
+you then use that to
+initialize your, you know,
+
+85
+00:04:13,898 --> 00:04:16,891
+your full neural network,
+and then from there
+
+86
+00:04:16,891 --> 00:04:20,224
+you do backprop and fine tuning of that.
+
+87
+00:04:23,057 --> 00:04:26,146
+And so when we really started
+to get the first really strong
+
+88
+00:04:26,146 --> 00:04:30,219
+results using neural networks,
+and what sort of really
+
+89
+00:04:30,219 --> 00:04:34,219
+sparked the whole craze
+of starting to use these
+
+90
+00:04:35,066 --> 00:04:39,233
+kinds of networks really
+widely was at around 2012,
+
+91
+00:04:40,268 --> 00:04:42,717
+where we had first the strongest results
+
+92
+00:04:42,717 --> 00:04:44,980
+using for speech recognition,
+
+93
+00:04:44,980 --> 00:04:47,921
+and so this is work out
+of Geoff Hinton's lab
+
+94
+00:04:47,921 --> 00:04:50,606
+for acoustic modeling
+and speech recognition.
+
+95
+00:04:50,606 --> 00:04:55,021
+And then for image recognition,
+2012 was the landmark paper
+
+96
+00:04:55,021 --> 00:04:58,604
+from Alex Krizhevsky
+in Geoff Hinton's lab,
+
+97
+00:04:59,638 --> 00:05:01,919
+which introduced the first
+convolutional neural network
+
+98
+00:05:01,919 --> 00:05:04,220
+architecture that was able to do,
+
+99
+00:05:04,220 --> 00:05:06,813
+get really strong results
+on ImageNet classification.
+
+100
+00:05:06,813 --> 00:05:10,917
+And so it took the ImageNet,
+image classification benchmark,
+
+101
+00:05:10,917 --> 00:05:13,186
+and was able to dramatically reduce
+
+102
+00:05:13,186 --> 00:05:15,519
+the error on that benchmark.
+
+103
+00:05:16,793 --> 00:05:19,958
+And so since then, you
+know, ConvNets have gotten
+
+104
+00:05:19,958 --> 00:05:24,236
+really widely used in all
+kinds of applications.
+
+105
+00:05:24,236 --> 00:05:28,225
+So now let's step back and
+take a look at what gave rise
+
+106
+00:05:28,225 --> 00:05:31,714
+to convolutional neural
+networks specifically.
+
+107
+00:05:31,714 --> 00:05:34,113
+And so we can go back to the 1950s,
+
+108
+00:05:34,113 --> 00:05:37,689
+where Hubel and Wiesel did
+a series of experiments
+
+109
+00:05:37,689 --> 00:05:41,003
+trying to understand how neurons
+
+110
+00:05:41,003 --> 00:05:42,538
+in the visual cortex worked,
+
+111
+00:05:42,538 --> 00:05:45,579
+and they studied this
+specifically for cats.
+
+112
+00:05:45,579 --> 00:05:48,273
+And so we talked a little bit
+about this in lecture one,
+
+113
+00:05:48,273 --> 00:05:51,362
+but basically in these
+experiments they put electrodes
+
+114
+00:05:51,362 --> 00:05:53,526
+in the cat, into the cat brain,
+
+115
+00:05:53,526 --> 00:05:56,066
+and they gave the cat
+different visual stimulus.
+
+116
+00:05:56,066 --> 00:05:57,888
+Right, and so, things like, you know,
+
+117
+00:05:57,888 --> 00:06:01,171
+different kinds of edges, oriented edges,
+
+118
+00:06:01,171 --> 00:06:03,187
+different sorts of
+shapes, and they measured
+
+119
+00:06:03,187 --> 00:06:06,937
+the response of the
+neurons to these stimuli.
+
+120
+00:06:09,029 --> 00:06:12,765
+And so there were a couple
+of important conclusions
+
+121
+00:06:12,765 --> 00:06:14,993
+that they were able to
+make, and observations.
+
+122
+00:06:14,993 --> 00:06:17,021
+And so the first thing
+found that, you know,
+
+123
+00:06:17,021 --> 00:06:19,534
+there's sort of this topographical
+mapping in the cortex.
+
+124
+00:06:19,534 --> 00:06:22,246
+So nearby cells in the
+cortex also represent
+
+125
+00:06:22,246 --> 00:06:24,932
+nearby regions in the visual field.
+
+126
+00:06:24,932 --> 00:06:27,767
+And so you can see for
+example, on the right here
+
+127
+00:06:27,767 --> 00:06:31,730
+where if you take kind
+of the spatial mapping
+
+128
+00:06:31,730 --> 00:06:34,475
+and map this onto a visual cortex
+
+129
+00:06:34,475 --> 00:06:37,750
+there's more peripheral
+regions are these blue areas,
+
+130
+00:06:37,750 --> 00:06:41,722
+you know, farther away from the center.
+
+131
+00:06:41,722 --> 00:06:44,122
+And so they also discovered
+that these neurons
+
+132
+00:06:44,122 --> 00:06:46,789
+had a hierarchical organization.
+
+133
+00:06:47,634 --> 00:06:51,236
+And so if you look at different
+types of visual stimuli
+
+134
+00:06:51,236 --> 00:06:54,828
+they were able to find
+that at the earliest layers
+
+135
+00:06:54,828 --> 00:06:57,837
+retinal ganglion cells
+were responsive to things
+
+136
+00:06:57,837 --> 00:07:01,601
+that looked kind of like
+circular regions of spots.
+
+137
+00:07:01,601 --> 00:07:04,231
+And then on top of that
+there are simple cells,
+
+138
+00:07:04,231 --> 00:07:07,999
+and these simple cells are
+responsive to oriented edges,
+
+139
+00:07:07,999 --> 00:07:11,146
+so different orientation
+of the light stimulus.
+
+140
+00:07:11,146 --> 00:07:13,246
+And then going further,
+they discover that these
+
+141
+00:07:13,246 --> 00:07:15,448
+were then connected to more complex cells,
+
+142
+00:07:15,448 --> 00:07:17,721
+which were responsive to
+both light orientation
+
+143
+00:07:17,721 --> 00:07:19,923
+as well as movement, and so on.
+
+144
+00:07:19,923 --> 00:07:22,145
+And you get, you know,
+increasing complexity,
+
+145
+00:07:22,145 --> 00:07:25,452
+for example, hypercomplex
+cells are now responsive
+
+146
+00:07:25,452 --> 00:07:28,984
+to movement with kind
+of an endpoint, right,
+
+147
+00:07:28,984 --> 00:07:32,092
+and so now you're starting
+to get the idea of corners
+
+148
+00:07:32,092 --> 00:07:34,175
+and then blobs and so on.
+
+149
+00:07:38,143 --> 00:07:38,976
+And so
+
+150
+00:07:40,298 --> 00:07:44,247
+then in 1980, the neocognitron
+was the first example
+
+151
+00:07:44,247 --> 00:07:46,715
+of a network architecture, a model,
+
+152
+00:07:46,715 --> 00:07:50,924
+that had this idea of
+simple and complex cells
+
+153
+00:07:50,924 --> 00:07:52,454
+that Hubel and Wiesel had discovered.
+
+154
+00:07:52,454 --> 00:07:55,419
+And in this case Fukushima put these into
+
+155
+00:07:55,419 --> 00:07:59,038
+these alternating layers of
+simple and complex cells,
+
+156
+00:07:59,038 --> 00:08:00,729
+where you had these simple cells
+
+157
+00:08:00,729 --> 00:08:03,129
+that had modifiable parameters,
+and then complex cells
+
+158
+00:08:03,129 --> 00:08:06,799
+on top of these that
+performed a sort of pooling
+
+159
+00:08:06,799 --> 00:08:08,791
+so that it was invariant to, you know,
+
+160
+00:08:08,791 --> 00:08:12,958
+different minor modifications
+from the simple cells.
+
+161
+00:08:14,786 --> 00:08:17,159
+And so this is work that
+was in the 1980s, right,
+
+162
+00:08:17,159 --> 00:08:19,242
+and so by 1998 Yann LeCun
+
+163
+00:08:21,839 --> 00:08:23,445
+basically showed the first example
+
+164
+00:08:23,445 --> 00:08:27,743
+of applying backpropagation
+and gradient-based learning
+
+165
+00:08:27,743 --> 00:08:29,645
+to train convolutional neural networks
+
+166
+00:08:29,645 --> 00:08:32,063
+that did really well on
+document recognition.
+
+167
+00:08:32,063 --> 00:08:35,339
+And specifically they
+were able to do a good job
+
+168
+00:08:35,340 --> 00:08:37,610
+of recognizing digits of zip codes.
+
+169
+00:08:37,610 --> 00:08:41,028
+And so these were then used pretty widely
+
+170
+00:08:41,028 --> 00:08:45,082
+for zip code recognition
+in the postal service.
+
+171
+00:08:45,082 --> 00:08:48,320
+But beyond that it
+wasn't able to scale yet
+
+172
+00:08:48,320 --> 00:08:51,579
+to more challenging and
+complex data, right,
+
+173
+00:08:51,579 --> 00:08:53,837
+digits are still fairly simple
+
+174
+00:08:53,837 --> 00:08:56,350
+and a limited set to recognize.
+
+175
+00:08:56,350 --> 00:09:00,901
+And so this is where
+Alex Krizhevsky, in 2012,
+
+176
+00:09:00,901 --> 00:09:04,893
+gave the modern incarnation of
+convolutional neural networks
+
+177
+00:09:04,893 --> 00:09:08,900
+and his network we sort of
+colloquially call AlexNet.
+
+178
+00:09:08,900 --> 00:09:11,543
+But this network really
+didn't look so much different
+
+179
+00:09:11,543 --> 00:09:14,205
+than the convolutional neural networks
+
+180
+00:09:14,205 --> 00:09:16,472
+that Yann LeCun was dealing with.
+
+181
+00:09:16,472 --> 00:09:18,363
+They're now, you know,
+they were scaled now
+
+182
+00:09:18,363 --> 00:09:21,751
+to be larger and deeper and able to,
+
+183
+00:09:21,751 --> 00:09:23,753
+the most important parts
+were that they were now able
+
+184
+00:09:23,753 --> 00:09:26,544
+to take advantage of
+the large amount of data
+
+185
+00:09:26,544 --> 00:09:30,711
+that's now available, in web
+images, in ImageNet data set.
+
+186
+00:09:32,078 --> 00:09:33,757
+As well as take advantage
+
+187
+00:09:33,757 --> 00:09:37,724
+of the parallel computing power in GPUs.
+
+188
+00:09:37,724 --> 00:09:41,033
+And so we'll talk more about that later.
+
+189
+00:09:41,033 --> 00:09:43,127
+But fast forwarding
+today, so now, you know,
+
+190
+00:09:43,127 --> 00:09:45,434
+ConvNets are used everywhere.
+
+191
+00:09:45,434 --> 00:09:49,999
+And so we have the initial
+classification results
+
+192
+00:09:49,999 --> 00:09:52,294
+on ImageNet from Alex Krizhevsky.
+
+193
+00:09:52,294 --> 00:09:55,188
+This is able to do a really
+good job of image retrieval.
+
+194
+00:09:55,188 --> 00:09:57,274
+You can see that when we're
+trying to retrieve a flower
+
+195
+00:09:57,274 --> 00:09:59,488
+for example, the features that are learned
+
+196
+00:09:59,488 --> 00:10:04,134
+are really powerful for
+doing similarity matching.
+
+197
+00:10:04,134 --> 00:10:07,049
+We also have ConvNets that
+are used for detection.
+
+198
+00:10:07,049 --> 00:10:10,557
+So we're able to do a really
+good job of localizing
+
+199
+00:10:10,557 --> 00:10:14,285
+where in an image is, for
+example, a bus, or a boat,
+
+200
+00:10:14,285 --> 00:10:17,705
+and so on, and draw precise
+bounding boxes around that.
+
+201
+00:10:17,705 --> 00:10:21,353
+We're able to go even deeper
+beyond that to do segmentation,
+
+202
+00:10:21,353 --> 00:10:23,145
+right, and so these are now richer tasks
+
+203
+00:10:23,145 --> 00:10:26,112
+where we're not looking
+for just the bounding box
+
+204
+00:10:26,112 --> 00:10:27,958
+but we're actually going
+to label every pixel
+
+205
+00:10:27,958 --> 00:10:32,125
+in the outline of, you know,
+trees, and people, and so on.
+
+206
+00:10:34,126 --> 00:10:36,868
+And these kind of algorithms are used in,
+
+207
+00:10:36,868 --> 00:10:38,864
+for example, self-driving cars,
+
+208
+00:10:38,864 --> 00:10:42,066
+and a lot of this is powered
+by GPUs as I mentioned earlier,
+
+209
+00:10:42,066 --> 00:10:45,114
+that's able to do parallel processing
+
+210
+00:10:45,114 --> 00:10:48,812
+and able to efficiently
+train and run these ConvNets.
+
+211
+00:10:48,812 --> 00:10:52,406
+And so we have modern
+powerful GPUs as well as ones
+
+212
+00:10:52,406 --> 00:10:55,634
+that work in embedded
+systems, for example,
+
+213
+00:10:55,634 --> 00:10:59,207
+that you would use in a self-driving car.
+
+214
+00:10:59,207 --> 00:11:01,695
+So we can also look at some
+of the other applications
+
+215
+00:11:01,695 --> 00:11:03,399
+that ConvNets are used for.
+
+216
+00:11:03,399 --> 00:11:06,227
+So, face-recognition, right,
+we can put an input image
+
+217
+00:11:06,227 --> 00:11:10,394
+of a face and get out a
+likelihood of who this person is.
+
+218
+00:11:12,626 --> 00:11:15,622
+ConvNets are applied to video,
+and so this is an example
+
+219
+00:11:15,622 --> 00:11:19,551
+of a video network that
+looks at both images
+
+220
+00:11:19,551 --> 00:11:21,902
+as well as temporal information,
+
+221
+00:11:21,902 --> 00:11:25,951
+and from there is able to classify videos.
+
+222
+00:11:25,951 --> 00:11:28,569
+We're also able to do pose recognition.
+
+223
+00:11:28,569 --> 00:11:30,215
+Being able to recognize, you know,
+
+224
+00:11:30,215 --> 00:11:32,770
+shoulders, elbows, and different joints.
+
+225
+00:11:32,770 --> 00:11:37,577
+And so here are some images
+of our fabulous TA, Lane,
+
+226
+00:11:37,577 --> 00:11:42,234
+in various kinds of pretty
+non-standard human poses.
+
+227
+00:11:42,234 --> 00:11:45,791
+But ConvNets are able
+to do a pretty good job
+
+228
+00:11:45,791 --> 00:11:48,465
+of pose recognition these days.
+
+229
+00:11:48,465 --> 00:11:51,741
+They're also used in game playing.
+
+230
+00:11:51,741 --> 00:11:54,296
+So some of the work in
+reinforcement learning,
+
+231
+00:11:54,296 --> 00:11:56,509
+deeper enforcement learning
+that you may have seen,
+
+232
+00:11:56,509 --> 00:11:58,595
+playing Atari games, and Go, and so on,
+
+233
+00:11:58,595 --> 00:12:02,981
+and ConvNets are an important
+part of all of these.
+
+234
+00:12:02,981 --> 00:12:06,656
+Some other applications,
+so they're being used for
+
+235
+00:12:06,656 --> 00:12:10,150
+interpretation and
+diagnosis of medical images,
+
+236
+00:12:10,150 --> 00:12:14,317
+for classification of galaxies,
+for street sign recognition.
+
+237
+00:12:18,059 --> 00:12:19,519
+There's also whale recognition,
+
+238
+00:12:19,519 --> 00:12:22,342
+this is from a recent Kaggle Challenge.
+
+239
+00:12:22,342 --> 00:12:26,067
+We also have examples of
+looking at aerial maps
+
+240
+00:12:26,067 --> 00:12:28,485
+and being able to draw
+out where are the streets
+
+241
+00:12:28,485 --> 00:12:29,999
+on these maps, where are buildings,
+
+242
+00:12:29,999 --> 00:12:33,249
+and being able to segment all of these.
+
+243
+00:12:35,089 --> 00:12:39,170
+And then beyond recognition
+of classification detection,
+
+244
+00:12:39,170 --> 00:12:41,587
+these types of tasks, we also have tasks
+
+245
+00:12:41,587 --> 00:12:44,472
+like image captioning,
+where given an image,
+
+246
+00:12:44,472 --> 00:12:46,363
+we want to write a sentence description
+
+247
+00:12:46,363 --> 00:12:48,644
+about what's in the image.
+
+248
+00:12:48,644 --> 00:12:49,970
+And so this is something
+that we'll go into
+
+249
+00:12:49,970 --> 00:12:52,819
+a little bit later in the class.
+
+250
+00:12:52,819 --> 00:12:57,169
+And we also have, you know,
+really, really fancy and cool
+
+251
+00:12:57,169 --> 00:13:01,251
+kind of artwork that we can
+do using neural networks.
+
+252
+00:13:01,251 --> 00:13:03,855
+And so on the left is an
+example of a deep dream,
+
+253
+00:13:03,855 --> 00:13:08,022
+where we're able to take
+images and kind of hallucinate
+
+254
+00:13:09,173 --> 00:13:12,412
+different kinds of objects
+and concepts in the image.
+
+255
+00:13:12,412 --> 00:13:16,274
+There's also neural style type
+work, where we take an image
+
+256
+00:13:16,274 --> 00:13:19,817
+and we're able to re-render this image
+
+257
+00:13:19,817 --> 00:13:23,808
+using a style of a particular
+artist and artwork, right.
+
+258
+00:13:23,808 --> 00:13:27,899
+And so here we can take, for
+example, Van Gogh on the right,
+
+259
+00:13:27,899 --> 00:13:30,909
+Starry Night, and use that to redraw
+
+260
+00:13:30,909 --> 00:13:33,370
+our original image using that style.
+
+261
+00:13:33,370 --> 00:13:36,473
+And Justin has done a lot of work in this
+
+262
+00:13:36,473 --> 00:13:38,239
+and so if you guys are interested,
+
+263
+00:13:38,239 --> 00:13:42,163
+these are images produced
+by some of his code
+
+264
+00:13:42,163 --> 00:13:46,244
+and you guys should talk
+to him more about it.
+
+265
+00:13:46,244 --> 00:13:50,069
+Okay, so basically, you know,
+this is just a small sample
+
+266
+00:13:50,069 --> 00:13:52,727
+of where ConvNets are being used today.
+
+267
+00:13:52,727 --> 00:13:55,289
+But there's really a huge amount
+that can be done with this,
+
+268
+00:13:55,289 --> 00:13:58,378
+right, and so, you know,
+for you guys' projects,
+
+269
+00:13:58,378 --> 00:14:00,624
+sort of, you know, let
+your imagination go wild
+
+270
+00:14:00,624 --> 00:14:04,605
+and we're excited to see
+what sorts of applications
+
+271
+00:14:04,605 --> 00:14:06,465
+you can come up with.
+
+272
+00:14:06,465 --> 00:14:08,031
+So today we're going to talk about
+
+273
+00:14:08,031 --> 00:14:10,307
+how convolutional neural networks work.
+
+274
+00:14:10,307 --> 00:14:13,233
+And again, same as with neural
+networks, we're going to first
+
+275
+00:14:13,233 --> 00:14:16,904
+talk about how they work
+from a functional perspective
+
+276
+00:14:16,904 --> 00:14:18,668
+without any of the brain analogies.
+
+277
+00:14:18,668 --> 00:14:22,835
+And then we'll talk briefly
+about some of these connections.
+
+278
+00:14:25,453 --> 00:14:28,361
+Okay, so, last lecture, we talked about
+
+279
+00:14:28,361 --> 00:14:31,444
+this idea of a fully connected layer.
+
+280
+00:14:32,878 --> 00:14:36,257
+And how, you know, for
+a fully connected layer
+
+281
+00:14:36,257 --> 00:14:39,373
+what we're doing is we operate
+on top of these vectors,
+
+282
+00:14:39,373 --> 00:14:43,218
+right, and so let's say we
+have, you know, an image,
+
+283
+00:14:43,218 --> 00:14:45,726
+a 3D image, 32 by 32 by three,
+
+284
+00:14:45,726 --> 00:14:48,443
+so some of the images that we
+were looking at previously.
+
+285
+00:14:48,443 --> 00:14:51,548
+We'll take that, we'll stretch
+all of the pixels out, right,
+
+286
+00:14:51,548 --> 00:14:55,196
+and then we have this
+3072 dimensional vector,
+
+287
+00:14:55,196 --> 00:14:56,787
+for example in this case.
+
+288
+00:14:56,787 --> 00:14:58,944
+And then we have these weights, right,
+
+289
+00:14:58,944 --> 00:15:01,741
+so we're going to multiply
+this by a weight matrix.
+
+290
+00:15:01,741 --> 00:15:05,908
+And so here for example our W
+we're going to say is 10 by 3072.
+
+291
+00:15:07,264 --> 00:15:10,755
+And then we're going
+to get the activations,
+
+292
+00:15:10,755 --> 00:15:13,943
+the output of this layer,
+right, and so in this case,
+
+293
+00:15:13,943 --> 00:15:18,056
+we take each of our 10 rows
+and we do this dot product
+
+294
+00:15:18,056 --> 00:15:20,389
+with 3072 dimensional input.
+
+295
+00:15:22,207 --> 00:15:24,835
+And from there we get this one number
+
+296
+00:15:24,835 --> 00:15:27,892
+that's kind of the value of that neuron.
+
+297
+00:15:27,892 --> 00:15:30,020
+And so in this case we're going to have
+
+298
+00:15:30,020 --> 00:15:32,270
+10 of these neuron outputs.
+
+299
+00:15:35,417 --> 00:15:38,355
+And so a convolutional
+layer, so the main difference
+
+300
+00:15:38,355 --> 00:15:39,988
+between this and the fully connected layer
+
+301
+00:15:39,988 --> 00:15:41,203
+that we've been talking about
+
+302
+00:15:41,203 --> 00:15:44,165
+is that here we want to
+preserve spatial structure.
+
+303
+00:15:44,165 --> 00:15:47,090
+And so taking this 32 by 32 by three image
+
+304
+00:15:47,090 --> 00:15:49,838
+that we had earlier, instead
+of stretching this all out
+
+305
+00:15:49,838 --> 00:15:53,186
+into one long vector, we're
+now going to keep the structure
+
+306
+00:15:53,186 --> 00:15:57,750
+of this image, right, this
+three dimensional input.
+
+307
+00:15:57,750 --> 00:15:59,526
+And then what we're going to do is
+
+308
+00:15:59,526 --> 00:16:01,910
+our weights are going to
+be these small filters,
+
+309
+00:16:01,910 --> 00:16:05,746
+so in this case for example, a
+five by five by three filter,
+
+310
+00:16:05,746 --> 00:16:07,212
+and we're going to take this filter
+
+311
+00:16:07,212 --> 00:16:09,679
+and we're going to slide
+it over the image spatially
+
+312
+00:16:09,679 --> 00:16:13,153
+and compute dot products
+at every spatial location.
+
+313
+00:16:13,153 --> 00:16:17,320
+And so we're going to go into
+detail of exactly how this works.
+
+314
+00:16:18,668 --> 00:16:20,523
+So, our filters, first of all,
+
+315
+00:16:20,523 --> 00:16:23,957
+always extend the full
+depth of the input volume.
+
+316
+00:16:23,957 --> 00:16:28,759
+And so they're going to be
+just a smaller spatial area,
+
+317
+00:16:28,759 --> 00:16:30,357
+so in this case five by five, right,
+
+318
+00:16:30,357 --> 00:16:33,425
+instead of our full 32
+by 32 spatial input,
+
+319
+00:16:33,425 --> 00:16:37,536
+but they're always going to go
+through the full depth, right,
+
+320
+00:16:37,536 --> 00:16:42,499
+so here we're going to
+take five by five by three.
+
+321
+00:16:42,499 --> 00:16:44,619
+And then we're going to take this filter
+
+322
+00:16:44,619 --> 00:16:46,996
+and at a given spatial location
+
+323
+00:16:46,996 --> 00:16:49,046
+we're going to do a dot product
+
+324
+00:16:49,046 --> 00:16:52,901
+between this filter and
+then a chunk of a image.
+
+325
+00:16:52,901 --> 00:16:54,492
+So we're just going to overlay this filter
+
+326
+00:16:54,492 --> 00:16:56,998
+on top of a spatial location in the image,
+
+327
+00:16:56,998 --> 00:16:58,636
+right, and then do the dot product,
+
+328
+00:16:58,636 --> 00:17:02,665
+the multiplication of each
+element of that filter
+
+329
+00:17:02,665 --> 00:17:05,203
+with each corresponding element
+in that spatial location
+
+330
+00:17:05,203 --> 00:17:07,099
+that we've just plopped it on top of.
+
+331
+00:17:07,099 --> 00:17:09,732
+And then this is going
+to give us a dot product.
+
+332
+00:17:09,733 --> 00:17:14,345
+So in this case, we have
+five times five times three,
+
+333
+00:17:14,345 --> 00:17:16,257
+this is the number of multiplications
+
+334
+00:17:16,257 --> 00:17:18,755
+that we're going to do,
+right, plus the bias term.
+
+335
+00:17:18,755 --> 00:17:22,324
+And so this is basically
+taking our filter W
+
+336
+00:17:22,324 --> 00:17:26,491
+and basically doing W transpose
+times X and plus bias.
+
+337
+00:17:27,722 --> 00:17:30,299
+So is that clear how this works?
+
+338
+00:17:30,299 --> 00:17:31,771
+Yeah, question.
+
+339
+00:17:31,771 --> 00:17:34,521
+[faint speaking]
+
+340
+00:17:35,656 --> 00:17:37,837
+Yeah, so the question is,
+when we do the dot product
+
+341
+00:17:37,837 --> 00:17:40,722
+do we turn the five by five
+by three into one vector?
+
+342
+00:17:40,722 --> 00:17:42,907
+Yeah, in essence that's what you're doing.
+
+343
+00:17:42,907 --> 00:17:44,950
+You can, I mean, you
+can think of it as just
+
+344
+00:17:44,950 --> 00:17:47,996
+plopping it on and doing the
+element-wise multiplication
+
+345
+00:17:47,996 --> 00:17:50,523
+at each location, but this is
+going to give you the same result
+
+346
+00:17:50,523 --> 00:17:53,691
+as if you stretched out
+the filter at that point,
+
+347
+00:17:53,691 --> 00:17:56,211
+stretched out the input
+volume that it's laid over,
+
+348
+00:17:56,211 --> 00:17:57,891
+and then took the dot product,
+
+349
+00:17:57,891 --> 00:18:01,111
+and that's what's written
+here, yeah, question.
+
+350
+00:18:01,111 --> 00:18:03,867
+[faint speaking]
+
+351
+00:18:03,867 --> 00:18:05,305
+Oh, this is, so the question is,
+
+352
+00:18:05,305 --> 00:18:07,997
+any intuition for why
+this is a W transpose?
+
+353
+00:18:07,997 --> 00:18:10,476
+And this was just, not really,
+
+354
+00:18:10,476 --> 00:18:12,329
+this is just the notation
+that we have here
+
+355
+00:18:12,329 --> 00:18:15,978
+to make the math work
+out as a dot product.
+
+356
+00:18:15,978 --> 00:18:19,045
+So it just depends on whether,
+how you're representing W
+
+357
+00:18:19,045 --> 00:18:23,974
+and whether in this case
+if we look at the W matrix
+
+358
+00:18:23,974 --> 00:18:26,781
+this happens to be each column
+and so we're just taking
+
+359
+00:18:26,781 --> 00:18:29,593
+the transpose to get a row out of it.
+
+360
+00:18:29,593 --> 00:18:31,989
+But there's no intuition here,
+
+361
+00:18:31,989 --> 00:18:34,098
+we're just taking the filters of W
+
+362
+00:18:34,098 --> 00:18:37,679
+and we're stretching it
+out into a one D vector,
+
+363
+00:18:37,679 --> 00:18:39,067
+and in order for it to be a dot product
+
+364
+00:18:39,067 --> 00:18:42,862
+it has to be like a one
+by, one by N vector.
+
+365
+00:18:42,862 --> 00:18:45,612
+[faint speaking]
+
+366
+00:18:48,263 --> 00:18:49,829
+Okay, so the question is,
+
+367
+00:18:49,829 --> 00:18:53,996
+is W here not five by five
+by three, it's one by 75.
+
+368
+00:18:55,180 --> 00:18:57,307
+So that's the case, right, if we're going
+
+369
+00:18:57,307 --> 00:18:59,882
+to do this dot product
+of W transpose times X,
+
+370
+00:18:59,882 --> 00:19:01,120
+we have to stretch it out first
+
+371
+00:19:01,120 --> 00:19:02,550
+before we do the dot product.
+
+372
+00:19:02,550 --> 00:19:05,312
+So we take the five by five by three,
+
+373
+00:19:05,312 --> 00:19:06,462
+and we just take all these values
+
+374
+00:19:06,462 --> 00:19:09,629
+and stretch it out into a long vector.
+
+375
+00:19:10,913 --> 00:19:14,992
+And so again, similar
+to the other question,
+
+376
+00:19:14,992 --> 00:19:16,706
+the actual operation that we're doing here
+
+377
+00:19:16,706 --> 00:19:18,691
+is plopping our filter on top of
+
+378
+00:19:18,691 --> 00:19:20,568
+a spatial location in the image
+
+379
+00:19:20,568 --> 00:19:23,375
+and multiplying all of the
+corresponding values together,
+
+380
+00:19:23,375 --> 00:19:25,906
+but in order just to make it
+kind of an easy expression
+
+381
+00:19:25,906 --> 00:19:27,527
+similar to what we've seen before
+
+382
+00:19:27,527 --> 00:19:29,702
+we can also just stretch
+each of these out,
+
+383
+00:19:29,702 --> 00:19:32,707
+make sure that dimensions
+are transposed correctly
+
+384
+00:19:32,707 --> 00:19:35,061
+so that it works out as a dot product.
+
+385
+00:19:35,061 --> 00:19:36,311
+Yeah, question.
+
+386
+00:19:37,232 --> 00:19:40,740
+[faint speaking]
+
+387
+00:19:40,740 --> 00:19:41,698
+Okay, the question is,
+
+388
+00:19:41,698 --> 00:19:43,797
+how do we slide the filter over the image.
+
+389
+00:19:43,797 --> 00:19:46,760
+We'll go into that next, yes.
+
+390
+00:19:46,760 --> 00:19:49,510
+[faint speaking]
+
+391
+00:19:52,071 --> 00:19:55,068
+Okay, so the question is,
+should we rotate the kernel
+
+392
+00:19:55,068 --> 00:19:58,111
+by 180 degrees to better
+match the convolution,
+
+393
+00:19:58,111 --> 00:20:00,178
+the definition of a convolution.
+
+394
+00:20:00,178 --> 00:20:03,172
+And so the answer is that
+we'll also show the equation
+
+395
+00:20:03,172 --> 00:20:05,870
+for this later, but
+we're using convolution
+
+396
+00:20:05,870 --> 00:20:09,451
+as kind of a looser definition
+of what's happening.
+
+397
+00:20:09,451 --> 00:20:11,171
+So for people from signal processing,
+
+398
+00:20:11,171 --> 00:20:13,101
+what we are actually technically doing,
+
+399
+00:20:13,101 --> 00:20:14,925
+if you want to call this a convolution,
+
+400
+00:20:14,925 --> 00:20:18,738
+is we're convolving with the
+flipped version of the filter.
+
+401
+00:20:18,738 --> 00:20:21,947
+But for the most part, we
+just don't worry about this
+
+402
+00:20:21,947 --> 00:20:24,689
+and we just, yeah, do this operation
+
+403
+00:20:24,689 --> 00:20:27,983
+and it's like a convolution in spirit.
+
+404
+00:20:27,983 --> 00:20:28,900
+Okay, so...
+
+405
+00:20:31,890 --> 00:20:35,077
+Okay, so we had a question
+earlier, how do we, you know,
+
+406
+00:20:35,077 --> 00:20:37,246
+slide this over all the spatial locations.
+
+407
+00:20:37,246 --> 00:20:38,526
+Right, so what we're going to do is
+
+408
+00:20:38,526 --> 00:20:41,826
+we're going to take this
+filter, we're going to start
+
+409
+00:20:41,826 --> 00:20:45,237
+at the upper left-hand
+corner and basically center
+
+410
+00:20:45,237 --> 00:20:49,975
+our filter on top of every
+pixel in this input volume.
+
+411
+00:20:49,975 --> 00:20:53,654
+And at every position, we're
+going to do this dot product
+
+412
+00:20:53,654 --> 00:20:55,949
+and this will produce one value
+
+413
+00:20:55,949 --> 00:20:57,511
+in our output activation map.
+
+414
+00:20:57,511 --> 00:21:00,927
+And so then we're going
+to just slide this around.
+
+415
+00:21:00,927 --> 00:21:02,844
+The simplest version
+is just at every pixel
+
+416
+00:21:02,844 --> 00:21:05,359
+we're going to do this
+operation and fill in
+
+417
+00:21:05,359 --> 00:21:09,442
+the corresponding point
+in our output activation.
+
+418
+00:21:10,352 --> 00:21:14,166
+You can see here that the
+dimensions are not exactly
+
+419
+00:21:14,166 --> 00:21:15,532
+what would happen, right,
+if you're going to do this.
+
+420
+00:21:15,532 --> 00:21:17,748
+I had 32 by 32 in the input
+
+421
+00:21:17,748 --> 00:21:20,126
+and I'm having 28 by 28 in the output,
+
+422
+00:21:20,126 --> 00:21:22,920
+and so we'll go into
+examples later of the math
+
+423
+00:21:22,920 --> 00:21:26,364
+of exactly how this is going
+to work out dimension-wise,
+
+424
+00:21:26,364 --> 00:21:29,767
+but basically you have a choice
+
+425
+00:21:29,767 --> 00:21:31,393
+of how you're going to slide this,
+
+426
+00:21:31,393 --> 00:21:35,129
+whether you go at every
+pixel or whether you slide,
+
+427
+00:21:35,129 --> 00:21:39,437
+let's say, you know, two
+input values over at a time,
+
+428
+00:21:39,437 --> 00:21:41,326
+two pixels over at a time,
+
+429
+00:21:41,326 --> 00:21:42,958
+and so you can get different size outputs
+
+430
+00:21:42,958 --> 00:21:44,823
+depending on how you choose to slide.
+
+431
+00:21:44,823 --> 00:21:48,990
+But you're basically doing this
+operation in a grid fashion.
+
+432
+00:21:50,180 --> 00:21:52,623
+Okay, so what we just saw earlier,
+
+433
+00:21:52,623 --> 00:21:55,792
+this is taking one filter, sliding it over
+
+434
+00:21:55,792 --> 00:21:58,141
+all of the spatial locations in the image
+
+435
+00:21:58,141 --> 00:22:00,620
+and then we're going to get
+this activation map out, right,
+
+436
+00:22:00,620 --> 00:22:04,731
+which is the value of that
+filter at every spatial location.
+
+437
+00:22:04,731 --> 00:22:07,669
+And so when we're dealing
+with a convolutional layer,
+
+438
+00:22:07,669 --> 00:22:09,778
+we want to work with
+multiple filters, right,
+
+439
+00:22:09,778 --> 00:22:12,858
+because each filter is kind
+of looking for a specific
+
+440
+00:22:12,858 --> 00:22:16,250
+type of template or concept
+in the input volume.
+
+441
+00:22:16,250 --> 00:22:20,479
+And so we're going to have
+a set of multiple filters,
+
+442
+00:22:20,479 --> 00:22:22,623
+and so here I'm going
+to take a second filter,
+
+443
+00:22:22,623 --> 00:22:26,359
+this green filter, which is
+again five by five by three,
+
+444
+00:22:26,359 --> 00:22:30,059
+I'm going to slide this over
+all of the spatial locations
+
+445
+00:22:30,059 --> 00:22:33,258
+in my input volume, and
+then I'm going to get out
+
+446
+00:22:33,258 --> 00:22:37,425
+this second green activation
+map also of the same size.
+
+447
+00:22:40,081 --> 00:22:41,628
+And we can do this for as many filters
+
+448
+00:22:41,628 --> 00:22:43,553
+as we want to have in this layer.
+
+449
+00:22:43,553 --> 00:22:45,817
+So for example, if we have six filters,
+
+450
+00:22:45,817 --> 00:22:47,871
+six of these five by five filters,
+
+451
+00:22:47,871 --> 00:22:51,698
+then we're going to get in
+total six activation maps out.
+
+452
+00:22:51,698 --> 00:22:54,618
+All of, so we're going
+to get this output volume
+
+453
+00:22:54,618 --> 00:22:58,368
+that's going to be
+basically six by 28 by 28.
+
+454
+00:23:01,607 --> 00:23:03,609
+Right, and so a preview
+of how we're going to use
+
+455
+00:23:03,609 --> 00:23:06,689
+these convolutional layers
+in our convolutional network
+
+456
+00:23:06,689 --> 00:23:08,644
+is that our ConvNet is
+basically going to be
+
+457
+00:23:08,644 --> 00:23:11,152
+a sequence of these convolutional layers
+
+458
+00:23:11,152 --> 00:23:13,769
+stacked on top of each other,
+same way as what we had
+
+459
+00:23:13,769 --> 00:23:16,676
+with the simple linear layers
+in their neural network.
+
+460
+00:23:16,676 --> 00:23:18,403
+And then we're going to intersperse these
+
+461
+00:23:18,403 --> 00:23:19,474
+with activation functions,
+
+462
+00:23:19,474 --> 00:23:23,057
+so for example, a ReLU
+activation function.
+
+463
+00:23:24,503 --> 00:23:28,670
+Right, and so you're going to
+get something like Conv, ReLU,
+
+464
+00:23:29,535 --> 00:23:31,257
+and usually also some pooling layers,
+
+465
+00:23:31,257 --> 00:23:33,975
+and then you're just going
+to get a sequence of these
+
+466
+00:23:33,975 --> 00:23:36,965
+each creating an output
+that's now going to be
+
+467
+00:23:36,965 --> 00:23:40,465
+the input to the next convolutional layer.
+
+468
+00:23:43,638 --> 00:23:46,552
+Okay, and so each of these
+layers, as I said earlier,
+
+469
+00:23:46,552 --> 00:23:49,305
+has multiple filters, right, many filters.
+
+470
+00:23:49,305 --> 00:23:52,957
+And each of the filter is
+producing an activation map.
+
+471
+00:23:52,957 --> 00:23:55,633
+And so when you look at
+multiple of these layers
+
+472
+00:23:55,633 --> 00:23:58,141
+stacked together in a ConvNet,
+what ends up happening
+
+473
+00:23:58,141 --> 00:24:01,175
+is you end up learning this
+hierarching of filters,
+
+474
+00:24:01,175 --> 00:24:04,421
+where the filters at the
+earlier layers usually represent
+
+475
+00:24:04,421 --> 00:24:06,318
+low-level features that
+you're looking for.
+
+476
+00:24:06,318 --> 00:24:09,257
+So things kind of like edges, right.
+
+477
+00:24:09,257 --> 00:24:10,272
+And then at the mid-level,
+
+478
+00:24:10,272 --> 00:24:14,128
+you're going to get more
+complex kinds of features,
+
+479
+00:24:14,128 --> 00:24:16,478
+so maybe it's looking more for things
+
+480
+00:24:16,478 --> 00:24:19,113
+like corners and blobs and so on.
+
+481
+00:24:19,113 --> 00:24:20,602
+And then at higher-level features,
+
+482
+00:24:20,602 --> 00:24:22,823
+you're going to get
+things that are starting
+
+483
+00:24:22,823 --> 00:24:25,852
+to more resemble concepts than blobs.
+
+484
+00:24:25,852 --> 00:24:27,905
+And we'll go into more
+detail later in the class
+
+485
+00:24:27,905 --> 00:24:30,522
+in how you can actually
+visualize all these features
+
+486
+00:24:30,522 --> 00:24:33,165
+and try and interpret what your network,
+
+487
+00:24:33,165 --> 00:24:35,561
+what kinds of features
+your network is learning.
+
+488
+00:24:35,561 --> 00:24:38,974
+But the important thing for
+now is just to understand
+
+489
+00:24:38,974 --> 00:24:40,378
+that what these features end up being
+
+490
+00:24:40,378 --> 00:24:42,800
+when you have a whole stack of these,
+
+491
+00:24:42,800 --> 00:24:46,967
+is these types of simple
+to more complex features.
+
+492
+00:24:48,305 --> 00:24:49,138
+[faint speaking]
+
+493
+00:24:49,138 --> 00:24:49,971
+Yeah.
+
+494
+00:24:50,984 --> 00:24:51,817
+Oh, okay.
+
+495
+00:24:59,067 --> 00:25:01,124
+Oh, okay, so the question
+is, what's the intuition
+
+496
+00:25:01,124 --> 00:25:03,113
+for increasing the depth each time.
+
+497
+00:25:03,113 --> 00:25:06,384
+So here I had three filters
+in the original layer
+
+498
+00:25:06,384 --> 00:25:08,814
+and then six filters in the next layer.
+
+499
+00:25:08,814 --> 00:25:12,651
+Right, and so this is
+mostly a design choice.
+
+500
+00:25:12,651 --> 00:25:14,274
+You know, people in practice have found
+
+501
+00:25:14,274 --> 00:25:17,255
+certain types of these
+configurations to work better.
+
+502
+00:25:17,255 --> 00:25:19,894
+And so later on we'll go into
+case studies of different
+
+503
+00:25:19,894 --> 00:25:23,185
+kinds of convolutional
+neural network architectures
+
+504
+00:25:23,185 --> 00:25:25,658
+and design choices for these
+
+505
+00:25:25,658 --> 00:25:28,344
+and why certain ones
+work better than others.
+
+506
+00:25:28,344 --> 00:25:30,516
+But yeah, basically the choice of,
+
+507
+00:25:30,516 --> 00:25:31,876
+you're going to have many design choices
+
+508
+00:25:31,876 --> 00:25:33,238
+in a convolutional neural network,
+
+509
+00:25:33,238 --> 00:25:34,948
+the size of your filter, the stride,
+
+510
+00:25:34,948 --> 00:25:36,369
+how many filters you have,
+
+511
+00:25:36,369 --> 00:25:39,611
+and so we'll talk about
+this all more later.
+
+512
+00:25:39,611 --> 00:25:41,246
+Question.
+
+513
+00:25:41,246 --> 00:25:43,996
+[faint speaking]
+
+514
+00:25:50,300 --> 00:25:53,691
+Yeah, so the question is,
+as we're sliding this filter
+
+515
+00:25:53,691 --> 00:25:56,364
+over the image spatially it
+looks like we're sampling
+
+516
+00:25:56,364 --> 00:26:00,177
+the edges and corners less
+than the other locations.
+
+517
+00:26:00,177 --> 00:26:01,676
+Yeah, that's a really good point,
+
+518
+00:26:01,676 --> 00:26:04,483
+and we'll talk I think in a few slides
+
+519
+00:26:04,483 --> 00:26:07,900
+about how we try and compensate for that.
+
+520
+00:26:12,009 --> 00:26:15,592
+Okay, so each of these
+convolutional layers
+
+521
+00:26:16,870 --> 00:26:20,797
+that we have stacked together,
+we saw how we're starting
+
+522
+00:26:20,797 --> 00:26:23,877
+with more simpler features
+and then aggregating these
+
+523
+00:26:23,877 --> 00:26:26,228
+into more complex features later on.
+
+524
+00:26:26,228 --> 00:26:28,343
+And so in practice this is compatible
+
+525
+00:26:28,343 --> 00:26:32,549
+with what Hubel and Wiesel
+noticed in their experiments,
+
+526
+00:26:32,549 --> 00:26:35,895
+right, that we had these simple cells
+
+527
+00:26:35,895 --> 00:26:37,406
+at the earlier stages of processing,
+
+528
+00:26:37,406 --> 00:26:39,532
+followed by more complex cells later on.
+
+529
+00:26:39,532 --> 00:26:42,865
+And so even though we didn't explicitly
+
+530
+00:26:44,067 --> 00:26:46,455
+force our ConvNet to learn
+these kinds of features,
+
+531
+00:26:46,455 --> 00:26:48,295
+in practice when you give it this type of
+
+532
+00:26:48,295 --> 00:26:51,623
+hierarchical structure and
+train it using backpropagation,
+
+533
+00:26:51,623 --> 00:26:55,041
+these are the kinds of filters
+that end up being learned.
+
+534
+00:26:55,041 --> 00:26:57,791
+[faint speaking]
+
+535
+00:27:05,555 --> 00:27:07,116
+Okay, so yeah, so the question is,
+
+536
+00:27:07,116 --> 00:27:10,979
+what are we seeing in
+these visualizations.
+
+537
+00:27:10,979 --> 00:27:13,321
+And so, alright so, in
+these visualizations, like,
+
+538
+00:27:13,321 --> 00:27:17,134
+if we look at this Conv1, the
+first convolutional layer,
+
+539
+00:27:17,134 --> 00:27:20,975
+each of these grid, each part
+of this grid is a one neuron.
+
+540
+00:27:20,975 --> 00:27:23,118
+And so what we've visualized here
+
+541
+00:27:23,118 --> 00:27:26,701
+is what the input looks
+like that maximizes
+
+542
+00:27:27,893 --> 00:27:29,956
+the activation of that particular neuron.
+
+543
+00:27:29,956 --> 00:27:31,826
+So what sort of image you would get
+
+544
+00:27:31,826 --> 00:27:34,070
+that would give you the largest value,
+
+545
+00:27:34,070 --> 00:27:36,594
+make that neuron fire and
+have the largest value.
+
+546
+00:27:36,594 --> 00:27:38,811
+And so the way we do this is basically
+
+547
+00:27:38,811 --> 00:27:42,978
+by doing backpropagation from
+a particular neuron activation
+
+548
+00:27:44,415 --> 00:27:46,570
+and seeing what in the input will trigger,
+
+549
+00:27:46,570 --> 00:27:48,848
+will give you the highest
+values of this neuron.
+
+550
+00:27:48,848 --> 00:27:50,730
+And this is something
+that we'll talk about
+
+551
+00:27:50,730 --> 00:27:53,276
+in much more depth in a later lecture
+
+552
+00:27:53,276 --> 00:27:56,280
+about how we create all
+of these visualizations.
+
+553
+00:27:56,280 --> 00:27:59,124
+But basically each element of these grids
+
+554
+00:27:59,124 --> 00:28:03,342
+is showing what in the
+input would look like
+
+555
+00:28:03,342 --> 00:28:06,775
+that basically maximizes the
+activation of the neuron.
+
+556
+00:28:06,775 --> 00:28:10,608
+So in a sense, what is
+the neuron looking for?
+
+557
+00:28:13,537 --> 00:28:18,490
+Okay, so here is an example
+of some of the activation maps
+
+558
+00:28:18,490 --> 00:28:19,835
+produced by each filter, right.
+
+559
+00:28:19,835 --> 00:28:22,200
+So we can visualize up here on the top
+
+560
+00:28:22,200 --> 00:28:26,025
+we have this whole row of
+example five by five filters,
+
+561
+00:28:26,025 --> 00:28:30,407
+and so this is basically a real
+case from a trained ConvNet
+
+562
+00:28:30,407 --> 00:28:34,490
+where each of these is
+what a five by five filter
+
+563
+00:28:35,593 --> 00:28:38,511
+looks like, and then as we
+convolve this over an image,
+
+564
+00:28:38,511 --> 00:28:41,197
+so in this case this I think
+it's like a corner of a car,
+
+565
+00:28:41,197 --> 00:28:44,346
+the car light, what the
+activation looks like.
+
+566
+00:28:44,346 --> 00:28:46,799
+Right, and so here for example,
+
+567
+00:28:46,799 --> 00:28:49,449
+if we look at this first
+one, this red filter,
+
+568
+00:28:49,449 --> 00:28:51,330
+filter like with a red box around it,
+
+569
+00:28:51,330 --> 00:28:53,412
+we'll see that it's looking for,
+
+570
+00:28:53,412 --> 00:28:56,432
+the template looks like an
+edge, right, an oriented edge.
+
+571
+00:28:56,432 --> 00:28:58,050
+And so if you slide it over the image,
+
+572
+00:28:58,050 --> 00:29:01,812
+it'll have a high value,
+a more white value
+
+573
+00:29:01,812 --> 00:29:06,601
+where there are edges in
+this type of orientation.
+
+574
+00:29:06,601 --> 00:29:10,563
+And so each of these activation
+maps is kind of the output
+
+575
+00:29:10,563 --> 00:29:12,358
+of sliding one of these filters over
+
+576
+00:29:12,358 --> 00:29:16,444
+and where these filters
+are causing, you know,
+
+577
+00:29:16,444 --> 00:29:20,747
+where this sort of template
+is more present in the image.
+
+578
+00:29:20,747 --> 00:29:24,869
+And so the reason we call
+these convolutional is because
+
+579
+00:29:24,869 --> 00:29:27,221
+this is related to the
+convolution of two signals,
+
+580
+00:29:27,221 --> 00:29:29,153
+and so someone pointed out earlier
+
+581
+00:29:29,153 --> 00:29:32,982
+that this is basically this
+convolution equation over here,
+
+582
+00:29:32,982 --> 00:29:35,333
+for people who have
+seen convolutions before
+
+583
+00:29:35,333 --> 00:29:37,340
+in signal processing, and in practice
+
+584
+00:29:37,340 --> 00:29:38,927
+it's actually more like a correlation
+
+585
+00:29:38,927 --> 00:29:41,583
+where we're convolving
+with the flipped version
+
+586
+00:29:41,583 --> 00:29:46,154
+of the filter, but this
+is kind of a subtlety,
+
+587
+00:29:46,154 --> 00:29:50,149
+it's not really important for
+the purposes of this class.
+
+588
+00:29:50,149 --> 00:29:52,292
+But basically if you're
+writing out what you're doing,
+
+589
+00:29:52,292 --> 00:29:55,450
+it has an expression that
+looks something like this,
+
+590
+00:29:55,450 --> 00:29:58,385
+which is the standard
+definition of a convolution.
+
+591
+00:29:58,385 --> 00:30:00,402
+But this is basically
+just taking a filter,
+
+592
+00:30:00,402 --> 00:30:02,432
+sliding it spatially over the image
+
+593
+00:30:02,432 --> 00:30:06,432
+and computing the dot
+product at every location.
+
+594
+00:30:09,088 --> 00:30:11,977
+Okay, so you know, as I
+had mentioned earlier,
+
+595
+00:30:11,977 --> 00:30:14,208
+like what our total
+convolutional neural network
+
+596
+00:30:14,208 --> 00:30:17,278
+is going to look like is we're
+going to have an input image,
+
+597
+00:30:17,278 --> 00:30:19,693
+and then we're going to pass it through
+
+598
+00:30:19,693 --> 00:30:21,633
+this sequence of layers, right,
+
+599
+00:30:21,633 --> 00:30:23,915
+where we're going to have a
+convolutional layer first.
+
+600
+00:30:23,915 --> 00:30:28,236
+We usually have our
+non-linear layer after that.
+
+601
+00:30:28,236 --> 00:30:30,579
+So ReLU is something
+that's very commonly used
+
+602
+00:30:30,579 --> 00:30:33,608
+that we're going to talk about more later.
+
+603
+00:30:33,608 --> 00:30:36,791
+And then we have these Conv,
+ReLU, Conv, ReLU layers,
+
+604
+00:30:36,791 --> 00:30:39,775
+and then once in a while
+we'll use a pooling layer
+
+605
+00:30:39,775 --> 00:30:41,244
+that we'll talk about later as well
+
+606
+00:30:41,244 --> 00:30:45,411
+that basically downsamples the
+size of our activation maps.
+
+607
+00:30:47,300 --> 00:30:50,785
+And then finally at the end
+of this we'll take our last
+
+608
+00:30:50,785 --> 00:30:54,403
+convolutional layer output
+and then we're going to use
+
+609
+00:30:54,403 --> 00:30:56,872
+a fully connected layer
+that we've seen before,
+
+610
+00:30:56,872 --> 00:31:00,316
+connected to all of these
+convolutional outputs,
+
+611
+00:31:00,316 --> 00:31:03,011
+and use that to get a final score function
+
+612
+00:31:03,011 --> 00:31:07,178
+basically like what we've
+already been working with.
+
+613
+00:31:08,445 --> 00:31:10,931
+Okay, so now let's work out some examples
+
+614
+00:31:10,931 --> 00:31:14,181
+of how the spatial dimensions work out.
+
+615
+00:31:18,363 --> 00:31:23,087
+So let's take our 32 by 32
+by three image as before,
+
+616
+00:31:23,087 --> 00:31:25,624
+right, and we have our five
+by five by three filter
+
+617
+00:31:25,624 --> 00:31:28,025
+that we're going to slide over this image.
+
+618
+00:31:28,025 --> 00:31:29,816
+And we're going to see how
+we're going to use that
+
+619
+00:31:29,816 --> 00:31:34,337
+to produce exactly this
+28 by 28 activation map.
+
+620
+00:31:34,337 --> 00:31:37,644
+So let's assume that we actually
+have a seven by seven input
+
+621
+00:31:37,644 --> 00:31:39,104
+just to be simpler, and let's assume
+
+622
+00:31:39,104 --> 00:31:41,505
+we have a three by three filter.
+
+623
+00:31:41,505 --> 00:31:42,522
+So what we're going to do is
+
+624
+00:31:42,522 --> 00:31:44,969
+we're going to take this filter,
+
+625
+00:31:44,969 --> 00:31:47,418
+plop it down in our
+upper left-hand corner,
+
+626
+00:31:47,418 --> 00:31:50,253
+right, and we're going to
+multiply, do the dot product,
+
+627
+00:31:50,253 --> 00:31:53,169
+multiply all these values
+together to get our first value,
+
+628
+00:31:53,169 --> 00:31:54,918
+and this is going to go into
+the upper left-hand value
+
+629
+00:31:54,918 --> 00:31:56,764
+of our activation map.
+
+630
+00:31:56,764 --> 00:31:58,217
+Right, and then what
+we're going to do next
+
+631
+00:31:58,217 --> 00:32:00,475
+is we're just going to take this filter,
+
+632
+00:32:00,475 --> 00:32:02,389
+slide it one position to the right,
+
+633
+00:32:02,389 --> 00:32:05,535
+and then we're going to get
+another value out from here.
+
+634
+00:32:05,535 --> 00:32:09,895
+And so we can continue with
+this to have another value,
+
+635
+00:32:09,895 --> 00:32:12,797
+another, and in the end
+what we're going to get
+
+636
+00:32:12,797 --> 00:32:14,528
+is a five by five output, right,
+
+637
+00:32:14,528 --> 00:32:17,776
+because what fit was
+basically sliding this filter
+
+638
+00:32:17,776 --> 00:32:22,214
+a total of five spatial
+locations horizontally
+
+639
+00:32:22,214 --> 00:32:25,381
+and five spatial locations vertically.
+
+640
+00:32:27,834 --> 00:32:29,414
+Okay, so as I said before
+
+641
+00:32:29,414 --> 00:32:31,906
+there's different kinds of
+design choices that we can make.
+
+642
+00:32:31,906 --> 00:32:34,710
+Right, so previously I
+slid it at every single
+
+643
+00:32:34,710 --> 00:32:37,828
+spatial location and the
+interval at which I slide
+
+644
+00:32:37,828 --> 00:32:40,326
+I'm going to call the stride.
+
+645
+00:32:40,326 --> 00:32:43,093
+And so previously we
+used the stride of one.
+
+646
+00:32:43,093 --> 00:32:44,567
+And so now let's see what happens
+
+647
+00:32:44,567 --> 00:32:46,700
+if we have a stride of two.
+
+648
+00:32:46,700 --> 00:32:48,625
+Right, so now we're going
+to take our first location
+
+649
+00:32:48,625 --> 00:32:51,898
+the same as before, and
+then we're going to skip
+
+650
+00:32:51,898 --> 00:32:55,527
+this time two pixels over
+and we're going to get
+
+651
+00:32:55,527 --> 00:32:58,944
+our next value centered at this location.
+
+652
+00:33:00,773 --> 00:33:02,938
+Right, and so now if
+we use a stride of two,
+
+653
+00:33:02,938 --> 00:33:07,340
+we have in total three
+of these that can fit,
+
+654
+00:33:07,340 --> 00:33:11,257
+and so we're going to get
+a three by three output.
+
+655
+00:33:13,035 --> 00:33:15,955
+Okay, and so what happens when
+we have a stride of three,
+
+656
+00:33:15,955 --> 00:33:18,653
+what's the output size of this?
+
+657
+00:33:18,653 --> 00:33:21,924
+And so in this case, right, we have three,
+
+658
+00:33:21,924 --> 00:33:25,014
+we slide it over by three again,
+
+659
+00:33:25,014 --> 00:33:27,905
+and the problem is that here
+it actually doesn't fit.
+
+660
+00:33:27,905 --> 00:33:29,827
+Right, so we slide it over by three
+
+661
+00:33:29,827 --> 00:33:32,363
+and now it doesn't fit
+nicely within the image.
+
+662
+00:33:32,363 --> 00:33:35,721
+And so what we in practice we
+just, it just doesn't work.
+
+663
+00:33:35,721 --> 00:33:37,736
+We don't do convolutions like this
+
+664
+00:33:37,736 --> 00:33:41,903
+because it's going to lead to
+asymmetric outputs happening.
+
+665
+00:33:46,095 --> 00:33:49,561
+Right, and so just kind
+of looking at the way
+
+666
+00:33:49,561 --> 00:33:52,464
+that we computed how many, what
+the output size is going to be,
+
+667
+00:33:52,464 --> 00:33:54,690
+this actually can work into a nice formula
+
+668
+00:33:54,690 --> 00:33:57,687
+where we take our
+dimension of our input N,
+
+669
+00:33:57,687 --> 00:34:01,430
+we have our filter size
+F, we have our stride
+
+670
+00:34:01,430 --> 00:34:05,597
+at which we're sliding along,
+and our final output size,
+
+671
+00:34:06,992 --> 00:34:09,000
+the spatial dimension of each output size
+
+672
+00:34:09,000 --> 00:34:12,850
+is going to be N minus F
+divided by the stride plus one,
+
+673
+00:34:12,850 --> 00:34:16,547
+right, and you can kind of
+see this as a, you know,
+
+674
+00:34:16,547 --> 00:34:18,619
+if I'm going to take my
+filter, let's say I fill it in
+
+675
+00:34:18,620 --> 00:34:21,373
+at the very last possible
+position that it can be in
+
+676
+00:34:21,373 --> 00:34:23,159
+and then take all the pixels before that,
+
+677
+00:34:23,159 --> 00:34:27,326
+how many instances of moving
+by this stride can I fit in.
+
+678
+00:34:29,257 --> 00:34:32,546
+Right, and so that's how this
+equation kind of works out.
+
+679
+00:34:32,547 --> 00:34:35,422
+And so as we saw before,
+right, if we have N equal seven
+
+680
+00:34:35,422 --> 00:34:38,637
+and F equals three, if
+we want a stride of one
+
+681
+00:34:38,637 --> 00:34:40,795
+we plug it into this
+formula, we get five by five
+
+682
+00:34:40,795 --> 00:34:43,498
+as we had before, and the
+same thing we had for two.
+
+683
+00:34:43,498 --> 00:34:47,665
+And with a stride of three,
+this doesn't really work out.
+
+684
+00:34:50,288 --> 00:34:52,870
+And so in practice it's actually common
+
+685
+00:34:52,870 --> 00:34:56,203
+to zero pad the borders in order to make
+
+686
+00:34:57,134 --> 00:34:59,552
+the size work out to what we want it to.
+
+687
+00:34:59,552 --> 00:35:01,504
+And so this is kind of
+related to a question earlier,
+
+688
+00:35:01,504 --> 00:35:04,140
+which is what do we do,
+right, at the corners.
+
+689
+00:35:04,140 --> 00:35:06,145
+And so what in practice happens is
+
+690
+00:35:06,145 --> 00:35:09,222
+we're going to actually pad
+our input image with zeros
+
+691
+00:35:09,222 --> 00:35:12,449
+and so now you're going to
+be able to place a filter
+
+692
+00:35:12,449 --> 00:35:16,303
+centered at the upper
+right-hand pixel location
+
+693
+00:35:16,303 --> 00:35:19,134
+of your actual input image.
+
+694
+00:35:19,134 --> 00:35:22,784
+Okay, so here's a question,
+so who can tell me
+
+695
+00:35:22,784 --> 00:35:25,988
+if I have my same input, seven by seven,
+
+696
+00:35:25,988 --> 00:35:27,635
+three by three filter, stride one,
+
+697
+00:35:27,635 --> 00:35:29,942
+but now I pad with a one pixel border,
+
+698
+00:35:29,942 --> 00:35:33,654
+what's the size of my output going to be?
+
+699
+00:35:33,654 --> 00:35:36,285
+[faint speaking]
+
+700
+00:35:36,285 --> 00:35:39,535
+So, I heard some sixes, heard some sev,
+
+701
+00:35:41,211 --> 00:35:44,847
+so remember we have this
+formula that we had before.
+
+702
+00:35:44,847 --> 00:35:49,342
+So if we plug in N is equal
+to seven, F is equal to three,
+
+703
+00:35:49,342 --> 00:35:52,594
+right, and then our
+stride is equal to one.
+
+704
+00:35:52,594 --> 00:35:57,264
+So what we actually get, so
+actually this is giving us
+
+705
+00:35:57,264 --> 00:36:01,522
+seven, four, so seven
+minus three is four,
+
+706
+00:36:01,522 --> 00:36:03,256
+divided by one plus one is five.
+
+707
+00:36:03,256 --> 00:36:04,998
+And so this is what we had before.
+
+708
+00:36:04,998 --> 00:36:06,707
+So we actually need to adjust
+this formula a little bit,
+
+709
+00:36:06,707 --> 00:36:09,139
+right, so this was actually,
+this formula is the case
+
+710
+00:36:09,139 --> 00:36:12,161
+where we don't have zero padded pixels.
+
+711
+00:36:12,161 --> 00:36:16,328
+But if we do pad it, then if
+you now take your new output
+
+712
+00:36:17,347 --> 00:36:19,050
+and you slide it along,
+
+713
+00:36:19,050 --> 00:36:22,128
+you'll see that actually
+seven of the filters fit,
+
+714
+00:36:22,128 --> 00:36:24,173
+so you get a seven by seven output.
+
+715
+00:36:24,173 --> 00:36:26,467
+And plugging in our
+original formula, right,
+
+716
+00:36:26,467 --> 00:36:30,178
+so our N now is not seven, it's nine,
+
+717
+00:36:30,178 --> 00:36:33,385
+so if we go back here
+we have N equals nine
+
+718
+00:36:33,385 --> 00:36:37,001
+minus a filter size of
+three, which gives six.
+
+719
+00:36:37,001 --> 00:36:39,298
+Right, divided by our
+stride, which is one,
+
+720
+00:36:39,298 --> 00:36:42,253
+and so still six, and then
+plus one we get seven.
+
+721
+00:36:42,253 --> 00:36:43,807
+Right, and so once you've padded it
+
+722
+00:36:43,807 --> 00:36:47,974
+you want to incorporate this
+padding into your formula.
+
+723
+00:36:49,739 --> 00:36:51,646
+Yes, question.
+
+724
+00:36:51,646 --> 00:36:54,396
+[faint speaking]
+
+725
+00:37:00,717 --> 00:37:03,589
+Seven, okay, so the question is,
+
+726
+00:37:03,589 --> 00:37:06,114
+what's the actual output of the size,
+
+727
+00:37:06,114 --> 00:37:08,962
+is it seven by seven or
+seven by seven by three?
+
+728
+00:37:08,962 --> 00:37:11,935
+The output is going to be seven by seven
+
+729
+00:37:11,935 --> 00:37:14,495
+by the number of filters that you have.
+
+730
+00:37:14,495 --> 00:37:18,162
+So remember each filter is
+going to do a dot product
+
+731
+00:37:18,162 --> 00:37:21,320
+through the entire depth
+of your input volume.
+
+732
+00:37:21,320 --> 00:37:23,801
+But then that's going to
+produce one number, right,
+
+733
+00:37:23,801 --> 00:37:27,968
+so each filter is, let's
+see if we can go back here.
+
+734
+00:37:29,540 --> 00:37:32,938
+Each filter is producing
+a one by seven by seven
+
+735
+00:37:32,938 --> 00:37:37,124
+in this case activation map
+output, and so the depth
+
+736
+00:37:37,124 --> 00:37:40,493
+is going to be the number
+of filters that we have.
+
+737
+00:37:40,493 --> 00:37:43,243
+[faint speaking]
+
+738
+00:37:50,161 --> 00:37:53,411
+Sorry, let me just, one second go back.
+
+739
+00:37:55,136 --> 00:37:57,350
+Okay, can you repeat your question again?
+
+740
+00:37:57,350 --> 00:38:00,267
+[muffled speaking]
+
+741
+00:38:12,936 --> 00:38:16,011
+Okay, so the question is, how
+does this connect to before
+
+742
+00:38:16,011 --> 00:38:19,735
+when we had a 32 by 32
+by three input, right.
+
+743
+00:38:19,735 --> 00:38:21,830
+So our input had depth
+and here in this example
+
+744
+00:38:21,830 --> 00:38:24,721
+I'm showing a 2D example with no depth.
+
+745
+00:38:24,721 --> 00:38:27,226
+And so yeah, I'm showing
+this for simplicity
+
+746
+00:38:27,226 --> 00:38:30,373
+but in practice you're going to take your,
+
+747
+00:38:30,373 --> 00:38:32,334
+you're going to multiply
+throughout the entire depth
+
+748
+00:38:32,334 --> 00:38:34,188
+as we had before, so you're going to,
+
+749
+00:38:34,188 --> 00:38:36,765
+your filter is going to be
+in this case a three be three
+
+750
+00:38:36,765 --> 00:38:39,850
+spatial filter by whatever
+input depth that you had.
+
+751
+00:38:39,850 --> 00:38:43,183
+So three by three by three in this case.
+
+752
+00:38:44,059 --> 00:38:46,854
+Yeah, everything else stays the same.
+
+753
+00:38:46,854 --> 00:38:48,390
+Yes, question.
+
+754
+00:38:48,390 --> 00:38:51,307
+[muffled speaking]
+
+755
+00:38:53,529 --> 00:38:55,731
+Yeah, so the question
+is, does the zero padding
+
+756
+00:38:55,731 --> 00:38:58,664
+add some sort of extraneous
+features at the corners?
+
+757
+00:38:58,664 --> 00:39:01,446
+And yeah, so I mean, we're
+doing our best to still,
+
+758
+00:39:01,446 --> 00:39:03,779
+get some value and do, like,
+
+759
+00:39:04,721 --> 00:39:06,289
+process that region of the image,
+
+760
+00:39:06,289 --> 00:39:10,343
+and so zero padding is
+kind of one way to do this,
+
+761
+00:39:10,343 --> 00:39:12,999
+where I guess we can, we are detecting
+
+762
+00:39:12,999 --> 00:39:16,097
+part of this template in this region.
+
+763
+00:39:16,097 --> 00:39:18,323
+There's also other ways
+to do this that, you know,
+
+764
+00:39:18,323 --> 00:39:20,729
+you can try and like,
+mirror the values here
+
+765
+00:39:20,729 --> 00:39:23,615
+or extend them, and so it
+doesn't have to be zero padding,
+
+766
+00:39:23,615 --> 00:39:26,530
+but in practice this is one
+thing that works reasonably.
+
+767
+00:39:26,530 --> 00:39:29,930
+And so, yeah, so there is a
+little bit of kind of artifacts
+
+768
+00:39:29,930 --> 00:39:31,503
+at the edge and we sort of just,
+
+769
+00:39:31,503 --> 00:39:33,834
+you do your best to deal with it.
+
+770
+00:39:33,834 --> 00:39:36,486
+And in practice this works reasonably.
+
+771
+00:39:36,486 --> 00:39:39,503
+I think there was another question.
+
+772
+00:39:39,503 --> 00:39:41,283
+Yeah, question.
+
+773
+00:39:41,283 --> 00:39:44,033
+[faint speaking]
+
+774
+00:39:48,015 --> 00:39:51,535
+So if we have non-square
+images, do we ever use a stride
+
+775
+00:39:51,535 --> 00:39:54,330
+that's different
+horizontally and vertically?
+
+776
+00:39:54,330 --> 00:39:57,039
+So, I mean, there's nothing
+stopping you from doing that,
+
+777
+00:39:57,039 --> 00:39:59,816
+you could, but in practice we just usually
+
+778
+00:39:59,816 --> 00:40:02,841
+take the same stride, we
+usually operate square regions
+
+779
+00:40:02,841 --> 00:40:04,909
+and we just, yeah we usually just
+
+780
+00:40:04,909 --> 00:40:08,238
+take the same stride everywhere
+and it's sort of like,
+
+781
+00:40:08,238 --> 00:40:10,218
+in a sense it's a little bit like,
+
+782
+00:40:10,218 --> 00:40:12,900
+it's a little bit like the
+resolution at which you're,
+
+783
+00:40:12,900 --> 00:40:14,699
+you know, looking at this image,
+
+784
+00:40:14,699 --> 00:40:18,100
+and so usually there's kind
+of, you might want to match
+
+785
+00:40:18,100 --> 00:40:20,693
+sort of your horizontal
+and vertical resolutions.
+
+786
+00:40:20,693 --> 00:40:22,886
+But, yeah, so in practice you could
+
+787
+00:40:22,886 --> 00:40:25,553
+but really people don't do that.
+
+788
+00:40:26,555 --> 00:40:28,373
+Okay, another question.
+
+789
+00:40:28,373 --> 00:40:31,453
+[faint speaking]
+
+790
+00:40:31,453 --> 00:40:33,710
+So the question is, why
+do we do zero padding?
+
+791
+00:40:33,710 --> 00:40:35,247
+So the way we do zero padding
+
+792
+00:40:35,247 --> 00:40:39,376
+is to maintain the same
+input size as we had before.
+
+793
+00:40:39,376 --> 00:40:41,297
+Right, so we started with seven by seven,
+
+794
+00:40:41,297 --> 00:40:44,182
+and if we looked at just
+starting your filter
+
+795
+00:40:44,182 --> 00:40:46,756
+from the upper left-hand
+corner, filling everything in,
+
+796
+00:40:46,756 --> 00:40:49,019
+right, then we get a smaller size output,
+
+797
+00:40:49,019 --> 00:40:53,186
+but we would like to maintain
+our full size output.
+
+798
+00:40:56,276 --> 00:40:57,109
+Okay, so,
+
+799
+00:40:59,251 --> 00:41:02,664
+yeah, so we saw how padding
+can basically help you
+
+800
+00:41:02,664 --> 00:41:05,527
+maintain the size of the
+output that you want,
+
+801
+00:41:05,527 --> 00:41:08,237
+as well as apply your filter at these,
+
+802
+00:41:08,237 --> 00:41:10,753
+like, corner regions and edge regions.
+
+803
+00:41:10,753 --> 00:41:13,142
+And so in general in terms of choosing,
+
+804
+00:41:13,142 --> 00:41:15,772
+you know, your stride, your
+filter, your filter size,
+
+805
+00:41:15,772 --> 00:41:18,998
+your stride size, zero
+padding, what's common to see
+
+806
+00:41:18,998 --> 00:41:22,405
+is filters of size three
+by three, five by five,
+
+807
+00:41:22,405 --> 00:41:25,427
+seven by seven, these are
+pretty common filter sizes.
+
+808
+00:41:25,427 --> 00:41:27,908
+And so each of these, for three by three
+
+809
+00:41:27,908 --> 00:41:30,232
+you will want to zero pad with one
+
+810
+00:41:30,232 --> 00:41:33,567
+in order to maintain
+the same spatial size.
+
+811
+00:41:33,567 --> 00:41:35,618
+If you're going to do five by five,
+
+812
+00:41:35,618 --> 00:41:37,470
+you can work out the math,
+but it's going to come out
+
+813
+00:41:37,470 --> 00:41:39,422
+to you want to zero pad by two.
+
+814
+00:41:39,422 --> 00:41:43,505
+And then for seven you
+want to zero pad by three.
+
+815
+00:41:44,722 --> 00:41:47,316
+Okay, and so again you
+know, the motivation
+
+816
+00:41:47,316 --> 00:41:50,167
+for doing this type of zero padding
+
+817
+00:41:50,167 --> 00:41:52,184
+and trying to maintain
+the input size, right,
+
+818
+00:41:52,184 --> 00:41:54,500
+so we kind of alluded to this before,
+
+819
+00:41:54,500 --> 00:41:58,667
+but if you have multiple of
+these layers stacked together...
+
+820
+00:42:03,354 --> 00:42:07,015
+So if you have multiple of
+these layers stacked together
+
+821
+00:42:07,015 --> 00:42:08,689
+you'll see that, you know,
+if we don't do this kind of
+
+822
+00:42:08,689 --> 00:42:10,566
+zero padding, or any kind of padding,
+
+823
+00:42:10,566 --> 00:42:12,848
+we're going to really
+quickly shrink the size
+
+824
+00:42:12,848 --> 00:42:14,602
+of the outputs that we have.
+
+825
+00:42:14,602 --> 00:42:16,616
+Right, and so this is not
+something that we want.
+
+826
+00:42:16,616 --> 00:42:19,302
+Like, you can imagine if you
+have a pretty deep network
+
+827
+00:42:19,302 --> 00:42:23,293
+then very quickly your, the
+size of your activation maps
+
+828
+00:42:23,293 --> 00:42:25,907
+is going to shrink to
+something very small.
+
+829
+00:42:25,907 --> 00:42:28,790
+And this is bad both because
+we're kind of losing out
+
+830
+00:42:28,790 --> 00:42:29,990
+on some of this information, right,
+
+831
+00:42:29,990 --> 00:42:34,272
+now you're using a much
+smaller number of values
+
+832
+00:42:34,272 --> 00:42:36,578
+in order to represent your original image,
+
+833
+00:42:36,578 --> 00:42:38,568
+so you don't want that.
+
+834
+00:42:38,568 --> 00:42:41,318
+And then at the same time also as
+
+835
+00:42:42,983 --> 00:42:46,249
+we talked about this earlier, your also kind of
+
+836
+00:42:46,249 --> 00:42:48,589
+losing sort of some of
+this edge information,
+
+837
+00:42:48,589 --> 00:42:49,923
+corner information that each time
+
+838
+00:42:49,923 --> 00:42:53,590
+we're losing out and
+shrinking that further.
+
+839
+00:42:55,203 --> 00:42:57,310
+Okay, so let's go through
+a couple more examples
+
+840
+00:42:57,310 --> 00:43:00,060
+of computing some of these sizes.
+
+841
+00:43:00,991 --> 00:43:03,018
+So let's say that we have an input volume
+
+842
+00:43:03,018 --> 00:43:05,611
+which is 32 by 32 by three.
+
+843
+00:43:05,611 --> 00:43:09,244
+And here we have 10 five by five filters.
+
+844
+00:43:09,244 --> 00:43:12,388
+Let's use stride one and pad two.
+
+845
+00:43:12,388 --> 00:43:13,550
+And so who can tell me
+
+846
+00:43:13,550 --> 00:43:16,717
+what's the output volume size of this?
+
+847
+00:43:18,188 --> 00:43:20,353
+So you can think about
+the formula earlier.
+
+848
+00:43:20,353 --> 00:43:21,728
+Sorry, what was it?
+
+849
+00:43:21,728 --> 00:43:23,263
+[faint speaking]
+
+850
+00:43:23,263 --> 00:43:26,180
+32 by 32 by 10, yes that's correct.
+
+851
+00:43:27,572 --> 00:43:30,324
+And so the way we can see this, right,
+
+852
+00:43:30,324 --> 00:43:33,707
+is so we have our input size, F is 32.
+
+853
+00:43:33,707 --> 00:43:36,401
+Then in this case we want to augment it
+
+854
+00:43:36,401 --> 00:43:38,396
+by the padding that we added onto this.
+
+855
+00:43:38,396 --> 00:43:41,209
+So we padded it two in
+each dimension, right,
+
+856
+00:43:41,209 --> 00:43:44,122
+so we're actually going to get,
+total width and total height's
+
+857
+00:43:44,122 --> 00:43:47,181
+going to be 32 plus four on each side.
+
+858
+00:43:47,181 --> 00:43:49,992
+And then minus our filter size five,
+
+859
+00:43:49,992 --> 00:43:51,716
+divided by one plus one and we get 32.
+
+860
+00:43:51,716 --> 00:43:55,883
+So our output is going to
+be 32 by 32 for each filter.
+
+861
+00:43:57,213 --> 00:44:00,302
+And then we have 10 filters total,
+
+862
+00:44:00,302 --> 00:44:02,193
+so we have 10 of these activation maps,
+
+863
+00:44:02,193 --> 00:44:06,360
+and our total output volume
+is going to be 32 by 32 by 10.
+
+864
+00:44:08,244 --> 00:44:10,040
+Okay, next question,
+
+865
+00:44:10,040 --> 00:44:14,478
+so what's the number of
+parameters in this layer?
+
+866
+00:44:14,478 --> 00:44:18,145
+So remember we have 10
+five by five filters.
+
+867
+00:44:19,769 --> 00:44:22,698
+[faint speaking]
+
+868
+00:44:22,698 --> 00:44:26,365
+I kind of heard something,
+but it was quiet.
+
+869
+00:44:29,407 --> 00:44:31,240
+Can you guys speak up?
+
+870
+00:44:32,809 --> 00:44:36,226
+250, okay so I heard 250, which is close,
+
+871
+00:44:37,829 --> 00:44:40,018
+but remember that we're
+also, our input volume,
+
+872
+00:44:40,018 --> 00:44:42,149
+each of these filters
+goes through by depth.
+
+873
+00:44:42,149 --> 00:44:44,237
+So maybe this wasn't clearly written here
+
+874
+00:44:44,237 --> 00:44:46,855
+because each of the filters
+is five by five spatially,
+
+875
+00:44:46,855 --> 00:44:50,300
+but implicitly we also have
+the depth in here, right.
+
+876
+00:44:50,300 --> 00:44:52,835
+It's going to go through the whole volume.
+
+877
+00:44:52,835 --> 00:44:55,876
+So I heard, yeah, 750 I heard.
+
+878
+00:44:55,876 --> 00:44:57,430
+Almost there, this is
+kind of a trick question
+
+879
+00:44:57,430 --> 00:44:59,445
+'cause also remember
+we usually always have
+
+880
+00:44:59,445 --> 00:45:03,374
+a bias term, right, so
+in practice each filter
+
+881
+00:45:03,374 --> 00:45:08,084
+has five by five by three
+weights, plus our one bias term,
+
+882
+00:45:08,084 --> 00:45:10,483
+we have 76 parameters per filter,
+
+883
+00:45:10,483 --> 00:45:12,609
+and then we have 10 of these total,
+
+884
+00:45:12,609 --> 00:45:15,609
+and so there's 760 total parameters.
+
+885
+00:45:18,412 --> 00:45:20,464
+Okay, and so here's just a summary
+
+886
+00:45:20,464 --> 00:45:24,105
+of the convolutional layer
+that you guys can read
+
+887
+00:45:24,105 --> 00:45:25,890
+a little bit more carefully later on.
+
+888
+00:45:25,890 --> 00:45:28,924
+But we have our input volume
+of a certain dimension,
+
+889
+00:45:28,924 --> 00:45:31,137
+we have all of these choice,
+we have our filters, right,
+
+890
+00:45:31,137 --> 00:45:33,751
+where we have number of
+filters, the filter size,
+
+891
+00:45:33,751 --> 00:45:36,170
+the stride of the size,
+the amount of zero padding,
+
+892
+00:45:36,170 --> 00:45:38,682
+and you basically can use all of these,
+
+893
+00:45:38,682 --> 00:45:41,167
+go through the computations
+that we talked about earlier
+
+894
+00:45:41,167 --> 00:45:43,866
+in order to find out what
+your output volume is actually
+
+895
+00:45:43,866 --> 00:45:48,033
+going to be and how many total
+parameters that you have.
+
+896
+00:45:49,282 --> 00:45:51,951
+And so some common settings of this.
+
+897
+00:45:51,951 --> 00:45:55,526
+You know, we talked earlier
+about common filter sizes
+
+898
+00:45:55,526 --> 00:45:58,555
+of three by three, five by five.
+
+899
+00:45:58,555 --> 00:46:01,739
+Stride is usually one
+and two is pretty common.
+
+900
+00:46:01,739 --> 00:46:04,505
+And then your padding P is
+going to be whatever fits,
+
+901
+00:46:04,505 --> 00:46:08,518
+like, whatever will
+preserve your spatial extent
+
+902
+00:46:08,518 --> 00:46:10,401
+is what's common.
+
+903
+00:46:10,401 --> 00:46:13,623
+And then the total number of filters K,
+
+904
+00:46:13,623 --> 00:46:16,759
+usually we use powers of two
+just to be nice, so, you know,
+
+905
+00:46:16,759 --> 00:46:19,009
+32, 64, 128 and so on, 512,
+
+906
+00:46:19,903 --> 00:46:24,505
+these are pretty common
+numbers that you'll see.
+
+907
+00:46:24,505 --> 00:46:26,511
+And just as an aside,
+
+908
+00:46:26,511 --> 00:46:29,488
+we can also do a one by one convolution,
+
+909
+00:46:29,488 --> 00:46:31,557
+this still makes perfect sense where
+
+910
+00:46:31,557 --> 00:46:33,459
+given a one by one convolution
+
+911
+00:46:33,459 --> 00:46:35,852
+we still slide it over
+each spatial extent,
+
+912
+00:46:35,852 --> 00:46:37,700
+but now, you know, the spatial region
+
+913
+00:46:37,700 --> 00:46:38,888
+is not really five by five
+
+914
+00:46:38,888 --> 00:46:42,574
+it's just kind of the
+trivial case of one by one,
+
+915
+00:46:42,574 --> 00:46:44,819
+but we are still having this filter
+
+916
+00:46:44,819 --> 00:46:46,680
+go through the entire depth.
+
+917
+00:46:46,680 --> 00:46:48,273
+Right, so this is going
+to be a dot product
+
+918
+00:46:48,273 --> 00:46:52,053
+through the entire depth
+of your input volume.
+
+919
+00:46:52,053 --> 00:46:55,067
+And so the output here, right,
+if we have an input volume
+
+920
+00:46:55,067 --> 00:46:59,804
+of 56 by 56 by 64 depth and
+we're going to do one by one
+
+921
+00:46:59,804 --> 00:47:03,895
+convolution with 32 filters,
+then our output is going to be
+
+922
+00:47:03,895 --> 00:47:07,062
+56 by 56 by our number of filters, 32.
+
+923
+00:47:10,076 --> 00:47:13,419
+Okay, and so here's an example
+of a convolutional layer
+
+924
+00:47:13,419 --> 00:47:16,210
+in TORCH, a deep learning framework.
+
+925
+00:47:16,210 --> 00:47:18,747
+And so you'll see that,
+you know, last lecture
+
+926
+00:47:18,747 --> 00:47:20,799
+we talked about how you can go into these
+
+927
+00:47:20,799 --> 00:47:23,427
+deep learning frameworks,
+you can see these definitions
+
+928
+00:47:23,427 --> 00:47:25,017
+of each layer, right,
+where they have kind of
+
+929
+00:47:25,017 --> 00:47:26,665
+the forward pass and the backward pass
+
+930
+00:47:26,665 --> 00:47:28,667
+implemented for each layer.
+
+931
+00:47:28,667 --> 00:47:30,638
+And so you'll see convolutions,
+
+932
+00:47:30,638 --> 00:47:33,562
+spatial convolution is going
+to be just one of these,
+
+933
+00:47:33,562 --> 00:47:35,360
+and then the arguments
+that it's going to take
+
+934
+00:47:35,360 --> 00:47:39,890
+are going to be all of these
+design choices of, you know,
+
+935
+00:47:39,890 --> 00:47:42,781
+I mean, I guess your
+input and output sizes,
+
+936
+00:47:42,781 --> 00:47:45,759
+but also your choices of
+like your kernel width,
+
+937
+00:47:45,759 --> 00:47:50,161
+your kernel size, padding,
+and these kinds of things.
+
+938
+00:47:50,161 --> 00:47:53,226
+Right, and so if we look at
+another framework, Caffe,
+
+939
+00:47:53,226 --> 00:47:54,737
+you'll see something very similar,
+
+940
+00:47:54,737 --> 00:47:56,950
+where again now when you're
+defining your network
+
+941
+00:47:56,950 --> 00:48:00,880
+you define networks in Caffe
+using this kind of, you know,
+
+942
+00:48:00,880 --> 00:48:03,982
+proto text file where you're specifying
+
+943
+00:48:03,982 --> 00:48:07,160
+each of your design choices for your layer
+
+944
+00:48:07,160 --> 00:48:09,279
+and you can see for a convolutional layer
+
+945
+00:48:09,279 --> 00:48:11,806
+will say things like, you
+know, the number of outputs
+
+946
+00:48:11,806 --> 00:48:14,077
+that we have, this is going
+to be the number of filters
+
+947
+00:48:14,077 --> 00:48:18,244
+for Caffe, as well as the kernel
+size and stride and so on.
+
+948
+00:48:21,144 --> 00:48:24,701
+Okay, and so I guess before I go on,
+
+949
+00:48:24,701 --> 00:48:26,512
+any questions about convolution,
+
+950
+00:48:26,512 --> 00:48:29,512
+how the convolution operation works?
+
+951
+00:48:30,868 --> 00:48:32,161
+Yes, question.
+
+952
+00:48:32,161 --> 00:48:34,911
+[faint speaking]
+
+953
+00:48:51,604 --> 00:48:52,940
+Yeah, so the question is,
+
+954
+00:48:52,940 --> 00:48:55,902
+what's the intuition behind
+how you choose your stride.
+
+955
+00:48:55,902 --> 00:49:00,037
+And so at one sense it's
+kind of the resolution
+
+956
+00:49:00,037 --> 00:49:02,401
+at which you slide it on, and
+usually the reason behind this
+
+957
+00:49:02,401 --> 00:49:04,870
+is because when we have a larger stride
+
+958
+00:49:04,870 --> 00:49:06,908
+what we end up getting as the output
+
+959
+00:49:06,908 --> 00:49:09,258
+is a down sampled image, right,
+
+960
+00:49:09,258 --> 00:49:13,425
+and so what this downsampled
+image lets us have is both,
+
+961
+00:49:14,715 --> 00:49:17,202
+it's a way, it's kind of
+like pooling in a sense
+
+962
+00:49:17,202 --> 00:49:19,352
+but it's just a different
+and sometimes works better
+
+963
+00:49:19,352 --> 00:49:23,025
+way of doing pooling is one
+of the intuitions behind this,
+
+964
+00:49:23,025 --> 00:49:27,192
+'cause you get the same effect
+of downsampling your image,
+
+965
+00:49:28,183 --> 00:49:32,691
+and then also as you're doing
+this you're reducing the size
+
+966
+00:49:32,691 --> 00:49:35,502
+of the activation maps
+that you're dealing with
+
+967
+00:49:35,502 --> 00:49:38,892
+at each layer, right, and so
+this also affects later on
+
+968
+00:49:38,892 --> 00:49:40,825
+the total number of
+parameters that you have
+
+969
+00:49:40,825 --> 00:49:44,973
+because for example at the
+end of all your Conv layers,
+
+970
+00:49:44,973 --> 00:49:48,611
+now you might put on fully
+connected layers on top,
+
+971
+00:49:48,611 --> 00:49:51,092
+for example, and now the
+fully connected layer's
+
+972
+00:49:51,092 --> 00:49:53,362
+going to be connected to every value
+
+973
+00:49:53,362 --> 00:49:56,099
+of your convolutional output, right,
+
+974
+00:49:56,099 --> 00:49:59,058
+and so a smaller one will
+give you smaller number
+
+975
+00:49:59,058 --> 00:50:02,596
+of parameters, and so now
+you can get into, like,
+
+976
+00:50:02,596 --> 00:50:04,960
+basically thinking about
+trade offs of, you know,
+
+977
+00:50:04,960 --> 00:50:08,025
+number of parameters you
+have, the size of your model,
+
+978
+00:50:08,025 --> 00:50:10,076
+overfitting, things
+like that, and so yeah,
+
+979
+00:50:10,076 --> 00:50:11,371
+these are kind of some of the things
+
+980
+00:50:11,371 --> 00:50:15,538
+that you want to think about
+with choosing your stride.
+
+981
+00:50:18,496 --> 00:50:22,421
+Okay, so now if we look a
+little bit at kind of the,
+
+982
+00:50:22,421 --> 00:50:25,356
+you know, brain neuron view
+of a convolutional layer,
+
+983
+00:50:25,356 --> 00:50:29,627
+similar to what we
+looked at for the neurons
+
+984
+00:50:29,627 --> 00:50:31,599
+in the last lecture.
+
+985
+00:50:31,599 --> 00:50:35,610
+So what we have is that
+at every spatial location,
+
+986
+00:50:35,610 --> 00:50:37,488
+we take a dot product between a filter
+
+987
+00:50:37,488 --> 00:50:39,216
+and a specific part of the image, right,
+
+988
+00:50:39,216 --> 00:50:42,077
+and we get one number out from here.
+
+989
+00:50:42,077 --> 00:50:43,506
+And so this is the same idea
+
+990
+00:50:43,506 --> 00:50:46,042
+of doing these types
+of dot products, right,
+
+991
+00:50:46,042 --> 00:50:49,270
+taking your input, weighting
+it by these Ws, right,
+
+992
+00:50:49,270 --> 00:50:53,659
+values of your filter, these
+weights that are the synapses,
+
+993
+00:50:53,659 --> 00:50:55,227
+and getting a value out.
+
+994
+00:50:55,227 --> 00:50:57,559
+But the main difference
+here is just that now
+
+995
+00:50:57,559 --> 00:50:59,517
+your neuron has local connectivity.
+
+996
+00:50:59,517 --> 00:51:02,191
+So instead of being connected
+to the entire input,
+
+997
+00:51:02,191 --> 00:51:06,536
+it's just looking at a local
+region spatially of your image.
+
+998
+00:51:06,536 --> 00:51:08,701
+And so this looks at a local region
+
+999
+00:51:08,701 --> 00:51:11,859
+and then now you're going
+to get kind of, you know,
+
+1000
+00:51:11,859 --> 00:51:15,111
+this, how much this
+neuron is being triggered
+
+1001
+00:51:15,111 --> 00:51:17,500
+at every spatial location in your image.
+
+1002
+00:51:17,500 --> 00:51:19,631
+Right, so now you preserve
+the spatial structure
+
+1003
+00:51:19,631 --> 00:51:22,485
+and you can say, you
+know, be able to reason
+
+1004
+00:51:22,485 --> 00:51:26,652
+on top of these kinds of
+activation maps in later layers.
+
+1005
+00:51:30,048 --> 00:51:33,181
+And just a little bit of terminology,
+
+1006
+00:51:33,181 --> 00:51:36,931
+again for, you know, we have
+this five by five filter,
+
+1007
+00:51:36,931 --> 00:51:40,015
+we can also call this a
+five by five receptive field
+
+1008
+00:51:40,015 --> 00:51:41,726
+for the neuron, because this is,
+
+1009
+00:51:41,726 --> 00:51:44,300
+the receptive field is
+basically the, you know,
+
+1010
+00:51:44,300 --> 00:51:46,535
+input field that this field of vision
+
+1011
+00:51:46,535 --> 00:51:48,518
+that this neuron is receiving, right,
+
+1012
+00:51:48,518 --> 00:51:51,758
+and so that's just another common term
+
+1013
+00:51:51,758 --> 00:51:53,315
+that you'll hear for this.
+
+1014
+00:51:53,315 --> 00:51:55,743
+And then again remember each
+of these five by five filters
+
+1015
+00:51:55,743 --> 00:51:58,442
+we're sliding them over
+the spatial locations
+
+1016
+00:51:58,442 --> 00:52:00,506
+but they're the same set of weights,
+
+1017
+00:52:00,506 --> 00:52:03,089
+they share the same parameters.
+
+1018
+00:52:05,440 --> 00:52:08,045
+Okay, and so, you know, as we talked about
+
+1019
+00:52:08,045 --> 00:52:09,485
+what we're going to get at this output
+
+1020
+00:52:09,485 --> 00:52:11,200
+is going to be this volume, right,
+
+1021
+00:52:11,200 --> 00:52:13,874
+where spatially we have,
+you know, let's say 28 by 28
+
+1022
+00:52:13,874 --> 00:52:16,373
+and then our number of
+filters is the depth.
+
+1023
+00:52:16,373 --> 00:52:18,357
+And so for example with five filters,
+
+1024
+00:52:18,357 --> 00:52:20,663
+what we're going to
+get out is this 3D grid
+
+1025
+00:52:20,663 --> 00:52:23,381
+that's 28 by 28 by five.
+
+1026
+00:52:23,381 --> 00:52:26,606
+And so if you look at the filters across
+
+1027
+00:52:26,606 --> 00:52:30,654
+in one spatial location
+of the activation volume
+
+1028
+00:52:30,654 --> 00:52:33,825
+and going through depth
+these five neurons,
+
+1029
+00:52:33,825 --> 00:52:36,003
+all of these neurons,
+
+1030
+00:52:36,003 --> 00:52:37,408
+basically the way you can interpret this
+
+1031
+00:52:37,408 --> 00:52:39,471
+is they're all looking at the same region
+
+1032
+00:52:39,471 --> 00:52:40,590
+in the input volume,
+
+1033
+00:52:40,590 --> 00:52:42,344
+but they're just looking
+for different things, right.
+
+1034
+00:52:42,344 --> 00:52:43,953
+So they're different filters
+
+1035
+00:52:43,953 --> 00:52:48,120
+applied to the same spatial
+location in the image.
+
+1036
+00:52:49,152 --> 00:52:52,391
+And so just a reminder
+again kind of comparing
+
+1037
+00:52:52,391 --> 00:52:55,443
+with the fully connected layer
+that we talked about earlier.
+
+1038
+00:52:55,443 --> 00:52:57,805
+In that case, right, if we
+look at each of the neurons
+
+1039
+00:52:57,805 --> 00:53:01,607
+in our activation or
+output, each of the neurons
+
+1040
+00:53:01,607 --> 00:53:03,983
+was connected to the
+entire stretched out input,
+
+1041
+00:53:03,983 --> 00:53:06,637
+so it looked at the
+entire full input volume,
+
+1042
+00:53:06,637 --> 00:53:08,802
+compared to now where each one
+
+1043
+00:53:08,802 --> 00:53:12,805
+just looks at this local spatial region.
+
+1044
+00:53:12,805 --> 00:53:14,255
+Question.
+
+1045
+00:53:14,255 --> 00:53:17,088
+[muffled talking]
+
+1046
+00:53:22,648 --> 00:53:25,054
+Okay, so the question
+is, within a given layer,
+
+1047
+00:53:25,054 --> 00:53:28,137
+are the filters completely symmetric?
+
+1048
+00:53:30,158 --> 00:53:34,325
+So what do you mean by
+symmetric exactly, I guess?
+
+1049
+00:53:42,200 --> 00:53:46,389
+Right, so okay, so the
+filters, are the filters doing,
+
+1050
+00:53:46,389 --> 00:53:50,556
+they're doing the same dimension,
+the same calculation, yes.
+
+1051
+00:53:52,784 --> 00:53:54,444
+Okay, so is there anything different
+
+1052
+00:53:54,444 --> 00:53:58,122
+other than they have the
+same parameter values?
+
+1053
+00:53:58,122 --> 00:53:59,624
+No, so you're exactly right,
+
+1054
+00:53:59,624 --> 00:54:02,690
+we're just taking a filter
+with a given set of, you know,
+
+1055
+00:54:02,690 --> 00:54:04,973
+five by five by three parameter values,
+
+1056
+00:54:04,973 --> 00:54:07,335
+and we just slide this
+in exactly the same way
+
+1057
+00:54:07,335 --> 00:54:11,502
+over the entire input volume
+to get an activation map.
+
+1058
+00:54:14,596 --> 00:54:17,668
+Okay, so you know, we've
+gone into a lot of detail
+
+1059
+00:54:17,668 --> 00:54:20,592
+in what these convolutional
+layers look like,
+
+1060
+00:54:20,592 --> 00:54:22,372
+and so now I'm just going to go briefly
+
+1061
+00:54:22,372 --> 00:54:25,196
+through the other layers that we have
+
+1062
+00:54:25,196 --> 00:54:28,802
+that form this entire
+convolutional network.
+
+1063
+00:54:28,802 --> 00:54:31,071
+Right, so remember again,
+we have convolutional layers
+
+1064
+00:54:31,071 --> 00:54:33,365
+interspersed with pooling
+layers once in a while
+
+1065
+00:54:33,365 --> 00:54:36,653
+as well as these non-linearities.
+
+1066
+00:54:36,653 --> 00:54:39,017
+Okay, so what the pooling layers do
+
+1067
+00:54:39,017 --> 00:54:41,112
+is that they make the representations
+
+1068
+00:54:41,112 --> 00:54:42,716
+smaller and more manageable, right,
+
+1069
+00:54:42,716 --> 00:54:45,107
+so we talked about this earlier with
+
+1070
+00:54:45,107 --> 00:54:48,683
+someone asked a question of
+why we would want to make
+
+1071
+00:54:48,683 --> 00:54:51,562
+the representation smaller.
+
+1072
+00:54:51,562 --> 00:54:54,919
+And so this is again for it to have fewer,
+
+1073
+00:54:54,919 --> 00:54:58,343
+it effects the number of
+parameters that you have at the end
+
+1074
+00:54:58,343 --> 00:55:01,614
+as well as basically does some, you know,
+
+1075
+00:55:01,614 --> 00:55:04,425
+invariance over a given region.
+
+1076
+00:55:04,425 --> 00:55:05,830
+And so what the pooling layer does
+
+1077
+00:55:05,830 --> 00:55:09,460
+is it does exactly just downsamples,
+
+1078
+00:55:09,460 --> 00:55:13,415
+and it takes your input
+volume, so for example,
+
+1079
+00:55:13,415 --> 00:55:17,762
+224 by 224 by 64, and
+spatially downsamples this.
+
+1080
+00:55:17,762 --> 00:55:20,861
+So in the end you'll get out 112 by 112.
+
+1081
+00:55:20,861 --> 00:55:23,429
+And it's important to note
+this doesn't do anything
+
+1082
+00:55:23,429 --> 00:55:26,588
+in the depth, right, we're
+only pooling spatially.
+
+1083
+00:55:26,588 --> 00:55:30,168
+So the number of, your input depth
+
+1084
+00:55:30,168 --> 00:55:33,215
+is going to be the same
+as your output depth.
+
+1085
+00:55:33,215 --> 00:55:36,948
+And so, for example, a common
+way to do this is max pooling.
+
+1086
+00:55:36,948 --> 00:55:41,317
+So in this case our pooling
+layer also has a filter size
+
+1087
+00:55:41,317 --> 00:55:44,289
+and this filter size is
+going to be the region
+
+1088
+00:55:44,289 --> 00:55:46,825
+at which we pool over,
+right, so in this case
+
+1089
+00:55:46,825 --> 00:55:50,562
+if we have two by two filters,
+we're going to slide this,
+
+1090
+00:55:50,562 --> 00:55:53,572
+and so, here, we also have
+stride two in this case,
+
+1091
+00:55:53,572 --> 00:55:54,884
+so we're going to take this filter
+
+1092
+00:55:54,884 --> 00:55:58,999
+and we're going to slide
+it along our input volume
+
+1093
+00:55:58,999 --> 00:56:01,672
+in exactly the same way
+as we did for convolution.
+
+1094
+00:56:01,672 --> 00:56:03,619
+But here instead of
+doing these dot products,
+
+1095
+00:56:03,619 --> 00:56:06,205
+we just take the maximum value
+
+1096
+00:56:06,205 --> 00:56:08,338
+of the input volume in that region.
+
+1097
+00:56:08,338 --> 00:56:11,645
+Right, so here if we
+look at the red values,
+
+1098
+00:56:11,645 --> 00:56:13,416
+the value of that will
+be six is the largest.
+
+1099
+00:56:13,416 --> 00:56:15,655
+If we look at the greens
+it's going to give an eight,
+
+1100
+00:56:15,655 --> 00:56:18,655
+and then we have a three and a four.
+
+1101
+00:56:23,433 --> 00:56:24,931
+Yes, question.
+
+1102
+00:56:24,931 --> 00:56:27,848
+[muffled speaking]
+
+1103
+00:56:29,010 --> 00:56:31,304
+Yeah, so the question is, is
+it typical to set up the stride
+
+1104
+00:56:31,304 --> 00:56:34,406
+so that there isn't an overlap?
+
+1105
+00:56:34,406 --> 00:56:36,850
+And yeah, so for the pooling layers it is,
+
+1106
+00:56:36,850 --> 00:56:38,196
+I think the more common thing to do
+
+1107
+00:56:38,196 --> 00:56:41,256
+is to have them not have any overlap,
+
+1108
+00:56:41,256 --> 00:56:44,688
+and I guess the way you
+can think about this
+
+1109
+00:56:44,688 --> 00:56:48,322
+is basically we just want to downsample
+
+1110
+00:56:48,322 --> 00:56:50,560
+and so it makes sense to
+kind of look at this region
+
+1111
+00:56:50,560 --> 00:56:52,977
+and just get one value
+to represent this region
+
+1112
+00:56:52,977 --> 00:56:55,874
+and then just look at the
+next region and so on.
+
+1113
+00:56:55,874 --> 00:56:57,379
+Yeah, question.
+
+1114
+00:56:57,379 --> 00:57:00,129
+[faint speaking]
+
+1115
+00:57:02,415 --> 00:57:04,328
+Okay, so the question
+is, why is max pooling
+
+1116
+00:57:04,328 --> 00:57:05,710
+better than just taking the,
+
+1117
+00:57:05,710 --> 00:57:07,636
+doing something like average pooling?
+
+1118
+00:57:07,636 --> 00:57:10,058
+Yes, that's a good point,
+like, average pooling
+
+1119
+00:57:10,058 --> 00:57:12,017
+is also something that you can do,
+
+1120
+00:57:12,017 --> 00:57:15,417
+and intuition behind why
+max pooling is commonly used
+
+1121
+00:57:15,417 --> 00:57:17,979
+is that it can have
+this interpretation of,
+
+1122
+00:57:17,979 --> 00:57:21,471
+you know, if this is, these
+are activations of my neurons,
+
+1123
+00:57:21,471 --> 00:57:23,770
+right, and so each value is kind of
+
+1124
+00:57:23,770 --> 00:57:26,972
+how much this neuron
+fired in this location,
+
+1125
+00:57:26,972 --> 00:57:29,253
+how much this filter
+fired in this location.
+
+1126
+00:57:29,253 --> 00:57:31,927
+And so you can think of
+max pooling as saying,
+
+1127
+00:57:31,927 --> 00:57:36,094
+you know, giving a signal of
+how much did this filter fire
+
+1128
+00:57:37,000 --> 00:57:39,133
+at any location in this image.
+
+1129
+00:57:39,133 --> 00:57:41,264
+Right, and if we're
+thinking about detecting,
+
+1130
+00:57:41,264 --> 00:57:44,022
+you know, doing recognition,
+
+1131
+00:57:44,022 --> 00:57:46,535
+this might make some intuitive
+sense where you're saying,
+
+1132
+00:57:46,535 --> 00:57:49,034
+well, you know, whether a
+light or whether some aspect
+
+1133
+00:57:49,034 --> 00:57:52,206
+of your image that you're looking for,
+
+1134
+00:57:52,206 --> 00:57:53,990
+whether it happens anywhere in this region
+
+1135
+00:57:53,990 --> 00:57:57,073
+we want to fire at with a high value.
+
+1136
+00:57:57,940 --> 00:57:59,129
+Question.
+
+1137
+00:57:59,129 --> 00:58:02,046
+[muffled speaking]
+
+1138
+00:58:06,200 --> 00:58:08,746
+Yeah, so the question is,
+since pooling and stride
+
+1139
+00:58:08,746 --> 00:58:10,959
+both have the same effect of downsampling,
+
+1140
+00:58:10,959 --> 00:58:14,223
+can you just use stride
+instead of pooling and so on?
+
+1141
+00:58:14,223 --> 00:58:16,513
+Yeah, and so in practice I think
+
+1142
+00:58:16,513 --> 00:58:19,771
+looking at more recent
+neural network architectures
+
+1143
+00:58:19,771 --> 00:58:23,103
+people have begun to use stride more
+
+1144
+00:58:23,103 --> 00:58:27,704
+in order to do the downsampling
+instead of just pooling.
+
+1145
+00:58:27,704 --> 00:58:30,837
+And I think this gets into
+things like, you know,
+
+1146
+00:58:30,837 --> 00:58:32,801
+also like fractional strides
+and things that you can do.
+
+1147
+00:58:32,801 --> 00:58:36,968
+But in practice this in a
+sense maybe has a little bit
+
+1148
+00:58:38,721 --> 00:58:41,892
+better way to get better
+results using that, so.
+
+1149
+00:58:41,892 --> 00:58:44,125
+Yeah, so I think using
+stride is definitely,
+
+1150
+00:58:44,125 --> 00:58:47,292
+you can do it and people are doing it.
+
+1151
+00:58:49,672 --> 00:58:52,505
+Okay, so let's see, where were we.
+
+1152
+00:58:53,544 --> 00:58:56,553
+Okay, so yeah, so with
+these pooling layers,
+
+1153
+00:58:56,553 --> 00:59:00,358
+so again, there's right, some
+design choices that you make,
+
+1154
+00:59:00,358 --> 00:59:04,057
+you take this input volume of W by H by D,
+
+1155
+00:59:04,057 --> 00:59:07,446
+and then you're going to
+set your hyperparameters
+
+1156
+00:59:07,446 --> 00:59:10,107
+for design choices of your filter size
+
+1157
+00:59:10,107 --> 00:59:12,376
+or the spatial extent over
+which you are pooling,
+
+1158
+00:59:12,376 --> 00:59:15,101
+as well as your stride, and
+then you can again compute
+
+1159
+00:59:15,101 --> 00:59:18,676
+your output volume using the
+same equation that you used
+
+1160
+00:59:18,676 --> 00:59:21,325
+earlier for convolution, it
+still applies here, right,
+
+1161
+00:59:21,325 --> 00:59:24,030
+so we still have our W total extent
+
+1162
+00:59:24,030 --> 00:59:27,780
+minus filter size divided
+by stride plus one.
+
+1163
+00:59:30,880 --> 00:59:33,217
+Okay, and so just one other thing to note,
+
+1164
+00:59:33,217 --> 00:59:37,172
+it's also, typically people
+don't really use zero padding
+
+1165
+00:59:37,172 --> 00:59:39,647
+for the pooling layers
+because you're just trying
+
+1166
+00:59:39,647 --> 00:59:41,262
+to do a direct downsampling, right,
+
+1167
+00:59:41,262 --> 00:59:43,003
+so there isn't this problem of like,
+
+1168
+00:59:43,003 --> 00:59:44,423
+applying a filter at the corner
+
+1169
+00:59:44,423 --> 00:59:47,045
+and having some part of the
+filter go off your input volume.
+
+1170
+00:59:47,045 --> 00:59:49,526
+And so for pooling we don't
+usually have to worry about this
+
+1171
+00:59:49,526 --> 00:59:52,939
+and we just directly downsample.
+
+1172
+00:59:52,939 --> 00:59:56,304
+And so some common settings
+for the pooling layer
+
+1173
+00:59:56,304 --> 01:00:00,890
+is a filter size of two by
+two or three by three strides.
+
+1174
+01:00:00,890 --> 01:00:03,609
+Two by two, you know, you can have,
+
+1175
+01:00:03,609 --> 01:00:06,269
+also you can still have
+pooling of two by two
+
+1176
+01:00:06,269 --> 01:00:09,091
+even with a filter size of three by three,
+
+1177
+01:00:09,091 --> 01:00:10,789
+I think someone asked that earlier,
+
+1178
+01:00:10,789 --> 01:00:14,956
+but in practice it's pretty
+common just to have two by two.
+
+1179
+01:00:17,958 --> 01:00:21,527
+Okay, so now we've talked about
+these convolutional layers,
+
+1180
+01:00:21,527 --> 01:00:24,370
+the ReLU layers were the
+same as what we had before
+
+1181
+01:00:24,370 --> 01:00:29,174
+with the, you know, just
+the base neural network
+
+1182
+01:00:29,174 --> 01:00:31,492
+that we talked about last lecture.
+
+1183
+01:00:31,492 --> 01:00:33,899
+So we intersperse these and
+then we have a pooling layer
+
+1184
+01:00:33,899 --> 01:00:37,865
+every once in a while when we
+feel like downsampling, right.
+
+1185
+01:00:37,865 --> 01:00:41,080
+And then the last thing is that at the end
+
+1186
+01:00:41,080 --> 01:00:43,766
+we want to have a fully connected layer.
+
+1187
+01:00:43,766 --> 01:00:46,210
+And so this will be just exactly the same
+
+1188
+01:00:46,210 --> 01:00:48,790
+as the fully connected layers
+that you've seen before.
+
+1189
+01:00:48,790 --> 01:00:50,506
+So in this case now what we do
+
+1190
+01:00:50,506 --> 01:00:54,173
+is we take the convolutional
+network output,
+
+1191
+01:00:55,775 --> 01:00:57,503
+at the last layer we have some volume,
+
+1192
+01:00:57,503 --> 01:01:00,421
+so we're going to have width
+by height by some depth,
+
+1193
+01:01:00,421 --> 01:01:01,626
+and we just take all of these
+
+1194
+01:01:01,626 --> 01:01:04,212
+and we essentially just
+stretch these out, right.
+
+1195
+01:01:04,212 --> 01:01:06,322
+And so now we're going
+to get the same kind of,
+
+1196
+01:01:06,322 --> 01:01:08,795
+you know, basically 1D
+input that we're used to
+
+1197
+01:01:08,795 --> 01:01:12,962
+for a vanilla neural network,
+and then we're going to apply
+
+1198
+01:01:14,153 --> 01:01:16,275
+this fully connected layer on top,
+
+1199
+01:01:16,275 --> 01:01:17,715
+so now we're going to have connections
+
+1200
+01:01:17,715 --> 01:01:21,715
+to every one of these
+convolutional map outputs.
+
+1201
+01:01:22,676 --> 01:01:24,786
+And so what you can think
+of this is basically,
+
+1202
+01:01:24,786 --> 01:01:26,457
+now instead of preserving, you know,
+
+1203
+01:01:26,457 --> 01:01:28,616
+before we were preserving
+spatial structure,
+
+1204
+01:01:28,616 --> 01:01:30,897
+right, and so but at the
+last layer at the end,
+
+1205
+01:01:30,897 --> 01:01:32,982
+we want to aggregate all of this together
+
+1206
+01:01:32,982 --> 01:01:34,787
+and we want to reason basically on top of
+
+1207
+01:01:34,787 --> 01:01:37,081
+all of this as we had before.
+
+1208
+01:01:37,081 --> 01:01:40,518
+And so what you get from that is just our
+
+1209
+01:01:40,518 --> 01:01:43,185
+score outputs as we had earlier.
+
+1210
+01:01:45,744 --> 01:01:47,232
+Okay, so--
+
+1211
+01:01:47,232 --> 01:01:48,411
+- [Student] This is
+sort of a silly question
+
+1212
+01:01:48,411 --> 01:01:49,911
+about this visual.
+
+1213
+01:01:52,345 --> 01:01:56,123
+Like what are the 16 pixels
+that are on the far right,
+
+1214
+01:01:56,123 --> 01:02:00,357
+like what should be interpreting those as?
+
+1215
+01:02:00,357 --> 01:02:02,584
+- Okay, so the question
+is, what are the 16 pixels
+
+1216
+01:02:02,584 --> 01:02:04,238
+that are on the far
+right, do you mean the--
+
+1217
+01:02:04,238 --> 01:02:05,888
+- [Student] Like that column of--
+
+1218
+01:02:05,888 --> 01:02:07,566
+- [Instructor] Oh, each column.
+
+1219
+01:02:07,566 --> 01:02:09,425
+- [Student] The column
+on the far right, yeah.
+
+1220
+01:02:09,425 --> 01:02:11,031
+- [Instructor] The green
+ones or the black ones?
+
+1221
+01:02:11,031 --> 01:02:12,679
+- [Student] The ones labeled pool.
+
+1222
+01:02:12,679 --> 01:02:14,472
+- The one with hold on, pool.
+
+1223
+01:02:14,472 --> 01:02:16,312
+Oh, okay, yeah, so the question is
+
+1224
+01:02:16,312 --> 01:02:20,566
+how do we interpret this column,
+right, for example at pool.
+
+1225
+01:02:20,566 --> 01:02:24,645
+And so what we're showing
+here is each of these columns
+
+1226
+01:02:24,645 --> 01:02:28,376
+is the output activation maps, right,
+
+1227
+01:02:28,376 --> 01:02:29,887
+the output from one of these layers.
+
+1228
+01:02:29,887 --> 01:02:34,028
+And so starting from the
+beginning, we have our car,
+
+1229
+01:02:34,028 --> 01:02:35,465
+after the convolutional layer
+
+1230
+01:02:35,465 --> 01:02:37,795
+we now have these activation
+maps of each of the filters
+
+1231
+01:02:37,795 --> 01:02:40,537
+slid spatially over the input image.
+
+1232
+01:02:40,537 --> 01:02:42,484
+Then we pass that through a ReLU,
+
+1233
+01:02:42,484 --> 01:02:45,306
+so you can see the values
+coming out from there.
+
+1234
+01:02:45,306 --> 01:02:46,636
+And then going all the way over,
+
+1235
+01:02:46,636 --> 01:02:48,652
+and so what you get for the pooling layer
+
+1236
+01:02:48,652 --> 01:02:51,850
+is that it's really just taking
+
+1237
+01:02:51,850 --> 01:02:54,183
+the output of the ReLU layer
+
+1238
+01:02:55,548 --> 01:02:58,270
+that came just before it
+and then it's pooling it.
+
+1239
+01:02:58,270 --> 01:03:00,337
+So it's going to downsample it,
+
+1240
+01:03:00,337 --> 01:03:01,711
+right, and then it's going to take
+
+1241
+01:03:01,711 --> 01:03:04,510
+the max value in each filter location.
+
+1242
+01:03:04,510 --> 01:03:06,548
+And so now if you look at
+this pool layer output,
+
+1243
+01:03:06,548 --> 01:03:09,209
+like, for example, the last
+one that you were mentioning,
+
+1244
+01:03:09,209 --> 01:03:11,704
+it looks the same as this ReLU output
+
+1245
+01:03:11,704 --> 01:03:15,871
+except that it's downsampled
+and that it has this kind of
+
+1246
+01:03:17,311 --> 01:03:18,952
+max value at every spatial location
+
+1247
+01:03:18,952 --> 01:03:20,550
+and so that's the minor difference
+
+1248
+01:03:20,550 --> 01:03:22,534
+that you'll see between those two.
+
+1249
+01:03:22,534 --> 01:03:25,451
+[distant speaking]
+
+1250
+01:03:30,523 --> 01:03:32,559
+So the question is, now this looks like
+
+1251
+01:03:32,559 --> 01:03:34,654
+just a very small amount
+of information, right,
+
+1252
+01:03:34,654 --> 01:03:36,991
+so how can it know to
+classify it from here?
+
+1253
+01:03:36,991 --> 01:03:39,553
+And so the way that you
+should think about this
+
+1254
+01:03:39,553 --> 01:03:41,886
+is that each of these values
+
+1255
+01:03:43,365 --> 01:03:46,052
+inside one of these pool
+outputs is actually,
+
+1256
+01:03:46,052 --> 01:03:49,004
+it's the accumulation of all
+the processing that you've done
+
+1257
+01:03:49,004 --> 01:03:50,696
+throughout this entire network, right.
+
+1258
+01:03:50,696 --> 01:03:53,890
+So it's at the very top of your hierarchy,
+
+1259
+01:03:53,890 --> 01:03:55,458
+and so each actually represents
+
+1260
+01:03:55,458 --> 01:03:57,602
+kind of a higher level concept.
+
+1261
+01:03:57,602 --> 01:04:01,197
+So we saw before, you know,
+for example, Hubel and Wiesel
+
+1262
+01:04:01,197 --> 01:04:03,571
+and building up these
+hierarchical filters,
+
+1263
+01:04:03,571 --> 01:04:07,466
+where at the bottom level
+we're looking for edges, right,
+
+1264
+01:04:07,466 --> 01:04:10,257
+or things like very simple
+structures, like edges.
+
+1265
+01:04:10,257 --> 01:04:13,872
+And so after your convolutional layer
+
+1266
+01:04:13,872 --> 01:04:15,991
+the outputs that you see
+here in this first column
+
+1267
+01:04:15,991 --> 01:04:20,541
+is basically how much do
+specific, for example, edges,
+
+1268
+01:04:20,541 --> 01:04:22,700
+fire at different locations in the image.
+
+1269
+01:04:22,700 --> 01:04:25,268
+But then as you go through
+you're going to get more complex,
+
+1270
+01:04:25,268 --> 01:04:26,915
+it's looking for more
+complex things, right,
+
+1271
+01:04:26,915 --> 01:04:28,955
+and so the next convolutional layer
+
+1272
+01:04:28,955 --> 01:04:31,205
+is going to fire at how much, you know,
+
+1273
+01:04:31,205 --> 01:04:34,674
+let's say certain kinds of
+corners show up in the image,
+
+1274
+01:04:34,674 --> 01:04:36,080
+right, because it's reasoning.
+
+1275
+01:04:36,080 --> 01:04:37,957
+Its input is not the original image,
+
+1276
+01:04:37,957 --> 01:04:42,627
+its input is the output, it's
+already the edge maps, right,
+
+1277
+01:04:42,627 --> 01:04:44,560
+so it's reasoning on top of edge maps,
+
+1278
+01:04:44,560 --> 01:04:47,680
+and so that allows it to get more complex,
+
+1279
+01:04:47,680 --> 01:04:49,052
+detect more complex things.
+
+1280
+01:04:49,052 --> 01:04:50,756
+And so by the time you get all the way up
+
+1281
+01:04:50,756 --> 01:04:53,212
+to this last pooling layer,
+each value is representing
+
+1282
+01:04:53,212 --> 01:04:57,379
+how much a relatively complex
+sort of template is firing.
+
+1283
+01:04:58,765 --> 01:05:01,613
+Right, and so because of
+that now you can just have
+
+1284
+01:05:01,613 --> 01:05:04,460
+a fully connected layer,
+you're just aggregating
+
+1285
+01:05:04,460 --> 01:05:07,228
+all of this information together to get,
+
+1286
+01:05:07,228 --> 01:05:10,511
+you know, a score for your class.
+
+1287
+01:05:10,511 --> 01:05:13,134
+So each of these values is how much
+
+1288
+01:05:13,134 --> 01:05:17,051
+a pretty complicated
+complex concept is firing.
+
+1289
+01:05:19,043 --> 01:05:20,460
+Question.
+
+1290
+01:05:20,460 --> 01:05:23,239
+[faint speaking]
+
+1291
+01:05:23,239 --> 01:05:24,744
+So the question is, when
+do you know you've done
+
+1292
+01:05:24,744 --> 01:05:27,296
+enough pooling to do the classification?
+
+1293
+01:05:27,296 --> 01:05:30,722
+And the answer is you just try and see.
+
+1294
+01:05:30,722 --> 01:05:34,639
+So in practice, you know,
+these are all design choices
+
+1295
+01:05:34,639 --> 01:05:37,430
+and you can think about this
+a little bit intuitively,
+
+1296
+01:05:37,430 --> 01:05:41,203
+right, like you want to pool
+but if you pool too much
+
+1297
+01:05:41,203 --> 01:05:43,585
+you're going to have very few values
+
+1298
+01:05:43,585 --> 01:05:45,960
+representing your entire image and so on,
+
+1299
+01:05:45,960 --> 01:05:47,701
+so it's just kind of a trade off.
+
+1300
+01:05:47,701 --> 01:05:50,581
+Something reasonable
+versus people have tried
+
+1301
+01:05:50,581 --> 01:05:52,290
+a lot of different configurations
+
+1302
+01:05:52,290 --> 01:05:54,614
+so you'll probably cross validate, right,
+
+1303
+01:05:54,614 --> 01:05:57,049
+and try over different pooling sizes,
+
+1304
+01:05:57,049 --> 01:05:59,492
+different filter sizes,
+different number of layers,
+
+1305
+01:05:59,492 --> 01:06:02,926
+and see what works best for
+your problem because yeah,
+
+1306
+01:06:02,926 --> 01:06:05,350
+like every problem with
+different data is going to,
+
+1307
+01:06:05,350 --> 01:06:07,423
+you know, different set of these sorts
+
+1308
+01:06:07,423 --> 01:06:10,340
+of hyperparameters might work best.
+
+1309
+01:06:13,388 --> 01:06:16,836
+Okay, so last thing, just
+wanted to point you guys
+
+1310
+01:06:16,836 --> 01:06:19,753
+to this demo of training a ConvNet,
+
+1311
+01:06:21,171 --> 01:06:24,143
+which was created by Andre Karpathy,
+
+1312
+01:06:24,143 --> 01:06:26,424
+the originator of this class.
+
+1313
+01:06:26,424 --> 01:06:28,755
+And so he wrote up this demo
+
+1314
+01:06:28,755 --> 01:06:33,000
+where you can basically
+train a ConvNet on CIFAR-10,
+
+1315
+01:06:33,000 --> 01:06:35,874
+the dataset that we've seen
+before, right, with 10 classes.
+
+1316
+01:06:35,874 --> 01:06:39,341
+And what's nice about
+this demo is you can,
+
+1317
+01:06:39,341 --> 01:06:42,014
+it basically plots for you
+what each of these filters
+
+1318
+01:06:42,014 --> 01:06:44,260
+look like, what the
+activation maps look like.
+
+1319
+01:06:44,260 --> 01:06:46,137
+So some of the images I showed earlier
+
+1320
+01:06:46,137 --> 01:06:47,835
+were taken from this demo.
+
+1321
+01:06:47,835 --> 01:06:50,048
+And so you can go try it
+out, play around with it,
+
+1322
+01:06:50,048 --> 01:06:52,640
+and you know, just go through
+and try and get a sense
+
+1323
+01:06:52,640 --> 01:06:55,268
+for what these activation maps look like.
+
+1324
+01:06:55,268 --> 01:06:57,134
+And just one thing to note,
+
+1325
+01:06:57,134 --> 01:07:00,578
+usually the first layer
+activation maps are,
+
+1326
+01:07:00,578 --> 01:07:01,709
+you can interpret them, right,
+
+1327
+01:07:01,709 --> 01:07:03,606
+because they're operating
+directly on the input image
+
+1328
+01:07:03,606 --> 01:07:05,532
+so you can see what these templates mean.
+
+1329
+01:07:05,532 --> 01:07:07,784
+As you get to higher level layers
+
+1330
+01:07:07,784 --> 01:07:08,975
+it starts getting really hard,
+
+1331
+01:07:08,975 --> 01:07:11,163
+like how do you actually
+interpret what do these mean.
+
+1332
+01:07:11,163 --> 01:07:13,877
+So for the most part it's
+just hard to interpret
+
+1333
+01:07:13,877 --> 01:07:15,398
+so you shouldn't, you know, don't worry
+
+1334
+01:07:15,398 --> 01:07:17,535
+if you can't really make
+sense of what's going on.
+
+1335
+01:07:17,535 --> 01:07:19,604
+But it's still nice just
+to see the entire flow
+
+1336
+01:07:19,604 --> 01:07:22,271
+and what outputs are coming out.
+
+1337
+01:07:23,985 --> 01:07:27,313
+Okay, so in summary, so
+today we talked about
+
+1338
+01:07:27,313 --> 01:07:29,946
+how convolutional neural networks work,
+
+1339
+01:07:29,946 --> 01:07:31,257
+how they're basically stacks
+
+1340
+01:07:31,257 --> 01:07:34,204
+of these convolutional and pooling layers
+
+1341
+01:07:34,204 --> 01:07:38,291
+followed by fully connected
+layers at the end.
+
+1342
+01:07:38,291 --> 01:07:40,940
+There's been a trend towards
+having smaller filters
+
+1343
+01:07:40,940 --> 01:07:44,069
+and deeper architectures,
+so we'll talk more
+
+1344
+01:07:44,069 --> 01:07:47,364
+about case studies for
+some of these later on.
+
+1345
+01:07:47,364 --> 01:07:49,576
+There's also been a trend
+towards getting rid of these
+
+1346
+01:07:49,576 --> 01:07:52,215
+pooling and fully
+connected layers entirely.
+
+1347
+01:07:52,215 --> 01:07:55,275
+So just keeping these, just
+having, you know, Conv layers,
+
+1348
+01:07:55,275 --> 01:07:57,391
+very deep networks of Conv layers,
+
+1349
+01:07:57,391 --> 01:08:01,058
+so again we'll discuss
+all of this later on.
+
+1350
+01:08:01,898 --> 01:08:04,591
+And then typical architectures
+again look like this,
+
+1351
+01:08:04,591 --> 01:08:06,300
+you know, as we had earlier.
+
+1352
+01:08:06,300 --> 01:08:08,964
+Conv, ReLU for some N number of steps
+
+1353
+01:08:08,964 --> 01:08:10,821
+followed by a pool every once in a while,
+
+1354
+01:08:10,821 --> 01:08:13,197
+this whole thing repeated
+some number of times,
+
+1355
+01:08:13,197 --> 01:08:16,314
+and then followed by fully
+connected ReLU layers
+
+1356
+01:08:16,314 --> 01:08:18,987
+that we saw earlier, you know, one or two
+
+1357
+01:08:18,987 --> 01:08:20,287
+or just a few of these,
+
+1358
+01:08:20,287 --> 01:08:24,060
+and then a softmax at the
+end for your class scores.
+
+1359
+01:08:24,060 --> 01:08:26,100
+And so, you know, some typical values
+
+1360
+01:08:26,100 --> 01:08:29,183
+you might have N up to five of these.
+
+1361
+01:08:30,408 --> 01:08:33,144
+You're going to have pretty deep layers
+
+1362
+01:08:33,145 --> 01:08:36,759
+of Conv, ReLU, pool
+sequences, and then usually
+
+1363
+01:08:36,759 --> 01:08:39,701
+just a couple of these fully
+connected layers at the end.
+
+1364
+01:08:39,701 --> 01:08:42,221
+But we'll also go into
+some newer architectures
+
+1365
+01:08:42,221 --> 01:08:45,895
+like ResNet and GoogLeNet,
+which challenge this
+
+1366
+01:08:45,895 --> 01:08:49,755
+and will give pretty different
+types of architectures.
+
+1367
+01:08:49,756 --> 00:00:00,000
+Okay, thank you and
+see you guys next time.
+

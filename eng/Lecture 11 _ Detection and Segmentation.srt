@@ -1,0 +1,7746 @@
+1
+00:00:08,691 --> 00:00:10,473
+- Hello, hi.
+
+2
+00:00:10,473 --> 00:00:12,238
+So I want to get started.
+
+3
+00:00:12,238 --> 00:00:15,430
+Welcome to CS 231N Lecture 11.
+
+4
+00:00:15,430 --> 00:00:17,859
+We're going to talk about
+today detection segmentation
+
+5
+00:00:17,859 --> 00:00:20,038
+and a whole bunch of other
+really exciting topics
+
+6
+00:00:20,038 --> 00:00:23,259
+around core computer vision tasks.
+
+7
+00:00:23,259 --> 00:00:25,590
+But as usual, a couple
+administrative notes.
+
+8
+00:00:25,590 --> 00:00:29,356
+So last time you obviously
+took the midterm,
+
+9
+00:00:29,356 --> 00:00:31,358
+we didn't have lecture,
+hopefully that went okay
+
+10
+00:00:31,358 --> 00:00:34,379
+for all of you but so we're
+going to work on grading
+
+11
+00:00:34,379 --> 00:00:37,059
+the midterm this week, but as a reminder
+
+12
+00:00:37,059 --> 00:00:39,369
+please don't make any public discussions
+
+13
+00:00:39,369 --> 00:00:42,270
+about the midterm questions
+or answers or whatever
+
+14
+00:00:42,270 --> 00:00:45,054
+until at least tomorrow
+because there are still
+
+15
+00:00:45,054 --> 00:00:47,059
+some people taking makeup midterms today
+
+16
+00:00:47,059 --> 00:00:48,518
+and throughout the rest of the week
+
+17
+00:00:48,518 --> 00:00:50,918
+so we just ask you that
+you refrain from talking
+
+18
+00:00:50,918 --> 00:00:53,668
+publicly about midterm questions.
+
+19
+00:00:56,329 --> 00:00:57,790
+Why don't you wait until Monday?
+
+20
+00:00:57,790 --> 00:01:00,040
+[laughing]
+
+21
+00:01:00,899 --> 00:01:02,921
+Okay, great.
+
+22
+00:01:02,921 --> 00:01:04,971
+So we're also starting to
+work on midterm grading.
+
+23
+00:01:04,971 --> 00:01:06,698
+We'll get those back to
+you as soon as you can,
+
+24
+00:01:06,698 --> 00:01:07,761
+as soon as we can.
+
+25
+00:01:07,761 --> 00:01:10,289
+We're also starting to work
+on grading assignment two
+
+26
+00:01:10,289 --> 00:01:11,980
+so there's a lot of grading
+being done this week.
+
+27
+00:01:11,980 --> 00:01:14,079
+The TA's are pretty busy.
+
+28
+00:01:14,079 --> 00:01:16,511
+Also a reminder for you guys,
+hopefully you've been working
+
+29
+00:01:16,511 --> 00:01:18,479
+hard on your projects now that most of you
+
+30
+00:01:18,479 --> 00:01:21,679
+are done with the midterm
+so your project milestones
+
+31
+00:01:21,679 --> 00:01:25,460
+will be due on Tuesday so
+any sort of last minute
+
+32
+00:01:25,460 --> 00:01:26,970
+changes that you had in your projects,
+
+33
+00:01:26,970 --> 00:01:28,650
+I know some people
+decided to switch projects
+
+34
+00:01:28,650 --> 00:01:31,650
+after the proposal, some
+teams reshuffled a little bit,
+
+35
+00:01:31,650 --> 00:01:34,499
+that's fine but your
+milestone should reflect
+
+36
+00:01:34,499 --> 00:01:35,739
+the project that you're actually doing
+
+37
+00:01:35,739 --> 00:01:37,220
+for the rest of the quarter.
+
+38
+00:01:37,220 --> 00:01:39,677
+So hopefully that's going out well.
+
+39
+00:01:39,677 --> 00:01:41,519
+I know there's been a
+lot of worry and stress
+
+40
+00:01:41,519 --> 00:01:43,900
+on Piazza, wondering
+about assignment three.
+
+41
+00:01:43,900 --> 00:01:46,900
+So we're working on that as hard as we can
+
+42
+00:01:46,900 --> 00:01:48,479
+but that's actually a
+bit of a new assignment,
+
+43
+00:01:48,479 --> 00:01:50,189
+it's changing a bit from last year
+
+44
+00:01:50,189 --> 00:01:51,940
+so it will be out as soon as possible,
+
+45
+00:01:51,940 --> 00:01:53,951
+hopefully today or tomorrow.
+
+46
+00:01:53,951 --> 00:01:56,351
+Although we promise that
+whenever it comes out
+
+47
+00:01:56,351 --> 00:01:57,580
+you'll have two weeks to finish it
+
+48
+00:01:57,580 --> 00:02:01,551
+so try not to stress
+out about that too much.
+
+49
+00:02:01,551 --> 00:02:03,170
+But I'm pretty excited,
+I think assignment three
+
+50
+00:02:03,170 --> 00:02:05,318
+will be really cool, has a lot of cool,
+
+51
+00:02:05,318 --> 00:02:09,079
+it'll cover a lot of really cool material.
+
+52
+00:02:09,079 --> 00:02:11,591
+So another thing, last time in lecture
+
+53
+00:02:11,591 --> 00:02:13,340
+we mentioned this thing
+called the Train Game
+
+54
+00:02:13,340 --> 00:02:15,380
+which is this really cool
+thing we've been working on
+
+55
+00:02:15,380 --> 00:02:17,780
+sort of as a side project a little bit.
+
+56
+00:02:17,780 --> 00:02:20,751
+So this is an interactive
+tool that you guys can go on
+
+57
+00:02:20,751 --> 00:02:24,391
+and use to explore a
+little bit the process
+
+58
+00:02:24,391 --> 00:02:27,340
+of tuning hyperparameters
+in practice so we hope that,
+
+59
+00:02:27,340 --> 00:02:30,250
+so this is again totally
+not required for the course.
+
+60
+00:02:30,250 --> 00:02:33,119
+Totally optional, but
+if you do we will offer
+
+61
+00:02:33,119 --> 00:02:35,072
+a small amount of extra
+credit for those of you
+
+62
+00:02:35,072 --> 00:02:37,963
+who want to do well and
+participate on this.
+
+63
+00:02:37,963 --> 00:02:39,894
+And we'll send out
+exactly some more details
+
+64
+00:02:39,894 --> 00:02:42,224
+later this afternoon on Piazza.
+
+65
+00:02:42,224 --> 00:02:45,123
+But just a bit of a demo for
+what exactly is this thing.
+
+66
+00:02:45,123 --> 00:02:48,362
+So you'll get to go in
+and we've changed the name
+
+67
+00:02:48,362 --> 00:02:51,752
+from Train Game to HyperQuest
+because you're questing
+
+68
+00:02:51,752 --> 00:02:54,464
+to solve, to find the best
+hyperparameters for your model
+
+69
+00:02:54,464 --> 00:02:56,523
+so this is really cool,
+it'll be an interactive tool
+
+70
+00:02:56,523 --> 00:02:59,344
+that you can use to explore
+the training of hyperparameters
+
+71
+00:02:59,344 --> 00:03:01,254
+interactively in your browser.
+
+72
+00:03:01,254 --> 00:03:04,871
+So you'll login with
+your student ID and name.
+
+73
+00:03:04,871 --> 00:03:06,693
+You'll fill out a little survey with some
+
+74
+00:03:06,693 --> 00:03:08,830
+of your experience on deep learning
+
+75
+00:03:08,830 --> 00:03:11,747
+then you'll read some instructions.
+
+76
+00:03:11,747 --> 00:03:14,934
+So in this game you'll be
+shown some random data set
+
+77
+00:03:14,934 --> 00:03:16,152
+on every trial.
+
+78
+00:03:16,152 --> 00:03:19,214
+This data set might be
+images or it might be vectors
+
+79
+00:03:19,214 --> 00:03:21,494
+and your goal is to
+train a model by picking
+
+80
+00:03:21,494 --> 00:03:23,792
+the right hyperparameters
+interactively to perform
+
+81
+00:03:23,792 --> 00:03:25,632
+as well as you can on the validation set
+
+82
+00:03:25,632 --> 00:03:28,077
+of this random data set.
+
+83
+00:03:28,077 --> 00:03:29,926
+And it'll sort of keep
+track of your performance
+
+84
+00:03:29,926 --> 00:03:31,382
+over time and there'll be a leaderboard,
+
+85
+00:03:31,382 --> 00:03:33,423
+it'll be really cool.
+
+86
+00:03:33,423 --> 00:03:36,054
+So every time you play the game,
+
+87
+00:03:36,054 --> 00:03:38,723
+you'll get some statistics
+about your data set.
+
+88
+00:03:38,723 --> 00:03:41,064
+In this case we're doing
+a classification problem
+
+89
+00:03:41,064 --> 00:03:42,397
+with 10 classes.
+
+90
+00:03:43,424 --> 00:03:45,323
+You can see down at the bottom
+you have these statistics
+
+91
+00:03:45,323 --> 00:03:47,774
+about random data set, we have 10 classes.
+
+92
+00:03:47,774 --> 00:03:50,094
+The input data size is three by 32 by 32
+
+93
+00:03:50,094 --> 00:03:52,987
+so this is some image
+data set and we can see
+
+94
+00:03:52,987 --> 00:03:55,854
+that in this case we have 8500 examples
+
+95
+00:03:55,854 --> 00:03:58,832
+in the training set and 1500
+examples in the validation set.
+
+96
+00:03:58,832 --> 00:03:59,870
+These are all random, they'll change
+
+97
+00:03:59,870 --> 00:04:01,518
+a little bit every time.
+
+98
+00:04:01,518 --> 00:04:04,054
+Based on these data set statistics
+you'll make some choices
+
+99
+00:04:04,054 --> 00:04:06,912
+on your initial learning rate,
+your initial network size,
+
+100
+00:04:06,912 --> 00:04:08,931
+and your initial dropout rate.
+
+101
+00:04:08,931 --> 00:04:11,480
+Then you'll see a screen
+like this where it'll run
+
+102
+00:04:11,480 --> 00:04:13,811
+one epoch with those
+chosen hyperparameters,
+
+103
+00:04:13,811 --> 00:04:17,822
+show you on the right
+here you'll see two plots.
+
+104
+00:04:17,822 --> 00:04:19,712
+One is your training and validation loss
+
+105
+00:04:19,712 --> 00:04:21,040
+for that first epoch.
+
+106
+00:04:21,040 --> 00:04:23,409
+Then you'll see your training
+and validation accuracy
+
+107
+00:04:23,409 --> 00:04:26,280
+for that first epoch and
+based on the gaps that you see
+
+108
+00:04:26,280 --> 00:04:28,651
+in these two graphs you can
+make choices interactively
+
+109
+00:04:28,651 --> 00:04:30,759
+to change the learning
+rates and hyperparameters
+
+110
+00:04:30,759 --> 00:04:32,290
+for the next epoch.
+
+111
+00:04:32,290 --> 00:04:35,142
+So then you can either
+choose to continue training
+
+112
+00:04:35,142 --> 00:04:37,803
+with the current or
+changed hyperparameters,
+
+113
+00:04:37,803 --> 00:04:40,363
+you can also stop training,
+or you can revert to
+
+114
+00:04:40,363 --> 00:04:41,523
+go back to the previous checkpoint
+
+115
+00:04:41,523 --> 00:04:43,872
+in case things got really messed up.
+
+116
+00:04:43,872 --> 00:04:46,238
+So then you'll get to make some choice,
+
+117
+00:04:46,238 --> 00:04:48,691
+so here we'll decide to continue training
+
+118
+00:04:48,691 --> 00:04:51,347
+and in this case you could
+go and set new learning rates
+
+119
+00:04:51,347 --> 00:04:54,971
+and new hyperparameters for
+the next epoch of training.
+
+120
+00:04:54,971 --> 00:04:56,730
+You can also, kind of interesting here,
+
+121
+00:04:56,730 --> 00:04:59,808
+you can actually grow
+the network interactively
+
+122
+00:04:59,808 --> 00:05:01,899
+during training in this demo.
+
+123
+00:05:01,899 --> 00:05:05,592
+There's this cool trick
+from a couple recent papers
+
+124
+00:05:05,592 --> 00:05:07,562
+where you can either take existing layers
+
+125
+00:05:07,562 --> 00:05:09,902
+and make them wider or add
+new layers to the network
+
+126
+00:05:09,902 --> 00:05:12,083
+in the middle of training
+while still maintaining
+
+127
+00:05:12,083 --> 00:05:15,762
+the same function in the
+network so you can do that
+
+128
+00:05:15,762 --> 00:05:17,763
+to increase the size of
+your network in the middle
+
+129
+00:05:17,763 --> 00:05:20,131
+of training here which is kind of cool.
+
+130
+00:05:20,131 --> 00:05:22,371
+So then you'll make
+choices over several epochs
+
+131
+00:05:22,371 --> 00:05:24,430
+and eventually your
+final validation accuracy
+
+132
+00:05:24,430 --> 00:05:26,811
+will be recorded and we'll
+have some leaderboard
+
+133
+00:05:26,811 --> 00:05:29,912
+that compares your score on that data set
+
+134
+00:05:29,912 --> 00:05:33,072
+to some simple baseline models.
+
+135
+00:05:33,072 --> 00:05:35,380
+And depending on how well
+you do on this leaderboard
+
+136
+00:05:35,380 --> 00:05:37,534
+we'll again offer some small
+amounts of extra credit
+
+137
+00:05:37,534 --> 00:05:39,774
+for those of you who
+choose to participate.
+
+138
+00:05:39,774 --> 00:05:42,322
+So this is again, totally
+optional, but I think
+
+139
+00:05:42,322 --> 00:05:44,632
+it can be a really cool
+learning experience for you guys
+
+140
+00:05:44,632 --> 00:05:46,936
+to play around with and
+explore how hyperparameters
+
+141
+00:05:46,936 --> 00:05:49,243
+affect the learning process.
+
+142
+00:05:49,243 --> 00:05:50,742
+Also, it's really useful for us.
+
+143
+00:05:50,742 --> 00:05:54,872
+You'll help science out by
+participating in this experiment.
+
+144
+00:05:54,872 --> 00:05:57,662
+We're pretty interested in
+seeing how people behave
+
+145
+00:05:57,662 --> 00:06:02,101
+when they train neural networks
+so you'll be helping us out
+
+146
+00:06:02,101 --> 00:06:04,422
+as well if you decide to play this.
+
+147
+00:06:04,422 --> 00:06:08,462
+But again, totally optional, up to you.
+
+148
+00:06:08,462 --> 00:06:10,295
+Any questions on that?
+
+149
+00:06:15,080 --> 00:06:16,670
+Hopefully at some point but it's.
+
+150
+00:06:16,670 --> 00:06:18,680
+So the question was will this be a paper
+
+151
+00:06:18,680 --> 00:06:20,272
+or whatever eventually?
+
+152
+00:06:20,272 --> 00:06:22,800
+Hopefully but it's really
+early stages of this project
+
+153
+00:06:22,800 --> 00:06:26,760
+so I can't make any
+promises but I hope so.
+
+154
+00:06:26,760 --> 00:06:29,510
+But I think it'll be really cool.
+
+155
+00:06:33,240 --> 00:06:35,000
+[laughing]
+
+156
+00:06:35,000 --> 00:06:36,571
+Yeah, so the question is
+how can you add layers
+
+157
+00:06:36,571 --> 00:06:37,971
+during training?
+
+158
+00:06:37,971 --> 00:06:39,680
+I don't really want to
+get into that right now
+
+159
+00:06:39,680 --> 00:06:43,552
+but the paper to read is
+Net2Net by Ian Goodfellow's
+
+160
+00:06:43,552 --> 00:06:45,291
+one of the authors and
+there's another paper
+
+161
+00:06:45,291 --> 00:06:48,240
+from Microsoft called Network Morphism.
+
+162
+00:06:48,240 --> 00:06:52,407
+So if you read those two papers
+you can see how this works.
+
+163
+00:06:53,680 --> 00:06:56,232
+Okay, so last time, a bit of a reminder
+
+164
+00:06:56,232 --> 00:06:58,152
+before we had the midterm
+last time we talked
+
+165
+00:06:58,152 --> 00:06:59,792
+about recurrent neural networks.
+
+166
+00:06:59,792 --> 00:07:01,359
+We saw that recurrent
+neural networks can be used
+
+167
+00:07:01,359 --> 00:07:03,032
+for different types of problems.
+
+168
+00:07:03,032 --> 00:07:05,340
+In addition to one to one
+we can do one to many,
+
+169
+00:07:05,340 --> 00:07:07,192
+many to one, many to many.
+
+170
+00:07:07,192 --> 00:07:10,679
+We saw how this can apply
+to language modeling
+
+171
+00:07:10,679 --> 00:07:12,965
+and we saw some cool examples
+of applying neural networks
+
+172
+00:07:12,965 --> 00:07:15,460
+to model different sorts of
+languages at the character level
+
+173
+00:07:15,460 --> 00:07:18,912
+and we sampled these
+artificial math and Shakespeare
+
+174
+00:07:18,912 --> 00:07:20,571
+and C source code.
+
+175
+00:07:20,571 --> 00:07:22,752
+We also saw how similar
+things could be applied
+
+176
+00:07:22,752 --> 00:07:26,560
+to image captioning by connecting
+a CNN feature extractor
+
+177
+00:07:26,560 --> 00:07:28,491
+together with an RNN language model.
+
+178
+00:07:28,491 --> 00:07:31,011
+And we saw some really
+cool examples of that.
+
+179
+00:07:31,011 --> 00:07:33,680
+We also talked about the
+different types of RNN's.
+
+180
+00:07:33,680 --> 00:07:36,040
+We talked about this Vanilla RNN.
+
+181
+00:07:36,040 --> 00:07:37,872
+I also want to mention that
+this is sometimes called
+
+182
+00:07:37,872 --> 00:07:40,158
+a Simple RNN or an Elman RNN so you'll see
+
+183
+00:07:40,158 --> 00:07:42,331
+all of these different
+terms in literature.
+
+184
+00:07:42,331 --> 00:07:44,997
+We also talked about the Long
+Short Term Memory or LSTM.
+
+185
+00:07:44,997 --> 00:07:46,872
+And we talked about how the gradient,
+
+186
+00:07:46,872 --> 00:07:50,102
+the LSTM has this crazy set of equations
+
+187
+00:07:50,102 --> 00:07:53,021
+but it makes sense because it
+helps improve gradient flow
+
+188
+00:07:53,021 --> 00:07:56,022
+during back propagation
+and helps this thing model
+
+189
+00:07:56,022 --> 00:07:59,443
+more longer term dependencies
+in our sequences.
+
+190
+00:07:59,443 --> 00:08:01,403
+So today we're going to
+switch gears and talk about
+
+191
+00:08:01,403 --> 00:08:03,982
+a whole bunch of different exciting tasks.
+
+192
+00:08:03,982 --> 00:08:06,963
+We're going to talk about, so
+so far we've been talking about
+
+193
+00:08:06,963 --> 00:08:08,992
+mostly the image classification problem.
+
+194
+00:08:08,992 --> 00:08:10,883
+Today we're going to talk
+about various types of other
+
+195
+00:08:10,883 --> 00:08:13,262
+computer vision tasks where
+you actually want to go in
+
+196
+00:08:13,262 --> 00:08:17,162
+and say things about the spatial
+pixels inside your images
+
+197
+00:08:17,162 --> 00:08:19,542
+so we'll see segmentation,
+localization, detection,
+
+198
+00:08:19,542 --> 00:08:21,942
+a couple other different
+computer vision tasks
+
+199
+00:08:21,942 --> 00:08:22,912
+and how you can approach these
+
+200
+00:08:22,912 --> 00:08:25,494
+with convolutional neural networks.
+
+201
+00:08:25,494 --> 00:08:28,140
+So as a bit of refresher,
+so far the main thing
+
+202
+00:08:28,140 --> 00:08:29,552
+we've been talking about in this class
+
+203
+00:08:29,552 --> 00:08:32,163
+is image classification so
+here we're going to have
+
+204
+00:08:32,163 --> 00:08:33,770
+some input image come in.
+
+205
+00:08:33,770 --> 00:08:34,842
+That input image will go through
+
+206
+00:08:34,842 --> 00:08:36,583
+some deep convolutional network,
+
+207
+00:08:36,583 --> 00:08:39,013
+that network will give
+us some feature vector
+
+208
+00:08:39,014 --> 00:08:42,991
+of maybe 4096 dimensions
+in the case of AlexNet RGB
+
+209
+00:08:42,991 --> 00:08:44,798
+and then from that final feature vector
+
+210
+00:08:44,798 --> 00:08:46,222
+we'll have some fully-connected,
+
+211
+00:08:46,222 --> 00:08:47,750
+some final fully-connected layer
+
+212
+00:08:47,750 --> 00:08:50,568
+that gives us 1000 numbers
+for the different class scores
+
+213
+00:08:50,568 --> 00:08:52,861
+that we care about where
+1000 is maybe the number
+
+214
+00:08:52,861 --> 00:08:55,660
+of classes in ImageNet in this example.
+
+215
+00:08:55,660 --> 00:08:57,143
+And then at the end of the day
+
+216
+00:08:57,143 --> 00:08:59,080
+what the network does is we input an image
+
+217
+00:08:59,080 --> 00:09:01,437
+and then we output a single category label
+
+218
+00:09:01,437 --> 00:09:05,083
+saying what is the content of
+this entire image as a whole.
+
+219
+00:09:05,083 --> 00:09:08,241
+But this is maybe the
+most basic possible task
+
+220
+00:09:08,241 --> 00:09:09,879
+in computer vision and
+there's a whole bunch
+
+221
+00:09:09,879 --> 00:09:11,686
+of other interesting types of tasks
+
+222
+00:09:11,686 --> 00:09:14,314
+that we might want to
+solve using deep learning.
+
+223
+00:09:14,314 --> 00:09:16,466
+So today we're going to talk about several
+
+224
+00:09:16,466 --> 00:09:18,609
+of these different tasks and
+step through each of these
+
+225
+00:09:18,609 --> 00:09:21,515
+and see how they all
+work with deep learning.
+
+226
+00:09:21,515 --> 00:09:25,017
+So we'll talk about these more in detail
+
+227
+00:09:25,017 --> 00:09:26,944
+about what each problem is as we get to it
+
+228
+00:09:26,944 --> 00:09:28,852
+but this is kind of a summary slide
+
+229
+00:09:28,852 --> 00:09:31,480
+that we'll talk first about
+semantic segmentation.
+
+230
+00:09:31,480 --> 00:09:33,847
+We'll talk about classification
+and localization,
+
+231
+00:09:33,847 --> 00:09:35,153
+then we'll talk about object detection,
+
+232
+00:09:35,153 --> 00:09:36,753
+and finally a couple brief words
+
+233
+00:09:36,753 --> 00:09:39,086
+about instance segmentation.
+
+234
+00:09:39,967 --> 00:09:44,035
+So first is the problem
+of semantic segmentation.
+
+235
+00:09:44,035 --> 00:09:46,348
+In the problem of semantic segmentation,
+
+236
+00:09:46,348 --> 00:09:49,847
+we want to input an image
+and then output a decision
+
+237
+00:09:49,847 --> 00:09:52,567
+of a category for every
+pixel in that image
+
+238
+00:09:52,567 --> 00:09:55,514
+so for every pixel in this, so
+this input image for example
+
+239
+00:09:55,514 --> 00:09:58,327
+is this cat walking through
+the field, he's very cute.
+
+240
+00:09:58,327 --> 00:10:00,333
+And in the output we want to say
+
+241
+00:10:00,333 --> 00:10:04,517
+for every pixel is that pixel
+a cat or grass or sky or trees
+
+242
+00:10:04,517 --> 00:10:07,701
+or background or some
+other set of categories.
+
+243
+00:10:07,701 --> 00:10:09,490
+So we're going to have
+some set of categories
+
+244
+00:10:09,490 --> 00:10:11,922
+just like we did in the
+image classification case
+
+245
+00:10:11,922 --> 00:10:13,829
+but now rather than
+assigning a single category
+
+246
+00:10:13,829 --> 00:10:15,820
+labeled to the entire
+image, we want to produce
+
+247
+00:10:15,820 --> 00:10:19,569
+a category label for each
+pixel of the input image.
+
+248
+00:10:19,569 --> 00:10:22,674
+And this is called semantic segmentation.
+
+249
+00:10:22,674 --> 00:10:25,086
+So one interesting thing
+about semantic segmentation
+
+250
+00:10:25,086 --> 00:10:27,340
+is that it does not
+differentiate instances
+
+251
+00:10:27,340 --> 00:10:29,769
+so in this example on the
+right we have this image
+
+252
+00:10:29,769 --> 00:10:31,523
+with two cows where
+they're standing right next
+
+253
+00:10:31,523 --> 00:10:34,031
+to each other and when
+we're talking about semantic
+
+254
+00:10:34,031 --> 00:10:36,859
+segmentation we're just
+labeling all the pixels
+
+255
+00:10:36,859 --> 00:10:39,741
+independently for what is
+the category of that pixel.
+
+256
+00:10:39,741 --> 00:10:41,747
+So in the case like this
+where we have two cows
+
+257
+00:10:41,747 --> 00:10:44,510
+right next to each other
+the output does not make
+
+258
+00:10:44,510 --> 00:10:46,840
+any distinguishing, does not distinguish
+
+259
+00:10:46,840 --> 00:10:48,309
+between these two cows.
+
+260
+00:10:48,309 --> 00:10:50,098
+Instead we just get a whole mass of pixels
+
+261
+00:10:50,098 --> 00:10:51,782
+that are all labeled as cow.
+
+262
+00:10:51,782 --> 00:10:54,868
+So this is a bit of a shortcoming
+of semantic segmentation
+
+263
+00:10:54,868 --> 00:10:56,625
+and we'll see how we can fix this later
+
+264
+00:10:56,625 --> 00:10:58,910
+when we move to instance segmentation.
+
+265
+00:10:58,910 --> 00:11:00,549
+But at least for now we'll just talk about
+
+266
+00:11:00,549 --> 00:11:02,882
+semantic segmentation first.
+
+267
+00:11:04,437 --> 00:11:07,595
+So you can imagine maybe using a class,
+
+268
+00:11:07,595 --> 00:11:09,340
+so one potential approach for attacking
+
+269
+00:11:09,340 --> 00:11:12,544
+semantic segmentation might
+be through classification.
+
+270
+00:11:12,544 --> 00:11:14,553
+So there's this, you could use this idea
+
+271
+00:11:14,553 --> 00:11:17,755
+of a sliding window approach
+to semantic segmentation.
+
+272
+00:11:17,755 --> 00:11:21,076
+So you might imagine that
+we take our input image
+
+273
+00:11:21,076 --> 00:11:24,315
+and we break it up into many
+many small, tiny local crops
+
+274
+00:11:24,315 --> 00:11:27,763
+of the image so in this
+example we've taken
+
+275
+00:11:27,763 --> 00:11:31,310
+maybe three crops from
+around the head of this cow
+
+276
+00:11:31,310 --> 00:11:33,705
+and then you could imagine
+taking each of those crops
+
+277
+00:11:33,705 --> 00:11:36,564
+and now treating this as
+a classification problem.
+
+278
+00:11:36,564 --> 00:11:39,086
+Saying for this crop, what is the category
+
+279
+00:11:39,086 --> 00:11:41,246
+of the central pixel of the crop?
+
+280
+00:11:41,246 --> 00:11:43,828
+And then we could use
+all the same machinery
+
+281
+00:11:43,828 --> 00:11:46,752
+that we've developed for
+classifying entire images
+
+282
+00:11:46,752 --> 00:11:48,760
+but now just apply it on crops rather than
+
+283
+00:11:48,760 --> 00:11:51,083
+on the entire image.
+
+284
+00:11:51,083 --> 00:11:54,412
+And this would probably
+work to some extent
+
+285
+00:11:54,412 --> 00:11:56,601
+but it's probably not a very good idea.
+
+286
+00:11:56,601 --> 00:11:58,422
+So this would end up being super super
+
+287
+00:11:58,422 --> 00:12:02,498
+computationally expensive
+because we want to label
+
+288
+00:12:02,498 --> 00:12:04,701
+every pixel in the image,
+we would need a separate
+
+289
+00:12:04,701 --> 00:12:07,319
+crop for every pixel in
+that image and this would be
+
+290
+00:12:07,319 --> 00:12:09,407
+super super expensive to
+run forward and backward
+
+291
+00:12:09,407 --> 00:12:10,910
+passes through.
+
+292
+00:12:10,910 --> 00:12:14,437
+And moreover, we're actually,
+if you think about this
+
+293
+00:12:14,437 --> 00:12:17,085
+we can actually share
+computation between different
+
+294
+00:12:17,085 --> 00:12:20,476
+patches so if you're trying
+to classify two patches
+
+295
+00:12:20,476 --> 00:12:22,950
+that are right next to each
+other and actually overlap
+
+296
+00:12:22,950 --> 00:12:25,509
+then the convolutional
+features of those patches
+
+297
+00:12:25,509 --> 00:12:28,242
+will end up going through
+the same convolutional layers
+
+298
+00:12:28,242 --> 00:12:30,611
+and we can actually share
+a lot of the computation
+
+299
+00:12:30,611 --> 00:12:32,644
+when applying this to separate passes
+
+300
+00:12:32,644 --> 00:12:34,742
+or when applying this type of approach
+
+301
+00:12:34,742 --> 00:12:37,194
+to separate patches in the image.
+
+302
+00:12:37,194 --> 00:12:39,801
+So this is actually a terrible
+idea and nobody does this
+
+303
+00:12:39,801 --> 00:12:41,896
+and you should probably not do this
+
+304
+00:12:41,896 --> 00:12:44,913
+but it's at least the first
+thing you might think of
+
+305
+00:12:44,913 --> 00:12:48,683
+if you were trying to think
+about semantic segmentation.
+
+306
+00:12:48,683 --> 00:12:50,598
+Then the next idea that works a bit better
+
+307
+00:12:50,598 --> 00:12:53,372
+is this idea of a fully
+convolutional network right.
+
+308
+00:12:53,372 --> 00:12:56,080
+So rather than extracting
+individual patches from the image
+
+309
+00:12:56,080 --> 00:12:58,305
+and classifying these
+patches independently,
+
+310
+00:12:58,305 --> 00:13:00,959
+we can imagine just having
+our network be a whole giant
+
+311
+00:13:00,959 --> 00:13:03,604
+stack of convolutional layers
+with no fully connected
+
+312
+00:13:03,604 --> 00:13:06,501
+layers or anything so in this
+case we just have a bunch
+
+313
+00:13:06,501 --> 00:13:10,631
+of convolutional layers that
+are all maybe three by three
+
+314
+00:13:10,631 --> 00:13:12,633
+with zero padding or something like that
+
+315
+00:13:12,633 --> 00:13:15,422
+so that each convolutional
+layer preserves the spatial size
+
+316
+00:13:15,422 --> 00:13:17,843
+of the input and now if we pass our image
+
+317
+00:13:17,843 --> 00:13:20,605
+through a whole stack of
+these convolutional layers,
+
+318
+00:13:20,605 --> 00:13:23,090
+then the final convolutional
+layer could just output
+
+319
+00:13:23,090 --> 00:13:27,184
+a tensor of something by C by H by W
+
+320
+00:13:27,184 --> 00:13:29,622
+where C is the number of
+categories that we care about
+
+321
+00:13:29,622 --> 00:13:32,491
+and you could see this
+tensor as just giving
+
+322
+00:13:32,491 --> 00:13:34,734
+our classification scores for every pixel
+
+323
+00:13:34,734 --> 00:13:38,127
+in the input image at every
+location in the input image.
+
+324
+00:13:38,127 --> 00:13:40,144
+And we could compute this all at once
+
+325
+00:13:40,144 --> 00:13:43,014
+with just some giant stack
+of convolutional layers.
+
+326
+00:13:43,014 --> 00:13:44,571
+And then you could imagine
+training this thing
+
+327
+00:13:44,571 --> 00:13:47,216
+by putting a classification
+loss at every pixel
+
+328
+00:13:47,216 --> 00:13:50,558
+of this output, taking an
+average over those pixels
+
+329
+00:13:50,558 --> 00:13:52,718
+in space, and just training
+this kind of network
+
+330
+00:13:52,718 --> 00:13:55,137
+through normal, regular back propagation.
+
+331
+00:13:55,137 --> 00:13:55,970
+Question?
+
+332
+00:13:58,430 --> 00:13:59,728
+Oh, the question is how do you develop
+
+333
+00:13:59,728 --> 00:14:01,179
+training data for this?
+
+334
+00:14:01,179 --> 00:14:02,687
+It's very expensive right.
+
+335
+00:14:02,687 --> 00:14:04,366
+So the training data for this would be
+
+336
+00:14:04,366 --> 00:14:06,899
+we need to label every
+pixel in those input images
+
+337
+00:14:06,899 --> 00:14:09,654
+so there's tools that
+people sometimes have online
+
+338
+00:14:09,654 --> 00:14:11,831
+where you can go in and
+sort of draw contours
+
+339
+00:14:11,831 --> 00:14:14,613
+around the objects and
+then fill in regions
+
+340
+00:14:14,613 --> 00:14:16,104
+but in general getting
+this kind of training data
+
+341
+00:14:16,104 --> 00:14:17,604
+is very expensive.
+
+342
+00:14:29,243 --> 00:14:31,357
+Yeah, the question is
+what is the loss function?
+
+343
+00:14:31,357 --> 00:14:34,328
+So here since we're making
+a classification decision
+
+344
+00:14:34,328 --> 00:14:37,009
+per pixel then we put a cross entropy loss
+
+345
+00:14:37,009 --> 00:14:39,025
+on every pixel of the output.
+
+346
+00:14:39,025 --> 00:14:40,739
+So we have the ground truth category label
+
+347
+00:14:40,739 --> 00:14:42,212
+for every pixel in the output,
+
+348
+00:14:42,212 --> 00:14:44,363
+then we compute across entropy loss
+
+349
+00:14:44,363 --> 00:14:45,793
+between every pixel in the output
+
+350
+00:14:45,793 --> 00:14:48,143
+and the ground truth pixels and then
+
+351
+00:14:48,143 --> 00:14:50,437
+take either a sum or an average over space
+
+352
+00:14:50,437 --> 00:14:52,739
+and then sum or average
+over the mini-batch.
+
+353
+00:14:52,739 --> 00:14:53,572
+Question?
+
+354
+00:15:18,548 --> 00:15:19,465
+Yeah, yeah.
+
+355
+00:15:24,804 --> 00:15:26,505
+Yeah, the question is do we assume
+
+356
+00:15:26,505 --> 00:15:28,008
+that we know the categories?
+
+357
+00:15:28,008 --> 00:15:31,258
+So yes, we do assume that we
+know the categories up front
+
+358
+00:15:31,258 --> 00:15:33,716
+so this is just like the
+image classification case.
+
+359
+00:15:33,716 --> 00:15:36,785
+So an image classification we
+know at the start of training
+
+360
+00:15:36,785 --> 00:15:39,466
+based on our data set that
+maybe there's 10 or 20
+
+361
+00:15:39,466 --> 00:15:41,357
+or 100 or 1000 classes that we care about
+
+362
+00:15:41,357 --> 00:15:45,024
+for this data set and
+then here we are fixed
+
+363
+00:15:45,910 --> 00:15:50,077
+to that set of classes that
+are fixed for the data set.
+
+364
+00:15:51,012 --> 00:15:53,927
+So this model is relatively simple
+
+365
+00:15:53,927 --> 00:15:56,206
+and you can imagine this
+working reasonably well
+
+366
+00:15:56,206 --> 00:15:58,853
+assuming that you tuned all
+the hyperparameters right
+
+367
+00:15:58,853 --> 00:16:00,562
+but it's kind of a problem right.
+
+368
+00:16:00,562 --> 00:16:02,346
+So in this setup, since
+we're applying a bunch
+
+369
+00:16:02,346 --> 00:16:05,120
+of convolutions that
+are all keeping the same
+
+370
+00:16:05,120 --> 00:16:07,479
+spatial size of the input image,
+
+371
+00:16:07,479 --> 00:16:09,574
+this would be super super expensive right.
+
+372
+00:16:09,574 --> 00:16:12,500
+If you wanted to do
+convolutions that maybe have
+
+373
+00:16:12,500 --> 00:16:16,435
+64 or 128 or 256 channels for
+those convolutional filters
+
+374
+00:16:16,435 --> 00:16:18,982
+which is pretty common in
+a lot of these networks,
+
+375
+00:16:18,982 --> 00:16:21,394
+then running those convolutions
+on this high resolution
+
+376
+00:16:21,394 --> 00:16:24,111
+input image over a
+sequence of layers would be
+
+377
+00:16:24,111 --> 00:16:25,849
+extremely computationally expensive
+
+378
+00:16:25,849 --> 00:16:27,361
+and would take a ton of memory.
+
+379
+00:16:27,361 --> 00:16:29,252
+So in practice, you don't
+usually see networks
+
+380
+00:16:29,252 --> 00:16:31,304
+with this architecture.
+
+381
+00:16:31,304 --> 00:16:33,526
+Instead you tend to see
+networks that look something
+
+382
+00:16:33,526 --> 00:16:37,512
+like this where we have some downsampling
+
+383
+00:16:37,512 --> 00:16:39,277
+and then some upsampling
+of the feature map
+
+384
+00:16:39,277 --> 00:16:40,592
+inside the image.
+
+385
+00:16:40,592 --> 00:16:42,490
+So rather than doing all the convolutions
+
+386
+00:16:42,490 --> 00:16:44,614
+of the full spatial
+resolution of the image,
+
+387
+00:16:44,614 --> 00:16:46,304
+we'll maybe go through a small number
+
+388
+00:16:46,304 --> 00:16:48,997
+of convolutional layers
+at the original resolution
+
+389
+00:16:48,997 --> 00:16:50,858
+then downsample that
+feature map using something
+
+390
+00:16:50,858 --> 00:16:53,991
+like max pooling or strided convolutions
+
+391
+00:16:53,991 --> 00:16:55,719
+and sort of downsample, downsample,
+
+392
+00:16:55,719 --> 00:16:57,656
+so we have convolutions in downsampling
+
+393
+00:16:57,656 --> 00:16:59,338
+and convolutions in downsampling
+
+394
+00:16:59,338 --> 00:17:02,199
+that look much like a lot of
+the classification networks
+
+395
+00:17:02,199 --> 00:17:04,640
+that you see but now
+the difference is that
+
+396
+00:17:04,640 --> 00:17:06,800
+rather than transitioning
+to a fully connected layer
+
+397
+00:17:06,800 --> 00:17:09,346
+like you might do in an
+image classification setup,
+
+398
+00:17:09,346 --> 00:17:12,071
+instead we want to increase
+the spatial resolution
+
+399
+00:17:12,071 --> 00:17:15,213
+of our predictions in the
+second half of the network
+
+400
+00:17:15,214 --> 00:17:17,598
+so that our output image
+can now be the same size
+
+401
+00:17:17,598 --> 00:17:20,614
+as our input image and this ends up being
+
+402
+00:17:20,614 --> 00:17:22,136
+much more computationally efficient
+
+403
+00:17:22,136 --> 00:17:24,176
+because you can make the network very deep
+
+404
+00:17:24,176 --> 00:17:26,417
+and work at a lower spatial resolution
+
+405
+00:17:26,417 --> 00:17:29,749
+for many of the layers at
+the inside of the network.
+
+406
+00:17:29,749 --> 00:17:33,205
+So we've already seen
+examples of downsampling
+
+407
+00:17:33,205 --> 00:17:36,418
+when it comes to convolutional networks.
+
+408
+00:17:36,418 --> 00:17:38,343
+We've seen that you can
+do strided convolutions
+
+409
+00:17:38,343 --> 00:17:41,180
+or various types of pooling
+to reduce the spatial size
+
+410
+00:17:41,180 --> 00:17:44,050
+of the image inside a
+network but we haven't
+
+411
+00:17:44,050 --> 00:17:46,040
+really talked about
+upsampling and the question
+
+412
+00:17:46,040 --> 00:17:49,107
+you might be wondering is
+what are these upsampling
+
+413
+00:17:49,107 --> 00:17:51,476
+layers actually look
+like inside the network?
+
+414
+00:17:51,476 --> 00:17:53,833
+And what are our strategies
+for increasing the size
+
+415
+00:17:53,833 --> 00:17:55,875
+of a feature map inside the network?
+
+416
+00:17:55,875 --> 00:17:59,208
+Sorry, was there a question in the back?
+
+417
+00:18:07,316 --> 00:18:09,061
+Yeah, so the question
+is how do we upsample?
+
+418
+00:18:09,061 --> 00:18:10,330
+And the answer is that's the topic
+
+419
+00:18:10,330 --> 00:18:11,758
+of the next couple slides.
+
+420
+00:18:11,758 --> 00:18:13,263
+[laughing]
+
+421
+00:18:13,263 --> 00:18:17,197
+So one strategy for
+upsampling is something like
+
+422
+00:18:17,197 --> 00:18:21,075
+unpooling so we have
+this notion of pooling
+
+423
+00:18:21,075 --> 00:18:23,379
+to downsample so we talked
+about average pooling
+
+424
+00:18:23,379 --> 00:18:26,187
+or max pooling so when we
+talked about average pooling
+
+425
+00:18:26,187 --> 00:18:27,754
+we're kind of taking a spatial average
+
+426
+00:18:27,754 --> 00:18:30,389
+within a receptive field
+of each pooling region.
+
+427
+00:18:30,389 --> 00:18:32,765
+One kind of analog for
+upsampling is this idea
+
+428
+00:18:32,765 --> 00:18:34,853
+of nearest neighbor unpooling.
+
+429
+00:18:34,853 --> 00:18:36,761
+So here on the left we see this example
+
+430
+00:18:36,761 --> 00:18:39,090
+of nearest neighbor
+unpooling where our input
+
+431
+00:18:39,090 --> 00:18:41,379
+is maybe some two by
+two grid and our output
+
+432
+00:18:41,379 --> 00:18:43,853
+is a four by four grid
+and now in our output
+
+433
+00:18:43,853 --> 00:18:47,698
+we've done a two by two
+stride two nearest neighbor
+
+434
+00:18:47,698 --> 00:18:50,461
+unpooling or upsampling
+where we've just duplicated
+
+435
+00:18:50,461 --> 00:18:53,177
+that element for every
+point in our two by two
+
+436
+00:18:53,177 --> 00:18:56,149
+receptive field of the unpooling region.
+
+437
+00:18:56,149 --> 00:18:59,605
+Another thing you might see
+is this bed of nails unpooling
+
+438
+00:18:59,605 --> 00:19:03,472
+or bed of nails upsampling
+where you'll just take,
+
+439
+00:19:03,472 --> 00:19:05,741
+again we have a two by two receptive field
+
+440
+00:19:05,741 --> 00:19:09,116
+for our unpooling regions
+and then you'll take the,
+
+441
+00:19:09,116 --> 00:19:13,465
+in this case you make it all
+zeros except for one element
+
+442
+00:19:13,465 --> 00:19:17,487
+of the unpooling region so
+in this case we've taken
+
+443
+00:19:17,487 --> 00:19:19,376
+all of our inputs and
+always put them in the upper
+
+444
+00:19:19,376 --> 00:19:21,852
+left hand corner of this unpooling region
+
+445
+00:19:21,852 --> 00:19:23,463
+and everything else is zeros.
+
+446
+00:19:23,463 --> 00:19:24,867
+And this is kind of like a bed of nails
+
+447
+00:19:24,867 --> 00:19:27,341
+because the zeros are very flat,
+
+448
+00:19:27,341 --> 00:19:30,133
+then you've got these things poking up
+
+449
+00:19:30,133 --> 00:19:33,560
+for the values at these
+various non-zero regions.
+
+450
+00:19:33,560 --> 00:19:35,899
+Another thing that you see
+sometimes which was alluded to
+
+451
+00:19:35,899 --> 00:19:39,591
+by the question a minute ago
+is this idea of max unpooling
+
+452
+00:19:39,591 --> 00:19:42,848
+so in a lot of these networks
+they tend to be symmetrical
+
+453
+00:19:42,848 --> 00:19:46,340
+where we have a downsampling
+portion of the network
+
+454
+00:19:46,340 --> 00:19:48,266
+and then an upsampling
+portion of the network
+
+455
+00:19:48,266 --> 00:19:52,047
+with a symmetry between those
+two portions of the network.
+
+456
+00:19:52,047 --> 00:19:55,628
+So sometimes what you'll see
+is this idea of max unpooling
+
+457
+00:19:55,628 --> 00:20:00,553
+where for each unpooling,
+for each upsampling layer,
+
+458
+00:20:00,553 --> 00:20:03,325
+it is associated with
+one of the pooling layers
+
+459
+00:20:03,325 --> 00:20:06,140
+in the first half of the network
+and now in the first half,
+
+460
+00:20:06,140 --> 00:20:09,380
+in the downsampling when we do max pooling
+
+461
+00:20:09,380 --> 00:20:12,577
+we'll actually remember which
+element of the receptive field
+
+462
+00:20:12,577 --> 00:20:16,465
+during max pooling was
+used to do the max pooling
+
+463
+00:20:16,465 --> 00:20:18,481
+and now when we go through
+the rest of the network
+
+464
+00:20:18,481 --> 00:20:20,821
+then we'll do something that
+looks like this bed of nails
+
+465
+00:20:20,821 --> 00:20:23,969
+upsampling except rather than
+always putting the elements
+
+466
+00:20:23,969 --> 00:20:26,391
+in the same position,
+instead we'll stick it
+
+467
+00:20:26,391 --> 00:20:29,775
+into the position that was
+used in the corresponding
+
+468
+00:20:29,775 --> 00:20:33,697
+max pooling step earlier in the network.
+
+469
+00:20:33,697 --> 00:20:35,154
+I'm not sure if that explanation was clear
+
+470
+00:20:35,154 --> 00:20:38,321
+but hopefully the picture makes sense.
+
+471
+00:20:39,248 --> 00:20:42,388
+Yeah, so then you just end up
+filling the rest with zeros.
+
+472
+00:20:42,388 --> 00:20:43,751
+So then you fill the rest with zeros
+
+473
+00:20:43,751 --> 00:20:45,871
+and then you stick the elements
+from the low resolution
+
+474
+00:20:45,871 --> 00:20:48,256
+patch up into the high resolution patch
+
+475
+00:20:48,256 --> 00:20:51,714
+at the points where the
+max pooling took place
+
+476
+00:20:51,714 --> 00:20:54,964
+at the corresponding max pooling there.
+
+477
+00:20:56,871 --> 00:21:00,723
+Okay, so that's kind
+of an interesting idea.
+
+478
+00:21:00,723 --> 00:21:02,056
+Sorry, question?
+
+479
+00:21:08,696 --> 00:21:10,559
+Oh yeah, so the question
+is why is this a good idea?
+
+480
+00:21:10,559 --> 00:21:11,801
+Why might this matter?
+
+481
+00:21:11,801 --> 00:21:14,502
+So the idea is that when we're
+doing semantic segmentation
+
+482
+00:21:14,502 --> 00:21:16,806
+we want our predictions
+to be pixel perfect right.
+
+483
+00:21:16,806 --> 00:21:19,667
+We kind of want to get
+those sharp boundaries
+
+484
+00:21:19,667 --> 00:21:23,708
+and those tiny details in
+our predictive segmentation
+
+485
+00:21:23,708 --> 00:21:27,001
+so now if you're doing this max pooling,
+
+486
+00:21:27,001 --> 00:21:29,279
+there's this sort of
+heterogeneity that's happening
+
+487
+00:21:29,279 --> 00:21:31,782
+inside the feature map
+due to the max pooling
+
+488
+00:21:31,782 --> 00:21:35,949
+where from the low resolution
+image you don't know,
+
+489
+00:21:36,839 --> 00:21:39,395
+you're sort of losing spatial
+information in some sense
+
+490
+00:21:39,395 --> 00:21:42,390
+by you don't know where that
+feature vector came from
+
+491
+00:21:42,390 --> 00:21:45,253
+in the local receptive
+field after max pooling.
+
+492
+00:21:45,253 --> 00:21:48,673
+So if you actually unpool
+by putting the vector
+
+493
+00:21:48,673 --> 00:21:51,394
+in the same slot you might
+think that that might help us
+
+494
+00:21:51,394 --> 00:21:53,759
+handle these fine details
+a little bit better
+
+495
+00:21:53,759 --> 00:21:55,866
+and help us preserve some
+of that spatial information
+
+496
+00:21:55,866 --> 00:21:59,051
+that was lost during max pooling.
+
+497
+00:21:59,051 --> 00:21:59,884
+Question?
+
+498
+00:22:10,883 --> 00:22:13,809
+The question is does this make
+things easier for back prop?
+
+499
+00:22:13,809 --> 00:22:17,275
+Yeah, I guess, I don't think
+it changes the back prop
+
+500
+00:22:17,275 --> 00:22:19,389
+dynamics too much because
+storing these indices
+
+501
+00:22:19,389 --> 00:22:21,009
+is not a huge computational overhead.
+
+502
+00:22:21,009 --> 00:22:24,851
+They're pretty small in
+comparison to everything else.
+
+503
+00:22:24,851 --> 00:22:26,606
+So another thing that you'll see sometimes
+
+504
+00:22:26,606 --> 00:22:29,566
+is this idea of transpose convolution.
+
+505
+00:22:29,566 --> 00:22:33,259
+So transpose convolution,
+so for these various types
+
+506
+00:22:33,259 --> 00:22:34,724
+of unpooling that we just talked about,
+
+507
+00:22:34,724 --> 00:22:36,561
+these bed of nails, this nearest neighbor,
+
+508
+00:22:36,561 --> 00:22:38,945
+this max unpooling, all
+of these are kind of
+
+509
+00:22:38,945 --> 00:22:41,347
+a fixed function, they're
+not really learning exactly
+
+510
+00:22:41,347 --> 00:22:44,964
+how to do the upsampling so
+if you think about something
+
+511
+00:22:44,964 --> 00:22:47,404
+like strided convolution,
+strided convolution
+
+512
+00:22:47,404 --> 00:22:50,212
+is kind of like a learnable
+layer that learns the way
+
+513
+00:22:50,212 --> 00:22:53,010
+that the network wants
+to perform downsampling
+
+514
+00:22:53,010 --> 00:22:54,423
+at that layer.
+
+515
+00:22:54,423 --> 00:22:57,890
+And by analogy with that
+there's this type of layer
+
+516
+00:22:57,890 --> 00:23:00,317
+called a transpose
+convolution that lets us do
+
+517
+00:23:00,317 --> 00:23:02,534
+kind of learnable upsampling.
+
+518
+00:23:02,534 --> 00:23:04,233
+So it will both upsample the feature map
+
+519
+00:23:04,233 --> 00:23:05,954
+and learn some weights about how it wants
+
+520
+00:23:05,954 --> 00:23:08,068
+to do that upsampling.
+
+521
+00:23:08,068 --> 00:23:10,363
+And this is really just
+another type of convolution
+
+522
+00:23:10,363 --> 00:23:13,262
+so to see how this works
+remember how a normal
+
+523
+00:23:13,262 --> 00:23:16,663
+three by three stride one pad
+one convolution would work.
+
+524
+00:23:16,663 --> 00:23:18,524
+That for this kind of normal convolution
+
+525
+00:23:18,524 --> 00:23:20,488
+that we've seen many
+times now in this class,
+
+526
+00:23:20,488 --> 00:23:22,207
+our input might by four by four,
+
+527
+00:23:22,207 --> 00:23:24,316
+our output might be four by four,
+
+528
+00:23:24,316 --> 00:23:26,119
+and now we'll have this
+three by three kernel
+
+529
+00:23:26,119 --> 00:23:27,698
+and we'll take an inner product between,
+
+530
+00:23:27,698 --> 00:23:29,721
+we'll plop down that kernel
+at the corner of the image,
+
+531
+00:23:29,721 --> 00:23:31,639
+take an inner product,
+and that inner product
+
+532
+00:23:31,639 --> 00:23:33,249
+will give us the value and the activation
+
+533
+00:23:33,249 --> 00:23:35,409
+in the upper left hand
+corner of our output.
+
+534
+00:23:35,409 --> 00:23:37,749
+And we'll repeat this
+for every receptive field
+
+535
+00:23:37,749 --> 00:23:39,388
+in the image.
+
+536
+00:23:39,388 --> 00:23:42,177
+Now if we talk about strided convolution
+
+537
+00:23:42,177 --> 00:23:44,688
+then strided convolution ends
+up looking pretty similar.
+
+538
+00:23:44,688 --> 00:23:47,714
+However, our input is
+maybe a four by four region
+
+539
+00:23:47,714 --> 00:23:49,648
+and our output is a two by two region.
+
+540
+00:23:49,648 --> 00:23:51,573
+But we still have this idea of taking,
+
+541
+00:23:51,573 --> 00:23:54,633
+of there being some three
+by three filter or kernel
+
+542
+00:23:54,633 --> 00:23:56,523
+that we plop down in
+the corner of the image,
+
+543
+00:23:56,523 --> 00:23:58,318
+take an inner product
+and use that to compute
+
+544
+00:23:58,318 --> 00:24:00,808
+a value of the activation and the output.
+
+545
+00:24:00,808 --> 00:24:02,865
+But now with strided
+convolution the idea is that
+
+546
+00:24:02,865 --> 00:24:06,676
+we're moving that, rather
+than popping down that filter
+
+547
+00:24:06,676 --> 00:24:08,879
+at every possible point in the input,
+
+548
+00:24:08,879 --> 00:24:11,057
+instead we're going to move
+the filter by two pixels
+
+549
+00:24:11,057 --> 00:24:14,191
+in the input every time we
+move the filter by one pixel,
+
+550
+00:24:14,191 --> 00:24:16,961
+every time we move by
+one pixel in the output.
+
+551
+00:24:16,961 --> 00:24:19,293
+Right so this stride
+of two gives us a ratio
+
+552
+00:24:19,293 --> 00:24:21,363
+between how much do we move in the input
+
+553
+00:24:21,363 --> 00:24:23,361
+versus how much do we move in the output.
+
+554
+00:24:23,361 --> 00:24:25,907
+So when you do a strided
+convolution with stride two
+
+555
+00:24:25,907 --> 00:24:28,653
+this ends up downsampling
+the image or the feature map
+
+556
+00:24:28,653 --> 00:24:32,495
+by a factor of two in
+kind of a learnable way.
+
+557
+00:24:32,495 --> 00:24:35,187
+And now a transpose convolution
+is sort of the opposite
+
+558
+00:24:35,187 --> 00:24:39,955
+in a way so here our input
+will be a two by two region
+
+559
+00:24:39,955 --> 00:24:42,638
+and our output will be
+a four by four region.
+
+560
+00:24:42,638 --> 00:24:44,375
+But now the operation that we perform
+
+561
+00:24:44,375 --> 00:24:46,904
+with transpose convolution
+is a little bit different.
+
+562
+00:24:46,904 --> 00:24:50,675
+Now so rather than taking an inner product
+
+563
+00:24:50,675 --> 00:24:53,368
+instead what we're going
+to do is we're going to
+
+564
+00:24:53,368 --> 00:24:56,074
+take the value of our input feature map
+
+565
+00:24:56,074 --> 00:24:58,379
+at that upper left hand
+corner and that'll be
+
+566
+00:24:58,379 --> 00:25:00,856
+some scalar value in the
+upper left hand corner.
+
+567
+00:25:00,856 --> 00:25:04,211
+We're going to multiply the
+filter by that scalar value
+
+568
+00:25:04,211 --> 00:25:06,767
+and then copy those values
+over to this three by three
+
+569
+00:25:06,767 --> 00:25:11,620
+region in the output so rather
+than taking an inner product
+
+570
+00:25:11,620 --> 00:25:14,428
+with our filter and the
+input, instead our input
+
+571
+00:25:14,428 --> 00:25:17,299
+gives weights that we will
+use to weight the filter
+
+572
+00:25:17,299 --> 00:25:21,547
+and then our output will be
+weighted copies of the filter
+
+573
+00:25:21,547 --> 00:25:24,911
+that are weighted by
+the values in the input.
+
+574
+00:25:24,911 --> 00:25:28,243
+And now we can do this
+sort of same ratio trick
+
+575
+00:25:28,243 --> 00:25:31,168
+in order to upsample so
+now when we move one pixel
+
+576
+00:25:31,168 --> 00:25:33,947
+in the input now we can
+plop our filter down
+
+577
+00:25:33,947 --> 00:25:36,703
+two pixels away in the output
+and it's the same trick
+
+578
+00:25:36,703 --> 00:25:39,743
+that now the blue pixel in
+the input is some scalar value
+
+579
+00:25:39,743 --> 00:25:41,254
+and we'll take that scalar value,
+
+580
+00:25:41,254 --> 00:25:43,713
+multiply it by the values in the filter,
+
+581
+00:25:43,713 --> 00:25:46,269
+and copy those weighted filter values
+
+582
+00:25:46,269 --> 00:25:49,048
+into this new region in the output.
+
+583
+00:25:49,048 --> 00:25:51,678
+The tricky part is that
+sometimes these receptive fields
+
+584
+00:25:51,678 --> 00:25:54,765
+in the output can overlap
+now and now when these
+
+585
+00:25:54,765 --> 00:25:57,419
+receptive fields in the output overlap
+
+586
+00:25:57,419 --> 00:26:00,143
+we just sum the results in the output.
+
+587
+00:26:00,143 --> 00:26:02,299
+So then you can imagine
+repeating this everywhere
+
+588
+00:26:02,299 --> 00:26:04,720
+and repeating this process everywhere
+
+589
+00:26:04,720 --> 00:26:07,931
+and this ends up doing sort
+of a learnable upsampling
+
+590
+00:26:07,931 --> 00:26:10,299
+where we use these learned
+convolutional filter weights
+
+591
+00:26:10,299 --> 00:26:14,466
+to upsample the image and
+increase the spatial size.
+
+592
+00:26:15,609 --> 00:26:17,768
+By the way, you'll see this operation go
+
+593
+00:26:17,768 --> 00:26:19,975
+by a lot of different names in literature.
+
+594
+00:26:19,975 --> 00:26:24,153
+Sometimes this gets called
+things like deconvolution
+
+595
+00:26:24,153 --> 00:26:27,024
+which I think is kind of a
+bad name but you'll see it
+
+596
+00:26:27,024 --> 00:26:31,269
+out there in papers so from a
+signal processing perspective
+
+597
+00:26:31,269 --> 00:26:34,066
+deconvolution means the inverse
+operation to convolution
+
+598
+00:26:34,066 --> 00:26:37,343
+which this is not however
+you'll frequently see this
+
+599
+00:26:37,343 --> 00:26:39,945
+type of layer called a deconvolution layer
+
+600
+00:26:39,945 --> 00:26:42,239
+in some deep learning
+papers so be aware of that,
+
+601
+00:26:42,239 --> 00:26:44,121
+watch out for that terminology.
+
+602
+00:26:44,121 --> 00:26:46,615
+You'll also sometimes see
+this called upconvolution
+
+603
+00:26:46,615 --> 00:26:48,280
+which is kind of a cute name.
+
+604
+00:26:48,280 --> 00:26:51,490
+Sometimes it gets called
+fractionally strided convolution
+
+605
+00:26:51,490 --> 00:26:54,435
+because if we think of the
+stride as the ratio in step
+
+606
+00:26:54,435 --> 00:26:57,791
+between the input and the output
+then now this is something
+
+607
+00:26:57,791 --> 00:27:01,437
+like a stride one half
+convolution because of this ratio
+
+608
+00:27:01,437 --> 00:27:03,247
+of one to two between steps in the input
+
+609
+00:27:03,247 --> 00:27:04,869
+and steps in the output.
+
+610
+00:27:04,869 --> 00:27:07,180
+This also sometimes gets
+called a backwards strided
+
+611
+00:27:07,180 --> 00:27:09,311
+convolution because if you think about it
+
+612
+00:27:09,311 --> 00:27:13,039
+and work through the math
+this ends up being the same,
+
+613
+00:27:13,039 --> 00:27:15,287
+the forward pass of a
+transpose convolution
+
+614
+00:27:15,287 --> 00:27:17,611
+ends up being the same
+mathematical operation
+
+615
+00:27:17,611 --> 00:27:20,030
+as the backwards pass
+in a normal convolution
+
+616
+00:27:20,030 --> 00:27:21,859
+so you might have to take my word for it,
+
+617
+00:27:21,859 --> 00:27:24,172
+that might not be super obvious
+when you first look at this
+
+618
+00:27:24,172 --> 00:27:26,420
+but that's kind of a neat
+fact so you'll sometimes
+
+619
+00:27:26,420 --> 00:27:28,698
+see that name as well.
+
+620
+00:27:28,698 --> 00:27:30,929
+And as maybe a bit of
+a more concrete example
+
+621
+00:27:30,929 --> 00:27:33,035
+of what this looks like I think
+it's maybe a little easier
+
+622
+00:27:33,035 --> 00:27:36,923
+to see in one dimension so if we imagine,
+
+623
+00:27:36,923 --> 00:27:40,084
+so here we're doing a three
+by three transpose convolution
+
+624
+00:27:40,084 --> 00:27:41,272
+in one dimension.
+
+625
+00:27:41,272 --> 00:27:43,612
+Sorry, not three by three, a three by one
+
+626
+00:27:43,612 --> 00:27:46,091
+transpose convolution in one dimension.
+
+627
+00:27:46,091 --> 00:27:48,117
+So our filter here is just three numbers.
+
+628
+00:27:48,117 --> 00:27:50,211
+Our input is two numbers
+and now you can see
+
+629
+00:27:50,211 --> 00:27:53,318
+that in our output we've
+taken the values in the input,
+
+630
+00:27:53,318 --> 00:27:55,396
+used them to weight the
+values of the filter
+
+631
+00:27:55,396 --> 00:27:58,060
+and plopped down those
+weighted filters in the output
+
+632
+00:27:58,060 --> 00:28:00,501
+with a stride of two and now
+where these receptive fields
+
+633
+00:28:00,501 --> 00:28:03,597
+overlap in the output then we sum.
+
+634
+00:28:03,597 --> 00:28:06,297
+So you might be wondering,
+this is kind of a funny name.
+
+635
+00:28:06,297 --> 00:28:08,698
+Where does the name transpose
+convolution come from
+
+636
+00:28:08,698 --> 00:28:10,725
+and why is that actually my preferred name
+
+637
+00:28:10,725 --> 00:28:12,253
+for this operation?
+
+638
+00:28:12,253 --> 00:28:13,621
+So that comes from this kind of
+
+639
+00:28:13,621 --> 00:28:15,530
+neat interpretation of convolution.
+
+640
+00:28:15,530 --> 00:28:18,131
+So it turns out that any
+time you do convolution
+
+641
+00:28:18,131 --> 00:28:21,902
+you can always write convolution
+as a matrix multiplication.
+
+642
+00:28:21,902 --> 00:28:23,711
+So again, this is kind of easier to see
+
+643
+00:28:23,711 --> 00:28:25,737
+with a one-dimensional example
+
+644
+00:28:25,737 --> 00:28:28,320
+but here we've got some weight.
+
+645
+00:28:29,347 --> 00:28:31,266
+So we're doing a
+one-dimensional convolution
+
+646
+00:28:31,266 --> 00:28:34,497
+of a weight vector x
+which has three elements,
+
+647
+00:28:34,497 --> 00:28:37,259
+and an input vector, a vector,
+which has four elements,
+
+648
+00:28:37,259 --> 00:28:38,706
+A, B, C, D.
+
+649
+00:28:38,706 --> 00:28:41,532
+So here we're doing a
+three by one convolution
+
+650
+00:28:41,532 --> 00:28:44,944
+with stride one and you
+can see that we can frame
+
+651
+00:28:44,944 --> 00:28:47,869
+this whole operation as
+a matrix multiplication
+
+652
+00:28:47,869 --> 00:28:51,944
+where we take our convolutional kernel x
+
+653
+00:28:51,944 --> 00:28:54,781
+and turn it into some matrix capital X
+
+654
+00:28:54,781 --> 00:28:57,498
+which contains copies of
+that convolutional kernel
+
+655
+00:28:57,498 --> 00:28:59,360
+that are offset by different regions.
+
+656
+00:28:59,360 --> 00:29:01,710
+And now we can take this
+giant weight matrix X
+
+657
+00:29:01,710 --> 00:29:03,726
+and do a matrix vector
+multiplication between x
+
+658
+00:29:03,726 --> 00:29:06,907
+and our input a and this
+just produces the same result
+
+659
+00:29:06,907 --> 00:29:08,157
+as convolution.
+
+660
+00:29:09,274 --> 00:29:11,155
+And now with transpose convolution means
+
+661
+00:29:11,155 --> 00:29:13,505
+that we're going to take
+this same weight matrix
+
+662
+00:29:13,505 --> 00:29:15,989
+but now we're going to
+multiply by the transpose
+
+663
+00:29:15,989 --> 00:29:17,770
+of that same weight matrix.
+
+664
+00:29:17,770 --> 00:29:21,019
+So here you can see the same
+example for this stride one
+
+665
+00:29:21,019 --> 00:29:24,106
+convolution on the left and
+the corresponding stride one
+
+666
+00:29:24,106 --> 00:29:26,491
+transpose convolution on the right.
+
+667
+00:29:26,491 --> 00:29:28,165
+And if you work through
+the details you'll see
+
+668
+00:29:28,165 --> 00:29:31,018
+that when it comes to stride one,
+
+669
+00:29:31,018 --> 00:29:34,313
+a stride one transpose
+convolution also ends up being
+
+670
+00:29:34,313 --> 00:29:37,570
+a stride one normal convolution
+so there's a little bit
+
+671
+00:29:37,570 --> 00:29:39,533
+of details in the way that
+the border and the padding
+
+672
+00:29:39,533 --> 00:29:42,334
+are handled but it's
+fundamentally the same operation.
+
+673
+00:29:42,334 --> 00:29:43,971
+But now things look different
+
+674
+00:29:43,971 --> 00:29:45,879
+when you talk about a stride of two.
+
+675
+00:29:45,879 --> 00:29:49,514
+So again, here on the left
+we can take a stride two
+
+676
+00:29:49,514 --> 00:29:51,828
+convolution and write out
+this stride two convolution
+
+677
+00:29:51,828 --> 00:29:54,240
+as a matrix multiplication.
+
+678
+00:29:54,240 --> 00:29:57,310
+And now the corresponding
+transpose convolution
+
+679
+00:29:57,310 --> 00:29:59,837
+is no longer a convolution so if you look
+
+680
+00:29:59,837 --> 00:30:01,953
+through this weight matrix and think about
+
+681
+00:30:01,953 --> 00:30:04,985
+how convolutions end up
+getting represented in this way
+
+682
+00:30:04,985 --> 00:30:08,496
+then now this transposed
+matrix for the stride two
+
+683
+00:30:08,496 --> 00:30:10,926
+convolution is something
+fundamentally different
+
+684
+00:30:10,926 --> 00:30:13,913
+from the original normal
+convolution operation
+
+685
+00:30:13,913 --> 00:30:16,208
+so that's kind of the
+reasoning behind the name
+
+686
+00:30:16,208 --> 00:30:18,675
+and that's why I think that's
+kind of the nicest name
+
+687
+00:30:18,675 --> 00:30:20,647
+to call this operation by.
+
+688
+00:30:20,647 --> 00:30:22,980
+Sorry, was there a question?
+
+689
+00:30:27,991 --> 00:30:29,646
+Sorry?
+
+690
+00:30:29,646 --> 00:30:31,617
+It's very possible there's
+a typo in the slide
+
+691
+00:30:31,617 --> 00:30:33,824
+so please point out on
+Piazza and I'll fix it
+
+692
+00:30:33,824 --> 00:30:36,523
+but I hope the idea was clear.
+
+693
+00:30:36,523 --> 00:30:38,026
+Is there another question?
+
+694
+00:30:38,026 --> 00:30:40,167
+Okay, thank you [laughing].
+
+695
+00:30:40,167 --> 00:30:43,000
+Yeah, so, oh no lots of questions.
+
+696
+00:30:53,576 --> 00:30:56,360
+Yeah, so the issue is why
+do we sum and not average?
+
+697
+00:30:56,360 --> 00:31:00,373
+So the reason we sum is due
+to this transpose convolution
+
+698
+00:31:00,373 --> 00:31:03,404
+formula zone so that's
+the reason why we sum
+
+699
+00:31:03,404 --> 00:31:04,846
+but you're right that you actually,
+
+700
+00:31:04,846 --> 00:31:06,646
+this is kind of a problem
+that the magnitudes
+
+701
+00:31:06,646 --> 00:31:08,337
+will actually vary in the output depending
+
+702
+00:31:08,337 --> 00:31:11,325
+on how many receptive
+fields were in the output.
+
+703
+00:31:11,325 --> 00:31:13,152
+So actually in practice this
+is something that people
+
+704
+00:31:13,152 --> 00:31:15,322
+started to point out very
+recently and somewhat
+
+705
+00:31:15,322 --> 00:31:19,561
+switched away from this
+stride, so using three by three
+
+706
+00:31:19,561 --> 00:31:22,064
+stride two transpose
+convolution upsampling
+
+707
+00:31:22,064 --> 00:31:24,250
+can sometimes produce some
+checkerboard artifacts
+
+708
+00:31:24,250 --> 00:31:26,250
+in the output exactly due to that problem.
+
+709
+00:31:26,250 --> 00:31:28,611
+So what I've seen in a
+couple more recent papers
+
+710
+00:31:28,611 --> 00:31:31,117
+is maybe to use four by four stride two
+
+711
+00:31:31,117 --> 00:31:33,414
+or two by two stride two
+transpose convolution
+
+712
+00:31:33,414 --> 00:31:34,960
+for upsampling and that helps alleviate
+
+713
+00:31:34,960 --> 00:31:37,127
+that problem a little bit.
+
+714
+00:31:46,834 --> 00:31:50,499
+Yeah, so the question is what
+is a stride half convolution
+
+715
+00:31:50,499 --> 00:31:52,515
+and where does that terminology come from?
+
+716
+00:31:52,515 --> 00:31:53,864
+I think that was from my paper.
+
+717
+00:31:53,864 --> 00:31:56,790
+So that was actually, yes
+that was definitely this.
+
+718
+00:31:56,790 --> 00:31:58,707
+So at the time I was writing that paper
+
+719
+00:31:58,707 --> 00:32:01,181
+I was kind of into the name
+fractionally strided convolution
+
+720
+00:32:01,181 --> 00:32:02,971
+but after thinking about
+it a bit more I think
+
+721
+00:32:02,971 --> 00:32:07,282
+transpose convolution is
+probably the right name.
+
+722
+00:32:07,282 --> 00:32:11,350
+So then this idea of semantic segmentation
+
+723
+00:32:11,350 --> 00:32:13,746
+actually ends up being pretty natural.
+
+724
+00:32:13,746 --> 00:32:15,850
+You just have this giant
+convolutional network
+
+725
+00:32:15,850 --> 00:32:19,540
+with downsampling and
+upsampling inside the network
+
+726
+00:32:19,540 --> 00:32:22,053
+and now our downsampling will
+be by strided convolution
+
+727
+00:32:22,053 --> 00:32:25,246
+or pooling, our upsampling will
+be by transpose convolution
+
+728
+00:32:25,246 --> 00:32:28,035
+or various types of
+unpooling or upsampling
+
+729
+00:32:28,035 --> 00:32:29,773
+and we can train this
+whole thing end to end
+
+730
+00:32:29,773 --> 00:32:31,994
+with back propagation using
+this cross entropy loss
+
+731
+00:32:31,994 --> 00:32:33,634
+over every pixel.
+
+732
+00:32:33,634 --> 00:32:36,793
+So this is actually pretty
+cool that we can take
+
+733
+00:32:36,793 --> 00:32:38,794
+a lot of the same machinery
+that we already learned
+
+734
+00:32:38,794 --> 00:32:41,514
+for image classification
+and now just apply it
+
+735
+00:32:41,514 --> 00:32:43,664
+very easily to extend
+to new types of problems
+
+736
+00:32:43,664 --> 00:32:45,414
+so that's super cool.
+
+737
+00:32:46,333 --> 00:32:49,362
+So the next task that I want
+to talk about is this idea
+
+738
+00:32:49,362 --> 00:32:52,024
+of classification plus localization.
+
+739
+00:32:52,024 --> 00:32:54,953
+So we've talked about
+image classification a lot
+
+740
+00:32:54,953 --> 00:32:56,712
+where we want to just
+assign a category label
+
+741
+00:32:56,712 --> 00:32:59,474
+to the input image but
+sometimes you might want to know
+
+742
+00:32:59,474 --> 00:33:01,234
+a little bit more about the image.
+
+743
+00:33:01,234 --> 00:33:04,093
+In addition to predicting
+what the category is,
+
+744
+00:33:04,093 --> 00:33:06,762
+in this case the cat, you
+might also want to know
+
+745
+00:33:06,762 --> 00:33:09,077
+where is that object in the image?
+
+746
+00:33:09,077 --> 00:33:12,352
+So in addition to predicting
+the category label cat,
+
+747
+00:33:12,352 --> 00:33:14,408
+you might also want to draw a bounding box
+
+748
+00:33:14,408 --> 00:33:17,874
+around the region of
+the cat in that image.
+
+749
+00:33:17,874 --> 00:33:20,122
+And classification plus localization,
+
+750
+00:33:20,122 --> 00:33:22,713
+the distinction here between
+this and object detection
+
+751
+00:33:22,713 --> 00:33:25,203
+is that in the localization
+scenario you assume
+
+752
+00:33:25,203 --> 00:33:28,482
+ahead of time that you know
+there's exactly one object
+
+753
+00:33:28,482 --> 00:33:31,242
+in the image that you're looking
+for or maybe more than one
+
+754
+00:33:31,242 --> 00:33:34,001
+but you know ahead of time
+that we're going to make
+
+755
+00:33:34,001 --> 00:33:36,202
+some classification
+decision about this image
+
+756
+00:33:36,202 --> 00:33:38,434
+and we're going to produce
+exactly one bounding box
+
+757
+00:33:38,434 --> 00:33:41,001
+that's going to tell us
+where that object is located
+
+758
+00:33:41,001 --> 00:33:44,053
+in the image so we
+sometimes call that task
+
+759
+00:33:44,053 --> 00:33:47,584
+classification plus localization.
+
+760
+00:33:47,584 --> 00:33:49,904
+And again, we can reuse a
+lot of the same machinery
+
+761
+00:33:49,904 --> 00:33:51,968
+that we've already learned
+from image classification
+
+762
+00:33:51,968 --> 00:33:53,680
+in order to tackle this problem.
+
+763
+00:33:53,680 --> 00:33:56,789
+So kind of a basic
+architecture for this problem
+
+764
+00:33:56,789 --> 00:33:58,220
+looks something like this.
+
+765
+00:33:58,220 --> 00:33:59,949
+So again, we have our input image,
+
+766
+00:33:59,949 --> 00:34:01,570
+we feed our input image through some giant
+
+767
+00:34:01,570 --> 00:34:03,560
+convolutional network, this is Alex,
+
+768
+00:34:03,560 --> 00:34:05,610
+this is AlexNet for
+example, which will give us
+
+769
+00:34:05,610 --> 00:34:09,301
+some final vector summarizing
+the content of the image.
+
+770
+00:34:09,301 --> 00:34:12,379
+Then just like before we'll
+have some fully connected layer
+
+771
+00:34:12,379 --> 00:34:15,730
+that goes from that final
+vector to our class scores.
+
+772
+00:34:15,730 --> 00:34:18,341
+But now we'll also have
+another fully connected layer
+
+773
+00:34:18,341 --> 00:34:21,109
+that goes from that
+vector to four numbers.
+
+774
+00:34:21,109 --> 00:34:23,339
+Where the four numbers are something like
+
+775
+00:34:23,339 --> 00:34:26,309
+the height, the width,
+and the x and y positions
+
+776
+00:34:26,309 --> 00:34:28,478
+of that bounding box.
+
+777
+00:34:28,478 --> 00:34:31,449
+And now our network will
+produce these two different
+
+778
+00:34:31,449 --> 00:34:34,228
+outputs, one is this set of class scores,
+
+779
+00:34:34,228 --> 00:34:36,340
+and the other are these four
+numbers giving the coordinates
+
+780
+00:34:36,341 --> 00:34:39,094
+of the bounding box in the input image.
+
+781
+00:34:39,094 --> 00:34:41,180
+And now during training time,
+when we train this network
+
+782
+00:34:41,181 --> 00:34:44,489
+we'll actually have two
+losses so in this scenario
+
+783
+00:34:44,489 --> 00:34:47,210
+we're sort of assuming a
+fully supervised setting
+
+784
+00:34:47,210 --> 00:34:49,159
+so we assume that each
+of our training images
+
+785
+00:34:49,159 --> 00:34:52,119
+is annotated with both a
+category label and also
+
+786
+00:34:52,120 --> 00:34:55,331
+a ground truth bounding box
+for that category in the image.
+
+787
+00:34:55,331 --> 00:34:57,118
+So now we have two loss functions.
+
+788
+00:34:57,118 --> 00:34:59,864
+We have our favorite
+softmax loss that we compute
+
+789
+00:34:59,864 --> 00:35:01,640
+using the ground truth category label
+
+790
+00:35:01,640 --> 00:35:03,360
+and the predicted class scores,
+
+791
+00:35:03,360 --> 00:35:06,461
+and we also have some
+kind of loss that gives us
+
+792
+00:35:06,461 --> 00:35:09,920
+some measure of dissimilarity
+between our predicted
+
+793
+00:35:09,920 --> 00:35:11,348
+coordinates for the bounding box
+
+794
+00:35:11,348 --> 00:35:13,669
+and our actual coordinates
+for the bounding box.
+
+795
+00:35:13,669 --> 00:35:16,448
+So one very simple thing
+is to just take an L2 loss
+
+796
+00:35:16,448 --> 00:35:18,610
+between those two and that's
+kind of the simplest thing
+
+797
+00:35:18,610 --> 00:35:20,509
+that you'll see in
+practice although sometimes
+
+798
+00:35:20,509 --> 00:35:22,570
+people play around with
+this and maybe use L1
+
+799
+00:35:22,570 --> 00:35:25,181
+or smooth L1 or they
+parametrize the bounding box
+
+800
+00:35:25,181 --> 00:35:27,728
+a little bit differently but
+the idea is always the same,
+
+801
+00:35:27,728 --> 00:35:30,277
+that you have some regression loss
+
+802
+00:35:30,277 --> 00:35:32,709
+between your predicted
+bounding box coordinates
+
+803
+00:35:32,709 --> 00:35:35,509
+and the ground truth
+bounding box coordinates.
+
+804
+00:35:35,509 --> 00:35:36,342
+Question?
+
+805
+00:35:38,177 --> 00:35:39,510
+Sorry, go ahead.
+
+806
+00:35:49,410 --> 00:35:50,966
+So the question is, is this a good idea
+
+807
+00:35:50,966 --> 00:35:52,193
+to do all at the same time?
+
+808
+00:35:52,193 --> 00:35:53,633
+Like what happens if you misclassify,
+
+809
+00:35:53,633 --> 00:35:55,600
+should you even look
+at the box coordinates?
+
+810
+00:35:55,600 --> 00:35:57,401
+So sometimes people get fancy with it,
+
+811
+00:35:57,401 --> 00:35:59,901
+so in general it works okay.
+
+812
+00:35:59,901 --> 00:36:01,993
+It's not a big problem, you
+can actually train a network
+
+813
+00:36:01,993 --> 00:36:03,652
+to do both of these
+things at the same time
+
+814
+00:36:03,652 --> 00:36:06,753
+and it'll figure it out but
+sometimes things can get tricky
+
+815
+00:36:06,753 --> 00:36:09,592
+in terms of misclassification
+so sometimes what you'll see
+
+816
+00:36:09,592 --> 00:36:12,741
+for example is that rather
+than predicting a single box
+
+817
+00:36:12,741 --> 00:36:15,102
+you might make predictions
+like a separate prediction
+
+818
+00:36:15,102 --> 00:36:19,232
+of the box for each category
+and then only apply loss
+
+819
+00:36:19,232 --> 00:36:22,651
+to the predicted box corresponding
+
+820
+00:36:22,651 --> 00:36:24,091
+to the ground truth category.
+
+821
+00:36:24,091 --> 00:36:26,011
+So people do get a little
+bit fancy with these things
+
+822
+00:36:26,011 --> 00:36:28,318
+that sometimes helps a bit in practice.
+
+823
+00:36:28,318 --> 00:36:30,552
+But at least this basic
+setup, it might not be perfect
+
+824
+00:36:30,552 --> 00:36:32,232
+or it might not be
+optimal but it will work
+
+825
+00:36:32,232 --> 00:36:34,611
+and it will do something.
+
+826
+00:36:34,611 --> 00:36:37,361
+Was there a question in the back?
+
+827
+00:36:41,226 --> 00:36:43,447
+Yeah, so that's the
+question is do these losses
+
+828
+00:36:43,447 --> 00:36:46,746
+have different units, do
+they dominate the gradient?
+
+829
+00:36:46,746 --> 00:36:49,306
+So this is what we call a multi-task loss
+
+830
+00:36:49,306 --> 00:36:51,415
+so whenever we're taking
+derivatives we always
+
+831
+00:36:51,415 --> 00:36:54,325
+want to take derivative
+of a scalar with respect
+
+832
+00:36:54,325 --> 00:36:56,725
+to our network parameters
+and use that derivative
+
+833
+00:36:56,725 --> 00:36:58,554
+to take gradient steps.
+
+834
+00:36:58,554 --> 00:37:01,331
+But now we've got two scalars
+that we want to both minimize
+
+835
+00:37:01,331 --> 00:37:03,662
+so what you tend to do in
+practice is have some additional
+
+836
+00:37:03,662 --> 00:37:05,742
+hyperparameter that
+gives you some weighting
+
+837
+00:37:05,742 --> 00:37:08,243
+between these two losses so
+you'll take a weighted sum
+
+838
+00:37:08,243 --> 00:37:09,843
+of these two different loss functions
+
+839
+00:37:09,843 --> 00:37:11,833
+to give our final scalar loss.
+
+840
+00:37:11,833 --> 00:37:13,422
+And then you'll take your
+gradients with respect
+
+841
+00:37:13,422 --> 00:37:15,642
+to this weighted sum of the two losses.
+
+842
+00:37:15,642 --> 00:37:18,513
+And this ends up being
+really really tricky
+
+843
+00:37:18,513 --> 00:37:21,022
+because this weighting
+parameter is a hyperparameter
+
+844
+00:37:21,022 --> 00:37:23,691
+that you need to set but
+it's kind of different
+
+845
+00:37:23,691 --> 00:37:25,422
+from some of the other hyperparameters
+
+846
+00:37:25,422 --> 00:37:27,851
+that we've seen so far in the past right
+
+847
+00:37:27,851 --> 00:37:29,923
+because this weighting hyperparameter
+
+848
+00:37:29,923 --> 00:37:32,390
+actually changes the
+value of the loss function
+
+849
+00:37:32,390 --> 00:37:34,872
+so one thing that you might often look at
+
+850
+00:37:34,872 --> 00:37:36,531
+when you're trying to set hyperparameters
+
+851
+00:37:36,531 --> 00:37:38,701
+is you might make different
+hyperparameter choices
+
+852
+00:37:38,701 --> 00:37:40,502
+and see what happens to the loss
+
+853
+00:37:40,502 --> 00:37:43,091
+under different choices
+of hyperparameters.
+
+854
+00:37:43,091 --> 00:37:45,570
+But in this case because
+the loss actually,
+
+855
+00:37:45,570 --> 00:37:47,851
+because the hyperparameter
+affects the absolute value
+
+856
+00:37:47,851 --> 00:37:51,089
+of the loss making those
+comparisons becomes kind of tricky.
+
+857
+00:37:51,089 --> 00:37:54,473
+So setting that hyperparameter
+is somewhat difficult.
+
+858
+00:37:54,473 --> 00:37:56,121
+And in practice, you
+kind of need to take it
+
+859
+00:37:56,121 --> 00:37:58,153
+on a case by case basis
+for exactly the problem
+
+860
+00:37:58,153 --> 00:38:00,393
+you're solving but my
+general strategy for this
+
+861
+00:38:00,393 --> 00:38:04,342
+is to have some other
+metric of performance
+
+862
+00:38:04,342 --> 00:38:08,163
+that you care about other
+than the actual loss value
+
+863
+00:38:08,163 --> 00:38:11,182
+which then you actually use
+that final performance metric
+
+864
+00:38:11,182 --> 00:38:13,502
+to make your cross validation
+choices rather than looking
+
+865
+00:38:13,502 --> 00:38:17,763
+at the value of the loss
+to make those choices.
+
+866
+00:38:17,763 --> 00:38:18,596
+Question?
+
+867
+00:38:27,529 --> 00:38:30,432
+So the question is why do
+we do this all at once?
+
+868
+00:38:30,432 --> 00:38:32,682
+Why not do this separately?
+
+869
+00:38:38,131 --> 00:38:40,099
+Yeah, so the question is why
+don't we fix the big network
+
+870
+00:38:40,099 --> 00:38:43,923
+and then just only learn
+separate fully connected layers
+
+871
+00:38:43,923 --> 00:38:45,413
+for these two tasks?
+
+872
+00:38:45,413 --> 00:38:47,833
+People do do that sometimes
+and in fact that's probably
+
+873
+00:38:47,833 --> 00:38:49,523
+the first thing you
+should try if you're faced
+
+874
+00:38:49,523 --> 00:38:52,702
+with a situation like this but in general
+
+875
+00:38:52,702 --> 00:38:53,894
+whenever you're doing transfer learning
+
+876
+00:38:53,894 --> 00:38:55,742
+you always get better
+performance if you fine tune
+
+877
+00:38:55,742 --> 00:38:57,734
+the whole system jointly
+because there's probably
+
+878
+00:38:57,734 --> 00:39:00,574
+some mismatch between the features,
+
+879
+00:39:00,574 --> 00:39:02,961
+if you train on ImageNet and
+then you use that network
+
+880
+00:39:02,961 --> 00:39:05,451
+for your data set you're going
+to get better performance
+
+881
+00:39:05,451 --> 00:39:09,280
+on your data set if you can
+also change the network.
+
+882
+00:39:09,280 --> 00:39:11,521
+But one trick you might
+see in practice sometimes
+
+883
+00:39:11,521 --> 00:39:13,641
+is that you might freeze that network
+
+884
+00:39:13,641 --> 00:39:16,870
+then train those two things
+separately until convergence
+
+885
+00:39:16,870 --> 00:39:18,459
+and then after they
+converge then you go back
+
+886
+00:39:18,459 --> 00:39:20,398
+and jointly fine tune the whole system.
+
+887
+00:39:20,398 --> 00:39:21,958
+So that's a trick that sometimes people do
+
+888
+00:39:21,958 --> 00:39:24,558
+in practice in that situation.
+
+889
+00:39:24,558 --> 00:39:26,310
+And as I've kind of
+alluded to this big network
+
+890
+00:39:26,310 --> 00:39:28,811
+is often a pre-trained
+network that is taken
+
+891
+00:39:28,811 --> 00:39:30,978
+from ImageNet for example.
+
+892
+00:39:31,979 --> 00:39:34,729
+So a bit of an aside,
+this idea of predicting
+
+893
+00:39:34,729 --> 00:39:37,339
+some fixed number of
+positions in the image
+
+894
+00:39:37,339 --> 00:39:38,921
+can be applied to a lot
+of different problems
+
+895
+00:39:38,921 --> 00:39:41,881
+beyond just classification
+plus localization.
+
+896
+00:39:41,881 --> 00:39:44,710
+One kind of cool example
+is human pose estimation.
+
+897
+00:39:44,710 --> 00:39:47,379
+So here we want to take an input image
+
+898
+00:39:47,379 --> 00:39:49,440
+is a picture of a person.
+
+899
+00:39:49,440 --> 00:39:51,569
+We want to output the
+positions of the joints
+
+900
+00:39:51,569 --> 00:39:54,542
+for that person and this
+actually allows the network
+
+901
+00:39:54,542 --> 00:39:56,462
+to predict what is the pose of the human.
+
+902
+00:39:56,462 --> 00:39:59,030
+Where are his arms, where are
+his legs, stuff like that,
+
+903
+00:39:59,030 --> 00:40:02,702
+and generally most people have
+the same number of joints.
+
+904
+00:40:02,702 --> 00:40:04,060
+That's a bit of a simplifying assumption,
+
+905
+00:40:04,060 --> 00:40:06,862
+it might not always be true
+but it works for the network.
+
+906
+00:40:06,862 --> 00:40:10,251
+So for example one
+parameterization that you might see
+
+907
+00:40:10,251 --> 00:40:13,451
+in some data sets is
+define a person's pose
+
+908
+00:40:13,451 --> 00:40:15,430
+by 14 joint positions.
+
+909
+00:40:15,430 --> 00:40:16,932
+Their feet and their knees and their hips
+
+910
+00:40:16,932 --> 00:40:19,652
+and something like that and
+now when we train the network
+
+911
+00:40:19,652 --> 00:40:23,150
+then we're going to input
+this image of a person
+
+912
+00:40:23,150 --> 00:40:27,132
+and now we're going to output
+14 numbers in this case
+
+913
+00:40:27,132 --> 00:40:30,521
+giving the x and y coordinates
+for each of those 14 joints.
+
+914
+00:40:30,521 --> 00:40:33,120
+And then you apply some
+kind of regression loss
+
+915
+00:40:33,120 --> 00:40:35,961
+on each of those 14
+different predicted points
+
+916
+00:40:35,961 --> 00:40:40,619
+and just train this network
+with back propagation again.
+
+917
+00:40:40,619 --> 00:40:43,579
+Yeah, so you might see an L2
+loss but people play around
+
+918
+00:40:43,579 --> 00:40:46,571
+with other regression losses here as well.
+
+919
+00:40:46,571 --> 00:40:47,404
+Question?
+
+920
+00:40:50,934 --> 00:40:52,432
+So the question is what do I mean
+
+921
+00:40:52,432 --> 00:40:53,992
+when I say regression loss?
+
+922
+00:40:53,992 --> 00:40:56,099
+So I mean something
+other than cross entropy
+
+923
+00:40:56,099 --> 00:40:57,294
+or softmax right.
+
+924
+00:40:57,294 --> 00:40:59,094
+When I say regression loss I usually mean
+
+925
+00:40:59,094 --> 00:41:02,382
+like an L2 Euclidean loss or an L1 loss
+
+926
+00:41:02,382 --> 00:41:04,494
+or sometimes a smooth L1 loss.
+
+927
+00:41:04,494 --> 00:41:07,512
+But in general classification
+versus regression
+
+928
+00:41:07,512 --> 00:41:10,502
+is whether your output is
+categorical or continuous
+
+929
+00:41:10,502 --> 00:41:12,643
+so if you're expecting
+a categorical output
+
+930
+00:41:12,643 --> 00:41:15,272
+like you ultimately want to
+make a classification decision
+
+931
+00:41:15,272 --> 00:41:17,243
+over some fixed number of categories
+
+932
+00:41:17,243 --> 00:41:19,942
+then you'll think about
+a cross entropy loss,
+
+933
+00:41:19,942 --> 00:41:23,094
+softmax loss or these
+SVM margin type losses
+
+934
+00:41:23,094 --> 00:41:25,022
+that we talked about already in the class.
+
+935
+00:41:25,022 --> 00:41:28,272
+But if your expected output is
+to be some continuous value,
+
+936
+00:41:28,272 --> 00:41:30,222
+in this case the position of these points,
+
+937
+00:41:30,222 --> 00:41:32,174
+then your output is
+continuous so you tend to use
+
+938
+00:41:32,174 --> 00:41:34,734
+different types of losses
+in those situations.
+
+939
+00:41:34,734 --> 00:41:37,883
+Typically an L2, L1, different
+kinds of things there.
+
+940
+00:41:37,883 --> 00:41:41,482
+So sorry for not clarifying that earlier.
+
+941
+00:41:41,482 --> 00:41:44,471
+But the bigger point
+here is that for any time
+
+942
+00:41:44,471 --> 00:41:46,832
+you know that you want
+to make some fixed number
+
+943
+00:41:46,832 --> 00:41:51,003
+of outputs from your network,
+if you know for example.
+
+944
+00:41:51,003 --> 00:41:54,344
+Maybe you knew that you wanted to,
+
+945
+00:41:54,344 --> 00:41:56,395
+you knew that you always
+are going to have pictures
+
+946
+00:41:56,395 --> 00:41:58,763
+of a cat and a dog and
+you want to predict both
+
+947
+00:41:58,763 --> 00:42:01,392
+the bounding box of the cat
+and the bounding box of the dog
+
+948
+00:42:01,392 --> 00:42:03,062
+in that case you'd know
+that you have a fixed number
+
+949
+00:42:03,062 --> 00:42:05,304
+of outputs for each input
+so you might imagine
+
+950
+00:42:05,304 --> 00:42:07,093
+hooking up this type of regression
+
+951
+00:42:07,093 --> 00:42:09,264
+classification plus localization framework
+
+952
+00:42:09,264 --> 00:42:10,743
+for that problem as well.
+
+953
+00:42:10,743 --> 00:42:13,094
+So this idea of some fixed
+number of regression outputs
+
+954
+00:42:13,094 --> 00:42:14,872
+can be applied to a lot
+of different problems
+
+955
+00:42:14,872 --> 00:42:17,039
+including pose estimation.
+
+956
+00:42:19,062 --> 00:42:23,531
+So the next task that I want to
+talk about is object detection
+
+957
+00:42:23,531 --> 00:42:25,342
+and this is a really meaty topic.
+
+958
+00:42:25,342 --> 00:42:27,422
+This is kind of a core
+problem in computer vision
+
+959
+00:42:27,422 --> 00:42:29,910
+and you could probably
+teach a whole seminar class
+
+960
+00:42:29,910 --> 00:42:31,868
+on just the history of object detection
+
+961
+00:42:31,868 --> 00:42:33,902
+and various techniques applied there.
+
+962
+00:42:33,902 --> 00:42:35,931
+So I'll be relatively
+brief and try to go over
+
+963
+00:42:35,931 --> 00:42:39,691
+the main big ideas of object
+detection plus deep learning
+
+964
+00:42:39,691 --> 00:42:42,582
+that have been used in
+the last couple of years.
+
+965
+00:42:42,582 --> 00:42:44,731
+But the idea in object detection is that
+
+966
+00:42:44,731 --> 00:42:47,942
+we again start with some
+fixed set of categories
+
+967
+00:42:47,942 --> 00:42:52,182
+that we care about, maybe cats
+and dogs and fish or whatever
+
+968
+00:42:52,182 --> 00:42:55,321
+but some fixed set of categories
+that we're interested in.
+
+969
+00:42:55,321 --> 00:42:59,030
+And now our task is that
+given our input image,
+
+970
+00:42:59,030 --> 00:43:02,470
+every time one of those
+categories appears in the image,
+
+971
+00:43:02,470 --> 00:43:05,641
+we want to draw a box around
+it and we want to predict
+
+972
+00:43:05,641 --> 00:43:08,710
+the category of that
+box so this is different
+
+973
+00:43:08,710 --> 00:43:10,902
+from classification plus localization
+
+974
+00:43:10,902 --> 00:43:13,620
+because there might be a
+varying number of outputs
+
+975
+00:43:13,620 --> 00:43:15,302
+for every input image.
+
+976
+00:43:15,302 --> 00:43:17,910
+You don't know ahead of time
+how many objects you expect
+
+977
+00:43:17,910 --> 00:43:20,081
+to find in each image so that's,
+
+978
+00:43:20,081 --> 00:43:22,870
+this ends up being a
+pretty challenging problem.
+
+979
+00:43:22,870 --> 00:43:25,630
+So we've seen graphs, so
+this is kind of interesting.
+
+980
+00:43:25,630 --> 00:43:28,988
+We've seen this graph
+many times of the ImageNet
+
+981
+00:43:28,988 --> 00:43:31,870
+classification performance
+as a function of years
+
+982
+00:43:31,870 --> 00:43:34,761
+and we saw that it just got
+better and better every year
+
+983
+00:43:34,761 --> 00:43:37,342
+and there's been a similar
+trend with object detection
+
+984
+00:43:37,342 --> 00:43:39,131
+because object detection
+has again been one
+
+985
+00:43:39,131 --> 00:43:41,291
+of these core problems in computer vision
+
+986
+00:43:41,291 --> 00:43:44,110
+that people have cared
+about for a very long time.
+
+987
+00:43:44,110 --> 00:43:46,390
+So this slide is due to Ross Girshick
+
+988
+00:43:46,390 --> 00:43:48,742
+who's worked on this
+problem a lot and it shows
+
+989
+00:43:48,742 --> 00:43:51,070
+the progression of object
+detection performance
+
+990
+00:43:51,070 --> 00:43:54,441
+on this one particular
+data set called PASCAL VOC
+
+991
+00:43:54,441 --> 00:43:57,230
+which has been relatively
+used for a long time
+
+992
+00:43:57,230 --> 00:43:59,462
+in the object detection community.
+
+993
+00:43:59,462 --> 00:44:02,428
+And you can see that up until about 2012
+
+994
+00:44:02,428 --> 00:44:04,761
+performance on object
+detection started to stagnate
+
+995
+00:44:04,761 --> 00:44:08,161
+and slow down a little
+bit and then in 2013
+
+996
+00:44:08,161 --> 00:44:10,039
+was when some of the first
+deep learning approaches
+
+997
+00:44:10,039 --> 00:44:12,141
+to object detection came
+around and you could see
+
+998
+00:44:12,141 --> 00:44:13,982
+that performance just shot up very quickly
+
+999
+00:44:13,982 --> 00:44:16,171
+getting better and better year over year.
+
+1000
+00:44:16,171 --> 00:44:19,221
+One thing you might notice is
+that this plot ends in 2015
+
+1001
+00:44:19,221 --> 00:44:21,422
+and it's actually continued
+to go up since then
+
+1002
+00:44:21,422 --> 00:44:23,411
+so the current state of
+the art in this data set
+
+1003
+00:44:23,411 --> 00:44:25,651
+is well over 80 and in
+fact a lot of recent papers
+
+1004
+00:44:25,651 --> 00:44:28,051
+don't even report results
+on this data set anymore
+
+1005
+00:44:28,051 --> 00:44:29,929
+because it's considered too easy.
+
+1006
+00:44:29,929 --> 00:44:31,598
+So it's a little bit hard to know,
+
+1007
+00:44:31,598 --> 00:44:33,561
+I'm not actually sure what is
+the state of the art number
+
+1008
+00:44:33,561 --> 00:44:37,422
+on this data set but it's
+off the top of this plot.
+
+1009
+00:44:37,422 --> 00:44:40,091
+Sorry, did you have a question?
+
+1010
+00:44:40,091 --> 00:44:40,924
+Nevermind.
+
+1011
+00:44:42,051 --> 00:44:45,281
+Okay, so as I already
+said this is different
+
+1012
+00:44:45,281 --> 00:44:48,481
+from localization because
+there might be differing
+
+1013
+00:44:48,481 --> 00:44:50,961
+numbers of objects for each image.
+
+1014
+00:44:50,961 --> 00:44:53,462
+So for example in this
+cat on the upper left
+
+1015
+00:44:53,462 --> 00:44:55,142
+there's only one object
+so we only need to predict
+
+1016
+00:44:55,142 --> 00:44:57,771
+four numbers but now for
+this image in the middle
+
+1017
+00:44:57,771 --> 00:45:01,431
+there's three animals there
+so we need our network
+
+1018
+00:45:01,431 --> 00:45:03,774
+to predict 12 numbers, four coordinates
+
+1019
+00:45:03,774 --> 00:45:05,552
+for each bounding box.
+
+1020
+00:45:05,552 --> 00:45:08,379
+Or in this example of many
+many ducks then you want
+
+1021
+00:45:08,379 --> 00:45:10,673
+your network to predict
+a whole bunch of numbers.
+
+1022
+00:45:10,673 --> 00:45:13,211
+Again, four numbers for each duck.
+
+1023
+00:45:13,211 --> 00:45:17,894
+So this is quite different
+from object detection.
+
+1024
+00:45:17,894 --> 00:45:20,683
+Sorry object detection is quite
+different from localization
+
+1025
+00:45:20,683 --> 00:45:24,382
+because in object detection
+you might have varying numbers
+
+1026
+00:45:24,382 --> 00:45:26,633
+of objects in the image and
+you don't know ahead of time
+
+1027
+00:45:26,633 --> 00:45:28,870
+how many you expect to find.
+
+1028
+00:45:28,870 --> 00:45:32,213
+So as a result, it's kind of
+tricky if you want to think
+
+1029
+00:45:32,213 --> 00:45:34,568
+of object detection as
+a regression problem.
+
+1030
+00:45:34,568 --> 00:45:37,467
+So instead, people tend to
+work, use kind of a different
+
+1031
+00:45:37,467 --> 00:45:40,768
+paradigm when thinking
+about object detection.
+
+1032
+00:45:40,768 --> 00:45:44,797
+So one approach that's very
+common and has been used
+
+1033
+00:45:44,797 --> 00:45:47,328
+for a long time in computer
+vision is this idea
+
+1034
+00:45:47,328 --> 00:45:49,958
+of sliding window approaches
+to object detection.
+
+1035
+00:45:49,958 --> 00:45:52,920
+So this is kind of similar to this idea
+
+1036
+00:45:52,920 --> 00:45:55,138
+of taking small patches and applying that
+
+1037
+00:45:55,138 --> 00:45:57,099
+for semantic segmentation and we can apply
+
+1038
+00:45:57,099 --> 00:45:59,360
+a similar idea for object detection.
+
+1039
+00:45:59,360 --> 00:46:01,733
+So the ideas is that
+we'll take different crops
+
+1040
+00:46:01,733 --> 00:46:05,118
+from the input image, in
+this case we've got this crop
+
+1041
+00:46:05,118 --> 00:46:07,248
+in the lower left hand corner of our image
+
+1042
+00:46:07,248 --> 00:46:08,808
+and now we take that crop,
+
+1043
+00:46:08,808 --> 00:46:10,359
+feed it through our convolutional network
+
+1044
+00:46:10,359 --> 00:46:11,939
+and our convolutional network does
+
+1045
+00:46:11,939 --> 00:46:14,829
+a classification decision
+on that input crop.
+
+1046
+00:46:14,829 --> 00:46:18,160
+It'll say that there's no dog
+here, there's no cat here,
+
+1047
+00:46:18,160 --> 00:46:20,960
+and then in addition to the
+categories that we care about
+
+1048
+00:46:20,960 --> 00:46:23,899
+we'll add an additional
+category called background
+
+1049
+00:46:23,899 --> 00:46:27,179
+and now our network can predict background
+
+1050
+00:46:27,179 --> 00:46:29,399
+in case it doesn't see
+any of the categories
+
+1051
+00:46:29,399 --> 00:46:32,288
+that we care about, so
+then when we take this crop
+
+1052
+00:46:32,288 --> 00:46:34,240
+from the lower left hand corner here
+
+1053
+00:46:34,240 --> 00:46:36,389
+then our network would
+hopefully predict background
+
+1054
+00:46:36,389 --> 00:46:39,008
+and say that no, there's no object here.
+
+1055
+00:46:39,008 --> 00:46:40,840
+Now if we take a different
+crop then our network
+
+1056
+00:46:40,840 --> 00:46:44,128
+would predict dog yes,
+cat no, background no.
+
+1057
+00:46:44,128 --> 00:46:45,909
+We take a different crop we get dog yes,
+
+1058
+00:46:45,909 --> 00:46:47,680
+cat no, background no.
+
+1059
+00:46:47,680 --> 00:46:51,789
+Or a different crop, dog
+no, cat yes, background no.
+
+1060
+00:46:51,789 --> 00:46:54,372
+Does anyone see a problem here?
+
+1061
+00:47:00,324 --> 00:47:02,812
+Yeah, the question is how
+do you choose the crops?
+
+1062
+00:47:02,812 --> 00:47:04,764
+So this is a huge problem right.
+
+1063
+00:47:04,764 --> 00:47:07,972
+Because there could be any
+number of objects in this image,
+
+1064
+00:47:07,972 --> 00:47:10,543
+these objects could appear
+at any location in the image,
+
+1065
+00:47:10,543 --> 00:47:13,193
+these objects could appear
+at any size in the image,
+
+1066
+00:47:13,193 --> 00:47:15,583
+these objects could also
+appear at any aspect ratio
+
+1067
+00:47:15,583 --> 00:47:18,571
+in the image, so if you want
+to do kind of a brute force
+
+1068
+00:47:18,571 --> 00:47:21,052
+sliding window approach
+you'd end up having to test
+
+1069
+00:47:21,052 --> 00:47:23,850
+thousands, tens of thousands,
+many many many many
+
+1070
+00:47:23,850 --> 00:47:27,263
+different crops in order
+to tackle this problem
+
+1071
+00:47:27,263 --> 00:47:29,523
+with a brute force
+sliding window approach.
+
+1072
+00:47:29,523 --> 00:47:32,025
+And in the case where
+every one of those crops
+
+1073
+00:47:32,025 --> 00:47:35,004
+is going to be fed through a
+giant convolutional network,
+
+1074
+00:47:35,004 --> 00:47:37,532
+this would be completely
+computationally intractable.
+
+1075
+00:47:37,532 --> 00:47:41,063
+So in practice people don't
+ever do this sort of brute force
+
+1076
+00:47:41,063 --> 00:47:43,503
+sliding window approach
+for object detection
+
+1077
+00:47:43,503 --> 00:47:45,920
+using convolutional networks.
+
+1078
+00:47:47,044 --> 00:47:49,532
+Instead there's this cool line of work
+
+1079
+00:47:49,532 --> 00:47:52,572
+called region proposals that comes from,
+
+1080
+00:47:52,572 --> 00:47:54,492
+this is not using deep learning typically.
+
+1081
+00:47:54,492 --> 00:47:56,332
+These are slightly more
+traditional computer vision
+
+1082
+00:47:56,332 --> 00:47:59,732
+techniques but the idea is
+that a region proposal network
+
+1083
+00:47:59,732 --> 00:48:02,353
+kind of uses more traditional
+signal processing,
+
+1084
+00:48:02,353 --> 00:48:05,401
+image processing type
+things to make some list
+
+1085
+00:48:05,401 --> 00:48:08,343
+of proposals for where,
+so given an input image,
+
+1086
+00:48:08,343 --> 00:48:10,322
+a region proposal network
+will then give you something
+
+1087
+00:48:10,322 --> 00:48:14,341
+like a thousand boxes where
+an object might be present.
+
+1088
+00:48:14,341 --> 00:48:17,023
+So you can imagine that
+maybe we do some local,
+
+1089
+00:48:17,023 --> 00:48:19,564
+we look for edges in the
+image and try to draw boxes
+
+1090
+00:48:19,564 --> 00:48:22,382
+that contain closed edges
+or something like that.
+
+1091
+00:48:22,382 --> 00:48:24,650
+These various types of
+image processing approaches,
+
+1092
+00:48:24,650 --> 00:48:27,004
+but these region proposal
+networks will basically look
+
+1093
+00:48:27,004 --> 00:48:30,132
+for blobby regions in our
+input image and then give us
+
+1094
+00:48:30,132 --> 00:48:32,873
+some set of candidate proposal regions
+
+1095
+00:48:32,873 --> 00:48:35,604
+where objects might be potentially found.
+
+1096
+00:48:35,604 --> 00:48:38,962
+And these are relatively fast-ish to run
+
+1097
+00:48:38,962 --> 00:48:42,193
+so one common example of
+a region proposal method
+
+1098
+00:48:42,193 --> 00:48:44,703
+that you might see is something
+called Selective Search
+
+1099
+00:48:44,703 --> 00:48:47,244
+which I think actually gives
+you 2000 region proposals,
+
+1100
+00:48:47,244 --> 00:48:49,284
+not the 1000 that it says on the slide.
+
+1101
+00:48:49,284 --> 00:48:51,713
+So you kind of run this
+thing and then after
+
+1102
+00:48:51,713 --> 00:48:53,844
+about two seconds of turning on your CPU
+
+1103
+00:48:53,844 --> 00:48:57,364
+it'll spit out 2000 region
+proposals in the input image
+
+1104
+00:48:57,364 --> 00:48:59,404
+where objects are likely to be found
+
+1105
+00:48:59,404 --> 00:49:01,204
+so there'll be a lot of noise in those.
+
+1106
+00:49:01,204 --> 00:49:03,252
+Most of them will not be true objects
+
+1107
+00:49:03,252 --> 00:49:05,052
+but there's a pretty high recall.
+
+1108
+00:49:05,052 --> 00:49:07,223
+If there is an object in
+the image then it does tend
+
+1109
+00:49:07,223 --> 00:49:08,913
+to get covered by these region proposals
+
+1110
+00:49:08,913 --> 00:49:11,204
+from Selective Search.
+
+1111
+00:49:11,204 --> 00:49:14,212
+So now rather than applying
+our classification network
+
+1112
+00:49:14,212 --> 00:49:17,103
+to every possible location
+and scale in the image
+
+1113
+00:49:17,103 --> 00:49:19,930
+instead what we can do is
+first apply one of these
+
+1114
+00:49:19,930 --> 00:49:22,171
+region proposal networks to get some set
+
+1115
+00:49:22,171 --> 00:49:25,164
+of proposal regions where
+objects are likely located
+
+1116
+00:49:25,164 --> 00:49:28,783
+and now apply a convolutional
+network for classification
+
+1117
+00:49:28,783 --> 00:49:30,772
+to each of these proposal
+regions and this will end up
+
+1118
+00:49:30,772 --> 00:49:33,135
+being much more computationally tractable
+
+1119
+00:49:33,135 --> 00:49:36,903
+than trying to do all
+possible locations and scales.
+
+1120
+00:49:36,903 --> 00:49:40,583
+And this idea all came
+together in this paper
+
+1121
+00:49:40,583 --> 00:49:45,583
+called R-CNN from a few years
+ago that does exactly that.
+
+1122
+00:49:45,583 --> 00:49:48,221
+So given our input image in this case
+
+1123
+00:49:48,221 --> 00:49:50,673
+we'll run some region proposal network
+
+1124
+00:49:50,673 --> 00:49:53,263
+to get our proposals, these
+are also sometimes called
+
+1125
+00:49:53,263 --> 00:49:56,724
+regions of interest or ROI's
+so again Selective Search
+
+1126
+00:49:56,724 --> 00:49:59,692
+gives you something like
+2000 regions of interest.
+
+1127
+00:49:59,692 --> 00:50:03,523
+Now one of the problems
+here is that these input,
+
+1128
+00:50:03,523 --> 00:50:07,043
+these regions in the input
+image could have different sizes
+
+1129
+00:50:07,043 --> 00:50:08,204
+but if we're going to run them all
+
+1130
+00:50:08,204 --> 00:50:11,063
+through a convolutional
+network our classification,
+
+1131
+00:50:11,063 --> 00:50:13,143
+our convolutional networks
+for classification
+
+1132
+00:50:13,143 --> 00:50:15,922
+all want images of the
+same input size typically
+
+1133
+00:50:15,922 --> 00:50:18,149
+due to the fully connected
+net layers and whatnot
+
+1134
+00:50:18,149 --> 00:50:21,058
+so we need to take each
+of these region proposals
+
+1135
+00:50:21,058 --> 00:50:24,029
+and warp them to that fixed square size
+
+1136
+00:50:24,029 --> 00:50:26,855
+that is expected as input
+to our downstream network.
+
+1137
+00:50:26,855 --> 00:50:29,170
+So we'll crop out those region proposal,
+
+1138
+00:50:29,170 --> 00:50:32,018
+those regions corresponding
+to the region proposals,
+
+1139
+00:50:32,018 --> 00:50:34,090
+we'll warp them to that fixed size,
+
+1140
+00:50:34,090 --> 00:50:35,549
+and then we'll run each of them
+
+1141
+00:50:35,549 --> 00:50:37,418
+through a convolutional network
+
+1142
+00:50:37,418 --> 00:50:40,488
+which will then use in this case an SVM
+
+1143
+00:50:40,488 --> 00:50:44,237
+to make a classification
+decision for each of those,
+
+1144
+00:50:44,237 --> 00:50:48,479
+to predict categories
+for each of those crops.
+
+1145
+00:50:48,479 --> 00:50:52,506
+And then I lost a slide.
+
+1146
+00:50:52,506 --> 00:50:55,957
+But it'll also, not shown
+in the slide right now
+
+1147
+00:50:55,957 --> 00:50:59,757
+but in addition R-CNN also
+predicts a regression,
+
+1148
+00:50:59,757 --> 00:51:02,946
+like a correction to the bounding box
+
+1149
+00:51:02,946 --> 00:51:05,650
+in addition for each of
+these input region proposals
+
+1150
+00:51:05,650 --> 00:51:07,770
+because the problem is that
+your input region proposals
+
+1151
+00:51:07,770 --> 00:51:10,498
+are kind of generally in the
+right position for an object
+
+1152
+00:51:10,498 --> 00:51:13,549
+but they might not be perfect
+so in addition R-CNN will,
+
+1153
+00:51:13,549 --> 00:51:17,038
+in addition to category labels
+for each of these proposals,
+
+1154
+00:51:17,038 --> 00:51:19,610
+it'll also predict four
+numbers that are kind of an
+
+1155
+00:51:19,610 --> 00:51:22,469
+offset or a correction to
+the box that was predicted
+
+1156
+00:51:22,469 --> 00:51:24,658
+at the region proposal stage.
+
+1157
+00:51:24,658 --> 00:51:26,418
+So then again, this is a multi-task loss
+
+1158
+00:51:26,418 --> 00:51:27,919
+and you would train this whole thing.
+
+1159
+00:51:27,919 --> 00:51:30,169
+Sorry was there a question?
+
+1160
+00:51:35,511 --> 00:51:36,692
+The question is how much does the change
+
+1161
+00:51:36,692 --> 00:51:39,359
+in aspect ratio impact accuracy?
+
+1162
+00:51:40,698 --> 00:51:41,772
+It's a little bit hard to say.
+
+1163
+00:51:41,772 --> 00:51:43,732
+I think there's some
+controlled experiments
+
+1164
+00:51:43,732 --> 00:51:46,551
+in some of these papers but I'm not sure
+
+1165
+00:51:46,551 --> 00:51:48,738
+I can give a generic answer to that.
+
+1166
+00:51:48,738 --> 00:51:49,571
+Question?
+
+1167
+00:51:53,602 --> 00:51:54,671
+The question is is it necessary
+
+1168
+00:51:54,671 --> 00:51:56,772
+for regions of interest to be rectangles?
+
+1169
+00:51:56,772 --> 00:52:00,212
+So they typically are
+because it's tough to warp
+
+1170
+00:52:00,212 --> 00:52:03,731
+these non-region things but once you move
+
+1171
+00:52:03,731 --> 00:52:05,511
+to something like instant segmentation
+
+1172
+00:52:05,511 --> 00:52:08,911
+then you sometimes get proposals
+that are not rectangles.
+
+1173
+00:52:08,911 --> 00:52:10,441
+If you actually do care
+about predicting things
+
+1174
+00:52:10,441 --> 00:52:12,071
+that are not rectangles.
+
+1175
+00:52:12,071 --> 00:52:14,238
+Is there another question?
+
+1176
+00:52:18,704 --> 00:52:21,317
+Yeah, so the question is are
+the region proposals learned
+
+1177
+00:52:21,317 --> 00:52:24,375
+so in R-CNN it's a traditional thing.
+
+1178
+00:52:24,375 --> 00:52:27,134
+These are not learned, this is
+kind of some fixed algorithm
+
+1179
+00:52:27,134 --> 00:52:29,203
+that someone wrote down but
+we'll see in a couple minutes
+
+1180
+00:52:29,203 --> 00:52:31,866
+that we can actually, we've
+changed that a little bit
+
+1181
+00:52:31,866 --> 00:52:33,466
+in the last couple of years.
+
+1182
+00:52:33,466 --> 00:52:35,633
+Is there another question?
+
+1183
+00:52:37,767 --> 00:52:39,486
+The question is is the
+offset always inside
+
+1184
+00:52:39,486 --> 00:52:40,735
+the region of interest?
+
+1185
+00:52:40,735 --> 00:52:42,665
+The answer is no, it doesn't have to be.
+
+1186
+00:52:42,665 --> 00:52:45,346
+You might imagine that
+suppose the region of interest
+
+1187
+00:52:45,346 --> 00:52:48,687
+put a box around a person
+but missed the head
+
+1188
+00:52:48,687 --> 00:52:50,786
+then you could imagine
+the network inferring
+
+1189
+00:52:50,786 --> 00:52:53,439
+that oh this is a person but
+people usually have heads
+
+1190
+00:52:53,439 --> 00:52:55,906
+so the network showed the box
+should be a little bit higher.
+
+1191
+00:52:55,906 --> 00:52:57,515
+So sometimes the final predicted boxes
+
+1192
+00:52:57,515 --> 00:52:59,666
+will be outside the region of interest.
+
+1193
+00:52:59,666 --> 00:53:00,499
+Question?
+
+1194
+00:53:08,110 --> 00:53:08,943
+Yeah.
+
+1195
+00:53:12,019 --> 00:53:13,619
+Yeah the question is
+you have a lot of ROI's
+
+1196
+00:53:13,619 --> 00:53:15,877
+that don't correspond to true objects?
+
+1197
+00:53:15,877 --> 00:53:18,179
+And like we said, in
+addition to the classes
+
+1198
+00:53:18,179 --> 00:53:20,078
+that you actually care
+about you add an additional
+
+1199
+00:53:20,078 --> 00:53:22,550
+background class so your
+class scores can also
+
+1200
+00:53:22,550 --> 00:53:26,289
+predict background to say
+that there was no object here.
+
+1201
+00:53:26,289 --> 00:53:27,122
+Question?
+
+1202
+00:53:37,716 --> 00:53:40,894
+Yeah, so the question is
+what kind of data do we need
+
+1203
+00:53:40,894 --> 00:53:43,364
+and yeah, this is fully
+supervised in the sense that
+
+1204
+00:53:43,364 --> 00:53:47,385
+our training data has each
+image, consists of images.
+
+1205
+00:53:47,385 --> 00:53:50,065
+Each image has all the
+object categories marked
+
+1206
+00:53:50,065 --> 00:53:53,383
+with bounding boxes for each
+instance of that category.
+
+1207
+00:53:53,383 --> 00:53:55,404
+There are definitely papers
+that try to approach this
+
+1208
+00:53:55,404 --> 00:53:56,904
+like oh what if you don't have the data.
+
+1209
+00:53:56,904 --> 00:54:00,759
+What if you only have
+that data for some images?
+
+1210
+00:54:00,759 --> 00:54:02,945
+Or what if that data is noisy but at least
+
+1211
+00:54:02,945 --> 00:54:04,735
+in the generic case you
+assume full supervision
+
+1212
+00:54:04,735 --> 00:54:08,568
+of all objects in the
+images at training time.
+
+1213
+00:54:09,835 --> 00:54:12,974
+Okay, so I think we've
+kind of alluded to this
+
+1214
+00:54:12,974 --> 00:54:14,825
+but there's kind of a lot of problems
+
+1215
+00:54:14,825 --> 00:54:16,535
+with this R-CNN framework.
+
+1216
+00:54:16,535 --> 00:54:18,044
+And actually if you look at
+the figure here on the right
+
+1217
+00:54:18,044 --> 00:54:19,975
+you can see that additional
+bounding box head
+
+1218
+00:54:19,975 --> 00:54:21,644
+so I'll put it back.
+
+1219
+00:54:21,644 --> 00:54:25,811
+But this is kind of still
+computationally pretty expensive
+
+1220
+00:54:27,436 --> 00:54:30,004
+because if we've got
+2000 region proposals,
+
+1221
+00:54:30,004 --> 00:54:32,196
+we're running each of those
+proposals independently,
+
+1222
+00:54:32,196 --> 00:54:34,415
+that can be pretty expensive.
+
+1223
+00:54:34,415 --> 00:54:37,111
+There's also this question
+of relying on this
+
+1224
+00:54:37,111 --> 00:54:40,015
+fixed region proposal network,
+this fixed region proposals,
+
+1225
+00:54:40,015 --> 00:54:42,895
+we're not learning them so
+that's kind of a problem.
+
+1226
+00:54:42,895 --> 00:54:46,015
+And just in practice it
+ends up being pretty slow
+
+1227
+00:54:46,015 --> 00:54:48,164
+so in the original implementation R-CNN
+
+1228
+00:54:48,164 --> 00:54:50,563
+would actually dump all
+the features to disk
+
+1229
+00:54:50,563 --> 00:54:52,863
+so it'd take hundreds of
+gigabytes of disk space
+
+1230
+00:54:52,863 --> 00:54:54,721
+to store all these features.
+
+1231
+00:54:54,721 --> 00:54:56,862
+Then training would be super
+slow since you have to make
+
+1232
+00:54:56,862 --> 00:54:58,472
+all these different
+forward and backward passes
+
+1233
+00:54:58,472 --> 00:55:01,569
+through the image and it
+took something like 84 hours
+
+1234
+00:55:01,569 --> 00:55:04,356
+is one number they've
+recorded for training time
+
+1235
+00:55:04,356 --> 00:55:06,134
+so this is super super slow.
+
+1236
+00:55:06,134 --> 00:55:07,984
+And now at test time it's also super slow,
+
+1237
+00:55:07,984 --> 00:55:11,076
+something like roughly 30
+seconds minute per image
+
+1238
+00:55:11,076 --> 00:55:13,134
+because you need to run
+thousands of forward passes
+
+1239
+00:55:13,134 --> 00:55:14,454
+through the convolutional network
+
+1240
+00:55:14,454 --> 00:55:16,004
+for each of these region proposals
+
+1241
+00:55:16,004 --> 00:55:18,316
+so this ends up being pretty slow.
+
+1242
+00:55:18,316 --> 00:55:21,505
+Thankfully we have fast
+R-CNN that fixed a lot
+
+1243
+00:55:21,505 --> 00:55:25,084
+of these problems so when we do fast R-CNN
+
+1244
+00:55:25,084 --> 00:55:27,404
+then it's going to look kind of the same.
+
+1245
+00:55:27,404 --> 00:55:29,036
+We're going to start with our input image
+
+1246
+00:55:29,036 --> 00:55:31,465
+but now rather than processing
+each region of interest
+
+1247
+00:55:31,465 --> 00:55:34,116
+separately instead we're
+going to run the entire image
+
+1248
+00:55:34,116 --> 00:55:36,923
+through some convolutional
+layers all at once
+
+1249
+00:55:36,923 --> 00:55:39,494
+to give this high resolution
+convolutional feature map
+
+1250
+00:55:39,494 --> 00:55:41,924
+corresponding to the entire image.
+
+1251
+00:55:41,924 --> 00:55:44,345
+And now we still are using
+some region proposals
+
+1252
+00:55:44,345 --> 00:55:46,652
+from some fixed thing
+like Selective Search
+
+1253
+00:55:46,652 --> 00:55:50,414
+but rather than cropping
+out the pixels of the image
+
+1254
+00:55:50,414 --> 00:55:52,334
+corresponding to the region proposals,
+
+1255
+00:55:52,334 --> 00:55:55,164
+instead we imagine projecting
+those region proposals
+
+1256
+00:55:55,164 --> 00:55:57,705
+onto this convolutional feature map
+
+1257
+00:55:57,705 --> 00:56:00,673
+and then taking crops from
+the convolutional feature map
+
+1258
+00:56:00,673 --> 00:56:02,633
+corresponding to each proposal rather
+
+1259
+00:56:02,633 --> 00:56:04,745
+than taking crops directly from the image.
+
+1260
+00:56:04,745 --> 00:56:06,713
+And this allows us to reuse
+a lot of this expensive
+
+1261
+00:56:06,713 --> 00:56:09,532
+convolutional computation
+across the entire image
+
+1262
+00:56:09,532 --> 00:56:13,425
+when we have many many crops per image.
+
+1263
+00:56:13,425 --> 00:56:15,932
+But again, if we have some
+fully connected layers
+
+1264
+00:56:15,932 --> 00:56:18,052
+downstream those fully connected layers
+
+1265
+00:56:18,052 --> 00:56:20,052
+are expecting some fixed-size input
+
+1266
+00:56:20,052 --> 00:56:23,844
+so now we need to do some
+reshaping of those crops
+
+1267
+00:56:23,844 --> 00:56:26,131
+from the convolutional feature map
+
+1268
+00:56:26,131 --> 00:56:28,572
+and they do that in a differentiable way
+
+1269
+00:56:28,572 --> 00:56:31,673
+using something they call
+an ROI pooling layer.
+
+1270
+00:56:31,673 --> 00:56:35,362
+Once you have these warped crops
+
+1271
+00:56:35,362 --> 00:56:37,084
+from the convolutional feature map
+
+1272
+00:56:37,084 --> 00:56:38,622
+then you can run these things through some
+
+1273
+00:56:38,622 --> 00:56:41,191
+fully connected layers and
+predict your classification
+
+1274
+00:56:41,191 --> 00:56:43,853
+scores and your linear regression offsets
+
+1275
+00:56:43,853 --> 00:56:45,673
+to the bounding boxes.
+
+1276
+00:56:45,673 --> 00:56:47,484
+And now when we train
+this thing then we again
+
+1277
+00:56:47,484 --> 00:56:49,062
+have a multi-task loss that trades off
+
+1278
+00:56:49,062 --> 00:56:51,654
+between these two constraints
+and during back propagation
+
+1279
+00:56:51,654 --> 00:56:53,362
+we can back prop through this entire thing
+
+1280
+00:56:53,362 --> 00:56:56,124
+and learn it all jointly.
+
+1281
+00:56:56,124 --> 00:56:59,833
+This ROI pooling, it looks
+kind of like max pooling.
+
+1282
+00:56:59,833 --> 00:57:00,973
+I don't really want to get into
+
+1283
+00:57:00,973 --> 00:57:03,575
+the details of that right now.
+
+1284
+00:57:03,575 --> 00:57:07,887
+And in terms of speed if we
+look at R-CNN versus fast R-CNN
+
+1285
+00:57:07,887 --> 00:57:10,422
+versus this other model called SPP net
+
+1286
+00:57:10,422 --> 00:57:12,014
+which is kind of in between the two,
+
+1287
+00:57:12,014 --> 00:57:14,494
+then you can see that at
+training time fast R-CNN
+
+1288
+00:57:14,494 --> 00:57:16,924
+is something like 10 times faster to train
+
+1289
+00:57:16,924 --> 00:57:18,433
+because we're sharing all this computation
+
+1290
+00:57:18,433 --> 00:57:20,134
+between different feature maps.
+
+1291
+00:57:20,134 --> 00:57:23,272
+And now at test time
+fast R-CNN is super fast
+
+1292
+00:57:23,272 --> 00:57:27,222
+and in fact fast R-CNN
+is so fast at test time
+
+1293
+00:57:27,222 --> 00:57:31,352
+that its computation time
+is actually dominated
+
+1294
+00:57:31,352 --> 00:57:33,764
+by computing region proposals.
+
+1295
+00:57:33,764 --> 00:57:36,433
+So we said that computing
+these 2000 region proposals
+
+1296
+00:57:36,433 --> 00:57:39,334
+using Selective Search takes
+something like two seconds
+
+1297
+00:57:39,334 --> 00:57:41,553
+and now once we've got
+all these region proposals
+
+1298
+00:57:41,553 --> 00:57:44,534
+then because we're processing
+them all sort of in a shared
+
+1299
+00:57:44,534 --> 00:57:46,724
+way by sharing these
+expensive convolutions
+
+1300
+00:57:46,724 --> 00:57:49,724
+across the entire image that
+we can process all of these
+
+1301
+00:57:49,724 --> 00:57:53,273
+region proposals in less
+than a second altogether.
+
+1302
+00:57:53,273 --> 00:57:55,494
+So fast R-CNN ends up being bottlenecked
+
+1303
+00:57:55,494 --> 00:57:59,142
+by just the computing of
+these region proposals.
+
+1304
+00:57:59,142 --> 00:58:03,804
+Thankfully we've solved this
+problem with faster R-CNN.
+
+1305
+00:58:03,804 --> 00:58:07,883
+So the idea in faster
+R-CNN is to just make,
+
+1306
+00:58:07,883 --> 00:58:11,324
+so the problem was the
+computing the region proposals
+
+1307
+00:58:11,324 --> 00:58:13,734
+using this fixed function
+was a bottleneck.
+
+1308
+00:58:13,734 --> 00:58:15,832
+So instead we'll just
+make the network itself
+
+1309
+00:58:15,832 --> 00:58:18,054
+predict its own region proposals.
+
+1310
+00:58:18,054 --> 00:58:20,822
+And so the way that this
+sort of works is that again,
+
+1311
+00:58:20,822 --> 00:58:23,993
+we take our input image,
+run the entire input image
+
+1312
+00:58:23,993 --> 00:58:26,433
+altogether through some
+convolutional layers
+
+1313
+00:58:26,433 --> 00:58:28,062
+to get some convolutional feature map
+
+1314
+00:58:28,062 --> 00:58:30,572
+representing the entire
+high resolution image
+
+1315
+00:58:30,572 --> 00:58:33,204
+and now there's a separate
+region proposal network
+
+1316
+00:58:33,204 --> 00:58:35,913
+which works on top of those
+convolutional features
+
+1317
+00:58:35,913 --> 00:58:39,204
+and predicts its own region
+proposals inside the network.
+
+1318
+00:58:39,204 --> 00:58:41,964
+Now once we have those
+predicted region proposals
+
+1319
+00:58:41,964 --> 00:58:44,542
+then it looks just like fast R-CNN
+
+1320
+00:58:44,542 --> 00:58:46,913
+where now we take crops
+from those region proposals
+
+1321
+00:58:46,913 --> 00:58:48,262
+from the convolutional features,
+
+1322
+00:58:48,262 --> 00:58:50,662
+pass them up to the rest of the network.
+
+1323
+00:58:50,662 --> 00:58:53,108
+And now we talked about multi-task losses
+
+1324
+00:58:53,108 --> 00:58:55,182
+and multi-task training networks
+
+1325
+00:58:55,182 --> 00:58:57,094
+to do multiple things at once.
+
+1326
+00:58:57,094 --> 00:58:59,372
+Well now we're telling the
+network to do four things
+
+1327
+00:58:59,372 --> 00:59:02,978
+all at once so balancing out this four-way
+
+1328
+00:59:02,978 --> 00:59:05,019
+multi-task loss is kind of tricky.
+
+1329
+00:59:05,019 --> 00:59:07,059
+But because the region proposal network
+
+1330
+00:59:07,059 --> 00:59:09,648
+needs to do two things: it needs to say
+
+1331
+00:59:09,648 --> 00:59:11,979
+for each potential
+proposal is it an object
+
+1332
+00:59:11,979 --> 00:59:14,848
+or not an object, it
+needs to actually regress
+
+1333
+00:59:14,848 --> 00:59:18,186
+the bounding box coordinates
+for each of those proposals,
+
+1334
+00:59:18,186 --> 00:59:20,035
+and now the final network at the end
+
+1335
+00:59:20,035 --> 00:59:21,787
+needs to do these two things again.
+
+1336
+00:59:21,787 --> 00:59:23,576
+Make final classification decisions
+
+1337
+00:59:23,576 --> 00:59:26,288
+for what are the class scores
+for each of these proposals,
+
+1338
+00:59:26,288 --> 00:59:29,565
+and also have a second round
+of bounding box regression
+
+1339
+00:59:29,565 --> 00:59:31,059
+to again correct any errors that may have
+
+1340
+00:59:31,059 --> 00:59:34,086
+come from the region proposal stage.
+
+1341
+00:59:34,086 --> 00:59:34,919
+Question?
+
+1342
+00:59:45,231 --> 00:59:47,453
+So the question is that
+sometimes multi-task learning
+
+1343
+00:59:47,453 --> 00:59:48,862
+might be seen as regularization
+
+1344
+00:59:48,862 --> 00:59:50,703
+and are we getting that affect here?
+
+1345
+00:59:50,703 --> 00:59:52,602
+I'm not sure if there's been
+super controlled studies
+
+1346
+00:59:52,602 --> 00:59:55,562
+on that but actually
+in the original version
+
+1347
+00:59:55,562 --> 00:59:58,903
+of the faster R-CNN paper
+they did a little bit
+
+1348
+00:59:58,903 --> 01:00:01,162
+of experimentation like what if we share
+
+1349
+01:00:01,162 --> 01:00:03,951
+the region proposal network,
+what if we don't share?
+
+1350
+01:00:03,951 --> 01:00:05,530
+What if we learn separate
+convolutional networks
+
+1351
+01:00:05,530 --> 01:00:06,682
+for the region proposal network
+
+1352
+01:00:06,682 --> 01:00:08,522
+versus the classification network?
+
+1353
+01:00:08,522 --> 01:00:10,111
+And I think there were minor differences
+
+1354
+01:00:10,111 --> 01:00:12,970
+but it wasn't a dramatic
+difference either way.
+
+1355
+01:00:12,970 --> 01:00:15,141
+So in practice it's kind
+of nicer to only learn one
+
+1356
+01:00:15,141 --> 01:00:18,380
+because it's computationally cheaper.
+
+1357
+01:00:18,380 --> 01:00:19,713
+Sorry, question?
+
+1358
+01:00:33,583 --> 01:00:35,292
+Yeah the question is how do you train
+
+1359
+01:00:35,292 --> 01:00:38,143
+this region proposal network
+because you don't know,
+
+1360
+01:00:38,143 --> 01:00:40,351
+you don't have ground
+truth region proposals
+
+1361
+01:00:40,351 --> 01:00:41,903
+for the region proposal network.
+
+1362
+01:00:41,903 --> 01:00:43,282
+So that's a little bit hairy.
+
+1363
+01:00:43,282 --> 01:00:45,172
+I don't want to get too
+much into those details
+
+1364
+01:00:45,172 --> 01:00:49,092
+but the idea is that at any
+time you have a region proposal
+
+1365
+01:00:49,092 --> 01:00:51,583
+which has more than some
+threshold of overlap
+
+1366
+01:00:51,583 --> 01:00:53,452
+with any of the ground truth objects
+
+1367
+01:00:53,452 --> 01:00:55,652
+then you say that that is
+the positive region proposal
+
+1368
+01:00:55,652 --> 01:00:57,771
+and you should predict
+that as the region proposal
+
+1369
+01:00:57,771 --> 01:01:01,642
+and any potential proposal
+which has very low overlap
+
+1370
+01:01:01,642 --> 01:01:02,942
+with any ground truth objects
+
+1371
+01:01:02,942 --> 01:01:04,471
+should be predicted as a negative.
+
+1372
+01:01:04,471 --> 01:01:06,652
+But there's a lot of dark
+magic hyperparameters
+
+1373
+01:01:06,652 --> 01:01:09,550
+in that process and
+that's a little bit hairy.
+
+1374
+01:01:09,550 --> 01:01:10,383
+Question?
+
+1375
+01:01:15,394 --> 01:01:17,554
+Yeah, so the question is what
+is the classification loss
+
+1376
+01:01:17,554 --> 01:01:19,793
+on the region proposal
+network and the answer is
+
+1377
+01:01:19,793 --> 01:01:22,164
+that it's making a binary,
+so I didn't want to get
+
+1378
+01:01:22,164 --> 01:01:23,938
+into too much of the
+details of that architecture
+
+1379
+01:01:23,938 --> 01:01:25,320
+'cause it's a little bit hairy
+
+1380
+01:01:25,320 --> 01:01:26,648
+but it's making binary decisions.
+
+1381
+01:01:26,648 --> 01:01:29,258
+So it has some set of potential regions
+
+1382
+01:01:29,258 --> 01:01:30,686
+that it's considering and it's making
+
+1383
+01:01:30,686 --> 01:01:32,269
+a binary decision for each one.
+
+1384
+01:01:32,269 --> 01:01:34,078
+Is this an object or not an object?
+
+1385
+01:01:34,078 --> 01:01:37,578
+So it's like a binary classification loss.
+
+1386
+01:01:38,520 --> 01:01:40,858
+So once you train this
+thing then faster R-CNN
+
+1387
+01:01:40,858 --> 01:01:43,658
+ends up being pretty darn fast.
+
+1388
+01:01:43,658 --> 01:01:46,248
+So now because we've
+eliminated this overhead
+
+1389
+01:01:46,248 --> 01:01:48,706
+from computing region
+proposals outside the network,
+
+1390
+01:01:48,706 --> 01:01:51,008
+now faster R-CNN ends
+up being very very fast
+
+1391
+01:01:51,008 --> 01:01:53,588
+compared to these other alternatives.
+
+1392
+01:01:53,588 --> 01:01:56,693
+Also, one interesting thing
+is that because we're learning
+
+1393
+01:01:56,693 --> 01:01:59,388
+the region proposals
+here you might imagine
+
+1394
+01:01:59,388 --> 01:02:00,848
+maybe what if there was some mismatch
+
+1395
+01:02:00,848 --> 01:02:05,086
+between this fixed region
+proposal algorithm and my data?
+
+1396
+01:02:05,086 --> 01:02:06,938
+So in this case once you're learning
+
+1397
+01:02:06,938 --> 01:02:09,240
+your own region proposals
+then you can overcome
+
+1398
+01:02:09,240 --> 01:02:12,018
+that mismatch if your region proposals
+
+1399
+01:02:12,018 --> 01:02:16,320
+are somewhat weird or
+different than other data sets.
+
+1400
+01:02:16,320 --> 01:02:19,926
+So this whole family of R-CNN methods,
+
+1401
+01:02:19,926 --> 01:02:22,914
+R stands for region, so these
+are all region-based methods
+
+1402
+01:02:22,914 --> 01:02:25,116
+because there's some
+kind of region proposal
+
+1403
+01:02:25,116 --> 01:02:27,796
+and then we're doing some processing,
+
+1404
+01:02:27,796 --> 01:02:29,178
+some independent processing for each
+
+1405
+01:02:29,178 --> 01:02:30,716
+of those potential regions.
+
+1406
+01:02:30,716 --> 01:02:32,447
+So this whole family of methods are called
+
+1407
+01:02:32,447 --> 01:02:36,708
+these region-based methods
+for object detection.
+
+1408
+01:02:36,708 --> 01:02:38,196
+But there's another family of methods
+
+1409
+01:02:38,196 --> 01:02:40,676
+that you sometimes see
+for object detection
+
+1410
+01:02:40,676 --> 01:02:43,818
+which is sort of all feed
+forward in a single pass.
+
+1411
+01:02:43,818 --> 01:02:48,076
+So one of these is YOLO
+for You Only Look Once.
+
+1412
+01:02:48,076 --> 01:02:50,796
+And another is SSD for
+Single Shot Detection
+
+1413
+01:02:50,796 --> 01:02:54,067
+and these two came out
+somewhat around the same time.
+
+1414
+01:02:54,067 --> 01:02:55,959
+But the idea is that rather
+than doing independent
+
+1415
+01:02:55,959 --> 01:02:58,496
+processing for each of
+these potential regions
+
+1416
+01:02:58,496 --> 01:03:00,138
+instead we want to try to treat this
+
+1417
+01:03:00,138 --> 01:03:02,348
+like a regression problem and just make
+
+1418
+01:03:02,348 --> 01:03:03,916
+all these predictions all at once
+
+1419
+01:03:03,916 --> 01:03:06,156
+with some big convolutional network.
+
+1420
+01:03:06,156 --> 01:03:08,367
+So now given our input image you imagine
+
+1421
+01:03:08,367 --> 01:03:11,327
+dividing that input image
+into some coarse grid,
+
+1422
+01:03:11,327 --> 01:03:13,468
+in this case it's a seven by seven grid
+
+1423
+01:03:13,468 --> 01:03:15,698
+and now within each of those grid cells
+
+1424
+01:03:15,698 --> 01:03:18,556
+you imagine some set
+of base bounding boxes.
+
+1425
+01:03:18,556 --> 01:03:20,995
+Here I've drawn three base bounding boxes
+
+1426
+01:03:20,995 --> 01:03:23,418
+like a tall one, a wide
+one, and a square one
+
+1427
+01:03:23,418 --> 01:03:25,748
+but in practice you would
+use more than three.
+
+1428
+01:03:25,748 --> 01:03:28,098
+So now for each of these grid cells
+
+1429
+01:03:28,098 --> 01:03:30,314
+and for each of these base bounding boxes
+
+1430
+01:03:30,314 --> 01:03:32,858
+you want to predict several things.
+
+1431
+01:03:32,858 --> 01:03:37,025
+One, you want to predict an
+offset off the base bounding box
+
+1432
+01:03:38,177 --> 01:03:40,087
+to predict what is the true location
+
+1433
+01:03:40,087 --> 01:03:43,020
+of the object off this base bounding box.
+
+1434
+01:03:43,020 --> 01:03:46,340
+And you also want to predict
+classification scores
+
+1435
+01:03:46,340 --> 01:03:49,820
+so maybe a classification score for each
+
+1436
+01:03:49,820 --> 01:03:51,460
+of these base bounding boxes.
+
+1437
+01:03:51,460 --> 01:03:53,619
+How likely is it that an
+object of this category
+
+1438
+01:03:53,619 --> 01:03:55,503
+appears in this bounding box.
+
+1439
+01:03:55,503 --> 01:03:58,250
+So then at the end we end up predicting
+
+1440
+01:03:58,250 --> 01:03:59,762
+from our input image, we end up predicting
+
+1441
+01:03:59,762 --> 01:04:03,929
+this giant tensor of seven
+by seven grid by 5B + C.
+
+1442
+01:04:04,951 --> 01:04:08,130
+So that's just where we
+have B base bounding boxes,
+
+1443
+01:04:08,130 --> 01:04:10,231
+we have five numbers for
+each giving our offset
+
+1444
+01:04:10,231 --> 01:04:12,700
+and our confidence for
+that base bounding box
+
+1445
+01:04:12,700 --> 01:04:16,340
+and C classification scores
+for our C categories.
+
+1446
+01:04:16,340 --> 01:04:19,549
+So then we kind of see object
+detection as this input
+
+1447
+01:04:19,549 --> 01:04:23,522
+of an image, output of this
+three dimensional tensor
+
+1448
+01:04:23,522 --> 01:04:25,642
+and you can imagine just
+training this whole thing
+
+1449
+01:04:25,642 --> 01:04:27,722
+with a giant convolutional network.
+
+1450
+01:04:27,722 --> 01:04:30,682
+And that's kind of what
+these single shot methods do
+
+1451
+01:04:30,682 --> 01:04:33,320
+where they just, and again
+matching the ground truth
+
+1452
+01:04:33,320 --> 01:04:37,050
+objects into these potential base boxes
+
+1453
+01:04:37,050 --> 01:04:41,180
+becomes a little bit hairy but
+that's what these methods do.
+
+1454
+01:04:41,180 --> 01:04:43,060
+And by the way, the
+region proposal network
+
+1455
+01:04:43,060 --> 01:04:45,388
+that gets used in faster
+R-CNN ends up looking
+
+1456
+01:04:45,388 --> 01:04:48,539
+quite similar to these
+where they have some set
+
+1457
+01:04:48,539 --> 01:04:51,210
+of base bounding boxes
+over some gridded image,
+
+1458
+01:04:51,210 --> 01:04:53,899
+another region proposal
+network does some regression
+
+1459
+01:04:53,899 --> 01:04:55,279
+plus some classification.
+
+1460
+01:04:55,279 --> 01:04:59,196
+So there's kind of some
+overlapping ideas here.
+
+1461
+01:05:00,388 --> 01:05:04,555
+So in faster R-CNN we're
+kind of treating the object,
+
+1462
+01:05:05,390 --> 01:05:08,372
+the region proposal step
+as kind of this fixed
+
+1463
+01:05:08,372 --> 01:05:11,199
+end-to-end regression problem
+and then we do the separate
+
+1464
+01:05:11,199 --> 01:05:13,892
+per region processing but now
+with these single shot methods
+
+1465
+01:05:13,892 --> 01:05:16,350
+we only do that first step and just do all
+
+1466
+01:05:16,350 --> 01:05:19,761
+of our object detection
+with a single forward pass.
+
+1467
+01:05:19,761 --> 01:05:21,740
+So object detection has a
+ton of different variables.
+
+1468
+01:05:21,740 --> 01:05:23,950
+There could be different
+base networks like VGG,
+
+1469
+01:05:23,950 --> 01:05:26,459
+ResNet, we've seen
+different metastrategies
+
+1470
+01:05:26,459 --> 01:05:29,601
+for object detection
+including this faster R-CNN
+
+1471
+01:05:29,601 --> 01:05:31,820
+type region based family of methods,
+
+1472
+01:05:31,820 --> 01:05:34,060
+this single shot detection
+family of methods.
+
+1473
+01:05:34,060 --> 01:05:35,492
+There's kind of a hybrid
+that I didn't talk about
+
+1474
+01:05:35,492 --> 01:05:38,153
+called R-FCN which is somewhat in between.
+
+1475
+01:05:38,153 --> 01:05:39,580
+There's a lot of different hyperparameters
+
+1476
+01:05:39,580 --> 01:05:40,911
+like what is the image size,
+
+1477
+01:05:40,911 --> 01:05:43,590
+how many region proposals do you use.
+
+1478
+01:05:43,590 --> 01:05:44,938
+And there's actually
+this really cool paper
+
+1479
+01:05:44,938 --> 01:05:48,022
+that will appear at CVPR this
+summer that does a really
+
+1480
+01:05:48,022 --> 01:05:50,102
+controlled experimentation
+around a lot of these
+
+1481
+01:05:50,102 --> 01:05:53,102
+different variables and tries to tell you
+
+1482
+01:05:53,102 --> 01:05:54,732
+how do these methods all perform
+
+1483
+01:05:54,732 --> 01:05:56,353
+under these different variables.
+
+1484
+01:05:56,353 --> 01:05:58,676
+So if you're interested I'd
+encourage you to check it out
+
+1485
+01:05:58,676 --> 01:06:01,171
+but kind of one of the
+key takeaways is that
+
+1486
+01:06:01,171 --> 01:06:04,012
+the faster R-CNN style
+of region based methods
+
+1487
+01:06:04,012 --> 01:06:06,702
+tends to give higher
+accuracies but ends up being
+
+1488
+01:06:06,702 --> 01:06:08,972
+much slower than the single shot methods
+
+1489
+01:06:08,972 --> 01:06:10,612
+because the single shot
+methods don't require
+
+1490
+01:06:10,612 --> 01:06:12,486
+this per region processing.
+
+1491
+01:06:12,486 --> 01:06:14,542
+But I encourage you to
+check out this paper
+
+1492
+01:06:14,542 --> 01:06:17,204
+if you want more details.
+
+1493
+01:06:17,204 --> 01:06:20,062
+Also as a bit of aside,
+I had this fun paper
+
+1494
+01:06:20,062 --> 01:06:21,852
+with Andre a couple years ago that kind of
+
+1495
+01:06:21,852 --> 01:06:24,621
+combined object detection
+with image captioning
+
+1496
+01:06:24,621 --> 01:06:27,273
+and did this problem
+called dense captioning
+
+1497
+01:06:27,273 --> 01:06:30,324
+so now the idea is that
+rather than predicting
+
+1498
+01:06:30,324 --> 01:06:32,472
+a fixed category label for each region,
+
+1499
+01:06:32,472 --> 01:06:35,084
+instead we want to write
+a caption for each region.
+
+1500
+01:06:35,084 --> 01:06:37,902
+And again, we had some data
+set that had this sort of data
+
+1501
+01:06:37,902 --> 01:06:41,033
+where we had a data set of
+regions together with captions
+
+1502
+01:06:41,033 --> 01:06:43,302
+and then we sort of trained
+this giant end-to-end model
+
+1503
+01:06:43,302 --> 01:06:46,153
+that just predicted these
+captions all jointly.
+
+1504
+01:06:46,153 --> 01:06:48,993
+And this ends up looking
+somewhat like faster R-CNN
+
+1505
+01:06:48,993 --> 01:06:50,962
+where you have some region proposal stage
+
+1506
+01:06:50,962 --> 01:06:53,764
+then a bounding box, then
+some per region processing.
+
+1507
+01:06:53,764 --> 01:06:56,657
+But rather than a SVM or a softmax loss
+
+1508
+01:06:56,657 --> 01:06:59,382
+instead those per region
+processing has a whole
+
+1509
+01:06:59,382 --> 01:07:03,454
+RNN language model that predicts
+a caption for each region.
+
+1510
+01:07:03,454 --> 01:07:06,814
+So that ends up looking quite
+a bit like faster R-CNN.
+
+1511
+01:07:06,814 --> 01:07:07,953
+There's a video here but I think
+
+1512
+01:07:07,953 --> 01:07:11,524
+we're running out of time so I'll skip it.
+
+1513
+01:07:11,524 --> 01:07:15,108
+But the idea here is
+that once you have this,
+
+1514
+01:07:15,108 --> 01:07:17,897
+you can kind of tie together
+a lot of these ideas
+
+1515
+01:07:17,897 --> 01:07:19,727
+and if you have some new
+problem that you're interested
+
+1516
+01:07:19,727 --> 01:07:21,508
+in tackling like dense captioning,
+
+1517
+01:07:21,508 --> 01:07:23,156
+you can recycle a lot of the components
+
+1518
+01:07:23,156 --> 01:07:24,607
+that you've learned from other problems
+
+1519
+01:07:24,607 --> 01:07:26,860
+like object detection and image captioning
+
+1520
+01:07:26,860 --> 01:07:28,786
+and kind of stitch together
+one end-to-end network
+
+1521
+01:07:28,786 --> 01:07:30,356
+that produces the outputs
+that you care about
+
+1522
+01:07:30,356 --> 01:07:32,565
+for your problem.
+
+1523
+01:07:32,565 --> 01:07:34,386
+So the last task that I want to talk about
+
+1524
+01:07:34,386 --> 01:07:36,567
+is this idea of instance segmentation.
+
+1525
+01:07:36,567 --> 01:07:38,165
+So here instance segmentation is
+
+1526
+01:07:38,165 --> 01:07:40,636
+in some ways like the full problem
+
+1527
+01:07:40,636 --> 01:07:45,007
+We're given an input image
+and we want to predict one,
+
+1528
+01:07:45,007 --> 01:07:48,028
+the locations and identities
+of objects in that image
+
+1529
+01:07:48,028 --> 01:07:50,594
+similar to object detection,
+but rather than just
+
+1530
+01:07:50,594 --> 01:07:52,847
+predicting a bounding box
+for each of those objects,
+
+1531
+01:07:52,847 --> 01:07:55,385
+instead we want to predict
+a whole segmentation mask
+
+1532
+01:07:55,385 --> 01:07:57,943
+for each of those objects
+and predict which pixels
+
+1533
+01:07:57,943 --> 01:08:02,785
+in the input image corresponds
+to each object instance.
+
+1534
+01:08:02,785 --> 01:08:04,575
+So this is kind of like a hybrid
+
+1535
+01:08:04,575 --> 01:08:07,484
+between semantic segmentation
+and object detection
+
+1536
+01:08:07,484 --> 01:08:09,815
+because like object
+detection we can handle
+
+1537
+01:08:09,815 --> 01:08:12,271
+multiple objects and we
+differentiate the identities
+
+1538
+01:08:12,271 --> 01:08:15,196
+of different instances so in this example
+
+1539
+01:08:15,196 --> 01:08:17,215
+since there are two dogs in the image
+
+1540
+01:08:17,215 --> 01:08:19,385
+and instance segmentation method
+
+1541
+01:08:19,385 --> 01:08:21,924
+actually distinguishes
+between the two dog instances
+
+1542
+01:08:21,924 --> 01:08:25,425
+and the output and kind of
+like semantic segmentation
+
+1543
+01:08:25,425 --> 01:08:27,948
+we have this pixel wise accuracy
+
+1544
+01:08:27,948 --> 01:08:30,268
+where for each of these
+objects we want to say
+
+1545
+01:08:30,268 --> 01:08:32,765
+which pixels belong to that object.
+
+1546
+01:08:32,765 --> 01:08:34,709
+So there's been a lot of different methods
+
+1547
+01:08:34,709 --> 01:08:38,247
+that people have tackled, for
+instance segmentation as well,
+
+1548
+01:08:38,247 --> 01:08:40,567
+but the current state of
+the art is this new paper
+
+1549
+01:08:40,567 --> 01:08:44,636
+called Mask R-CNN that
+actually just came out
+
+1550
+01:08:44,636 --> 01:08:47,846
+on archive about a month ago
+so this is not yet published,
+
+1551
+01:08:47,846 --> 01:08:49,868
+this is like super fresh stuff.
+
+1552
+01:08:49,868 --> 01:08:52,675
+And this ends up looking
+a lot like faster R-CNN.
+
+1553
+01:08:52,676 --> 01:08:55,296
+So it has this multi-stage
+processing approach
+
+1554
+01:08:55,296 --> 01:08:57,508
+where we take our whole input image,
+
+1555
+01:08:57,509 --> 01:09:00,117
+that whole input image goes
+into some convolutional
+
+1556
+01:09:00,117 --> 01:09:03,127
+network and some learned
+region proposal network
+
+1557
+01:09:03,127 --> 01:09:05,622
+that's exactly the same as faster R-CNN
+
+1558
+01:09:05,622 --> 01:09:08,206
+and now once we have our
+learned region proposals
+
+1559
+01:09:08,207 --> 01:09:09,557
+then we project those proposals
+
+1560
+01:09:09,557 --> 01:09:11,247
+onto our convolutional feature map
+
+1561
+01:09:11,247 --> 01:09:14,796
+just like we did in fast and faster R-CNN.
+
+1562
+01:09:14,796 --> 01:09:17,196
+But now rather than just
+making a classification
+
+1563
+01:09:17,197 --> 01:09:19,167
+and a bounding box for regression decision
+
+1564
+01:09:19,167 --> 01:09:21,229
+for each of those boxes we in addition
+
+1565
+01:09:21,229 --> 01:09:23,419
+want to predict a segmentation mask
+
+1566
+01:09:23,420 --> 01:09:25,729
+for each of those bounding box,
+
+1567
+01:09:25,729 --> 01:09:27,478
+for each of those region proposals.
+
+1568
+01:09:27,478 --> 01:09:30,478
+So now it kind of looks like a mini,
+
+1569
+01:09:30,478 --> 01:09:32,529
+like a semantic segmentation problem
+
+1570
+01:09:32,529 --> 01:09:34,408
+inside each of the region proposals
+
+1571
+01:09:34,408 --> 01:09:36,888
+that we're getting from our
+region proposal network.
+
+1572
+01:09:36,889 --> 01:09:40,288
+So now after we do this
+ROI aligning to warp
+
+1573
+01:09:40,288 --> 01:09:42,888
+our features corresponding
+to the region of proposal
+
+1574
+01:09:42,889 --> 01:09:45,948
+into the right shape, then we
+have two different branches.
+
+1575
+01:09:45,948 --> 01:09:48,209
+One branch will come up that looks exact,
+
+1576
+01:09:48,209 --> 01:09:50,198
+and this first branch at
+the top looks just like
+
+1577
+01:09:50,198 --> 01:09:53,750
+faster R-CNN and it will
+predict classification scores
+
+1578
+01:09:53,750 --> 01:09:55,580
+telling us what is the
+category corresponding
+
+1579
+01:09:55,580 --> 01:09:57,838
+to that region of
+proposal or alternatively
+
+1580
+01:09:57,838 --> 01:09:59,318
+whether or not it's background.
+
+1581
+01:09:59,318 --> 01:10:01,369
+And we'll also predict some
+bounding box coordinates
+
+1582
+01:10:01,369 --> 01:10:04,596
+that regressed off the
+region proposal coordinates.
+
+1583
+01:10:04,596 --> 01:10:06,830
+And now in addition we'll
+have this branch at the bottom
+
+1584
+01:10:06,830 --> 01:10:09,738
+which looks basically like
+a semantic segmentation
+
+1585
+01:10:09,738 --> 01:10:13,550
+mini network which will
+classify for each pixel
+
+1586
+01:10:13,550 --> 01:10:17,780
+in that input region proposal
+whether or not it's an object
+
+1587
+01:10:17,780 --> 01:10:22,180
+so this mask R-CNN problem,
+this mask R-CNN architecture
+
+1588
+01:10:22,180 --> 01:10:24,249
+just kind of unifies all
+of these different problems
+
+1589
+01:10:24,249 --> 01:10:26,928
+that we've been talking
+about today into one nice
+
+1590
+01:10:26,928 --> 01:10:29,230
+jointly end-to-end trainable model.
+
+1591
+01:10:29,230 --> 01:10:31,238
+And it's really cool and it actually works
+
+1592
+01:10:31,238 --> 01:10:34,958
+really really well so when
+you look at the examples
+
+1593
+01:10:34,958 --> 01:10:36,710
+in the paper they're kind of amazing.
+
+1594
+01:10:36,710 --> 01:10:39,078
+They look kind of indistinguishable
+from ground truth.
+
+1595
+01:10:39,078 --> 01:10:41,012
+So in this example on the left you can see
+
+1596
+01:10:41,012 --> 01:10:42,623
+that there are these two people standing
+
+1597
+01:10:42,623 --> 01:10:44,838
+in front of motorcycles,
+it's drawn the boxes
+
+1598
+01:10:44,838 --> 01:10:46,820
+around these people, it's
+also gone in and labeled
+
+1599
+01:10:46,820 --> 01:10:49,497
+all the pixels of those
+people and it's really small
+
+1600
+01:10:49,497 --> 01:10:51,038
+but actually in the
+background on that image
+
+1601
+01:10:51,038 --> 01:10:52,868
+on the left there's also
+a whole crowd of people
+
+1602
+01:10:52,868 --> 01:10:54,961
+standing very small in the background.
+
+1603
+01:10:54,961 --> 01:10:56,478
+It's also drawn boxes around each of those
+
+1604
+01:10:56,478 --> 01:10:58,628
+and grabbed the pixels
+of each of those images.
+
+1605
+01:10:58,628 --> 01:11:00,729
+And you can see that this is just,
+
+1606
+01:11:00,729 --> 01:11:02,118
+it ends up working really really well
+
+1607
+01:11:02,118 --> 01:11:04,215
+and it's a relatively simple addition
+
+1608
+01:11:04,215 --> 01:11:08,028
+on top of the existing
+faster R-CNN framework.
+
+1609
+01:11:08,028 --> 01:11:11,146
+So I told you that mask
+R-CNN unifies everything
+
+1610
+01:11:11,146 --> 01:11:13,318
+we talked about today and it also does
+
+1611
+01:11:13,318 --> 01:11:15,108
+pose estimation by the way.
+
+1612
+01:11:15,108 --> 01:11:18,417
+So we talked about, you
+can do pose estimation
+
+1613
+01:11:18,417 --> 01:11:20,478
+by predicting these joint coordinates
+
+1614
+01:11:20,478 --> 01:11:22,257
+for each of the joints of the person
+
+1615
+01:11:22,257 --> 01:11:26,214
+so you can do mask R-CNN to
+do joint object detection,
+
+1616
+01:11:26,214 --> 01:11:29,388
+pose estimation, and
+instance segmentation.
+
+1617
+01:11:29,388 --> 01:11:31,246
+And the only addition we need to make
+
+1618
+01:11:31,246 --> 01:11:33,337
+is that for each of these region proposals
+
+1619
+01:11:33,337 --> 01:11:35,246
+we add an additional little branch
+
+1620
+01:11:35,246 --> 01:11:39,086
+that predicts these
+coordinates of the joints
+
+1621
+01:11:39,086 --> 01:11:42,628
+for the instance of the
+current region proposal.
+
+1622
+01:11:42,628 --> 01:11:44,506
+So now this is just another loss,
+
+1623
+01:11:44,506 --> 01:11:46,137
+like another layer that we add,
+
+1624
+01:11:46,137 --> 01:11:47,836
+another head coming out of the network
+
+1625
+01:11:47,836 --> 01:11:51,715
+and an additional term
+in our multi-task loss.
+
+1626
+01:11:51,715 --> 01:11:54,027
+But once we add this one little branch
+
+1627
+01:11:54,027 --> 01:11:56,684
+then you can do all of these
+different problems jointly
+
+1628
+01:11:56,684 --> 01:11:59,406
+and you get results looking
+something like this.
+
+1629
+01:11:59,406 --> 01:12:02,705
+Where now this network, like
+a single feed forward network
+
+1630
+01:12:02,705 --> 01:12:06,126
+is deciding how many
+people are in the image,
+
+1631
+01:12:06,126 --> 01:12:07,876
+detecting where those people are,
+
+1632
+01:12:07,876 --> 01:12:09,792
+figuring out the pixels
+corresponding to each
+
+1633
+01:12:09,792 --> 01:12:12,283
+of those people and also
+drawing a skeleton estimating
+
+1634
+01:12:12,283 --> 01:12:14,593
+the pose of those people
+and this works really well
+
+1635
+01:12:14,593 --> 01:12:16,993
+even in crowded scenes like this classroom
+
+1636
+01:12:16,993 --> 01:12:18,102
+where there's a ton of people sitting
+
+1637
+01:12:18,102 --> 01:12:19,273
+and they all overlap each other
+
+1638
+01:12:19,273 --> 01:12:22,742
+and it just seems to work incredibly well.
+
+1639
+01:12:22,742 --> 01:12:25,392
+And because it's built on
+the faster R-CNN framework
+
+1640
+01:12:25,392 --> 01:12:28,291
+it also runs relatively close to real time
+
+1641
+01:12:28,291 --> 01:12:31,153
+so this is running something
+like five frames per second
+
+1642
+01:12:31,153 --> 01:12:33,582
+on a GPU because this is all sort of done
+
+1643
+01:12:33,582 --> 01:12:36,061
+in the single forward pass of the network.
+
+1644
+01:12:36,061 --> 01:12:37,603
+So this is again, a super new paper
+
+1645
+01:12:37,603 --> 01:12:39,622
+but I think that this will probably get
+
+1646
+01:12:39,622 --> 01:12:42,833
+a lot of attention in the coming months.
+
+1647
+01:12:42,833 --> 01:12:45,430
+So just to recap, we've talked.
+
+1648
+01:12:45,430 --> 01:12:46,680
+Sorry question?
+
+1649
+01:12:53,800 --> 01:12:55,781
+The question is how much
+training data do you need?
+
+1650
+01:12:55,781 --> 01:12:58,610
+So all of these instant
+segmentation results
+
+1651
+01:12:58,610 --> 01:13:00,948
+were trained on the
+Microsoft Coco data set
+
+1652
+01:13:00,948 --> 01:13:05,349
+so Microsoft Coco is roughly
+200,000 training images.
+
+1653
+01:13:05,349 --> 01:13:08,320
+It has 80 categories that it cares about
+
+1654
+01:13:08,320 --> 01:13:11,101
+so in each of those
+200,000 training images
+
+1655
+01:13:11,101 --> 01:13:14,010
+it has all the instances of
+those 80 categories labeled.
+
+1656
+01:13:14,010 --> 01:13:17,139
+So there's something like
+200,000 images for training
+
+1657
+01:13:17,139 --> 01:13:18,548
+and there's something
+like I think an average
+
+1658
+01:13:18,548 --> 01:13:21,069
+of fivee or six instances per image.
+
+1659
+01:13:21,069 --> 01:13:23,285
+So it actually is quite a lot of data.
+
+1660
+01:13:23,285 --> 01:13:26,970
+And for Microsoft Coco for all the people
+
+1661
+01:13:26,970 --> 01:13:28,909
+in Microsoft Coco they
+also have all the joints
+
+1662
+01:13:28,909 --> 01:13:32,000
+annotated as well so this
+actually does have quite a lot
+
+1663
+01:13:32,000 --> 01:13:34,320
+of supervision at training
+time you're right,
+
+1664
+01:13:34,320 --> 01:13:36,669
+and actually is trained
+with quite a lot of data.
+
+1665
+01:13:36,669 --> 01:13:39,638
+So I think one really
+interesting topic to study
+
+1666
+01:13:39,638 --> 01:13:42,050
+moving forward is that we kind of know
+
+1667
+01:13:42,050 --> 01:13:44,620
+that if you have a lot of
+data to solve some problem,
+
+1668
+01:13:44,620 --> 01:13:46,349
+at this point we're relatively
+confident that you can
+
+1669
+01:13:46,349 --> 01:13:48,088
+stitch up some convolutional network
+
+1670
+01:13:48,088 --> 01:13:50,701
+that can probably do a
+reasonable job at that problem
+
+1671
+01:13:50,701 --> 01:13:53,701
+but figuring out ways to
+get performance like this
+
+1672
+01:13:53,701 --> 01:13:55,809
+with less training data
+is a super interesting
+
+1673
+01:13:55,809 --> 01:13:57,700
+and active area of research and I think
+
+1674
+01:13:57,700 --> 01:13:59,069
+that's something people will be spending
+
+1675
+01:13:59,069 --> 01:14:03,301
+a lot of their efforts working
+on in the next few years.
+
+1676
+01:14:03,301 --> 01:14:05,749
+So just to recap, today we
+had kind of a whirlwind tour
+
+1677
+01:14:05,749 --> 01:14:08,068
+of a whole bunch of different
+computer vision topics
+
+1678
+01:14:08,068 --> 01:14:10,141
+and we saw how a lot of the
+machinery that we built up
+
+1679
+01:14:10,141 --> 01:14:13,061
+from image classification can
+be applied relatively easily
+
+1680
+01:14:13,061 --> 01:14:15,925
+to tackle these different
+computer vision topics.
+
+1681
+01:14:15,925 --> 01:14:18,013
+And next time we'll talk about,
+
+1682
+01:14:18,013 --> 01:14:20,835
+we'll have a really fun lecture
+on visualizing CNN features.
+
+1683
+01:14:20,835 --> 00:00:00,000
+Well also talk about DeepDream
+and neural style transfer.
+

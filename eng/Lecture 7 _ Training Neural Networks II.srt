@@ -1,0 +1,8520 @@
+1
+00:00:08,840 --> 00:00:10,009
+- Okay, it's after 12, so I think
+
+2
+00:00:10,009 --> 00:00:11,842
+we should get started.
+
+3
+00:00:15,129 --> 00:00:16,262
+Today we're going to kind of pick up
+
+4
+00:00:16,262 --> 00:00:17,904
+where we left off last time.
+
+5
+00:00:17,904 --> 00:00:19,205
+Last time we talked about a lot of
+
+6
+00:00:19,205 --> 00:00:20,875
+sort of tips and tricks involved
+
+7
+00:00:20,875 --> 00:00:22,628
+in the nitty gritty details of training
+
+8
+00:00:22,628 --> 00:00:23,885
+neural networks.
+
+9
+00:00:23,885 --> 00:00:25,545
+Today we'll pick up where we left off,
+
+10
+00:00:25,545 --> 00:00:26,920
+and talk about a lot more of these
+
+11
+00:00:26,920 --> 00:00:28,868
+sort of nitty gritty details about
+
+12
+00:00:28,868 --> 00:00:30,924
+training these things.
+
+13
+00:00:30,924 --> 00:00:32,717
+As usual, a couple administrative notes
+
+14
+00:00:32,717 --> 00:00:35,192
+before we get into the material.
+
+15
+00:00:35,192 --> 00:00:38,123
+As you all know, assignment
+one is already due.
+
+16
+00:00:38,123 --> 00:00:40,130
+Hopefully you all turned it in.
+
+17
+00:00:40,130 --> 00:00:42,723
+Did it go okay? Was it not okay?
+
+18
+00:00:42,723 --> 00:00:44,056
+Rough sentiment?
+
+19
+00:00:45,937 --> 00:00:46,989
+Mostly okay.
+
+20
+00:00:46,989 --> 00:00:48,215
+Okay, that's good.
+
+21
+00:00:48,215 --> 00:00:51,314
+Awesome. [laughs]
+
+22
+00:00:51,314 --> 00:00:52,687
+We're in the process of grading those,
+
+23
+00:00:52,687 --> 00:00:53,605
+so stay turned.
+
+24
+00:00:53,605 --> 00:00:55,705
+We're hoping to get grades back for those
+
+25
+00:00:55,705 --> 00:00:57,807
+before A two is due.
+
+26
+00:00:57,807 --> 00:01:00,038
+Another reminder, that
+your project proposals
+
+27
+00:01:00,038 --> 00:01:02,189
+are due tomorrow.
+
+28
+00:01:02,189 --> 00:01:04,606
+Actually, no, today at 11:59.
+
+29
+00:01:05,444 --> 00:01:06,843
+Make sure you send those in.
+
+30
+00:01:06,843 --> 00:01:09,559
+Details are on the website and on Piazza.
+
+31
+00:01:09,559 --> 00:01:12,750
+Also a reminder, assignment
+two is already out.
+
+32
+00:01:12,750 --> 00:01:15,754
+That'll be due a week from Thursday.
+
+33
+00:01:15,754 --> 00:01:17,757
+Historically, assignment two has been the
+
+34
+00:01:17,757 --> 00:01:20,102
+longest one in the class, so if you
+
+35
+00:01:20,102 --> 00:01:22,442
+haven't started already on assignment two,
+
+36
+00:01:22,442 --> 00:01:25,345
+I'd recommend you take a look at that
+
+37
+00:01:25,345 --> 00:01:26,345
+pretty soon.
+
+38
+00:01:27,607 --> 00:01:30,058
+Another reminder is
+that for assignment two,
+
+39
+00:01:30,058 --> 00:01:31,304
+I think of a lot of you will be using
+
+40
+00:01:31,304 --> 00:01:32,969
+Google Cloud.
+
+41
+00:01:32,969 --> 00:01:35,235
+Big reminder, make sure
+to stop your instances
+
+42
+00:01:35,235 --> 00:01:36,987
+when you're not using them because
+
+43
+00:01:36,987 --> 00:01:39,071
+whenever your instance
+is on, you get charged,
+
+44
+00:01:39,071 --> 00:01:40,514
+and we only have so many coupons
+
+45
+00:01:40,514 --> 00:01:43,384
+to distribute to you guys.
+
+46
+00:01:43,384 --> 00:01:44,966
+Anytime your instance is on, even if
+
+47
+00:01:44,966 --> 00:01:46,998
+you're not SSH to it, even if you're not
+
+48
+00:01:46,998 --> 00:01:49,884
+running things immediately
+in your Jupyter Notebook,
+
+49
+00:01:49,884 --> 00:01:52,708
+any time that instance is on,
+you're going to be charged.
+
+50
+00:01:52,708 --> 00:01:54,569
+Just make sure that you explicitly stop
+
+51
+00:01:54,569 --> 00:01:57,603
+your instances when you're not using them.
+
+52
+00:01:57,603 --> 00:01:59,399
+In this example, I've
+got a little screenshot
+
+53
+00:01:59,399 --> 00:02:01,940
+of my dashboard on Google Cloud.
+
+54
+00:02:01,940 --> 00:02:03,089
+I need to go in there and explicitly
+
+55
+00:02:03,089 --> 00:02:05,455
+go to the dropdown and click stop.
+
+56
+00:02:05,455 --> 00:02:06,712
+Just make sure that you do this when
+
+57
+00:02:06,712 --> 00:02:09,129
+you're done working each day.
+
+58
+00:02:09,966 --> 00:02:12,566
+Another thing to remember is it's kind of
+
+59
+00:02:12,566 --> 00:02:14,340
+up to you guys to keep
+track of your spending
+
+60
+00:02:14,340 --> 00:02:15,845
+on Google Cloud.
+
+61
+00:02:15,845 --> 00:02:18,212
+In particular, instances that use GPUs
+
+62
+00:02:18,212 --> 00:02:21,338
+are a lot more expensive
+than those with CPUs.
+
+63
+00:02:21,338 --> 00:02:23,720
+Rough order of magnitude,
+those GPU instances
+
+64
+00:02:23,720 --> 00:02:26,635
+are around 90 cents to a dollar an hour.
+
+65
+00:02:26,635 --> 00:02:28,807
+Those are actually quite pricey.
+
+66
+00:02:28,807 --> 00:02:31,023
+The CPU instances are much cheaper.
+
+67
+00:02:31,023 --> 00:02:32,732
+The general strategy is that you probably
+
+68
+00:02:32,732 --> 00:02:34,983
+want to make two instances, one with a GPU
+
+69
+00:02:34,983 --> 00:02:36,874
+and one without, and then only use that
+
+70
+00:02:36,874 --> 00:02:40,224
+GPU instance when you really need the GPU.
+
+71
+00:02:40,224 --> 00:02:43,271
+For example, on assignment two,
+
+72
+00:02:43,271 --> 00:02:44,766
+most of the assignment,
+you should only need
+
+73
+00:02:44,766 --> 00:02:46,198
+the CPU, so you should only use your
+
+74
+00:02:46,198 --> 00:02:47,862
+CPU instance for that.
+
+75
+00:02:47,862 --> 00:02:50,213
+But then the final
+question, about TensorFlow
+
+76
+00:02:50,213 --> 00:02:53,475
+or PyTorch, that will need a GPU.
+
+77
+00:02:53,475 --> 00:02:54,688
+This'll give you a little bit of practice
+
+78
+00:02:54,688 --> 00:02:56,354
+with switching between multiple instances
+
+79
+00:02:56,354 --> 00:02:59,382
+and only using that GPU
+when it's really necessary.
+
+80
+00:02:59,382 --> 00:03:01,310
+Again, just kind of watch your spending.
+
+81
+00:03:01,310 --> 00:03:04,792
+Try not to go too crazy on these things.
+
+82
+00:03:04,792 --> 00:03:06,733
+Any questions on the administrative stuff
+
+83
+00:03:06,733 --> 00:03:08,233
+before we move on?
+
+84
+00:03:11,665 --> 00:03:12,667
+Question.
+
+85
+00:03:12,667 --> 00:03:14,387
+- [Student] How much RAM should we use?
+
+86
+00:03:14,387 --> 00:03:16,618
+- Question is how much RAM should we use?
+
+87
+00:03:16,618 --> 00:03:18,533
+I think eight or 16 gigs is probably good
+
+88
+00:03:18,533 --> 00:03:22,348
+for everything that
+you need in this class.
+
+89
+00:03:22,348 --> 00:03:23,883
+As you scale up the number of CPUs
+
+90
+00:03:23,883 --> 00:03:25,355
+and the number of RAM, you also end up
+
+91
+00:03:25,355 --> 00:03:27,599
+spending more money.
+
+92
+00:03:27,599 --> 00:03:29,584
+If you stick with two or four CPUs
+
+93
+00:03:29,584 --> 00:03:31,111
+and eight or 16 gigs of RAM, that should
+
+94
+00:03:31,111 --> 00:03:33,360
+be plenty for all the
+homework-related stuff
+
+95
+00:03:33,360 --> 00:03:35,027
+that you need to do.
+
+96
+00:03:37,121 --> 00:03:39,440
+As a quick recap, last
+time we talked about
+
+97
+00:03:39,440 --> 00:03:40,902
+activation functions.
+
+98
+00:03:40,902 --> 00:03:42,017
+We talked about this whole zoo
+
+99
+00:03:42,017 --> 00:03:43,714
+of different activation functions and some
+
+100
+00:03:43,714 --> 00:03:45,447
+of their different properties.
+
+101
+00:03:45,447 --> 00:03:47,171
+We saw that the sigmoid, which used
+
+102
+00:03:47,171 --> 00:03:50,110
+to be quite popular when
+training neural networks
+
+103
+00:03:50,110 --> 00:03:52,254
+maybe 10 years ago or so, has this problem
+
+104
+00:03:52,254 --> 00:03:54,729
+with vanishing gradients near the two ends
+
+105
+00:03:54,729 --> 00:03:57,480
+of the activation function.
+
+106
+00:03:57,480 --> 00:04:00,221
+tanh has this similar sort of problem.
+
+107
+00:04:00,221 --> 00:04:01,900
+Kind of the general recommendation is that
+
+108
+00:04:01,900 --> 00:04:03,188
+you probably want to stick with ReLU
+
+109
+00:04:03,188 --> 00:04:05,951
+for most cases as sort of a default choice
+
+110
+00:04:05,951 --> 00:04:07,242
+'cause it tends to work well for a lot
+
+111
+00:04:07,242 --> 00:04:09,715
+of different architectures.
+
+112
+00:04:09,715 --> 00:04:12,072
+We also talked about
+weight initialization.
+
+113
+00:04:12,072 --> 00:04:14,545
+Remember that up on the
+top, we have this idea
+
+114
+00:04:14,545 --> 00:04:17,305
+that when you initialize your weights
+
+115
+00:04:17,305 --> 00:04:19,146
+at the start of training, if those weights
+
+116
+00:04:19,147 --> 00:04:21,362
+are initialized to be
+too small, then if you
+
+117
+00:04:21,362 --> 00:04:24,273
+look at, then the activations will vanish
+
+118
+00:04:24,273 --> 00:04:25,915
+as you go through the network because
+
+119
+00:04:25,915 --> 00:04:27,408
+as you multiply by these small numbers
+
+120
+00:04:27,408 --> 00:04:28,810
+over and over again, they'll all
+
+121
+00:04:28,810 --> 00:04:30,068
+sort of decay to zero.
+
+122
+00:04:30,068 --> 00:04:32,160
+Then everything will be
+zero, learning won't happen,
+
+123
+00:04:32,160 --> 00:04:33,557
+you'll be sad.
+
+124
+00:04:33,557 --> 00:04:34,808
+On the other hand, if you initialize
+
+125
+00:04:34,808 --> 00:04:37,108
+your weights too big,
+then as you go through
+
+126
+00:04:37,108 --> 00:04:38,910
+the network and multiply
+by your weight matrix
+
+127
+00:04:38,910 --> 00:04:41,693
+over and over again,
+eventually they'll explode.
+
+128
+00:04:41,693 --> 00:04:43,440
+You'll be unhappy,
+there'll be no learning,
+
+129
+00:04:43,440 --> 00:04:45,874
+it will be very bad.
+
+130
+00:04:45,874 --> 00:04:48,349
+But if you get that
+initialization just right,
+
+131
+00:04:48,349 --> 00:04:51,041
+for example, using the
+Xavier initialization
+
+132
+00:04:51,041 --> 00:04:54,590
+or the MSRA initialization,
+then you kind of keep
+
+133
+00:04:54,590 --> 00:04:56,249
+a nice distribution of activations
+
+134
+00:04:56,249 --> 00:04:59,016
+as you go through the network.
+
+135
+00:04:59,016 --> 00:05:00,940
+Remember that this kind of gets more
+
+136
+00:05:00,940 --> 00:05:02,947
+and more important and
+more and more critical
+
+137
+00:05:02,947 --> 00:05:04,813
+as your networks get deeper and deeper
+
+138
+00:05:04,813 --> 00:05:06,386
+because as your network gets deeper,
+
+139
+00:05:06,386 --> 00:05:07,979
+you're multiplying by
+those weight matrices
+
+140
+00:05:07,979 --> 00:05:12,105
+over and over again with these
+more multiplicative terms.
+
+141
+00:05:12,105 --> 00:05:14,965
+We also talked last time
+about data preprocessing.
+
+142
+00:05:14,965 --> 00:05:16,870
+We talked about how it's pretty typical
+
+143
+00:05:16,870 --> 00:05:19,943
+in conv nets to zero center and normalize
+
+144
+00:05:19,943 --> 00:05:24,151
+your data so it has zero
+mean and unit variance.
+
+145
+00:05:24,151 --> 00:05:27,016
+I wanted to provide a little
+bit of extra intuition
+
+146
+00:05:27,016 --> 00:05:30,453
+about why you might
+actually want to do this.
+
+147
+00:05:30,453 --> 00:05:33,742
+Imagine a simple setup where we have
+
+148
+00:05:33,742 --> 00:05:35,500
+a binary classification problem where we
+
+149
+00:05:35,500 --> 00:05:38,369
+want to draw a line to
+separate these red points
+
+150
+00:05:38,369 --> 00:05:40,017
+from these blue points.
+
+151
+00:05:40,017 --> 00:05:42,078
+On the left, you have this idea where
+
+152
+00:05:42,078 --> 00:05:44,832
+if those data points are
+kind of not normalized
+
+153
+00:05:44,832 --> 00:05:47,433
+and not centered and far
+away from the origin,
+
+154
+00:05:47,433 --> 00:05:50,044
+then we can still use a
+line to separate them,
+
+155
+00:05:50,044 --> 00:05:52,388
+but now if that line
+wiggles just a little bit,
+
+156
+00:05:52,388 --> 00:05:54,022
+then our classification is going to get
+
+157
+00:05:54,022 --> 00:05:55,492
+totally destroyed.
+
+158
+00:05:55,492 --> 00:05:57,729
+That kind of means that in the example
+
+159
+00:05:57,729 --> 00:06:00,356
+on the left, the loss function is now
+
+160
+00:06:00,356 --> 00:06:02,560
+extremely sensitive to small perturbations
+
+161
+00:06:02,560 --> 00:06:06,477
+in that linear classifier
+in our weight matrix.
+
+162
+00:06:07,800 --> 00:06:09,920
+We can still represent the same functions,
+
+163
+00:06:09,920 --> 00:06:12,349
+but that might make
+learning quite difficult
+
+164
+00:06:12,349 --> 00:06:15,039
+because, again, their
+loss is very sensitive
+
+165
+00:06:15,039 --> 00:06:18,804
+to our parameter vector,
+whereas in the situation
+
+166
+00:06:18,804 --> 00:06:21,067
+on the right, if you take that data cloud
+
+167
+00:06:21,067 --> 00:06:22,963
+and you move it into the
+origin and you make it
+
+168
+00:06:22,963 --> 00:06:25,836
+unit variance, then
+now, again, we can still
+
+169
+00:06:25,836 --> 00:06:28,511
+classify that data quite well, but now
+
+170
+00:06:28,511 --> 00:06:30,894
+as we wiggle that line a little bit,
+
+171
+00:06:30,894 --> 00:06:33,442
+then our loss function is less sensitive
+
+172
+00:06:33,442 --> 00:06:36,008
+to small perturbations
+in the parameter values.
+
+173
+00:06:36,008 --> 00:06:38,579
+That maybe makes optimization
+a little bit easier,
+
+174
+00:06:38,579 --> 00:06:41,549
+as we'll see a little bit going forward.
+
+175
+00:06:41,549 --> 00:06:44,301
+By the way, this situation is not only
+
+176
+00:06:44,301 --> 00:06:47,024
+in the linear classification case.
+
+177
+00:06:47,024 --> 00:06:49,400
+Inside a neural network,
+remember we kind of have
+
+178
+00:06:49,400 --> 00:06:53,041
+these interleavings of these linear
+
+179
+00:06:53,041 --> 00:06:55,574
+matrix multiplies, or
+convolutions, followed by
+
+180
+00:06:55,574 --> 00:06:58,241
+non-linear activation functions.
+
+181
+00:06:59,563 --> 00:07:01,751
+If the input to some layer in your
+
+182
+00:07:01,751 --> 00:07:03,943
+neural network is not centered or not
+
+183
+00:07:03,943 --> 00:07:06,172
+zero mean, not unit variance, then again,
+
+184
+00:07:06,172 --> 00:07:08,538
+small perturbations in the weight matrix
+
+185
+00:07:08,538 --> 00:07:10,802
+of that layer of the network could cause
+
+186
+00:07:10,802 --> 00:07:13,553
+large perturbations in
+the output of that layer,
+
+187
+00:07:13,553 --> 00:07:16,117
+which, again, might
+make learning difficult.
+
+188
+00:07:16,117 --> 00:07:17,874
+This is kind of a little bit of extra
+
+189
+00:07:17,874 --> 00:07:19,383
+intuition about why normalization
+
+190
+00:07:19,383 --> 00:07:20,966
+might be important.
+
+191
+00:07:22,349 --> 00:07:24,760
+Because we have this
+intuition that normalization
+
+192
+00:07:24,760 --> 00:07:27,347
+is so important, we talked
+about batch normalization,
+
+193
+00:07:27,347 --> 00:07:29,583
+which is where we just
+add this additional layer
+
+194
+00:07:29,583 --> 00:07:31,616
+inside our networks to just force all
+
+195
+00:07:31,616 --> 00:07:34,293
+of the intermediate
+activations to be zero mean
+
+196
+00:07:34,293 --> 00:07:36,515
+and unit variance.
+
+197
+00:07:36,515 --> 00:07:38,107
+I've sort of resummarized the
+
+198
+00:07:38,107 --> 00:07:39,586
+batch normalization equations here
+
+199
+00:07:39,586 --> 00:07:41,950
+with the shapes a little
+bit more explicitly.
+
+200
+00:07:41,950 --> 00:07:43,161
+Hopefully this can help you out
+
+201
+00:07:43,161 --> 00:07:44,429
+when you're implementing this thing
+
+202
+00:07:44,429 --> 00:07:45,657
+on assignment two.
+
+203
+00:07:45,657 --> 00:07:47,376
+But again, in batch normalization, we have
+
+204
+00:07:47,376 --> 00:07:49,270
+this idea that in the forward pass,
+
+205
+00:07:49,270 --> 00:07:51,621
+we use the statistics of the mini batch
+
+206
+00:07:51,621 --> 00:07:53,998
+to compute a mean and
+a standard deviation,
+
+207
+00:07:53,998 --> 00:07:57,101
+and then use those estimates to normalize
+
+208
+00:07:57,101 --> 00:07:59,739
+our data on the forward pass.
+
+209
+00:07:59,739 --> 00:08:01,357
+Then we also reintroduce the scale
+
+210
+00:08:01,357 --> 00:08:03,133
+and shift parameters to increase
+
+211
+00:08:03,133 --> 00:08:06,126
+the expressivity of the layer.
+
+212
+00:08:06,126 --> 00:08:07,221
+You might want to refer back to this
+
+213
+00:08:07,221 --> 00:08:10,475
+when working on assignment two.
+
+214
+00:08:10,475 --> 00:08:12,552
+We also talked last
+time a little bit about
+
+215
+00:08:12,552 --> 00:08:15,396
+babysitting the learning process, how you
+
+216
+00:08:15,396 --> 00:08:16,918
+should probably be looking
+at your loss curves
+
+217
+00:08:16,918 --> 00:08:18,631
+during training.
+
+218
+00:08:18,631 --> 00:08:20,140
+Here's an example of some networks
+
+219
+00:08:20,140 --> 00:08:23,557
+I was actually training over the weekend.
+
+220
+00:08:24,481 --> 00:08:25,964
+This is usually my setup when I'm working
+
+221
+00:08:25,964 --> 00:08:27,168
+on these things.
+
+222
+00:08:27,168 --> 00:08:28,673
+On the left, I have some plot showing
+
+223
+00:08:28,673 --> 00:08:30,924
+the training loss over time.
+
+224
+00:08:30,924 --> 00:08:32,506
+You can see it's kind of going down,
+
+225
+00:08:32,506 --> 00:08:34,700
+which means my network
+is reducing the loss.
+
+226
+00:08:34,700 --> 00:08:36,280
+It's doing well.
+
+227
+00:08:36,280 --> 00:08:38,909
+On the right, there's this plot where
+
+228
+00:08:38,909 --> 00:08:42,353
+the X axis is, again, time,
+or the iteration number,
+
+229
+00:08:42,354 --> 00:08:45,601
+and the Y axis is my performance measure
+
+230
+00:08:45,601 --> 00:08:48,950
+both on my training set
+and on my validation set.
+
+231
+00:08:48,950 --> 00:08:51,011
+You can see that as we go over time,
+
+232
+00:08:51,011 --> 00:08:52,674
+then my training set performance goes up
+
+233
+00:08:52,674 --> 00:08:54,595
+and up and up and up and
+up as my loss function
+
+234
+00:08:54,595 --> 00:08:57,111
+goes down, but at some
+point, my validation set
+
+235
+00:08:57,111 --> 00:08:59,165
+performance kind of plateaus.
+
+236
+00:08:59,165 --> 00:09:00,368
+This kind of suggests that maybe
+
+237
+00:09:00,368 --> 00:09:02,109
+I'm overfitting in this situation.
+
+238
+00:09:02,109 --> 00:09:03,384
+Maybe I should have been trying to add
+
+239
+00:09:03,384 --> 00:09:05,551
+additional regularization.
+
+240
+00:09:06,802 --> 00:09:08,273
+We also talked a bit last time about
+
+241
+00:09:08,273 --> 00:09:09,989
+hyperparameter search.
+
+242
+00:09:09,989 --> 00:09:12,023
+All these networks have
+sort of a large zoo
+
+243
+00:09:12,023 --> 00:09:13,167
+of hyperparameters.
+
+244
+00:09:13,167 --> 00:09:15,283
+It's pretty important
+to set them correctly.
+
+245
+00:09:15,283 --> 00:09:16,802
+We talked a little bit about grid search
+
+246
+00:09:16,802 --> 00:09:19,186
+versus random search,
+and how random search
+
+247
+00:09:19,186 --> 00:09:21,210
+is maybe a little bit nicer in theory
+
+248
+00:09:21,210 --> 00:09:24,750
+because in the situation
+where your performance
+
+249
+00:09:24,750 --> 00:09:26,170
+might be more sensitive, with respect
+
+250
+00:09:26,170 --> 00:09:28,714
+to one hyperparameter than
+other, and random search
+
+251
+00:09:28,714 --> 00:09:31,154
+lets you cover that space
+a little bit better.
+
+252
+00:09:31,154 --> 00:09:33,102
+We also talked about the idea of coarse
+
+253
+00:09:33,102 --> 00:09:35,248
+to fine search, where when you're doing
+
+254
+00:09:35,248 --> 00:09:37,490
+this hyperparameter
+optimization, probably you
+
+255
+00:09:37,490 --> 00:09:39,588
+want to start with very wide ranges
+
+256
+00:09:39,588 --> 00:09:41,357
+for your hyperparameters, only train
+
+257
+00:09:41,357 --> 00:09:43,893
+for a couple iterations, and then based on
+
+258
+00:09:43,893 --> 00:09:46,004
+those results, you kind of narrow in
+
+259
+00:09:46,004 --> 00:09:48,458
+on the range of
+hyperparameters that are good.
+
+260
+00:09:48,458 --> 00:09:50,686
+Now, again, redo your
+search in a smaller range
+
+261
+00:09:50,686 --> 00:09:52,151
+for more iterations.
+
+262
+00:09:52,151 --> 00:09:53,574
+You can kind of iterate this process
+
+263
+00:09:53,574 --> 00:09:55,413
+to kind of hone in on the right region
+
+264
+00:09:55,413 --> 00:09:57,193
+for hyperparameters.
+
+265
+00:09:57,193 --> 00:09:58,658
+But again, it's really important to,
+
+266
+00:09:58,658 --> 00:10:00,912
+at the start, have a very coarse range
+
+267
+00:10:00,912 --> 00:10:02,928
+to start with, where
+you want very, very wide
+
+268
+00:10:02,928 --> 00:10:04,940
+ranges for all your hyperparameters.
+
+269
+00:10:04,940 --> 00:10:07,924
+Ideally, those ranges should be so wide
+
+270
+00:10:07,924 --> 00:10:09,395
+that your network is kind of blowing up
+
+271
+00:10:09,395 --> 00:10:11,341
+at either end of the
+range so that you know
+
+272
+00:10:11,341 --> 00:10:12,814
+that you've searched a wide enough range
+
+273
+00:10:12,814 --> 00:10:14,231
+for those things.
+
+274
+00:10:17,947 --> 00:10:18,780
+Question?
+
+275
+00:10:20,529 --> 00:10:22,409
+- [Student] How many
+[speaks too low to hear]
+
+276
+00:10:22,409 --> 00:10:23,740
+optimize at once?
+
+277
+00:10:23,740 --> 00:10:27,157
+[speaks too low to hear]
+
+278
+00:10:32,325 --> 00:10:33,611
+- The question is how many hyperparameters
+
+279
+00:10:33,611 --> 00:10:35,039
+do we typically search at a time?
+
+280
+00:10:35,039 --> 00:10:36,702
+Here is two, but there's
+a lot more than two
+
+281
+00:10:36,702 --> 00:10:38,729
+in these typical things.
+
+282
+00:10:38,729 --> 00:10:40,263
+It kind of depends on the exact model
+
+283
+00:10:40,263 --> 00:10:42,705
+and the exact architecture, but because
+
+284
+00:10:42,705 --> 00:10:44,715
+the number of possibilities is exponential
+
+285
+00:10:44,715 --> 00:10:45,927
+in the number of hyperparameters,
+
+286
+00:10:45,927 --> 00:10:48,497
+you can't really test too many at a time.
+
+287
+00:10:48,497 --> 00:10:50,577
+It also kind of depends
+on how many machines
+
+288
+00:10:50,577 --> 00:10:52,222
+you have available.
+
+289
+00:10:52,222 --> 00:10:54,236
+It kind of varies from person to person
+
+290
+00:10:54,236 --> 00:10:56,230
+and from experiment to experiment.
+
+291
+00:10:56,230 --> 00:10:59,410
+But generally, I try
+not to do this over more
+
+292
+00:10:59,410 --> 00:11:01,535
+than maybe two or three or four at a time
+
+293
+00:11:01,535 --> 00:11:03,840
+at most because, again,
+this exponential search
+
+294
+00:11:03,840 --> 00:11:05,838
+just gets out of control.
+
+295
+00:11:05,838 --> 00:11:08,118
+Typically, learning rate
+is the really important one
+
+296
+00:11:08,118 --> 00:11:10,891
+that you need to nail first.
+
+297
+00:11:10,891 --> 00:11:13,136
+Then other things, like regularization,
+
+298
+00:11:13,136 --> 00:11:16,633
+like learning rate decay, model size,
+
+299
+00:11:16,633 --> 00:11:17,847
+these other types of things tend to be a
+
+300
+00:11:17,847 --> 00:11:20,027
+little bit less sensitive
+than learning rate.
+
+301
+00:11:20,027 --> 00:11:21,479
+Sometimes you might do kind of a block
+
+302
+00:11:21,479 --> 00:11:23,208
+coordinate descent, where you go and find
+
+303
+00:11:23,208 --> 00:11:25,082
+the good learning rate,
+then you go back and try
+
+304
+00:11:25,082 --> 00:11:27,944
+to look at different model sizes.
+
+305
+00:11:27,944 --> 00:11:29,343
+This can help you cut down on the
+
+306
+00:11:29,343 --> 00:11:31,244
+exponential search a little bit,
+
+307
+00:11:31,244 --> 00:11:32,644
+but it's a little bit problem dependent
+
+308
+00:11:32,644 --> 00:11:34,605
+on exactly which ones you
+should be searching over
+
+309
+00:11:34,605 --> 00:11:35,855
+in which order.
+
+310
+00:11:36,738 --> 00:11:38,605
+More questions?
+
+311
+00:11:38,605 --> 00:11:42,772
+- [Student] [speaks too low to hear]
+
+312
+00:11:45,184 --> 00:11:48,725
+Another parameter, but then changing that
+
+313
+00:11:48,725 --> 00:11:51,224
+other parameter, two or
+three other parameters,
+
+314
+00:11:51,224 --> 00:11:54,189
+makes it so that your
+learning rate or the ideal
+
+315
+00:11:54,189 --> 00:11:57,526
+learning rate is still
+[speaks too low to hear].
+
+316
+00:11:57,526 --> 00:11:59,557
+- Question is how often
+does it happen where
+
+317
+00:11:59,557 --> 00:12:01,001
+when you change one hyperparameter,
+
+318
+00:12:01,001 --> 00:12:03,023
+then the other, the
+optimal values of the other
+
+319
+00:12:03,023 --> 00:12:05,022
+hyperparameters change?
+
+320
+00:12:05,022 --> 00:12:09,844
+That does happen sometimes,
+although for learning rates,
+
+321
+00:12:09,844 --> 00:12:11,824
+that's typically less of a problem.
+
+322
+00:12:11,824 --> 00:12:13,416
+For learning rates,
+typically you want to get
+
+323
+00:12:13,416 --> 00:12:15,932
+in a good range, and
+then set it maybe even
+
+324
+00:12:15,932 --> 00:12:17,431
+a little bit lower than
+optimal, and let it go
+
+325
+00:12:17,431 --> 00:12:18,615
+for a long time.
+
+326
+00:12:18,615 --> 00:12:20,418
+Then if you do that, combined with some
+
+327
+00:12:20,418 --> 00:12:22,199
+of the fancier optimization
+strategies that
+
+328
+00:12:22,199 --> 00:12:25,373
+we'll talk about today,
+then a lot of models
+
+329
+00:12:25,373 --> 00:12:26,787
+tend to be a little bit less sensitive
+
+330
+00:12:26,787 --> 00:12:31,776
+to learning rate once you
+get them in a good range.
+
+331
+00:12:31,776 --> 00:12:33,447
+Sorry, did you have a
+question in front, as well?
+
+332
+00:12:33,447 --> 00:12:37,793
+- [Student] [speaks too low to hear]
+
+333
+00:12:37,793 --> 00:12:39,075
+- The question is what's wrong with having
+
+334
+00:12:39,075 --> 00:12:40,386
+a small learning rate and increasing
+
+335
+00:12:40,386 --> 00:12:41,777
+the number of epochs?
+
+336
+00:12:41,777 --> 00:12:43,488
+The answer is that it might take
+
+337
+00:12:43,488 --> 00:12:45,624
+a very long time. [laughs]
+
+338
+00:12:45,624 --> 00:12:48,868
+- [Student] [speaks too low to hear]
+
+339
+00:12:48,868 --> 00:12:50,346
+- Intuitively, if you
+set the learning rate
+
+340
+00:12:50,346 --> 00:12:53,010
+very low and let it go
+for a very long time,
+
+341
+00:12:53,010 --> 00:12:55,338
+then this should, in theory, always work.
+
+342
+00:12:55,338 --> 00:12:58,490
+But in practice, those
+factors of 10 or 100
+
+343
+00:12:58,490 --> 00:12:59,883
+actually matter a lot when you're training
+
+344
+00:12:59,883 --> 00:13:00,976
+these things.
+
+345
+00:13:00,976 --> 00:13:02,487
+Maybe if you got the right learning rate,
+
+346
+00:13:02,487 --> 00:13:04,416
+you could train it in six hours, 12 hours
+
+347
+00:13:04,416 --> 00:13:06,719
+or a day, but then if
+you just were super safe
+
+348
+00:13:06,719 --> 00:13:08,064
+and dropped it by a factor of 10
+
+349
+00:13:08,064 --> 00:13:10,930
+or by a factor of 100,
+now that one-day training
+
+350
+00:13:10,930 --> 00:13:12,396
+becomes 100 days of training.
+
+351
+00:13:12,396 --> 00:13:14,318
+That's three months.
+
+352
+00:13:14,318 --> 00:13:16,885
+That's not going to be good.
+
+353
+00:13:16,885 --> 00:13:17,747
+When you're taking these intro
+
+354
+00:13:17,747 --> 00:13:19,179
+computer science classes,
+they always kind of sweep
+
+355
+00:13:19,179 --> 00:13:21,153
+the constants under the rug, but when
+
+356
+00:13:21,153 --> 00:13:22,954
+you're actually thinking
+about training things,
+
+357
+00:13:22,954 --> 00:13:25,929
+those constants end up mattering a lot.
+
+358
+00:13:25,929 --> 00:13:27,346
+Another question?
+
+359
+00:13:28,362 --> 00:13:29,763
+- [Student] If you have
+a low learning rate,
+
+360
+00:13:29,763 --> 00:13:33,870
+[speaks too low to hear].
+
+361
+00:13:33,870 --> 00:13:35,344
+- Question is for a low learning rate,
+
+362
+00:13:35,344 --> 00:13:38,292
+are you more likely to
+be stuck in local optima?
+
+363
+00:13:38,292 --> 00:13:40,191
+I think that makes some intuitive sense,
+
+364
+00:13:40,191 --> 00:13:42,232
+but in practice, that seems not to be much
+
+365
+00:13:42,232 --> 00:13:43,086
+of a problem.
+
+366
+00:13:43,086 --> 00:13:47,515
+I think we'll talk a bit
+more about that later today.
+
+367
+00:13:47,515 --> 00:13:49,084
+Today I wanted to talk about a couple
+
+368
+00:13:49,084 --> 00:13:51,843
+other really interesting
+and important topics
+
+369
+00:13:51,843 --> 00:13:53,636
+when we're training neural networks.
+
+370
+00:13:53,636 --> 00:13:55,223
+In particular, I wanted to talk,
+
+371
+00:13:55,223 --> 00:13:56,327
+we've kind of alluded to this fact
+
+372
+00:13:56,327 --> 00:13:58,709
+of fancier, more powerful
+optimization algorithms
+
+373
+00:13:58,709 --> 00:14:00,140
+a couple times.
+
+374
+00:14:00,140 --> 00:14:01,560
+I wanted to spend some
+time today and really
+
+375
+00:14:01,560 --> 00:14:03,877
+dig into those and talk about what are the
+
+376
+00:14:03,877 --> 00:14:05,592
+actual optimization
+algorithms that most people
+
+377
+00:14:05,592 --> 00:14:07,552
+are using these days.
+
+378
+00:14:07,552 --> 00:14:09,576
+We also touched on regularization
+
+379
+00:14:09,576 --> 00:14:10,849
+in earlier lectures.
+
+380
+00:14:10,849 --> 00:14:12,736
+This concept of making your network
+
+381
+00:14:12,736 --> 00:14:14,599
+do additional things to reduce the gap
+
+382
+00:14:14,599 --> 00:14:16,291
+between train and test error.
+
+383
+00:14:16,291 --> 00:14:18,133
+I wanted to talk about
+some more strategies
+
+384
+00:14:18,133 --> 00:14:19,686
+that people are using in practice
+
+385
+00:14:19,686 --> 00:14:22,628
+of regularization, with
+respect to neural networks.
+
+386
+00:14:22,628 --> 00:14:24,411
+Finally, I also wanted to talk a bit
+
+387
+00:14:24,411 --> 00:14:26,886
+about transfer learning, where you can
+
+388
+00:14:26,886 --> 00:14:28,431
+sometimes get away with using less data
+
+389
+00:14:28,431 --> 00:14:30,058
+than you think by transferring from
+
+390
+00:14:30,058 --> 00:14:31,975
+one problem to another.
+
+391
+00:14:33,306 --> 00:14:36,005
+If you recall from a few lectures ago,
+
+392
+00:14:36,005 --> 00:14:37,710
+the kind of core strategy in training
+
+393
+00:14:37,710 --> 00:14:40,370
+neural networks is an optimization problem
+
+394
+00:14:40,370 --> 00:14:42,711
+where we write down some loss function,
+
+395
+00:14:42,711 --> 00:14:46,059
+which defines, for each
+value of the network weights,
+
+396
+00:14:46,059 --> 00:14:48,201
+the loss function tells us how good or bad
+
+397
+00:14:48,201 --> 00:14:51,467
+is that value of the weights
+doing on our problem.
+
+398
+00:14:51,467 --> 00:14:54,074
+Then we imagine that this loss function
+
+399
+00:14:54,074 --> 00:14:56,993
+gives us some nice
+landscape over the weights,
+
+400
+00:14:56,993 --> 00:14:59,411
+where on the right, I've shown this maybe
+
+401
+00:14:59,411 --> 00:15:01,335
+small, two-dimensional
+problem, where the X
+
+402
+00:15:01,335 --> 00:15:04,627
+and Y axes are two values of the weights.
+
+403
+00:15:04,627 --> 00:15:06,394
+Then the color of the
+plot kind of represents
+
+404
+00:15:06,394 --> 00:15:08,469
+the value of the loss.
+
+405
+00:15:08,469 --> 00:15:10,072
+In this kind of cartoon picture
+
+406
+00:15:10,072 --> 00:15:12,754
+of a two-dimensional problem, we're only
+
+407
+00:15:12,754 --> 00:15:15,680
+optimizing over these
+two values, W one, W two.
+
+408
+00:15:15,680 --> 00:15:19,205
+The goal is to find the most red region
+
+409
+00:15:19,205 --> 00:15:21,242
+in this case, which
+corresponds to the setting
+
+410
+00:15:21,242 --> 00:15:23,688
+of the weights with the lowest loss.
+
+411
+00:15:23,688 --> 00:15:25,030
+Remember, we've been working so far
+
+412
+00:15:25,030 --> 00:15:27,616
+with this extremely simple
+optimization algorithm,
+
+413
+00:15:27,616 --> 00:15:29,584
+stochastic gradient descent,
+
+414
+00:15:29,584 --> 00:15:32,878
+where it's super simple, it's three lines.
+
+415
+00:15:32,878 --> 00:15:36,095
+While true, we first evaluate the loss
+
+416
+00:15:36,095 --> 00:15:39,664
+in the gradient on some
+mini batch of data.
+
+417
+00:15:39,664 --> 00:15:43,043
+Then we step, updating
+our parameter vector
+
+418
+00:15:43,043 --> 00:15:45,141
+in the negative direction of the gradient
+
+419
+00:15:45,141 --> 00:15:46,891
+because this gives, again, the direction
+
+420
+00:15:46,891 --> 00:15:49,283
+of greatest decrease of the loss function.
+
+421
+00:15:49,283 --> 00:15:50,836
+Then we repeat this over and over again,
+
+422
+00:15:50,836 --> 00:15:53,315
+and hopefully we converge
+to the red region
+
+423
+00:15:53,315 --> 00:15:56,767
+and we get great errors
+and we're very happy.
+
+424
+00:15:56,767 --> 00:15:58,933
+But unfortunately, this relatively simple
+
+425
+00:15:58,933 --> 00:16:02,197
+optimization algorithm has
+quite a lot of problems
+
+426
+00:16:02,197 --> 00:16:05,947
+that actually could come up in practice.
+
+427
+00:16:05,947 --> 00:16:09,198
+One problem with stochastic
+gradient descent,
+
+428
+00:16:09,198 --> 00:16:12,003
+imagine what happens if
+our objective function
+
+429
+00:16:12,003 --> 00:16:15,336
+looks something like this, where, again,
+
+430
+00:16:16,696 --> 00:16:19,454
+we're plotting two
+values, W one and W two.
+
+431
+00:16:19,454 --> 00:16:21,417
+As we change one of those values,
+
+432
+00:16:21,417 --> 00:16:23,957
+the loss function changes very slowly.
+
+433
+00:16:23,957 --> 00:16:25,922
+As we change the horizontal
+value, then our loss
+
+434
+00:16:25,922 --> 00:16:27,172
+changes slowly.
+
+435
+00:16:28,637 --> 00:16:30,328
+As we go up and down in this landscape,
+
+436
+00:16:30,328 --> 00:16:32,724
+now our loss is very sensitive to changes
+
+437
+00:16:32,724 --> 00:16:35,415
+in the vertical direction.
+
+438
+00:16:35,415 --> 00:16:38,268
+By the way, this is
+referred to as the loss
+
+439
+00:16:38,268 --> 00:16:41,242
+having a bad condition
+number at this point,
+
+440
+00:16:41,242 --> 00:16:43,511
+which is the ratio between
+the largest and smallest
+
+441
+00:16:43,511 --> 00:16:45,331
+singular values of the Hessian matrix
+
+442
+00:16:45,331 --> 00:16:46,535
+at that point.
+
+443
+00:16:46,535 --> 00:16:48,814
+But the intuitive idea is
+that the loss landscape
+
+444
+00:16:48,814 --> 00:16:50,982
+kind of looks like a taco shell.
+
+445
+00:16:50,982 --> 00:16:52,877
+It's sort of very
+sensitive in one direction,
+
+446
+00:16:52,877 --> 00:16:54,878
+not sensitive in the other direction.
+
+447
+00:16:54,878 --> 00:16:57,381
+The question is what might SGD,
+
+448
+00:16:57,381 --> 00:16:59,368
+stochastic gradient
+descent, do on a function
+
+449
+00:16:59,368 --> 00:17:01,118
+that looks like this?
+
+450
+00:17:05,795 --> 00:17:07,535
+If you run stochastic gradient descent
+
+451
+00:17:07,535 --> 00:17:10,215
+on this type of function, you might get
+
+452
+00:17:10,215 --> 00:17:12,681
+this characteristic zigzagging behavior,
+
+453
+00:17:12,682 --> 00:17:16,502
+where because for this
+type of objective function,
+
+454
+00:17:16,502 --> 00:17:19,828
+the direction of the
+gradient does not align
+
+455
+00:17:19,829 --> 00:17:22,597
+with the direction towards the minima.
+
+456
+00:17:22,597 --> 00:17:24,547
+When you compute the
+gradient and take a step,
+
+457
+00:17:24,547 --> 00:17:27,263
+you might step sort of over this line
+
+458
+00:17:27,263 --> 00:17:29,820
+and sort of zigzag back and forth.
+
+459
+00:17:29,820 --> 00:17:32,588
+In effect, you get very
+slow progress along
+
+460
+00:17:32,588 --> 00:17:34,455
+the horizontal dimension, which is the
+
+461
+00:17:34,455 --> 00:17:36,480
+less sensitive dimension, and you get this
+
+462
+00:17:36,480 --> 00:17:39,837
+zigzagging, nasty, nasty
+zigzagging behavior
+
+463
+00:17:39,837 --> 00:17:42,036
+across the fast-changing dimension.
+
+464
+00:17:42,036 --> 00:17:45,032
+This is undesirable behavior.
+
+465
+00:17:45,032 --> 00:17:47,624
+By the way, this problem actually becomes
+
+466
+00:17:47,624 --> 00:17:50,624
+much more common in high dimensions.
+
+467
+00:17:51,671 --> 00:17:53,065
+In this kind of cartoon
+picture, we're only
+
+468
+00:17:53,065 --> 00:17:55,605
+showing a two-dimensional
+optimization landscape,
+
+469
+00:17:55,605 --> 00:17:57,892
+but in practice, our
+neural networks might have
+
+470
+00:17:57,892 --> 00:17:59,830
+millions, tens of millions,
+hundreds of millions
+
+471
+00:17:59,830 --> 00:18:01,102
+of parameters.
+
+472
+00:18:01,102 --> 00:18:02,811
+That's hundreds of millions of directions
+
+473
+00:18:02,811 --> 00:18:04,986
+along which this thing can move.
+
+474
+00:18:04,986 --> 00:18:06,737
+Now among those hundreds of millions
+
+475
+00:18:06,737 --> 00:18:08,942
+of different directions to move,
+
+476
+00:18:08,942 --> 00:18:10,742
+if the ratio between the largest one
+
+477
+00:18:10,742 --> 00:18:12,925
+and the smallest one is bad, then SGD
+
+478
+00:18:12,925 --> 00:18:14,706
+will not perform so nicely.
+
+479
+00:18:14,706 --> 00:18:17,332
+You can imagine that if we
+have 100 million parameters,
+
+480
+00:18:17,332 --> 00:18:19,601
+probably the maximum
+ratio between those two
+
+481
+00:18:19,601 --> 00:18:21,058
+will be quite large.
+
+482
+00:18:21,058 --> 00:18:22,966
+I think this is actually
+quite a big problem
+
+483
+00:18:22,966 --> 00:18:26,883
+in practice for many
+high-dimensional problems.
+
+484
+00:18:28,278 --> 00:18:31,041
+Another problem with SGD
+has to do with this idea
+
+485
+00:18:31,041 --> 00:18:34,049
+of local minima or saddle points.
+
+486
+00:18:34,049 --> 00:18:37,157
+Here I've sort of swapped
+the graph a little bit.
+
+487
+00:18:37,157 --> 00:18:39,186
+Now the X axis is showing the value
+
+488
+00:18:39,186 --> 00:18:41,641
+of one parameter, and then the Y axis
+
+489
+00:18:41,641 --> 00:18:44,488
+is showing the value of the loss.
+
+490
+00:18:44,488 --> 00:18:47,812
+In this top example, we have kind of this
+
+491
+00:18:47,812 --> 00:18:50,073
+curvy objective function, where there's a
+
+492
+00:18:50,073 --> 00:18:52,068
+valley in the middle.
+
+493
+00:18:52,068 --> 00:18:55,521
+What happens to SGD in this situation?
+
+494
+00:18:55,521 --> 00:18:57,516
+- [Student] [speaks too low to hear]
+
+495
+00:18:57,516 --> 00:18:59,866
+- In this situation, SGD will get stuck
+
+496
+00:18:59,866 --> 00:19:02,570
+because at this local minima, the gradient
+
+497
+00:19:02,570 --> 00:19:04,939
+is zero because it's locally flat.
+
+498
+00:19:04,939 --> 00:19:07,507
+Now remember with SGD,
+we compute the gradient
+
+499
+00:19:07,507 --> 00:19:09,679
+and step in the direction
+of opposite gradient,
+
+500
+00:19:09,679 --> 00:19:11,980
+so if at our current point,
+the opposite gradient
+
+501
+00:19:11,980 --> 00:19:14,440
+is zero, then we're not
+going to make any progress,
+
+502
+00:19:14,440 --> 00:19:16,347
+and we'll get stuck at this point.
+
+503
+00:19:16,347 --> 00:19:18,420
+There's another problem with this idea
+
+504
+00:19:18,420 --> 00:19:19,891
+of saddle points.
+
+505
+00:19:19,891 --> 00:19:21,361
+Rather than being a local minima,
+
+506
+00:19:21,361 --> 00:19:23,970
+you can imagine a point
+where in one direction
+
+507
+00:19:23,970 --> 00:19:26,625
+we go up, and in the other
+direction we go down.
+
+508
+00:19:26,625 --> 00:19:29,438
+Then at our current point,
+the gradient is zero.
+
+509
+00:19:29,438 --> 00:19:32,386
+Again, in this situation, the function
+
+510
+00:19:32,386 --> 00:19:33,826
+will get stuck at the saddle point because
+
+511
+00:19:33,826 --> 00:19:36,384
+the gradient is zero.
+
+512
+00:19:36,384 --> 00:19:37,943
+Although one thing I'd like to point out
+
+513
+00:19:37,943 --> 00:19:40,856
+is that in one dimension,
+in a one-dimensional problem
+
+514
+00:19:40,856 --> 00:19:44,378
+like this, local minima
+seem like a big problem
+
+515
+00:19:44,378 --> 00:19:46,218
+and saddle points seem like kind of not
+
+516
+00:19:46,218 --> 00:19:48,607
+something to worry about, but in fact,
+
+517
+00:19:48,607 --> 00:19:50,140
+it's the opposite once you move to very
+
+518
+00:19:50,140 --> 00:19:52,495
+high-dimensional problems because, again,
+
+519
+00:19:52,495 --> 00:19:54,329
+if you think about you're in this
+
+520
+00:19:54,329 --> 00:19:56,090
+100 million dimensional space,
+
+521
+00:19:56,090 --> 00:19:57,656
+what does a saddle point mean?
+
+522
+00:19:57,656 --> 00:19:59,523
+That means that at my current point,
+
+523
+00:19:59,523 --> 00:20:01,523
+some directions the loss goes up,
+
+524
+00:20:01,523 --> 00:20:03,620
+and some directions the loss goes down.
+
+525
+00:20:03,620 --> 00:20:05,371
+If you have 100 million dimensions,
+
+526
+00:20:05,371 --> 00:20:07,700
+that's probably going to
+happen more frequently than,
+
+527
+00:20:07,700 --> 00:20:10,076
+that's probably going to happen
+almost everywhere, basically.
+
+528
+00:20:10,076 --> 00:20:12,983
+Whereas a local minima
+says that of all those
+
+529
+00:20:12,983 --> 00:20:14,851
+100 million directions that I can move,
+
+530
+00:20:14,851 --> 00:20:17,229
+every one of them causes
+the loss to go up.
+
+531
+00:20:17,229 --> 00:20:19,369
+In fact, that seems pretty rare when
+
+532
+00:20:19,369 --> 00:20:20,634
+you're thinking about, again, these very
+
+533
+00:20:20,634 --> 00:20:22,801
+high-dimensional problems.
+
+534
+00:20:23,755 --> 00:20:25,766
+Really, the idea that has come to light
+
+535
+00:20:25,766 --> 00:20:27,672
+in the last few years is that when
+
+536
+00:20:27,672 --> 00:20:29,623
+you're training these very
+large neural networks,
+
+537
+00:20:29,623 --> 00:20:31,515
+the problem is more about saddle points
+
+538
+00:20:31,515 --> 00:20:33,768
+and less about local minima.
+
+539
+00:20:33,768 --> 00:20:36,050
+By the way, this also is a problem
+
+540
+00:20:36,050 --> 00:20:38,259
+not just exactly at the saddle point,
+
+541
+00:20:38,259 --> 00:20:40,625
+but also near the saddle point.
+
+542
+00:20:40,625 --> 00:20:42,439
+If you look at the example on the bottom,
+
+543
+00:20:42,439 --> 00:20:44,259
+you see that in the regions around
+
+544
+00:20:44,259 --> 00:20:46,620
+the saddle point, the gradient isn't zero,
+
+545
+00:20:46,620 --> 00:20:48,420
+but the slope is very small.
+
+546
+00:20:48,420 --> 00:20:50,493
+That means that if we're,
+again, just stepping
+
+547
+00:20:50,493 --> 00:20:52,120
+in the direction of the gradient,
+
+548
+00:20:52,120 --> 00:20:54,096
+and that gradient is very
+small, we're going to make
+
+549
+00:20:54,096 --> 00:20:58,003
+very, very slow progress whenever our
+
+550
+00:20:58,003 --> 00:21:00,039
+current parameter value
+is near a saddle point
+
+551
+00:21:00,039 --> 00:21:02,357
+in the objective landscape.
+
+552
+00:21:02,357 --> 00:21:04,940
+This is actually a big problem.
+
+553
+00:21:06,877 --> 00:21:10,600
+Another problem with SGD comes from the S.
+
+554
+00:21:10,600 --> 00:21:14,006
+Remember that SGD is
+stochastic gradient descent.
+
+555
+00:21:14,006 --> 00:21:15,830
+Recall that our loss function is typically
+
+556
+00:21:15,830 --> 00:21:18,868
+defined by computing the loss over many,
+
+557
+00:21:18,868 --> 00:21:21,071
+many different examples.
+
+558
+00:21:21,071 --> 00:21:24,415
+In this case, if N is
+your whole training set,
+
+559
+00:21:24,415 --> 00:21:26,604
+then that could be
+something like a million.
+
+560
+00:21:26,604 --> 00:21:28,513
+Each time computing
+the loss would be very,
+
+561
+00:21:28,513 --> 00:21:29,832
+very expensive.
+
+562
+00:21:29,832 --> 00:21:33,039
+In practice, remember
+that we often estimate
+
+563
+00:21:33,039 --> 00:21:34,940
+the loss and estimate the gradient
+
+564
+00:21:34,940 --> 00:21:37,442
+using a small mini batch of examples.
+
+565
+00:21:37,442 --> 00:21:38,965
+What this means is that we're not actually
+
+566
+00:21:38,965 --> 00:21:41,301
+getting the true information
+about the gradient
+
+567
+00:21:41,301 --> 00:21:42,633
+at every time step.
+
+568
+00:21:42,633 --> 00:21:44,654
+Instead, we're just
+getting some noisy estimate
+
+569
+00:21:44,654 --> 00:21:47,258
+of the gradient at our current point.
+
+570
+00:21:47,258 --> 00:21:49,224
+Here on the right, I've kind of faked
+
+571
+00:21:49,224 --> 00:21:51,060
+this plot a little bit.
+
+572
+00:21:51,060 --> 00:21:54,044
+I've just added random uniform noise
+
+573
+00:21:54,044 --> 00:21:56,277
+to the gradient at every point, and then
+
+574
+00:21:56,277 --> 00:22:00,412
+run SGD with these noisy,
+messed up gradients.
+
+575
+00:22:00,412 --> 00:22:01,992
+This is maybe not exactly what happens
+
+576
+00:22:01,992 --> 00:22:03,992
+with the SGD process,
+but it still give you
+
+577
+00:22:03,992 --> 00:22:06,021
+the sense that if there's noise in your
+
+578
+00:22:06,021 --> 00:22:08,472
+gradient estimates, then vanilla SGD
+
+579
+00:22:08,472 --> 00:22:10,449
+kind of meanders around the space
+
+580
+00:22:10,449 --> 00:22:12,354
+and might actually take a long time
+
+581
+00:22:12,354 --> 00:22:14,521
+to get towards the minima.
+
+582
+00:22:16,208 --> 00:22:17,740
+Now that we've talked about a lot
+
+583
+00:22:17,740 --> 00:22:19,451
+of these problems.
+
+584
+00:22:19,451 --> 00:22:21,441
+Sorry, was there a question?
+
+585
+00:22:21,441 --> 00:22:25,608
+- [Student] [speaks too low to hear]
+
+586
+00:22:29,584 --> 00:22:31,003
+- The question is do all of these
+
+587
+00:22:31,003 --> 00:22:34,920
+just go away if we use
+normal gradient descent?
+
+588
+00:22:35,766 --> 00:22:37,293
+Let's see.
+
+589
+00:22:37,293 --> 00:22:40,462
+I think that the taco shell problem
+
+590
+00:22:40,462 --> 00:22:42,318
+of high condition numbers
+is still a problem
+
+591
+00:22:42,318 --> 00:22:44,591
+with full batch gradient descent.
+
+592
+00:22:44,591 --> 00:22:45,963
+The noise.
+
+593
+00:22:45,963 --> 00:22:47,823
+As we'll see, we might sometimes introduce
+
+594
+00:22:47,823 --> 00:22:49,190
+additional noise into the network,
+
+595
+00:22:49,190 --> 00:22:51,377
+not only due to sampling mini batches,
+
+596
+00:22:51,377 --> 00:22:54,605
+but also due to explicit
+stochasticity in the network,
+
+597
+00:22:54,605 --> 00:22:55,687
+so we'll see that later.
+
+598
+00:22:55,687 --> 00:22:58,221
+That can still be a problem.
+
+599
+00:22:58,221 --> 00:23:00,228
+Saddle points, that's still a problem
+
+600
+00:23:00,228 --> 00:23:02,447
+for full batch gradient descent because
+
+601
+00:23:02,447 --> 00:23:03,757
+there can still be saddle points
+
+602
+00:23:03,757 --> 00:23:05,586
+in the full objective landscape.
+
+603
+00:23:05,586 --> 00:23:07,383
+Basically, even if we go to full batch
+
+604
+00:23:07,383 --> 00:23:08,980
+gradient descent, it doesn't really solve
+
+605
+00:23:08,980 --> 00:23:10,734
+these problems.
+
+606
+00:23:10,734 --> 00:23:12,773
+We kind of need to think
+about a slightly fancier
+
+607
+00:23:12,773 --> 00:23:14,513
+optimization algorithm that can try
+
+608
+00:23:14,513 --> 00:23:17,089
+to address these concerns.
+
+609
+00:23:17,089 --> 00:23:19,253
+Thankfully, there's a really,
+really simple strategy
+
+610
+00:23:19,253 --> 00:23:20,960
+that works pretty well at addressing
+
+611
+00:23:20,960 --> 00:23:22,451
+many of these problems.
+
+612
+00:23:22,451 --> 00:23:24,962
+That's this idea of adding a momentum term
+
+613
+00:23:24,962 --> 00:23:27,463
+to our stochastic gradient descent.
+
+614
+00:23:27,463 --> 00:23:29,455
+Here on the left, we have our classic
+
+615
+00:23:29,455 --> 00:23:31,863
+old friend, SGD, where we just always step
+
+616
+00:23:31,863 --> 00:23:33,408
+in the direction of the gradient.
+
+617
+00:23:33,408 --> 00:23:35,383
+But now on the right, we have this minor,
+
+618
+00:23:35,383 --> 00:23:38,089
+minor variance called SGD plus momentum,
+
+619
+00:23:38,089 --> 00:23:40,987
+which is now two equations
+and five lines of code,
+
+620
+00:23:40,987 --> 00:23:43,547
+so it's twice as complicated.
+
+621
+00:23:43,547 --> 00:23:44,867
+But it's very simple.
+
+622
+00:23:44,867 --> 00:23:47,315
+The idea is that we maintain a velocity
+
+623
+00:23:47,315 --> 00:23:50,273
+over time, and we add
+our gradient estimates
+
+624
+00:23:50,273 --> 00:23:51,816
+to the velocity.
+
+625
+00:23:51,816 --> 00:23:54,143
+Then we step in the
+direction of the velocity,
+
+626
+00:23:54,143 --> 00:23:58,296
+rather than stepping in the
+direction of the gradient.
+
+627
+00:23:58,296 --> 00:24:00,463
+This is very, very simple.
+
+628
+00:24:01,563 --> 00:24:04,562
+We also have this hyperparameter rho now
+
+629
+00:24:04,562 --> 00:24:06,410
+which corresponds to friction.
+
+630
+00:24:06,410 --> 00:24:07,774
+Now at every time step, we take our
+
+631
+00:24:07,774 --> 00:24:10,326
+current velocity, we
+decay the current velocity
+
+632
+00:24:10,326 --> 00:24:13,069
+by the friction constant,
+rho, which is often
+
+633
+00:24:13,069 --> 00:24:17,333
+something high, like
+.9 is a common choice.
+
+634
+00:24:17,333 --> 00:24:19,115
+We take our current velocity, we decay it
+
+635
+00:24:19,115 --> 00:24:21,658
+by friction and we add in our gradient.
+
+636
+00:24:21,658 --> 00:24:24,506
+Now we step in the direction
+of our velocity vector,
+
+637
+00:24:24,506 --> 00:24:25,817
+rather than the direction of our
+
+638
+00:24:25,817 --> 00:24:27,484
+raw gradient vector.
+
+639
+00:24:28,812 --> 00:24:30,710
+This super, super simple strategy
+
+640
+00:24:30,710 --> 00:24:32,656
+actually helps for all of these problems
+
+641
+00:24:32,656 --> 00:24:35,033
+that we just talked about.
+
+642
+00:24:35,033 --> 00:24:37,303
+If you think about what
+happens at local minima
+
+643
+00:24:37,303 --> 00:24:40,608
+or saddle points, then if we're imagining
+
+644
+00:24:40,608 --> 00:24:42,819
+velocity in this system,
+then you kind of have
+
+645
+00:24:42,819 --> 00:24:45,294
+this physical interpretation of this ball
+
+646
+00:24:45,294 --> 00:24:47,349
+kind of rolling down the
+hill, picking up speed
+
+647
+00:24:47,349 --> 00:24:48,700
+as it comes down.
+
+648
+00:24:48,700 --> 00:24:51,870
+Now once we have velocity,
+then even when we
+
+649
+00:24:51,870 --> 00:24:53,837
+pass that point of local minima,
+
+650
+00:24:53,837 --> 00:24:55,859
+the point will still have velocity,
+
+651
+00:24:55,859 --> 00:24:57,407
+even if it doesn't have gradient.
+
+652
+00:24:57,407 --> 00:24:59,625
+Then we can hopefully get
+over this local minima
+
+653
+00:24:59,625 --> 00:25:01,524
+and continue downward.
+
+654
+00:25:01,524 --> 00:25:04,294
+There's this similar
+intuition near saddle points,
+
+655
+00:25:04,294 --> 00:25:05,945
+where even though the gradient around
+
+656
+00:25:05,945 --> 00:25:08,001
+the saddle point is very small, we have
+
+657
+00:25:08,001 --> 00:25:09,758
+this velocity vector that we've built up
+
+658
+00:25:09,758 --> 00:25:11,219
+as we roll downhill.
+
+659
+00:25:11,219 --> 00:25:12,625
+That can hopefully carry us through
+
+660
+00:25:12,625 --> 00:25:14,720
+the saddle point and
+let us continue rolling
+
+661
+00:25:14,720 --> 00:25:16,947
+all the way down.
+
+662
+00:25:16,947 --> 00:25:18,563
+If you think about what happens in
+
+663
+00:25:18,563 --> 00:25:22,434
+poor conditioning, now if we were to have
+
+664
+00:25:22,434 --> 00:25:24,282
+these kind of zigzagging approximations
+
+665
+00:25:24,282 --> 00:25:27,407
+to the gradient, then those zigzags
+
+666
+00:25:27,407 --> 00:25:29,960
+will hopefully cancel
+each other out pretty fast
+
+667
+00:25:29,960 --> 00:25:31,590
+once we're using momentum.
+
+668
+00:25:31,590 --> 00:25:33,916
+This will effectively reduce the amount
+
+669
+00:25:33,916 --> 00:25:36,360
+by which we step in the
+sensitive direction,
+
+670
+00:25:36,360 --> 00:25:39,255
+whereas in the horizontal direction,
+
+671
+00:25:39,255 --> 00:25:40,926
+our velocity will just keep building up,
+
+672
+00:25:40,926 --> 00:25:43,918
+and will actually accelerate our descent
+
+673
+00:25:43,918 --> 00:25:46,491
+across that less sensitive dimension.
+
+674
+00:25:46,491 --> 00:25:48,340
+Adding momentum here can actually help us
+
+675
+00:25:48,340 --> 00:25:51,829
+with this high condition
+number problem, as well.
+
+676
+00:25:51,829 --> 00:25:53,428
+Finally, on the right, we've repeated
+
+677
+00:25:53,428 --> 00:25:57,919
+the same visualization of
+gradient descent with noise.
+
+678
+00:25:57,919 --> 00:26:00,403
+Here, the black is this vanilla SGD,
+
+679
+00:26:00,403 --> 00:26:02,547
+which is sort of zigzagging
+all over the place,
+
+680
+00:26:02,547 --> 00:26:04,342
+where the blue line is showing now SGD
+
+681
+00:26:04,342 --> 00:26:05,692
+with momentum.
+
+682
+00:26:05,692 --> 00:26:07,597
+You can see that because we're adding it,
+
+683
+00:26:07,597 --> 00:26:09,645
+we're building up this velocity over time,
+
+684
+00:26:09,645 --> 00:26:12,022
+the noise kind of gets averaged out
+
+685
+00:26:12,022 --> 00:26:13,129
+in our gradient estimates.
+
+686
+00:26:13,129 --> 00:26:15,395
+Now SGD ends up taking
+a much smoother path
+
+687
+00:26:15,395 --> 00:26:17,938
+towards the minima, compared with the SGD,
+
+688
+00:26:17,938 --> 00:26:20,822
+which is kind of meandering due to noise.
+
+689
+00:26:20,822 --> 00:26:22,017
+Question?
+
+690
+00:26:22,017 --> 00:26:26,184
+- [Student] [speaks too low to hear]
+
+691
+00:26:35,261 --> 00:26:37,920
+- The question is how does SGD momentum
+
+692
+00:26:37,920 --> 00:26:40,950
+help with the poorly
+conditioned coordinate?
+
+693
+00:26:40,950 --> 00:26:42,899
+The idea is that if you go back and look
+
+694
+00:26:42,899 --> 00:26:44,613
+at this velocity estimate and look
+
+695
+00:26:44,613 --> 00:26:46,906
+at the velocity
+computation, we're adding in
+
+696
+00:26:46,906 --> 00:26:49,610
+the gradient at every time step.
+
+697
+00:26:49,610 --> 00:26:51,580
+It kind of depends on your setting of rho,
+
+698
+00:26:51,580 --> 00:26:53,344
+that hyperparameter, but you can imagine
+
+699
+00:26:53,344 --> 00:26:57,088
+that if the gradient is relatively small,
+
+700
+00:26:57,088 --> 00:26:59,739
+and if rho is well
+behaved in this situation,
+
+701
+00:26:59,739 --> 00:27:02,048
+then our velocity could
+actually monotonically increase
+
+702
+00:27:02,048 --> 00:27:03,957
+up to a point where the velocity could now
+
+703
+00:27:03,957 --> 00:27:05,997
+be larger than the actual gradient.
+
+704
+00:27:05,997 --> 00:27:07,612
+Then we might actually
+make faster progress
+
+705
+00:27:07,612 --> 00:27:10,862
+along the poorly conditioned dimension.
+
+706
+00:27:13,054 --> 00:27:16,145
+Kind of one picture that
+you can have in mind
+
+707
+00:27:16,145 --> 00:27:18,505
+when we're doing SGD plus momentum is that
+
+708
+00:27:18,505 --> 00:27:20,758
+the red here is our current point.
+
+709
+00:27:20,758 --> 00:27:23,158
+At our current point,
+we have some red vector,
+
+710
+00:27:23,158 --> 00:27:24,847
+which is the direction of the gradient,
+
+711
+00:27:24,847 --> 00:27:26,415
+or rather our estimate of the gradient
+
+712
+00:27:26,415 --> 00:27:27,753
+at the current point.
+
+713
+00:27:27,753 --> 00:27:30,560
+Green is now the direction
+of our velocity vector.
+
+714
+00:27:30,560 --> 00:27:33,232
+Now when we do the momentum update,
+
+715
+00:27:33,232 --> 00:27:34,549
+we're actually stepping according to a
+
+716
+00:27:34,549 --> 00:27:36,802
+weighted average of these two.
+
+717
+00:27:36,802 --> 00:27:38,574
+This helps overcome some noise in our
+
+718
+00:27:38,574 --> 00:27:40,534
+gradient estimate.
+
+719
+00:27:40,534 --> 00:27:42,124
+There's a slight variation of momentum
+
+720
+00:27:42,124 --> 00:27:44,041
+that you sometimes see, called
+
+721
+00:27:44,041 --> 00:27:45,640
+Nesterov accelerated gradient,
+
+722
+00:27:45,640 --> 00:27:48,209
+also sometimes called Nesterov momentum.
+
+723
+00:27:48,209 --> 00:27:50,690
+That switches up this order of things
+
+724
+00:27:50,690 --> 00:27:52,222
+a little bit.
+
+725
+00:27:52,222 --> 00:27:56,309
+In sort of normal SGD momentum, we imagine
+
+726
+00:27:56,309 --> 00:27:58,075
+that we estimate the gradient
+at our current point,
+
+727
+00:27:58,075 --> 00:27:59,698
+and then take a mix of our velocity
+
+728
+00:27:59,698 --> 00:28:00,770
+and our gradient.
+
+729
+00:28:00,770 --> 00:28:02,513
+With Nesterov accelerated gradient, you do
+
+730
+00:28:02,513 --> 00:28:04,714
+something a little bit different.
+
+731
+00:28:04,714 --> 00:28:07,382
+Here, you start at the red point.
+
+732
+00:28:07,382 --> 00:28:10,098
+You step in the direction
+of where the velocity
+
+733
+00:28:10,098 --> 00:28:11,250
+would take you.
+
+734
+00:28:11,250 --> 00:28:14,844
+You evaluate the gradient at that point.
+
+735
+00:28:14,844 --> 00:28:16,022
+Then you go back to your original point
+
+736
+00:28:16,022 --> 00:28:19,217
+and kind of mix together those two.
+
+737
+00:28:19,217 --> 00:28:21,304
+This is kind of a funny interpretation,
+
+738
+00:28:21,304 --> 00:28:23,127
+but you can imagine that you're kind of
+
+739
+00:28:23,127 --> 00:28:26,164
+mixing together information
+a little bit more.
+
+740
+00:28:26,164 --> 00:28:28,089
+If your velocity direction was actually
+
+741
+00:28:28,089 --> 00:28:29,857
+a little bit wrong, it
+lets you incorporate
+
+742
+00:28:29,857 --> 00:28:31,774
+gradient information
+from a little bit larger
+
+743
+00:28:31,774 --> 00:28:35,187
+parts of the objective landscape.
+
+744
+00:28:35,187 --> 00:28:37,369
+This also has some really
+nice theoretical properties
+
+745
+00:28:37,369 --> 00:28:39,836
+when it comes to convex optimization,
+
+746
+00:28:39,836 --> 00:28:42,211
+but those guarantees go a little bit
+
+747
+00:28:42,211 --> 00:28:44,295
+out the window once it
+comes to non-convex problems
+
+748
+00:28:44,295 --> 00:28:46,431
+like neural networks.
+
+749
+00:28:46,431 --> 00:28:48,553
+Writing it down in
+equations, Nesterov momentum
+
+750
+00:28:48,553 --> 00:28:51,546
+looks something like this, where now
+
+751
+00:28:51,546 --> 00:28:54,379
+to update our velocity, we take a step,
+
+752
+00:28:54,379 --> 00:28:56,230
+according to our previous
+velocity, and evaluate
+
+753
+00:28:56,230 --> 00:28:57,640
+that gradient there.
+
+754
+00:28:57,640 --> 00:29:00,223
+Now when we take our next step,
+
+755
+00:29:01,388 --> 00:29:03,144
+we actually step in the
+direction of our velocity
+
+756
+00:29:03,144 --> 00:29:04,457
+that's incorporating information from
+
+757
+00:29:04,457 --> 00:29:06,707
+these multiple points.
+
+758
+00:29:06,707 --> 00:29:07,540
+Question?
+
+759
+00:29:08,922 --> 00:29:12,008
+- [Student] [speaks too low to hear]
+
+760
+00:29:12,008 --> 00:29:12,842
+- Oh, sorry.
+
+761
+00:29:12,842 --> 00:29:14,243
+The question is what's
+a good initialization
+
+762
+00:29:14,243 --> 00:29:15,228
+for the velocity?
+
+763
+00:29:15,228 --> 00:29:17,483
+This is almost always zero.
+
+764
+00:29:17,483 --> 00:29:18,595
+It's not even a hyperparameter.
+
+765
+00:29:18,595 --> 00:29:20,581
+Just set it to zero and don't worry.
+
+766
+00:29:20,581 --> 00:29:21,800
+Another question?
+
+767
+00:29:21,800 --> 00:29:25,967
+- [Student] [speaks too low to hear]
+
+768
+00:29:32,477 --> 00:29:35,817
+- Intuitively, the velocity
+is kind of a weighted sum
+
+769
+00:29:35,817 --> 00:29:38,553
+of your gradients that
+you've seen over time.
+
+770
+00:29:38,553 --> 00:29:41,951
+- [Student] [speaks too low to hear]
+
+771
+00:29:41,951 --> 00:29:44,512
+- With more recent gradients
+being weighted heavier.
+
+772
+00:29:44,512 --> 00:29:46,947
+At every time step, we
+take our old velocity,
+
+773
+00:29:46,947 --> 00:29:48,559
+we decay by friction and we add in
+
+774
+00:29:48,559 --> 00:29:50,201
+our current gradient.
+
+775
+00:29:50,201 --> 00:29:51,417
+You can kind of think of this as a
+
+776
+00:29:51,417 --> 00:29:55,147
+smooth moving average
+of your recent gradients
+
+777
+00:29:55,147 --> 00:29:57,511
+with kind of a exponentially
+decaying weight
+
+778
+00:29:57,511 --> 00:30:00,594
+on your gradients going back in time.
+
+779
+00:30:03,112 --> 00:30:05,359
+This Nesterov formulation
+is a little bit annoying
+
+780
+00:30:05,359 --> 00:30:07,837
+'cause if you look at
+this, normally when you
+
+781
+00:30:07,837 --> 00:30:09,933
+have your loss function,
+you want to evaluate
+
+782
+00:30:09,933 --> 00:30:12,117
+your loss and your
+gradient at the same point.
+
+783
+00:30:12,117 --> 00:30:14,645
+Nesterov breaks this a little bit.
+
+784
+00:30:14,645 --> 00:30:17,259
+It's a little bit annoying to work with.
+
+785
+00:30:17,259 --> 00:30:18,852
+Thankfully, there's a
+cute change of variables
+
+786
+00:30:18,852 --> 00:30:19,768
+you can do.
+
+787
+00:30:19,768 --> 00:30:20,918
+If you do the change of variables
+
+788
+00:30:20,918 --> 00:30:22,868
+and reshuffle a little bit, then you can
+
+789
+00:30:22,868 --> 00:30:25,230
+write Nesterov momentum in
+a slightly different way
+
+790
+00:30:25,230 --> 00:30:27,243
+that now, again, lets
+you evaluate the loss
+
+791
+00:30:27,243 --> 00:30:29,877
+and the gradient at the same point always.
+
+792
+00:30:29,877 --> 00:30:31,857
+Once you make this change of variables,
+
+793
+00:30:31,857 --> 00:30:34,578
+you get kind of a nice
+interpretation of Nesterov,
+
+794
+00:30:34,578 --> 00:30:36,880
+which is that here in the first step,
+
+795
+00:30:36,880 --> 00:30:39,371
+this looks exactly like
+updating the velocity
+
+796
+00:30:39,371 --> 00:30:42,224
+in the vanilla SGD momentum case, where we
+
+797
+00:30:42,224 --> 00:30:44,493
+have our current velocity,
+we evaluate gradient
+
+798
+00:30:44,493 --> 00:30:47,081
+at the current point and
+mix these two together
+
+799
+00:30:47,081 --> 00:30:48,663
+in a decaying way.
+
+800
+00:30:48,663 --> 00:30:50,977
+Now in the second update,
+now when we're actually
+
+801
+00:30:50,977 --> 00:30:52,436
+updating our parameter vector, if you look
+
+802
+00:30:52,436 --> 00:30:55,199
+at the second equation,
+we have our current point
+
+803
+00:30:55,199 --> 00:30:58,077
+plus our current velocity plus
+
+804
+00:30:58,077 --> 00:31:00,245
+a weighted difference
+between our current velocity
+
+805
+00:31:00,245 --> 00:31:01,939
+and our previous velocity.
+
+806
+00:31:01,939 --> 00:31:06,051
+Here, Nesterov momentum
+is kind of incorporating
+
+807
+00:31:06,051 --> 00:31:07,673
+some kind of error-correcting term between
+
+808
+00:31:07,673 --> 00:31:11,756
+your current velocity and
+your previous velocity.
+
+809
+00:31:13,514 --> 00:31:15,211
+If we look at SGD, SGD momentum
+
+810
+00:31:15,211 --> 00:31:17,230
+and Nesterov momentum
+on this kind of simple
+
+811
+00:31:17,230 --> 00:31:20,730
+problem, compared with SGD, we notice that
+
+812
+00:31:21,827 --> 00:31:24,145
+SGD kind of takes this,
+SGD is in the black,
+
+813
+00:31:24,145 --> 00:31:26,831
+kind of taking this slow
+progress toward the minima.
+
+814
+00:31:26,831 --> 00:31:28,734
+The blue and the green show momentum
+
+815
+00:31:28,734 --> 00:31:30,083
+and Nesterov.
+
+816
+00:31:30,083 --> 00:31:32,235
+These have this behavior
+of kind of overshooting
+
+817
+00:31:32,235 --> 00:31:35,492
+the minimum 'cause they're
+building up velocity
+
+818
+00:31:35,492 --> 00:31:37,288
+going past the minimum, and then kind of
+
+819
+00:31:37,288 --> 00:31:39,302
+correcting themselves and coming back
+
+820
+00:31:39,302 --> 00:31:40,334
+towards the minima.
+
+821
+00:31:40,334 --> 00:31:41,167
+Question?
+
+822
+00:31:42,508 --> 00:31:46,675
+- [Student] [speaks too low to hear]
+
+823
+00:31:52,509 --> 00:31:54,849
+- The question is this picture looks good,
+
+824
+00:31:54,849 --> 00:31:56,470
+but what happens if your minima call
+
+825
+00:31:56,470 --> 00:31:58,535
+lies in this very narrow basin?
+
+826
+00:31:58,535 --> 00:32:00,019
+Will the velocity just cause you
+
+827
+00:32:00,019 --> 00:32:02,012
+to skip right over that minima?
+
+828
+00:32:02,012 --> 00:32:03,461
+That's actually a really
+interesting point,
+
+829
+00:32:03,461 --> 00:32:05,717
+and the subject of some
+recent theoretical work,
+
+830
+00:32:05,717 --> 00:32:07,969
+but the idea is that maybe those really
+
+831
+00:32:07,969 --> 00:32:09,556
+sharp minima are actually bad minima.
+
+832
+00:32:09,556 --> 00:32:11,778
+We don't want to even land in those
+
+833
+00:32:11,778 --> 00:32:13,660
+'cause the idea is that maybe if you have
+
+834
+00:32:13,660 --> 00:32:15,525
+a very sharp minima, that actually could
+
+835
+00:32:15,525 --> 00:32:18,086
+be a minima that overfits more.
+
+836
+00:32:18,086 --> 00:32:20,356
+If you imagine that we
+doubled our training set,
+
+837
+00:32:20,356 --> 00:32:22,511
+the whole optimization
+landscape would change,
+
+838
+00:32:22,511 --> 00:32:24,083
+and maybe that very sensitive minima
+
+839
+00:32:24,083 --> 00:32:25,970
+would actually disappear
+if we were to collect
+
+840
+00:32:25,970 --> 00:32:27,905
+more training data.
+
+841
+00:32:27,905 --> 00:32:29,279
+We kind of have this intuition that we
+
+842
+00:32:29,279 --> 00:32:31,674
+maybe want to land in very flat minima
+
+843
+00:32:31,674 --> 00:32:33,904
+because those very flat
+minima are probably
+
+844
+00:32:33,904 --> 00:32:36,418
+more robust as we change
+the training data.
+
+845
+00:32:36,418 --> 00:32:38,354
+Those flat minima might
+actually generalize
+
+846
+00:32:38,354 --> 00:32:40,938
+better to testing data.
+
+847
+00:32:40,938 --> 00:32:42,453
+This is again, sort of very recent
+
+848
+00:32:42,453 --> 00:32:44,907
+theoretical work, but that's actually
+
+849
+00:32:44,907 --> 00:32:46,769
+a really good point that you bring it up.
+
+850
+00:32:46,769 --> 00:32:48,869
+In some sense, it's actually a feature
+
+851
+00:32:48,869 --> 00:32:51,922
+and not a bug that SGD momentum actually
+
+852
+00:32:51,922 --> 00:32:54,839
+skips over those very sharp minima.
+
+853
+00:32:56,464 --> 00:33:00,464
+That's actually a good
+thing, believe it or not.
+
+854
+00:33:01,310 --> 00:33:02,717
+Another thing you can see is if you look
+
+855
+00:33:02,717 --> 00:33:04,801
+at the difference between
+momentum and Nesterov here,
+
+856
+00:33:04,801 --> 00:33:06,832
+you can see that because of the
+
+857
+00:33:06,832 --> 00:33:09,247
+correction factor in
+Nesterov, maybe it's not
+
+858
+00:33:09,247 --> 00:33:10,783
+overshooting quite as drastically,
+
+859
+00:33:10,783 --> 00:33:13,200
+compared to vanilla momentum.
+
+860
+00:33:15,168 --> 00:33:17,714
+There's another kind
+of common optimization
+
+861
+00:33:17,714 --> 00:33:20,553
+strategy is this algorithm called AdaGrad,
+
+862
+00:33:20,553 --> 00:33:23,172
+which John Duchi, who's
+now a professor here,
+
+863
+00:33:23,172 --> 00:33:25,777
+worked on during his Ph.D.
+
+864
+00:33:25,777 --> 00:33:28,860
+The idea with AdaGrad is that as you,
+
+865
+00:33:30,766 --> 00:33:32,453
+during the course of the optimization,
+
+866
+00:33:32,453 --> 00:33:35,371
+you're going to keep a running estimate
+
+867
+00:33:35,371 --> 00:33:37,690
+or a running sum of all
+the squared gradients
+
+868
+00:33:37,690 --> 00:33:40,054
+that you see during training.
+
+869
+00:33:40,054 --> 00:33:42,039
+Now rather than having a velocity term,
+
+870
+00:33:42,039 --> 00:33:44,442
+instead we have this grad squared term.
+
+871
+00:33:44,442 --> 00:33:46,544
+During training, we're
+going to just keep adding
+
+872
+00:33:46,544 --> 00:33:49,684
+the squared gradients to
+this grad squared term.
+
+873
+00:33:49,684 --> 00:33:52,378
+Now when we update our parameter vector,
+
+874
+00:33:52,378 --> 00:33:55,545
+we'll divide by this grad squared term
+
+875
+00:33:57,430 --> 00:33:59,819
+when we're making our update step.
+
+876
+00:33:59,819 --> 00:34:02,688
+The question is what
+does this kind of scaling
+
+877
+00:34:02,688 --> 00:34:05,521
+do in this situation where we have
+
+878
+00:34:06,653 --> 00:34:08,878
+a very high condition number?
+
+879
+00:34:08,878 --> 00:34:13,045
+- [Student] [speaks too low to hear]
+
+880
+00:34:16,741 --> 00:34:18,791
+- The idea is that if
+we have two coordinates,
+
+881
+00:34:18,791 --> 00:34:21,214
+one that always has a very high gradient
+
+882
+00:34:21,214 --> 00:34:23,389
+and one that always has
+a very small gradient,
+
+883
+00:34:23,389 --> 00:34:25,007
+then as we add the sum of the squares
+
+884
+00:34:25,007 --> 00:34:27,126
+of the small gradient,
+we're going to be dividing
+
+885
+00:34:27,127 --> 00:34:30,697
+by a small number, so
+we'll accelerate movement
+
+886
+00:34:30,697 --> 00:34:33,609
+along the slow dimension,
+
+887
+00:34:33,610 --> 00:34:35,666
+along the one dimension.
+
+888
+00:34:35,666 --> 00:34:37,812
+Then along the other
+dimension, where the gradients
+
+889
+00:34:37,812 --> 00:34:40,728
+tend to be very large,
+then we'll be dividing
+
+890
+00:34:40,728 --> 00:34:42,926
+by a large number, so
+we'll kind of slow down
+
+891
+00:34:42,927 --> 00:34:46,409
+our progress along the wiggling dimension.
+
+892
+00:34:46,409 --> 00:34:48,514
+But there's kind of a problem here.
+
+893
+00:34:48,514 --> 00:34:50,942
+That's the question of
+what happens with AdaGrad
+
+894
+00:34:50,943 --> 00:34:52,976
+over the course of training, as t
+
+895
+00:34:52,976 --> 00:34:56,579
+gets larger and larger and larger?
+
+896
+00:34:56,579 --> 00:34:58,876
+- [Student] [speaks too low to hear]
+
+897
+00:34:58,876 --> 00:35:00,891
+- With AdaGrad, the steps
+actually get smaller
+
+898
+00:35:00,891 --> 00:35:02,724
+and smaller and smaller because we just
+
+899
+00:35:02,724 --> 00:35:04,501
+continue updating this estimate of the
+
+900
+00:35:04,501 --> 00:35:06,645
+squared gradients over
+time, so this estimate
+
+901
+00:35:06,645 --> 00:35:08,896
+just grows and grows
+and grows monotonically
+
+902
+00:35:08,896 --> 00:35:10,380
+over the course of training.
+
+903
+00:35:10,380 --> 00:35:12,962
+Now this causes our
+step size to get smaller
+
+904
+00:35:12,962 --> 00:35:15,844
+and smaller and smaller over time.
+
+905
+00:35:15,844 --> 00:35:18,038
+Again, in the convex case, there's some
+
+906
+00:35:18,038 --> 00:35:20,819
+really nice theory showing
+that this is actually
+
+907
+00:35:20,819 --> 00:35:23,965
+really good 'cause in the convex case,
+
+908
+00:35:23,965 --> 00:35:25,812
+as you approach a
+minimum, you kind of want
+
+909
+00:35:25,812 --> 00:35:28,610
+to slow down so you actually converge.
+
+910
+00:35:28,610 --> 00:35:30,404
+That's actually kind of a feature
+
+911
+00:35:30,404 --> 00:35:31,677
+in the convex case.
+
+912
+00:35:31,677 --> 00:35:33,865
+But in the non-convex
+case, that's a little bit
+
+913
+00:35:33,865 --> 00:35:36,562
+problematic because as you come towards
+
+914
+00:35:36,562 --> 00:35:38,694
+a saddle point, you might
+get stuck with AdaGrad,
+
+915
+00:35:38,694 --> 00:35:42,492
+and then you kind of no
+longer make any progress.
+
+916
+00:35:42,492 --> 00:35:44,773
+There's a slight variation of AdaGrad,
+
+917
+00:35:44,773 --> 00:35:47,370
+called RMSProp, that actually addresses
+
+918
+00:35:47,370 --> 00:35:49,163
+this concern a little bit.
+
+919
+00:35:49,163 --> 00:35:52,006
+Now with RMSProp, we
+still keep this estimate
+
+920
+00:35:52,006 --> 00:35:53,875
+of the squared gradients, but instead
+
+921
+00:35:53,875 --> 00:35:55,428
+of just letting that squared estimate
+
+922
+00:35:55,428 --> 00:35:57,595
+continually accumulate over training,
+
+923
+00:35:57,595 --> 00:36:01,570
+instead, we let that squared
+estimate actually decay.
+
+924
+00:36:01,570 --> 00:36:03,969
+This ends up looking kind
+of like a momentum update,
+
+925
+00:36:03,969 --> 00:36:06,057
+except we're having kind of momentum over
+
+926
+00:36:06,057 --> 00:36:08,114
+the squared gradients,
+rather than momentum
+
+927
+00:36:08,114 --> 00:36:09,825
+over the actual gradients.
+
+928
+00:36:09,825 --> 00:36:12,872
+Now with RMSProp, after
+we compute our gradient,
+
+929
+00:36:12,872 --> 00:36:15,354
+we take our current estimate
+of the grad squared,
+
+930
+00:36:15,354 --> 00:36:16,983
+we multiply it by this decay rate,
+
+931
+00:36:16,983 --> 00:36:20,846
+which is commonly
+something like .9 or .99.
+
+932
+00:36:20,846 --> 00:36:24,477
+Then we add in this one
+minus the decay rate
+
+933
+00:36:24,477 --> 00:36:27,086
+of our current squared gradient.
+
+934
+00:36:27,086 --> 00:36:30,866
+Now over time, you can imagine that.
+
+935
+00:36:30,866 --> 00:36:32,814
+Then again, when we
+make our step, the step
+
+936
+00:36:32,814 --> 00:36:36,080
+looks exactly the same as AdaGrad,
+
+937
+00:36:36,080 --> 00:36:37,678
+where we divide by the squared gradient
+
+938
+00:36:37,678 --> 00:36:39,592
+in the step to again
+have this nice property
+
+939
+00:36:39,592 --> 00:36:42,080
+of accelerating movement
+along the one dimension,
+
+940
+00:36:42,080 --> 00:36:44,555
+and slowing down movement
+along the other dimension.
+
+941
+00:36:44,555 --> 00:36:46,609
+But now with RMSProp,
+because these estimates
+
+942
+00:36:46,609 --> 00:36:49,614
+are leaky, then it kind
+of addresses the problem
+
+943
+00:36:49,614 --> 00:36:51,396
+of maybe always slowing down where you
+
+944
+00:36:51,396 --> 00:36:52,896
+might not want to.
+
+945
+00:36:56,940 --> 00:36:58,964
+Here again, we're kind
+of showing our favorite
+
+946
+00:36:58,964 --> 00:37:01,817
+toy problem with SGD
+in black, SGD momentum
+
+947
+00:37:01,817 --> 00:37:04,658
+in blue and RMSProp in red.
+
+948
+00:37:04,658 --> 00:37:07,807
+You can see that RMSProp and SGD momentum
+
+949
+00:37:07,807 --> 00:37:09,965
+are both doing much better than SGD,
+
+950
+00:37:09,965 --> 00:37:12,748
+but their qualitative behavior
+is a little bit different.
+
+951
+00:37:12,748 --> 00:37:16,005
+With SGD momentum, it kind of overshoots
+
+952
+00:37:16,005 --> 00:37:17,973
+the minimum and comes back, whereas with
+
+953
+00:37:17,973 --> 00:37:21,061
+RMSProp, it's kind of adjusting
+
+954
+00:37:21,061 --> 00:37:22,914
+its trajectory such that we're making
+
+955
+00:37:22,914 --> 00:37:24,549
+approximately equal progress among
+
+956
+00:37:24,549 --> 00:37:26,877
+all the dimensions.
+
+957
+00:37:26,877 --> 00:37:28,544
+By the way, you can't actually tell,
+
+958
+00:37:28,544 --> 00:37:32,967
+but this plot is also
+showing AdaGrad in green
+
+959
+00:37:32,967 --> 00:37:34,897
+with the same learning rate, but it just
+
+960
+00:37:34,897 --> 00:37:37,244
+gets stuck due to this
+problem of continually
+
+961
+00:37:37,244 --> 00:37:39,091
+decaying learning rates.
+
+962
+00:37:39,091 --> 00:37:41,354
+In practice, AdaGrad
+is maybe not so common
+
+963
+00:37:41,354 --> 00:37:43,437
+for many of these things.
+
+964
+00:37:44,276 --> 00:37:45,874
+That's a little bit of
+an unfair comparison
+
+965
+00:37:45,874 --> 00:37:46,877
+of AdaGrad.
+
+966
+00:37:46,877 --> 00:37:48,715
+Probably you need to
+increase the learning rate
+
+967
+00:37:48,715 --> 00:37:50,495
+with AdaGrad, and then
+it would end up looking
+
+968
+00:37:50,495 --> 00:37:53,043
+kind of like RMSProp in this case.
+
+969
+00:37:53,043 --> 00:37:55,639
+But in general, we tend not to use AdaGrad
+
+970
+00:37:55,639 --> 00:37:57,633
+so much when training neural networks.
+
+971
+00:37:57,633 --> 00:37:58,466
+Question?
+
+972
+00:37:58,466 --> 00:38:00,281
+- [Student] [speaks too low to hear]
+
+973
+00:38:00,281 --> 00:38:03,455
+- The answer is yes,
+this problem is convex,
+
+974
+00:38:03,455 --> 00:38:04,872
+but in this case,
+
+975
+00:38:07,631 --> 00:38:09,128
+it's a little bit of an unfair comparison
+
+976
+00:38:09,128 --> 00:38:11,315
+because the learning rates
+are not so comparable
+
+977
+00:38:11,315 --> 00:38:12,488
+among the methods.
+
+978
+00:38:12,488 --> 00:38:14,114
+I've been a little bit unfair to AdaGrad
+
+979
+00:38:14,114 --> 00:38:15,892
+in this visualization by showing the same
+
+980
+00:38:15,892 --> 00:38:17,775
+learning rate between
+the different algorithms,
+
+981
+00:38:17,775 --> 00:38:20,284
+when probably you should have separately
+
+982
+00:38:20,284 --> 00:38:23,617
+turned the learning rates per algorithm.
+
+983
+00:38:28,455 --> 00:38:29,921
+We saw in momentum, we had this idea
+
+984
+00:38:29,921 --> 00:38:32,203
+of velocity, where we're
+building up velocity
+
+985
+00:38:32,203 --> 00:38:34,249
+by adding in the gradients,
+and then stepping
+
+986
+00:38:34,249 --> 00:38:35,888
+in the direction of the velocity.
+
+987
+00:38:35,888 --> 00:38:38,200
+We saw with AdaGrad and RMSProp that we
+
+988
+00:38:38,200 --> 00:38:40,279
+had this other idea, of
+building up an estimate
+
+989
+00:38:40,279 --> 00:38:42,296
+of the squared gradients,
+and then dividing
+
+990
+00:38:42,296 --> 00:38:44,229
+by the squared gradients.
+
+991
+00:38:44,229 --> 00:38:46,252
+Then these both seem like good ideas
+
+992
+00:38:46,252 --> 00:38:47,143
+on their own.
+
+993
+00:38:47,143 --> 00:38:48,439
+Why don't we just stick 'em together
+
+994
+00:38:48,439 --> 00:38:49,465
+and use them both?
+
+995
+00:38:49,465 --> 00:38:51,383
+Maybe that would be even better.
+
+996
+00:38:51,383 --> 00:38:53,796
+That brings us to this
+algorithm called Adam,
+
+997
+00:38:53,796 --> 00:38:57,226
+or rather brings us very close to Adam.
+
+998
+00:38:57,226 --> 00:38:59,812
+We'll see in a couple
+slides that there's a slight
+
+999
+00:38:59,812 --> 00:39:01,604
+correction we need to make here.
+
+1000
+00:39:01,604 --> 00:39:03,914
+Here with Adam, we maintain an estimate
+
+1001
+00:39:03,914 --> 00:39:07,373
+of the first moment and the second moment.
+
+1002
+00:39:07,373 --> 00:39:10,706
+Now in the red, we make this estimate
+
+1003
+00:39:10,706 --> 00:39:13,654
+of the first moment as a weighed sum
+
+1004
+00:39:13,654 --> 00:39:15,152
+of our gradients.
+
+1005
+00:39:15,152 --> 00:39:18,385
+We have this moving estimate
+of the second moment,
+
+1006
+00:39:18,385 --> 00:39:20,904
+like AdaGrad and like RMSProp, which is a
+
+1007
+00:39:20,904 --> 00:39:23,226
+moving estimate of our squared gradients.
+
+1008
+00:39:23,226 --> 00:39:27,032
+Now when we make our update step, we step
+
+1009
+00:39:27,032 --> 00:39:29,106
+using both the first
+moment, which is kind of our
+
+1010
+00:39:29,106 --> 00:39:31,680
+velocity, and also divide
+by the second moment,
+
+1011
+00:39:31,680 --> 00:39:34,766
+or rather the square root
+of the second moment,
+
+1012
+00:39:34,766 --> 00:39:37,766
+which is this squared gradient term.
+
+1013
+00:39:38,613 --> 00:39:40,302
+This idea of Adam ends
+up looking a little bit
+
+1014
+00:39:40,302 --> 00:39:43,064
+like RMSProp plus momentum, or ends up
+
+1015
+00:39:43,064 --> 00:39:46,754
+looking like momentum plus
+second squared gradients.
+
+1016
+00:39:46,754 --> 00:39:50,304
+It kind of incorporates the
+nice properties of both.
+
+1017
+00:39:50,304 --> 00:39:52,474
+But there's a little
+bit of a problem here.
+
+1018
+00:39:52,474 --> 00:39:55,227
+That's the question of what happens
+
+1019
+00:39:55,227 --> 00:39:57,560
+at the very first time step?
+
+1020
+00:40:00,683 --> 00:40:02,492
+At the very first time step, you can see
+
+1021
+00:40:02,492 --> 00:40:04,536
+that at the beginning, we've initialized
+
+1022
+00:40:04,536 --> 00:40:06,619
+our second moment with zero.
+
+1023
+00:40:06,619 --> 00:40:10,119
+Now after one update of the second moment,
+
+1024
+00:40:11,551 --> 00:40:14,007
+typically this beta two, second moment
+
+1025
+00:40:14,007 --> 00:40:17,038
+decay rate, is something like .9 or .99,
+
+1026
+00:40:17,038 --> 00:40:18,720
+something very close to one.
+
+1027
+00:40:18,720 --> 00:40:21,556
+After one update, our
+second moment is still
+
+1028
+00:40:21,556 --> 00:40:23,352
+very, very close to zero.
+
+1029
+00:40:23,352 --> 00:40:25,751
+Now when we're making our update step here
+
+1030
+00:40:25,751 --> 00:40:27,906
+and we divide by our second moment,
+
+1031
+00:40:27,906 --> 00:40:30,224
+now we're dividing by a very small number.
+
+1032
+00:40:30,224 --> 00:40:31,681
+We're making a very, very large step
+
+1033
+00:40:31,681 --> 00:40:32,862
+at the beginning.
+
+1034
+00:40:32,862 --> 00:40:35,189
+This very, very large
+step at the beginning
+
+1035
+00:40:35,189 --> 00:40:38,253
+is not really due to the
+geometry of the problem.
+
+1036
+00:40:38,253 --> 00:40:40,189
+It's kind of an artifact
+of the fact that we
+
+1037
+00:40:40,189 --> 00:40:43,907
+initialized our second
+moment estimate was zero.
+
+1038
+00:40:43,907 --> 00:40:44,807
+Question?
+
+1039
+00:40:44,807 --> 00:40:48,974
+- [Student] [speaks too low to hear]
+
+1040
+00:40:53,317 --> 00:40:55,165
+- That's true.
+
+1041
+00:40:55,165 --> 00:40:56,573
+The comment is that if your first moment
+
+1042
+00:40:56,573 --> 00:40:58,973
+is also very small,
+then you're multiplying
+
+1043
+00:40:58,973 --> 00:41:00,850
+by small and you're
+dividing by square root
+
+1044
+00:41:00,850 --> 00:41:03,391
+of small squared, so
+what's going to happen?
+
+1045
+00:41:03,391 --> 00:41:06,231
+They might cancel each other
+out, you might be okay.
+
+1046
+00:41:06,231 --> 00:41:07,738
+That's true.
+
+1047
+00:41:07,738 --> 00:41:09,366
+Sometimes these cancel each other out
+
+1048
+00:41:09,366 --> 00:41:11,616
+and you're okay, but
+sometimes this ends up
+
+1049
+00:41:11,616 --> 00:41:14,117
+in taking very large steps
+right at the beginning.
+
+1050
+00:41:14,117 --> 00:41:16,730
+That can be quite bad.
+
+1051
+00:41:16,730 --> 00:41:18,762
+Maybe you initialize a little bit poorly.
+
+1052
+00:41:18,762 --> 00:41:20,018
+You take a very large step.
+
+1053
+00:41:20,018 --> 00:41:21,917
+Now your initialization
+is completely messed up,
+
+1054
+00:41:21,917 --> 00:41:23,171
+and then you're in a very bad part
+
+1055
+00:41:23,171 --> 00:41:24,500
+of the objective landscape
+and you just can't
+
+1056
+00:41:24,500 --> 00:41:26,630
+converge from there.
+
+1057
+00:41:26,630 --> 00:41:27,650
+Question?
+
+1058
+00:41:27,650 --> 00:41:31,400
+- [Student] [speaks too low to hear]
+
+1059
+00:41:31,400 --> 00:41:32,779
+- The idea is what is this 10
+
+1060
+00:41:32,779 --> 00:41:35,616
+to the minus seven term
+in the last equation?
+
+1061
+00:41:35,616 --> 00:41:37,016
+That's actually appeared in AdaGrad,
+
+1062
+00:41:37,016 --> 00:41:38,332
+RMSProp and Adam.
+
+1063
+00:41:38,332 --> 00:41:40,728
+The idea is that we're
+dividing by something.
+
+1064
+00:41:40,728 --> 00:41:42,672
+We want to make sure we're
+not dividing by zero,
+
+1065
+00:41:42,672 --> 00:41:44,510
+so we always add a small positive constant
+
+1066
+00:41:44,510 --> 00:41:46,058
+to the denominator, just to make sure
+
+1067
+00:41:46,058 --> 00:41:49,094
+we're not dividing by zero.
+
+1068
+00:41:49,094 --> 00:41:50,094
+That's technically a hyperparameter,
+
+1069
+00:41:50,094 --> 00:41:51,807
+but it tends not to matter too much,
+
+1070
+00:41:51,807 --> 00:41:53,262
+so just setting 10 to minus seven,
+
+1071
+00:41:53,262 --> 00:41:54,914
+10 to minus eight, something like that,
+
+1072
+00:41:54,914 --> 00:41:56,497
+tends to work well.
+
+1073
+00:41:58,452 --> 00:42:00,713
+With Adam, remember we just talked about
+
+1074
+00:42:00,713 --> 00:42:02,585
+this idea of at the first couple steps,
+
+1075
+00:42:02,585 --> 00:42:03,791
+it gets very large, and we might take
+
+1076
+00:42:03,791 --> 00:42:05,996
+very large steps and mess ourselves up.
+
+1077
+00:42:05,996 --> 00:42:08,378
+Adam also adds this bias correction term
+
+1078
+00:42:08,378 --> 00:42:11,074
+to avoid this problem of
+taking very large steps
+
+1079
+00:42:11,074 --> 00:42:12,995
+at the beginning.
+
+1080
+00:42:12,995 --> 00:42:15,129
+You can see that after we update our first
+
+1081
+00:42:15,129 --> 00:42:17,775
+and second moments, we
+create an unbiased estimate
+
+1082
+00:42:17,775 --> 00:42:21,196
+of those first and second
+moments by incorporating
+
+1083
+00:42:21,196 --> 00:42:23,104
+the current time step, t.
+
+1084
+00:42:23,104 --> 00:42:24,662
+Now we actually make our step using these
+
+1085
+00:42:24,662 --> 00:42:27,749
+unbiased estimates,
+rather than the original
+
+1086
+00:42:27,749 --> 00:42:30,035
+first and second moment estimates.
+
+1087
+00:42:30,035 --> 00:42:33,652
+This gives us our full form of Adam.
+
+1088
+00:42:33,652 --> 00:42:37,106
+By the way, Adam is a
+really, [laughs] really good
+
+1089
+00:42:37,106 --> 00:42:39,177
+optimization algorithm,
+and it works really well
+
+1090
+00:42:39,177 --> 00:42:41,342
+for a lot of different
+problems, so that's kind of
+
+1091
+00:42:41,342 --> 00:42:43,708
+my default optimization
+algorithm for just about
+
+1092
+00:42:43,708 --> 00:42:46,035
+any new problem that I'm tackling.
+
+1093
+00:42:46,035 --> 00:42:48,445
+In particular, if you
+set beta one equals .9,
+
+1094
+00:42:48,445 --> 00:42:51,599
+beta two equals .999, learning rate one e
+
+1095
+00:42:51,599 --> 00:42:53,573
+minus three or five e minus four,
+
+1096
+00:42:53,573 --> 00:42:55,426
+that's a great staring
+point for just about
+
+1097
+00:42:55,426 --> 00:42:59,282
+all the architectures
+I've ever worked with.
+
+1098
+00:42:59,282 --> 00:43:00,473
+Try that.
+
+1099
+00:43:00,473 --> 00:43:04,003
+That's a really good place
+to start, in general.
+
+1100
+00:43:04,003 --> 00:43:06,434
+[laughs]
+
+1101
+00:43:06,434 --> 00:43:07,798
+If we actually plot these things out
+
+1102
+00:43:07,798 --> 00:43:09,780
+and look at SGD, SGD momentum,
+
+1103
+00:43:09,780 --> 00:43:12,119
+RMSProp and Adam on the same problem,
+
+1104
+00:43:12,119 --> 00:43:14,355
+you can see that Adam, in the purple here,
+
+1105
+00:43:14,355 --> 00:43:16,869
+kind of combines elements
+of both SGD momentum
+
+1106
+00:43:16,869 --> 00:43:18,579
+and RMSProp.
+
+1107
+00:43:18,579 --> 00:43:20,467
+Adam kind of overshoots the minimum
+
+1108
+00:43:20,467 --> 00:43:23,430
+a little bit like SGD
+momentum, but it doesn't
+
+1109
+00:43:23,430 --> 00:43:25,660
+overshoot quite as much as momentum.
+
+1110
+00:43:25,660 --> 00:43:27,610
+Adam also has this similar behavior
+
+1111
+00:43:27,610 --> 00:43:30,007
+of RMSProp of kind of trying to curve
+
+1112
+00:43:30,007 --> 00:43:33,753
+to make equal progress
+along all dimensions.
+
+1113
+00:43:33,753 --> 00:43:35,519
+Maybe in this small
+two-dimensional example,
+
+1114
+00:43:35,519 --> 00:43:38,191
+Adam converged about
+similarly to other ones,
+
+1115
+00:43:38,191 --> 00:43:39,483
+but you can see qualitatively that
+
+1116
+00:43:39,483 --> 00:43:41,567
+it's kind of combining
+the behaviors of both
+
+1117
+00:43:41,567 --> 00:43:43,317
+momentum and RMSProp.
+
+1118
+00:43:45,527 --> 00:43:49,194
+Any questions about
+optimization algorithms?
+
+1119
+00:43:50,533 --> 00:43:52,830
+- [Student] [speaks too low to hear]
+
+1120
+00:43:52,830 --> 00:43:54,657
+They still take a very long time to train.
+
+1121
+00:43:54,657 --> 00:43:57,091
+[speaks too low to hear]
+
+1122
+00:43:57,091 --> 00:43:59,289
+- The question is what does Adam not fix?
+
+1123
+00:43:59,289 --> 00:44:00,595
+Would these neural
+networks are still large,
+
+1124
+00:44:00,595 --> 00:44:03,678
+they still take a long time to train.
+
+1125
+00:44:05,229 --> 00:44:07,583
+There can still be a problem.
+
+1126
+00:44:07,583 --> 00:44:09,464
+In this picture where
+we have this landscape
+
+1127
+00:44:09,464 --> 00:44:12,464
+of things looking like
+ovals, if you imagine
+
+1128
+00:44:12,464 --> 00:44:15,659
+that we're kind of making estimates along
+
+1129
+00:44:15,659 --> 00:44:18,004
+each dimension independently to allow us
+
+1130
+00:44:18,004 --> 00:44:19,704
+to speed up or slow down along different
+
+1131
+00:44:19,704 --> 00:44:22,389
+coordinate axes, but one problem is that
+
+1132
+00:44:22,389 --> 00:44:24,641
+if that taco shell is kind of tilted
+
+1133
+00:44:24,641 --> 00:44:27,061
+and is not axis aligned, then we're still
+
+1134
+00:44:27,061 --> 00:44:29,205
+only making estimates
+along the individual axes
+
+1135
+00:44:29,205 --> 00:44:30,372
+independently.
+
+1136
+00:44:31,420 --> 00:44:33,602
+That corresponds to taking your rotated
+
+1137
+00:44:33,602 --> 00:44:35,605
+taco shell and squishing it horizontally
+
+1138
+00:44:35,605 --> 00:44:38,616
+and vertically, but you
+can't actually unrotate it.
+
+1139
+00:44:38,616 --> 00:44:41,347
+In cases where you have this kind
+
+1140
+00:44:41,347 --> 00:44:44,091
+of rotated picture of poor conditioning,
+
+1141
+00:44:44,091 --> 00:44:45,884
+then Adam or any of these other algorithms
+
+1142
+00:44:45,884 --> 00:44:49,217
+really can't address that, that concern.
+
+1143
+00:44:51,841 --> 00:44:54,046
+Another thing that we've seen in all
+
+1144
+00:44:54,046 --> 00:44:56,229
+these optimization
+algorithms is learning rate
+
+1145
+00:44:56,229 --> 00:44:58,191
+as a hyperparameter.
+
+1146
+00:44:58,191 --> 00:45:00,111
+We've seen this picture
+before a couple times,
+
+1147
+00:45:00,111 --> 00:45:02,313
+that as you use different learning rates,
+
+1148
+00:45:02,313 --> 00:45:04,298
+sometimes if it's too
+high, it might explode
+
+1149
+00:45:04,298 --> 00:45:05,582
+in the yellow.
+
+1150
+00:45:05,582 --> 00:45:08,077
+If it's a very low
+learning rate, in the blue,
+
+1151
+00:45:08,077 --> 00:45:10,114
+it might take a very
+long time to converge.
+
+1152
+00:45:10,114 --> 00:45:11,251
+It's kind of tricky to pick the right
+
+1153
+00:45:11,251 --> 00:45:12,418
+learning rate.
+
+1154
+00:45:14,197 --> 00:45:15,571
+This is a little bit of a trick question
+
+1155
+00:45:15,571 --> 00:45:17,066
+because we don't actually have to stick
+
+1156
+00:45:17,066 --> 00:45:18,540
+with one learning rate
+throughout the course
+
+1157
+00:45:18,540 --> 00:45:19,793
+of training.
+
+1158
+00:45:19,793 --> 00:45:21,832
+Sometimes you'll see people
+decay the learning rates
+
+1159
+00:45:21,832 --> 00:45:24,546
+over time, where we can kind of combine
+
+1160
+00:45:24,546 --> 00:45:27,323
+the effects of these different curves
+
+1161
+00:45:27,323 --> 00:45:30,190
+on the left, and get the
+nice properties of each.
+
+1162
+00:45:30,190 --> 00:45:31,907
+Sometimes you'll start
+with a higher learning rate
+
+1163
+00:45:31,907 --> 00:45:34,395
+near the start of training, and then decay
+
+1164
+00:45:34,395 --> 00:45:35,588
+the learning rate and make it smaller
+
+1165
+00:45:35,588 --> 00:45:39,851
+and smaller throughout
+the course of training.
+
+1166
+00:45:39,851 --> 00:45:42,691
+A couple strategies for
+these would be a step decay,
+
+1167
+00:45:42,691 --> 00:45:45,483
+where at 100,000th
+iteration, you just decay
+
+1168
+00:45:45,483 --> 00:45:47,280
+by some factor and you keep going.
+
+1169
+00:45:47,280 --> 00:45:48,594
+You might see an exponential decay,
+
+1170
+00:45:48,594 --> 00:45:53,064
+where you continually
+decay during training.
+
+1171
+00:45:53,064 --> 00:45:54,607
+You might see different variations
+
+1172
+00:45:54,607 --> 00:45:56,345
+of continually decaying the learning rate
+
+1173
+00:45:56,345 --> 00:45:58,083
+during training.
+
+1174
+00:45:58,083 --> 00:46:00,855
+If you look at papers,
+especially the resonate paper,
+
+1175
+00:46:00,855 --> 00:46:03,232
+you often see plots that
+look kind of like this,
+
+1176
+00:46:03,232 --> 00:46:04,832
+where the loss is kind of going down,
+
+1177
+00:46:04,832 --> 00:46:07,265
+then dropping, then flattening again,
+
+1178
+00:46:07,265 --> 00:46:08,383
+then dropping again.
+
+1179
+00:46:08,383 --> 00:46:09,791
+What's going on in these plots is that
+
+1180
+00:46:09,791 --> 00:46:11,797
+they're using a step decay learning rate,
+
+1181
+00:46:11,797 --> 00:46:14,039
+where at these parts where it plateaus
+
+1182
+00:46:14,039 --> 00:46:15,599
+and then suddenly drops
+again, those are the
+
+1183
+00:46:15,599 --> 00:46:17,371
+iterations where they
+dropped the learning rate
+
+1184
+00:46:17,371 --> 00:46:18,886
+by some factor.
+
+1185
+00:46:18,886 --> 00:46:22,828
+This idea of dropping the learning rate,
+
+1186
+00:46:22,828 --> 00:46:24,090
+you might imagine that it got near
+
+1187
+00:46:24,090 --> 00:46:26,728
+some good region, but now
+the gradients got smaller,
+
+1188
+00:46:26,728 --> 00:46:28,551
+it's kind of bouncing around too much.
+
+1189
+00:46:28,551 --> 00:46:29,728
+Then if we drop the learning rate,
+
+1190
+00:46:29,728 --> 00:46:31,066
+it lets it slow down and continue
+
+1191
+00:46:31,066 --> 00:46:33,230
+to make progress down the landscape.
+
+1192
+00:46:33,230 --> 00:46:36,960
+This tends to help in practice sometimes.
+
+1193
+00:46:36,960 --> 00:46:38,909
+Although one thing to point out is that
+
+1194
+00:46:38,909 --> 00:46:40,912
+learning rate decay is
+a little bit more common
+
+1195
+00:46:40,912 --> 00:46:44,084
+with SGD momentum, and
+a little bit less common
+
+1196
+00:46:44,084 --> 00:46:45,458
+with something like Adam.
+
+1197
+00:46:45,458 --> 00:46:47,707
+Another thing I'd like
+to point out is that
+
+1198
+00:46:47,707 --> 00:46:49,699
+learning rate decay is kind of a
+
+1199
+00:46:49,699 --> 00:46:50,943
+second-order hyperparameter.
+
+1200
+00:46:50,943 --> 00:46:52,247
+You typically should not optimize
+
+1201
+00:46:52,247 --> 00:46:53,809
+over this thing from the start.
+
+1202
+00:46:53,809 --> 00:46:55,271
+Usually when you're
+kind of getting networks
+
+1203
+00:46:55,271 --> 00:46:58,589
+to work at the beginning, you want to pick
+
+1204
+00:46:58,589 --> 00:47:00,097
+a good learning rate with
+no learning rate decay
+
+1205
+00:47:00,097 --> 00:47:01,362
+from the start.
+
+1206
+00:47:01,362 --> 00:47:02,714
+Trying to cross-validate jointly over
+
+1207
+00:47:02,714 --> 00:47:04,629
+learning rate decay and
+initial learning rate
+
+1208
+00:47:04,629 --> 00:47:06,553
+and other things, you'll
+just get confused.
+
+1209
+00:47:06,553 --> 00:47:08,259
+What you do for setting
+learning rate decay
+
+1210
+00:47:08,259 --> 00:47:11,066
+is try with no decay, see what happens.
+
+1211
+00:47:11,066 --> 00:47:12,829
+Then kind of eyeball
+the loss curve and see
+
+1212
+00:47:12,829 --> 00:47:15,912
+where you think you might need decay.
+
+1213
+00:47:17,345 --> 00:47:19,006
+Another thing I wanted to mention briefly
+
+1214
+00:47:19,006 --> 00:47:22,039
+is this idea of all these algorithms
+
+1215
+00:47:22,039 --> 00:47:22,998
+that we've talked about
+
+1216
+00:47:22,998 --> 00:47:25,433
+are first-order optimization algorithms.
+
+1217
+00:47:25,433 --> 00:47:27,992
+In this picture, in this
+one-dimensional picture,
+
+1218
+00:47:27,992 --> 00:47:32,238
+we have this kind of
+curvy objective function
+
+1219
+00:47:32,238 --> 00:47:33,549
+at our current point in red.
+
+1220
+00:47:33,549 --> 00:47:34,995
+What we're basically doing is computing
+
+1221
+00:47:34,995 --> 00:47:36,542
+the gradient at that point.
+
+1222
+00:47:36,542 --> 00:47:38,619
+We're using the gradient
+information to compute
+
+1223
+00:47:38,619 --> 00:47:41,207
+some linear approximation to our function,
+
+1224
+00:47:41,207 --> 00:47:43,568
+which is kind of a first-order
+Taylor approximation
+
+1225
+00:47:43,568 --> 00:47:44,693
+to our function.
+
+1226
+00:47:44,693 --> 00:47:47,416
+Now we pretend that the
+first-order approximation
+
+1227
+00:47:47,416 --> 00:47:49,778
+is our actual function, and we make a step
+
+1228
+00:47:49,778 --> 00:47:52,299
+to try to minimize the approximation.
+
+1229
+00:47:52,299 --> 00:47:54,535
+But this approximation doesn't hold
+
+1230
+00:47:54,535 --> 00:47:56,377
+for very large regions, so we can't step
+
+1231
+00:47:56,377 --> 00:47:57,838
+too far in that direction.
+
+1232
+00:47:57,838 --> 00:47:59,521
+But really, the idea
+here is that we're only
+
+1233
+00:47:59,521 --> 00:48:01,129
+incorporating information about the first
+
+1234
+00:48:01,129 --> 00:48:03,002
+derivative of the function.
+
+1235
+00:48:03,002 --> 00:48:04,994
+You can actually go a little bit fancier.
+
+1236
+00:48:04,994 --> 00:48:07,433
+There's this idea of
+second-order approximation,
+
+1237
+00:48:07,433 --> 00:48:09,716
+where we take into account
+both first derivative
+
+1238
+00:48:09,716 --> 00:48:11,733
+and second derivative information.
+
+1239
+00:48:11,733 --> 00:48:14,812
+Now we make a second-order
+Taylor approximation
+
+1240
+00:48:14,812 --> 00:48:17,194
+to our function and kind
+of locally approximate
+
+1241
+00:48:17,194 --> 00:48:18,934
+our function with a quadratic.
+
+1242
+00:48:18,934 --> 00:48:20,498
+Now with a quadratic, you can step right
+
+1243
+00:48:20,498 --> 00:48:22,766
+to the minimum, and you're really happy.
+
+1244
+00:48:22,766 --> 00:48:26,254
+That's this idea of
+second-order optimization.
+
+1245
+00:48:26,254 --> 00:48:28,687
+When you generalize this
+to multiple dimensions,
+
+1246
+00:48:28,687 --> 00:48:30,974
+you get something called the Newton step,
+
+1247
+00:48:30,974 --> 00:48:33,137
+where you compute this Hessian matrix,
+
+1248
+00:48:33,137 --> 00:48:35,551
+which is a matrix of second derivatives,
+
+1249
+00:48:35,551 --> 00:48:37,753
+and you end up inverting
+this Hessian matrix
+
+1250
+00:48:37,753 --> 00:48:39,759
+in order to step directly to the minimum
+
+1251
+00:48:39,759 --> 00:48:44,174
+of this quadratic
+approximation to your function.
+
+1252
+00:48:44,174 --> 00:48:45,869
+Does anyone spot something
+that's quite different
+
+1253
+00:48:45,869 --> 00:48:47,872
+about this update rule,
+compared to the other ones
+
+1254
+00:48:47,872 --> 00:48:49,395
+that we've seen?
+
+1255
+00:48:49,395 --> 00:48:51,592
+- [Student] [speaks too low to hear]
+
+1256
+00:48:51,592 --> 00:48:53,313
+- This doesn't have a learning rate.
+
+1257
+00:48:53,313 --> 00:48:54,813
+That's kind of cool.
+
+1258
+00:48:56,948 --> 00:48:58,463
+We're making this quadratic approximation
+
+1259
+00:48:58,463 --> 00:48:59,638
+and we're stepping right to the minimum
+
+1260
+00:48:59,638 --> 00:49:01,149
+of the quadratic.
+
+1261
+00:49:01,149 --> 00:49:03,755
+At least in this vanilla
+version of Newton's method,
+
+1262
+00:49:03,755 --> 00:49:05,166
+you don't actually need a learning rate.
+
+1263
+00:49:05,166 --> 00:49:06,405
+You just always step to the minimum
+
+1264
+00:49:06,405 --> 00:49:08,334
+at every time step.
+
+1265
+00:49:08,334 --> 00:49:09,988
+However, in practice, you might end up,
+
+1266
+00:49:09,988 --> 00:49:11,492
+have a learning rate
+anyway because, again,
+
+1267
+00:49:11,492 --> 00:49:13,750
+that quadratic approximation
+might not be perfect,
+
+1268
+00:49:13,750 --> 00:49:15,405
+so you might only want
+to step in the direction
+
+1269
+00:49:15,405 --> 00:49:17,101
+towards the minimum, rather than actually
+
+1270
+00:49:17,101 --> 00:49:18,670
+stepping to the minimum, but at least
+
+1271
+00:49:18,670 --> 00:49:19,790
+in this vanilla version, it doesn't
+
+1272
+00:49:19,790 --> 00:49:21,540
+have a learning rate.
+
+1273
+00:49:24,479 --> 00:49:25,685
+But unfortunately, this is maybe
+
+1274
+00:49:25,685 --> 00:49:27,851
+a little bit impractical for deep learning
+
+1275
+00:49:27,851 --> 00:49:30,061
+because this Hessian matrix
+
+1276
+00:49:30,061 --> 00:49:33,413
+is N by N, where N is
+the number of parameters
+
+1277
+00:49:33,413 --> 00:49:35,004
+in your network.
+
+1278
+00:49:35,004 --> 00:49:37,829
+If N is 100 million,
+then 100 million squared
+
+1279
+00:49:37,829 --> 00:49:38,983
+is way too big.
+
+1280
+00:49:38,983 --> 00:49:40,419
+You definitely can't store that in memory,
+
+1281
+00:49:40,419 --> 00:49:42,531
+and you definitely can't invert it.
+
+1282
+00:49:42,531 --> 00:49:44,796
+In practice, people sometimes use these
+
+1283
+00:49:44,796 --> 00:49:46,971
+quasi-Newton methods
+that, rather than working
+
+1284
+00:49:46,971 --> 00:49:48,275
+with the full Hessian and inverting
+
+1285
+00:49:48,275 --> 00:49:50,983
+the full Hessian, they
+work with approximations.
+
+1286
+00:49:50,983 --> 00:49:53,210
+Low-rank approximations are common.
+
+1287
+00:49:53,210 --> 00:49:57,577
+You'll sometimes see
+these for some problems.
+
+1288
+00:49:57,577 --> 00:50:00,242
+L-BFGS is one particular
+second-order optimizer
+
+1289
+00:50:00,242 --> 00:50:02,647
+that has this approximate second,
+
+1290
+00:50:02,647 --> 00:50:03,972
+keeps this approximation of the Hessian
+
+1291
+00:50:03,972 --> 00:50:06,458
+that you'll sometimes
+see, but in practice,
+
+1292
+00:50:06,458 --> 00:50:08,418
+it doesn't work too well for many
+
+1293
+00:50:08,418 --> 00:50:11,690
+deep learning problems
+because these approximations,
+
+1294
+00:50:11,690 --> 00:50:13,774
+these second-order
+approximations, don't really
+
+1295
+00:50:13,774 --> 00:50:15,772
+handle the stochastic case very much,
+
+1296
+00:50:15,772 --> 00:50:16,895
+very nicely.
+
+1297
+00:50:16,895 --> 00:50:18,772
+They also tend not to work so well with
+
+1298
+00:50:18,772 --> 00:50:21,101
+non-convex problems.
+
+1299
+00:50:21,101 --> 00:50:23,627
+I don't want to get into
+that right now too much.
+
+1300
+00:50:23,627 --> 00:50:24,963
+In practice, what you should really do
+
+1301
+00:50:24,963 --> 00:50:27,435
+is probably Adam is a really good choice
+
+1302
+00:50:27,435 --> 00:50:29,507
+for many different neural network things,
+
+1303
+00:50:29,507 --> 00:50:31,737
+but if you're in a situation where you
+
+1304
+00:50:31,737 --> 00:50:33,557
+can afford to do full batch updates,
+
+1305
+00:50:33,557 --> 00:50:34,956
+and you know that your
+problem doesn't have
+
+1306
+00:50:34,956 --> 00:50:37,377
+really any stochasticity, then L-BFGS
+
+1307
+00:50:37,377 --> 00:50:39,459
+is kind of a good choice.
+
+1308
+00:50:39,459 --> 00:50:41,370
+L-BFGS doesn't really
+get used for training
+
+1309
+00:50:41,370 --> 00:50:43,666
+neural networks too much, but as we'll see
+
+1310
+00:50:43,666 --> 00:50:45,208
+in a couple of lectures, it does sometimes
+
+1311
+00:50:45,208 --> 00:50:47,736
+get used for things like style transfer,
+
+1312
+00:50:47,736 --> 00:50:49,848
+where you actually have less stochasticity
+
+1313
+00:50:49,848 --> 00:50:52,091
+and fewer parameters, but you still want
+
+1314
+00:50:52,091 --> 00:50:54,841
+to solve an optimization problem.
+
+1315
+00:50:56,319 --> 00:50:58,060
+All of these strategies we've talked about
+
+1316
+00:50:58,060 --> 00:51:01,477
+so far are about reducing training error.
+
+1317
+00:51:02,829 --> 00:51:04,439
+All these optimization
+algorithms are really
+
+1318
+00:51:04,439 --> 00:51:05,927
+about driving down your training error
+
+1319
+00:51:05,927 --> 00:51:07,937
+and minimizing your objective function,
+
+1320
+00:51:07,937 --> 00:51:09,123
+but we don't really care about
+
+1321
+00:51:09,123 --> 00:51:10,888
+training error that much.
+
+1322
+00:51:10,888 --> 00:51:12,521
+Instead, we really care
+about our performance
+
+1323
+00:51:12,521 --> 00:51:13,688
+on unseen data.
+
+1324
+00:51:13,688 --> 00:51:15,456
+We really care about reducing this gap
+
+1325
+00:51:15,456 --> 00:51:17,302
+between train and test error.
+
+1326
+00:51:17,302 --> 00:51:19,716
+The question is once we're already
+
+1327
+00:51:19,716 --> 00:51:21,713
+good at optimizing our objective function,
+
+1328
+00:51:21,713 --> 00:51:23,533
+what can we do to try to reduce this gap
+
+1329
+00:51:23,533 --> 00:51:24,770
+and make our model perform better
+
+1330
+00:51:24,770 --> 00:51:26,020
+on unseen data?
+
+1331
+00:51:28,982 --> 00:51:30,733
+One really quick and dirty, easy thing
+
+1332
+00:51:30,733 --> 00:51:34,102
+to try is this idea of model ensembles
+
+1333
+00:51:34,102 --> 00:51:35,984
+that sometimes works
+across many different areas
+
+1334
+00:51:35,984 --> 00:51:37,252
+in machine learning.
+
+1335
+00:51:37,252 --> 00:51:38,674
+The idea is pretty simple.
+
+1336
+00:51:38,674 --> 00:51:40,337
+Rather than having just one model,
+
+1337
+00:51:40,337 --> 00:51:42,638
+we'll train 10 different
+models independently
+
+1338
+00:51:42,638 --> 00:51:45,073
+from different initial random restarts.
+
+1339
+00:51:45,073 --> 00:51:47,086
+Now at test time, we'll run our data
+
+1340
+00:51:47,086 --> 00:51:48,901
+through all of the 10 models and average
+
+1341
+00:51:48,901 --> 00:51:51,818
+the predictions of those 10 models.
+
+1342
+00:51:54,047 --> 00:51:55,677
+Adding these multiple models together
+
+1343
+00:51:55,677 --> 00:51:57,769
+tends to reduce overfitting a little bit
+
+1344
+00:51:57,769 --> 00:52:00,163
+and tend to improve
+performance a little bit,
+
+1345
+00:52:00,163 --> 00:52:02,040
+typically by a couple percent.
+
+1346
+00:52:02,040 --> 00:52:04,204
+This is generally not
+a drastic improvement,
+
+1347
+00:52:04,204 --> 00:52:05,787
+but it is a consistent improvement.
+
+1348
+00:52:05,787 --> 00:52:07,498
+You'll see that in competitions, like
+
+1349
+00:52:07,498 --> 00:52:09,783
+ImageNet and other things like that,
+
+1350
+00:52:09,783 --> 00:52:11,498
+using model ensembles is very common
+
+1351
+00:52:11,498 --> 00:52:13,748
+to get maximal performance.
+
+1352
+00:52:14,973 --> 00:52:17,065
+You can actually get a little
+bit creative with this.
+
+1353
+00:52:17,065 --> 00:52:19,128
+Sometimes rather than
+training separate models
+
+1354
+00:52:19,128 --> 00:52:20,967
+independently, you can just keep multiple
+
+1355
+00:52:20,967 --> 00:52:22,595
+snapshots of your model during the course
+
+1356
+00:52:22,595 --> 00:52:24,863
+of training, and then use these
+
+1357
+00:52:24,863 --> 00:52:26,413
+as your ensembles.
+
+1358
+00:52:26,413 --> 00:52:28,262
+Then you still, at test
+time, need to average
+
+1359
+00:52:28,262 --> 00:52:30,289
+the predictions of these
+multiple snapshots,
+
+1360
+00:52:30,289 --> 00:52:31,812
+but you can collect the snapshots during
+
+1361
+00:52:31,812 --> 00:52:33,729
+the course of training.
+
+1362
+00:52:34,618 --> 00:52:36,441
+There's actually a very
+nice paper being presented
+
+1363
+00:52:36,441 --> 00:52:39,178
+at ICLR this week that kind of has
+
+1364
+00:52:39,178 --> 00:52:42,092
+a fancy version of this idea, where we use
+
+1365
+00:52:42,092 --> 00:52:43,695
+a crazy learning rate schedule,
+
+1366
+00:52:43,695 --> 00:52:45,800
+where our learning rate goes very slow,
+
+1367
+00:52:45,800 --> 00:52:48,481
+then very fast, then very
+slow, then very fast.
+
+1368
+00:52:48,481 --> 00:52:49,756
+The idea is that with this crazy
+
+1369
+00:52:49,756 --> 00:52:51,817
+learning rate schedule,
+then over the course
+
+1370
+00:52:51,817 --> 00:52:53,705
+of training, the model
+might be able to converge
+
+1371
+00:52:53,705 --> 00:52:55,699
+to different regions in
+the objective landscape
+
+1372
+00:52:55,699 --> 00:52:58,116
+that all are reasonably good.
+
+1373
+00:52:59,202 --> 00:53:00,373
+If you do an ensemble over these
+
+1374
+00:53:00,373 --> 00:53:02,256
+different snapshots, then you can improve
+
+1375
+00:53:02,256 --> 00:53:03,738
+your performance quite nicely,
+
+1376
+00:53:03,738 --> 00:53:06,017
+even though you're only
+training the model once.
+
+1377
+00:53:06,017 --> 00:53:07,516
+Questions?
+
+1378
+00:53:07,516 --> 00:53:11,683
+- [Student] [speaks too low to hear]
+
+1379
+00:53:25,873 --> 00:53:28,273
+- The question is, it's bad when
+
+1380
+00:53:28,273 --> 00:53:29,558
+there's a large gap between error 'cause
+
+1381
+00:53:29,558 --> 00:53:30,737
+that means you're overfitting, but if
+
+1382
+00:53:30,737 --> 00:53:33,898
+there's no gap, then
+is that also maybe bad?
+
+1383
+00:53:33,898 --> 00:53:36,131
+Do we actually want
+some small, optimal gap
+
+1384
+00:53:36,131 --> 00:53:37,931
+between the two?
+
+1385
+00:53:37,931 --> 00:53:39,617
+We don't really care about the gap.
+
+1386
+00:53:39,617 --> 00:53:41,496
+What we really care about is maximizing
+
+1387
+00:53:41,496 --> 00:53:44,504
+the performance on the validation set.
+
+1388
+00:53:44,504 --> 00:53:46,369
+What tends to happen is that if you
+
+1389
+00:53:46,369 --> 00:53:48,871
+don't see a gap, then
+you could have improved
+
+1390
+00:53:48,871 --> 00:53:52,288
+your absolute performance, in many cases,
+
+1391
+00:53:53,709 --> 00:53:55,480
+by overfitting a little bit more.
+
+1392
+00:53:55,480 --> 00:53:56,931
+There's this weird correlation between
+
+1393
+00:53:56,931 --> 00:53:58,698
+the absolute performance
+on the validation set
+
+1394
+00:53:58,698 --> 00:54:00,280
+and the size of that gap.
+
+1395
+00:54:00,280 --> 00:54:03,205
+We only care about absolute performance.
+
+1396
+00:54:03,205 --> 00:54:04,220
+Question in the back?
+
+1397
+00:54:04,220 --> 00:54:05,769
+- [Student] Are hyperparameters the same
+
+1398
+00:54:05,769 --> 00:54:07,489
+for the ensemble?
+
+1399
+00:54:07,489 --> 00:54:08,739
+- Are the hyperparameters the same
+
+1400
+00:54:08,739 --> 00:54:10,013
+for the ensembles?
+
+1401
+00:54:10,013 --> 00:54:11,135
+That's a good question.
+
+1402
+00:54:11,135 --> 00:54:12,719
+Sometimes they're not.
+
+1403
+00:54:12,719 --> 00:54:15,891
+You might want to try
+different sizes of the model,
+
+1404
+00:54:15,891 --> 00:54:16,998
+different learning rates, different
+
+1405
+00:54:16,998 --> 00:54:19,144
+regularization strategies
+and ensemble across
+
+1406
+00:54:19,144 --> 00:54:20,099
+these different things.
+
+1407
+00:54:20,099 --> 00:54:23,099
+That actually does happen sometimes.
+
+1408
+00:54:23,981 --> 00:54:25,615
+Another little trick you can do sometimes
+
+1409
+00:54:25,615 --> 00:54:27,832
+is that during training,
+you might actually keep
+
+1410
+00:54:27,832 --> 00:54:29,472
+an exponentially decaying average
+
+1411
+00:54:29,472 --> 00:54:32,254
+of your parameter vector
+itself to kind of have
+
+1412
+00:54:32,254 --> 00:54:34,365
+a smooth ensemble of your own network
+
+1413
+00:54:34,365 --> 00:54:36,263
+during training.
+
+1414
+00:54:36,263 --> 00:54:38,083
+Then use this smoothly decaying average
+
+1415
+00:54:38,083 --> 00:54:39,902
+of your parameter vector, rather than
+
+1416
+00:54:39,902 --> 00:54:42,134
+the actual checkpoints themselves.
+
+1417
+00:54:42,134 --> 00:54:43,457
+This is called Polyak averaging,
+
+1418
+00:54:43,457 --> 00:54:45,747
+and it sometimes helps a little bit.
+
+1419
+00:54:45,747 --> 00:54:47,163
+It's just another one
+of these small tricks
+
+1420
+00:54:47,163 --> 00:54:48,819
+you can sometimes add, but it's not maybe
+
+1421
+00:54:48,819 --> 00:54:51,323
+too common in practice.
+
+1422
+00:54:51,323 --> 00:54:53,295
+Another question you might have is that
+
+1423
+00:54:53,295 --> 00:54:54,846
+how can we actually
+improve the performance
+
+1424
+00:54:54,846 --> 00:54:56,263
+of single models?
+
+1425
+00:54:57,714 --> 00:54:59,518
+When we have ensembles,
+we still need to run,
+
+1426
+00:54:59,518 --> 00:55:01,224
+like, 10 models at test time.
+
+1427
+00:55:01,224 --> 00:55:02,988
+That's not so great.
+
+1428
+00:55:02,988 --> 00:55:04,638
+We really want some strategies to improve
+
+1429
+00:55:04,638 --> 00:55:06,704
+the performance of our single models.
+
+1430
+00:55:06,704 --> 00:55:08,722
+That's really this idea of regularization,
+
+1431
+00:55:08,722 --> 00:55:10,702
+where we add something to our model
+
+1432
+00:55:10,702 --> 00:55:12,439
+to prevent it from
+fitting the training data
+
+1433
+00:55:12,439 --> 00:55:14,877
+too well in the attempts
+to make it perform better
+
+1434
+00:55:14,877 --> 00:55:16,688
+on unseen data.
+
+1435
+00:55:16,688 --> 00:55:18,789
+We've seen a couple
+ideas, a couple methods
+
+1436
+00:55:18,789 --> 00:55:20,730
+for regularization already, where we add
+
+1437
+00:55:20,730 --> 00:55:24,000
+some explicit extra term to the loss.
+
+1438
+00:55:24,000 --> 00:55:25,911
+Where we have this one
+term telling the model
+
+1439
+00:55:25,911 --> 00:55:27,999
+to fit the data, and another term
+
+1440
+00:55:27,999 --> 00:55:30,223
+that's a regularization term.
+
+1441
+00:55:30,223 --> 00:55:32,017
+You saw this in homework
+one, where we used
+
+1442
+00:55:32,017 --> 00:55:33,517
+L2 regularization.
+
+1443
+00:55:35,289 --> 00:55:37,533
+As we talked about in lecture a couple
+
+1444
+00:55:37,533 --> 00:55:39,853
+lectures ago, this L2
+regularization doesn't
+
+1445
+00:55:39,853 --> 00:55:41,903
+really make maybe a lot
+of sense in the context
+
+1446
+00:55:41,903 --> 00:55:43,486
+of neural networks.
+
+1447
+00:55:44,407 --> 00:55:48,467
+Sometimes we use other
+things for neural networks.
+
+1448
+00:55:48,467 --> 00:55:50,321
+One regularization strategy that's super,
+
+1449
+00:55:50,321 --> 00:55:51,812
+super common for neural networks
+
+1450
+00:55:51,812 --> 00:55:53,861
+is this idea of dropout.
+
+1451
+00:55:53,861 --> 00:55:55,565
+Dropout is super simple.
+
+1452
+00:55:55,565 --> 00:55:57,074
+Every time we do a forward pass through
+
+1453
+00:55:57,074 --> 00:55:59,530
+the network, at every
+layer, we're going to
+
+1454
+00:55:59,530 --> 00:56:02,749
+randomly set some neurons to zero.
+
+1455
+00:56:02,749 --> 00:56:04,027
+Every time we do a forward pass,
+
+1456
+00:56:04,027 --> 00:56:05,510
+we'll set a different random subset
+
+1457
+00:56:05,510 --> 00:56:07,135
+of the neurons to zero.
+
+1458
+00:56:07,135 --> 00:56:09,173
+This kind of proceeds one layer at a time.
+
+1459
+00:56:09,173 --> 00:56:11,145
+We run through one layer, we compute
+
+1460
+00:56:11,145 --> 00:56:12,873
+the value of the layer, we randomly set
+
+1461
+00:56:12,873 --> 00:56:14,433
+some of them to zero,
+and then we continue up
+
+1462
+00:56:14,433 --> 00:56:15,678
+through the network.
+
+1463
+00:56:15,678 --> 00:56:17,893
+Now if you look at this
+fully connected network
+
+1464
+00:56:17,893 --> 00:56:21,090
+on the left versus a dropout version
+
+1465
+00:56:21,090 --> 00:56:22,930
+of the same network on
+the right, you can see
+
+1466
+00:56:22,930 --> 00:56:25,988
+that after we do dropout, it kind of looks
+
+1467
+00:56:25,988 --> 00:56:28,308
+like a smaller version
+of the same network,
+
+1468
+00:56:28,308 --> 00:56:30,885
+where we're only using
+some subset of the neurons.
+
+1469
+00:56:30,885 --> 00:56:34,774
+This subset that we use
+varies at each iteration,
+
+1470
+00:56:34,774 --> 00:56:36,231
+at each forward pass.
+
+1471
+00:56:36,231 --> 00:56:37,217
+Question?
+
+1472
+00:56:37,217 --> 00:56:41,384
+- [Student] [speaks too low to hear]
+
+1473
+00:56:44,179 --> 00:56:45,717
+- The question is what
+are we setting to zero?
+
+1474
+00:56:45,717 --> 00:56:46,860
+It's the activations.
+
+1475
+00:56:46,860 --> 00:56:49,082
+Each layer is computing
+previous activation
+
+1476
+00:56:49,082 --> 00:56:50,305
+times the weight matrix gives you
+
+1477
+00:56:50,305 --> 00:56:52,216
+our next activation.
+
+1478
+00:56:52,216 --> 00:56:53,881
+Then you just take that activation,
+
+1479
+00:56:53,881 --> 00:56:55,759
+set some of them to zero, and then
+
+1480
+00:56:55,759 --> 00:56:59,024
+your next layer will be
+partially zeroed activations
+
+1481
+00:56:59,024 --> 00:57:02,077
+times another matrix give
+you your next activations.
+
+1482
+00:57:02,077 --> 00:57:03,640
+Question?
+
+1483
+00:57:03,640 --> 00:57:07,187
+- [Student] [speaks too low to hear]
+
+1484
+00:57:07,187 --> 00:57:09,236
+- Question is which
+layers do you do this on?
+
+1485
+00:57:09,236 --> 00:57:11,708
+It's more common in
+fully connected layers,
+
+1486
+00:57:11,708 --> 00:57:14,939
+but you sometimes see this in
+convolutional layers, as well.
+
+1487
+00:57:14,939 --> 00:57:16,386
+When you're working in
+convolutional layers,
+
+1488
+00:57:16,386 --> 00:57:18,521
+sometimes instead of dropping
+
+1489
+00:57:18,521 --> 00:57:20,575
+each activation randomly,
+instead you sometimes
+
+1490
+00:57:20,575 --> 00:57:23,908
+might drop entire feature maps randomly.
+
+1491
+00:57:24,940 --> 00:57:26,731
+In convolutions, you have
+this channel dimension,
+
+1492
+00:57:26,731 --> 00:57:28,269
+and you might drop out entire channels,
+
+1493
+00:57:28,269 --> 00:57:30,602
+rather than random elements.
+
+1494
+00:57:32,544 --> 00:57:34,405
+Dropout is kind of super
+simple in practice.
+
+1495
+00:57:34,405 --> 00:57:37,022
+It only requires adding two lines,
+
+1496
+00:57:37,022 --> 00:57:38,965
+one line per dropout call.
+
+1497
+00:57:38,965 --> 00:57:40,884
+Here we have a three-layer neural network,
+
+1498
+00:57:40,884 --> 00:57:42,057
+and we've added dropout.
+
+1499
+00:57:42,057 --> 00:57:44,375
+You can see that all we needed to do
+
+1500
+00:57:44,375 --> 00:57:46,149
+was add this extra line where we randomly
+
+1501
+00:57:46,149 --> 00:57:47,641
+set some things to zero.
+
+1502
+00:57:47,641 --> 00:57:49,945
+This is super easy to implement.
+
+1503
+00:57:49,945 --> 00:57:52,623
+But the question is why
+is this even a good idea?
+
+1504
+00:57:52,623 --> 00:57:54,481
+We're seriously messing with the network
+
+1505
+00:57:54,481 --> 00:57:56,537
+at training time by setting a bunch
+
+1506
+00:57:56,537 --> 00:57:58,552
+of its values to zero.
+
+1507
+00:57:58,552 --> 00:58:01,473
+How can this possibly make sense?
+
+1508
+00:58:01,473 --> 00:58:04,390
+One sort of slightly hand wavy idea
+
+1509
+00:58:05,480 --> 00:58:07,474
+that people have is that
+dropout helps prevent
+
+1510
+00:58:07,474 --> 00:58:10,107
+co-adaptation of features.
+
+1511
+00:58:10,107 --> 00:58:11,377
+Maybe if you imagine that we're trying
+
+1512
+00:58:11,377 --> 00:58:14,281
+to classify cats, maybe in some universe,
+
+1513
+00:58:14,281 --> 00:58:16,338
+the network might learn one neuron
+
+1514
+00:58:16,338 --> 00:58:18,602
+for having an ear, one
+neuron for having a tail,
+
+1515
+00:58:18,602 --> 00:58:21,551
+one neuron for the input being furry.
+
+1516
+00:58:21,551 --> 00:58:23,284
+Then it kind of combines
+these things together
+
+1517
+00:58:23,284 --> 00:58:25,236
+to decide whether or not it's a cat.
+
+1518
+00:58:25,236 --> 00:58:27,391
+But now if we have dropout, then in making
+
+1519
+00:58:27,391 --> 00:58:30,427
+the final decision about
+catness, the network
+
+1520
+00:58:30,427 --> 00:58:32,176
+cannot depend too much on any of these
+
+1521
+00:58:32,176 --> 00:58:33,316
+one features.
+
+1522
+00:58:33,316 --> 00:58:34,929
+Instead, it kind of needs to distribute
+
+1523
+00:58:34,929 --> 00:58:38,210
+its idea of catness across
+many different features.
+
+1524
+00:58:38,210 --> 00:58:42,690
+This might help prevent
+overfitting somehow.
+
+1525
+00:58:42,690 --> 00:58:44,687
+Another interpretation of dropout
+
+1526
+00:58:44,687 --> 00:58:46,682
+that's come out a little bit more recently
+
+1527
+00:58:46,682 --> 00:58:48,999
+is that it's kind of like
+doing model ensembling
+
+1528
+00:58:48,999 --> 00:58:50,832
+within a single model.
+
+1529
+00:58:52,175 --> 00:58:53,689
+If you look at the picture on the left,
+
+1530
+00:58:53,689 --> 00:58:55,546
+after you apply dropout to the network,
+
+1531
+00:58:55,546 --> 00:58:57,245
+we're kind of computing this subnetwork
+
+1532
+00:58:57,245 --> 00:58:59,230
+using some subset of the neurons.
+
+1533
+00:58:59,230 --> 00:59:01,625
+Now every different potential dropout mask
+
+1534
+00:59:01,625 --> 00:59:03,876
+leads to a different potential subnetwork.
+
+1535
+00:59:03,876 --> 00:59:06,419
+Now dropout is kind of
+learning a whole ensemble
+
+1536
+00:59:06,419 --> 00:59:08,115
+of networks all at the same time that all
+
+1537
+00:59:08,115 --> 00:59:09,630
+share parameters.
+
+1538
+00:59:09,630 --> 00:59:12,077
+By the way, because of
+the number of potential
+
+1539
+00:59:12,077 --> 00:59:14,275
+dropout masks grows
+exponentially in the number
+
+1540
+00:59:14,275 --> 00:59:15,970
+of neurons, you're never going to sample
+
+1541
+00:59:15,970 --> 00:59:17,637
+all of these things.
+
+1542
+00:59:18,574 --> 00:59:21,106
+This is really a gigantic,
+gigantic ensemble
+
+1543
+00:59:21,106 --> 00:59:25,273
+of networks that are all
+being trained simultaneously.
+
+1544
+00:59:26,107 --> 00:59:29,613
+Then the question is what
+happens at test time?
+
+1545
+00:59:29,613 --> 00:59:31,733
+Once we move to dropout,
+we've kind of fundamentally
+
+1546
+00:59:31,733 --> 00:59:34,643
+changed the operation
+of our neural network.
+
+1547
+00:59:34,643 --> 00:59:37,642
+Previously, we've had
+our neural network, f,
+
+1548
+00:59:37,642 --> 00:59:39,201
+be a function of the weights, w,
+
+1549
+00:59:39,201 --> 00:59:42,190
+and the inputs, x, and then produce
+
+1550
+00:59:42,190 --> 00:59:43,335
+the output, y.
+
+1551
+00:59:43,335 --> 00:59:45,141
+But now, our network is also taking
+
+1552
+00:59:45,141 --> 00:59:47,314
+this additional input, z, which is some
+
+1553
+00:59:47,314 --> 00:59:48,753
+random dropout mask.
+
+1554
+00:59:48,753 --> 00:59:50,490
+That z is random.
+
+1555
+00:59:50,490 --> 00:59:53,217
+Having randomness at
+test time is maybe bad.
+
+1556
+00:59:53,217 --> 00:59:55,130
+Imagine that you're working at Facebook,
+
+1557
+00:59:55,130 --> 00:59:56,674
+and you want to classify the images
+
+1558
+00:59:56,674 --> 00:59:57,929
+that people are uploading.
+
+1559
+00:59:57,929 --> 01:00:00,397
+Then today, your image
+gets classified as a cat,
+
+1560
+01:00:00,397 --> 01:00:01,530
+and tomorrow it doesn't.
+
+1561
+01:00:01,530 --> 01:00:03,577
+That would be really weird and really bad.
+
+1562
+01:00:03,577 --> 01:00:05,964
+You'd probably want to eliminate this
+
+1563
+01:00:05,964 --> 01:00:08,240
+stochasticity at test
+time once the network
+
+1564
+01:00:08,240 --> 01:00:09,808
+is already trained.
+
+1565
+01:00:09,808 --> 01:00:11,318
+Then we kind of want to average out
+
+1566
+01:00:11,318 --> 01:00:12,578
+this randomness.
+
+1567
+01:00:12,578 --> 01:00:14,790
+If you write this out, you can imagine
+
+1568
+01:00:14,790 --> 01:00:16,757
+actually marginalizing out this randomness
+
+1569
+01:00:16,757 --> 01:00:18,616
+with some integral, but in practice,
+
+1570
+01:00:18,616 --> 01:00:20,738
+this integral is totally intractable.
+
+1571
+01:00:20,738 --> 01:00:23,086
+We don't know how to evaluate this thing.
+
+1572
+01:00:23,086 --> 01:00:24,853
+You're in bad shape.
+
+1573
+01:00:24,853 --> 01:00:26,224
+One thing you might imagine doing
+
+1574
+01:00:26,224 --> 01:00:28,558
+is approximating this
+integral via sampling,
+
+1575
+01:00:28,558 --> 01:00:30,278
+where you draw multiple samples of z
+
+1576
+01:00:30,278 --> 01:00:31,969
+and then average them out at test time,
+
+1577
+01:00:31,969 --> 01:00:34,326
+but this still would
+introduce some randomness,
+
+1578
+01:00:34,326 --> 01:00:36,525
+which is little bit bad.
+
+1579
+01:00:36,525 --> 01:00:38,029
+Thankfully, in the case of dropout, we can
+
+1580
+01:00:38,029 --> 01:00:39,520
+actually approximate this integral
+
+1581
+01:00:39,520 --> 01:00:41,908
+in kind of a cheap way locally.
+
+1582
+01:00:41,908 --> 01:00:44,427
+If we consider a single
+neuron, the output is a,
+
+1583
+01:00:44,427 --> 01:00:46,147
+the inputs are x and y, with two weights,
+
+1584
+01:00:46,147 --> 01:00:47,713
+w one, w two.
+
+1585
+01:00:47,713 --> 01:00:51,107
+Then at test time, our value a is just
+
+1586
+01:00:51,107 --> 01:00:53,107
+w one x plus w two y.
+
+1587
+01:00:54,075 --> 01:00:56,510
+Now imagine that we
+trained to this network.
+
+1588
+01:00:56,510 --> 01:00:58,997
+During training, we used
+dropout with probability
+
+1589
+01:00:58,997 --> 01:01:01,130
+1/2 of dropping our neurons.
+
+1590
+01:01:01,130 --> 01:01:03,853
+Now the expected value
+of a during training,
+
+1591
+01:01:03,853 --> 01:01:05,135
+we can kind of compute analytically
+
+1592
+01:01:05,135 --> 01:01:06,802
+for this small case.
+
+1593
+01:01:08,197 --> 01:01:09,824
+There's four possible dropout masks,
+
+1594
+01:01:09,824 --> 01:01:11,007
+and we're going to average out the values
+
+1595
+01:01:11,007 --> 01:01:12,734
+across these four masks.
+
+1596
+01:01:12,734 --> 01:01:14,522
+We can see that the expected value of a
+
+1597
+01:01:14,522 --> 01:01:18,689
+during training is 1/2
+w one x plus w two y.
+
+1598
+01:01:19,560 --> 01:01:22,211
+There's this disconnect between
+
+1599
+01:01:22,211 --> 01:01:24,842
+this average value of w one x plus w two y
+
+1600
+01:01:24,842 --> 01:01:26,567
+at test time, and at training time,
+
+1601
+01:01:26,567 --> 01:01:29,485
+the average value is only 1/2 as much.
+
+1602
+01:01:29,485 --> 01:01:31,593
+One cheap thing we can do is that
+
+1603
+01:01:31,593 --> 01:01:35,368
+at test time, we don't
+have any stochasticity.
+
+1604
+01:01:35,368 --> 01:01:37,195
+Instead, we just multiply this output
+
+1605
+01:01:37,195 --> 01:01:38,772
+by the dropout probability.
+
+1606
+01:01:38,772 --> 01:01:41,221
+Now these expected values are the same.
+
+1607
+01:01:41,221 --> 01:01:43,745
+This is kind of like a
+local cheap approximation
+
+1608
+01:01:43,745 --> 01:01:45,218
+to this complex integral.
+
+1609
+01:01:45,218 --> 01:01:46,978
+This is what people really commonly do
+
+1610
+01:01:46,978 --> 01:01:49,061
+in practice with dropout.
+
+1611
+01:01:50,200 --> 01:01:51,922
+At dropout, we have this predict function,
+
+1612
+01:01:51,922 --> 01:01:53,722
+and we just multiply
+our outputs of the layer
+
+1613
+01:01:53,722 --> 01:01:56,754
+by the dropout probability.
+
+1614
+01:01:56,754 --> 01:01:58,853
+The summary of dropout is
+that it's really simple
+
+1615
+01:01:58,853 --> 01:01:59,878
+on the forward pass.
+
+1616
+01:01:59,878 --> 01:02:02,178
+You're just adding two
+lines to your implementation
+
+1617
+01:02:02,178 --> 01:02:04,292
+to randomly zero out some nodes.
+
+1618
+01:02:04,292 --> 01:02:06,694
+Then at the test time prediction function,
+
+1619
+01:02:06,694 --> 01:02:09,375
+you just added one little multiplication
+
+1620
+01:02:09,375 --> 01:02:10,694
+by your probability.
+
+1621
+01:02:10,694 --> 01:02:11,814
+Dropout is super simple.
+
+1622
+01:02:11,814 --> 01:02:14,881
+It tends to work well sometimes
+
+1623
+01:02:14,881 --> 01:02:17,098
+for regularizing neural networks.
+
+1624
+01:02:17,098 --> 01:02:19,189
+By the way, one common
+trick you see sometimes
+
+1625
+01:02:19,189 --> 01:02:21,939
+is this idea of inverted dropout.
+
+1626
+01:02:23,150 --> 01:02:25,489
+Maybe at test time, you
+care more about efficiency,
+
+1627
+01:02:25,489 --> 01:02:27,500
+so you want to eliminate
+that extra multiplication
+
+1628
+01:02:27,500 --> 01:02:29,220
+by p at test time.
+
+1629
+01:02:29,220 --> 01:02:31,248
+Then what you can do is, at test time,
+
+1630
+01:02:31,248 --> 01:02:33,410
+you use the entire weight matrix, but now
+
+1631
+01:02:33,410 --> 01:02:35,838
+at training time, instead you divide by p
+
+1632
+01:02:35,838 --> 01:02:38,162
+because training is
+probably happening on a GPU.
+
+1633
+01:02:38,162 --> 01:02:39,198
+You don't really care if you do one
+
+1634
+01:02:39,198 --> 01:02:41,259
+extra multiply at training time, but then
+
+1635
+01:02:41,259 --> 01:02:42,527
+at test time, you kind of want this thing
+
+1636
+01:02:42,527 --> 01:02:45,218
+to be as efficient as possible.
+
+1637
+01:02:45,218 --> 01:02:46,051
+Question?
+
+1638
+01:02:46,901 --> 01:02:51,068
+- [Student] [speaks too low to hear]
+
+1639
+01:02:53,095 --> 01:02:57,262
+Now the gradient [speaks too low to hear].
+
+1640
+01:02:58,163 --> 01:02:59,710
+- The question is what
+happens to the gradient
+
+1641
+01:02:59,710 --> 01:03:02,697
+during training with dropout?
+
+1642
+01:03:02,697 --> 01:03:03,530
+You're right.
+
+1643
+01:03:03,530 --> 01:03:04,532
+We only end up propagating the gradients
+
+1644
+01:03:04,532 --> 01:03:07,068
+through the nodes that were not dropped.
+
+1645
+01:03:07,068 --> 01:03:09,494
+This has the consequence that
+
+1646
+01:03:09,494 --> 01:03:10,851
+when you're training with dropout,
+
+1647
+01:03:10,851 --> 01:03:12,711
+typically training takes longer because
+
+1648
+01:03:12,711 --> 01:03:14,034
+at each step, you're only updating
+
+1649
+01:03:14,034 --> 01:03:15,841
+some subparts of the network.
+
+1650
+01:03:15,841 --> 01:03:17,047
+When you're using dropout, it typically
+
+1651
+01:03:17,047 --> 01:03:19,022
+takes longer to train, but you might have
+
+1652
+01:03:19,022 --> 01:03:22,772
+a better generalization
+after it's converged.
+
+1653
+01:03:24,894 --> 01:03:27,578
+Dropout, we kind of saw is like this one
+
+1654
+01:03:27,578 --> 01:03:28,859
+concrete instantiation.
+
+1655
+01:03:28,859 --> 01:03:30,394
+There's a little bit more general strategy
+
+1656
+01:03:30,394 --> 01:03:33,295
+for regularization where during training
+
+1657
+01:03:33,295 --> 01:03:35,570
+we add some kind of
+randomness to the network
+
+1658
+01:03:35,570 --> 01:03:37,967
+to prevent it from fitting
+the training data too well.
+
+1659
+01:03:37,967 --> 01:03:39,619
+To kind of mess it up and prevent it
+
+1660
+01:03:39,619 --> 01:03:41,522
+from fitting the training data perfectly.
+
+1661
+01:03:41,522 --> 01:03:43,010
+Now at test time, we want to average out
+
+1662
+01:03:43,010 --> 01:03:45,076
+all that randomness to hopefully improve
+
+1663
+01:03:45,076 --> 01:03:46,645
+our generalization.
+
+1664
+01:03:46,645 --> 01:03:48,506
+Dropout is probably
+the most common example
+
+1665
+01:03:48,506 --> 01:03:50,734
+of this type of strategy, but actually
+
+1666
+01:03:50,734 --> 01:03:54,412
+batch normalization kind
+of fits this idea, as well.
+
+1667
+01:03:54,412 --> 01:03:57,218
+Remember in batch
+normalization, during training,
+
+1668
+01:03:57,218 --> 01:03:59,481
+one data point might appear
+in different mini batches
+
+1669
+01:03:59,481 --> 01:04:01,240
+with different other data points.
+
+1670
+01:04:01,240 --> 01:04:02,798
+There's a bit of
+stochasticity with respect
+
+1671
+01:04:02,798 --> 01:04:04,912
+to a single data point with how exactly
+
+1672
+01:04:04,912 --> 01:04:07,685
+that point gets normalized
+during training.
+
+1673
+01:04:07,685 --> 01:04:09,792
+But now at test time,
+we kind of average out
+
+1674
+01:04:09,792 --> 01:04:11,531
+this stochasticity by using some
+
+1675
+01:04:11,531 --> 01:04:13,272
+global estimates to normalize, rather than
+
+1676
+01:04:13,272 --> 01:04:15,220
+the per mini batch estimates.
+
+1677
+01:04:15,220 --> 01:04:17,021
+Actually batch normalization tends to have
+
+1678
+01:04:17,021 --> 01:04:18,910
+kind of a similar regularizing effect
+
+1679
+01:04:18,910 --> 01:04:20,708
+as dropout because they both introduce
+
+1680
+01:04:20,708 --> 01:04:22,707
+some kind of stochasticity or noise
+
+1681
+01:04:22,707 --> 01:04:24,736
+at training time, but then average it out
+
+1682
+01:04:24,736 --> 01:04:25,963
+at test time.
+
+1683
+01:04:25,963 --> 01:04:28,473
+Actually, when you train networks with
+
+1684
+01:04:28,473 --> 01:04:30,485
+batch normalization,
+sometimes you don't use
+
+1685
+01:04:30,485 --> 01:04:32,467
+dropout at all, and just
+the batch normalization
+
+1686
+01:04:32,467 --> 01:04:34,244
+adds enough of a regularizing effect
+
+1687
+01:04:34,244 --> 01:04:36,229
+to your network.
+
+1688
+01:04:36,229 --> 01:04:37,697
+Dropout is somewhat nice because you can
+
+1689
+01:04:37,697 --> 01:04:39,341
+actually tune the regularization strength
+
+1690
+01:04:39,341 --> 01:04:41,481
+by varying that parameter
+p, and there's no such
+
+1691
+01:04:41,481 --> 01:04:44,318
+control in batch normalization.
+
+1692
+01:04:44,318 --> 01:04:46,357
+Another kind of strategy that fits in
+
+1693
+01:04:46,357 --> 01:04:49,413
+this paradigm is this
+idea of data augmentation.
+
+1694
+01:04:49,413 --> 01:04:51,494
+During training, in a vanilla version
+
+1695
+01:04:51,494 --> 01:04:53,816
+for training, we have our
+data, we have our label.
+
+1696
+01:04:53,816 --> 01:04:57,563
+We use it to update our
+CNN at each time step.
+
+1697
+01:04:57,563 --> 01:04:59,166
+But instead, what we can do is randomly
+
+1698
+01:04:59,166 --> 01:05:02,233
+transform the image in
+some way during training
+
+1699
+01:05:02,233 --> 01:05:04,040
+such that the label is preserved.
+
+1700
+01:05:04,040 --> 01:05:06,572
+Now we train on these
+random transformations
+
+1701
+01:05:06,572 --> 01:05:09,903
+of the image rather than
+the original images.
+
+1702
+01:05:09,903 --> 01:05:12,464
+Sometimes you might see
+random horizontal flips
+
+1703
+01:05:12,464 --> 01:05:14,055
+'cause if you take a cat and flip it
+
+1704
+01:05:14,055 --> 01:05:16,638
+horizontally, it's still a cat.
+
+1705
+01:05:18,175 --> 01:05:20,309
+You'll randomly sample
+crops of different sizes
+
+1706
+01:05:20,309 --> 01:05:22,081
+from the image because the random crop
+
+1707
+01:05:22,081 --> 01:05:24,248
+of the cat is still a cat.
+
+1708
+01:05:25,673 --> 01:05:27,677
+Then during testing,
+you kind of average out
+
+1709
+01:05:27,677 --> 01:05:30,802
+this stochasticity by evaluating with some
+
+1710
+01:05:30,802 --> 01:05:32,993
+fixed set of crops, often the four corners
+
+1711
+01:05:32,993 --> 01:05:34,794
+and the middle and their flips.
+
+1712
+01:05:34,794 --> 01:05:36,443
+What's very common is that when you read,
+
+1713
+01:05:36,443 --> 01:05:38,526
+for example, papers on
+ImageNet, they'll report
+
+1714
+01:05:38,526 --> 01:05:40,452
+a single crop performance of their model,
+
+1715
+01:05:40,452 --> 01:05:41,919
+which is just like the whole image,
+
+1716
+01:05:41,919 --> 01:05:43,560
+and a 10 crop performance of their model,
+
+1717
+01:05:43,560 --> 01:05:46,376
+which are these five standard crops
+
+1718
+01:05:46,376 --> 01:05:47,793
+plus their flips.
+
+1719
+01:05:48,723 --> 01:05:50,891
+Also with data augmentation,
+you'll sometimes
+
+1720
+01:05:50,891 --> 01:05:53,104
+use color jittering,
+where you might randomly
+
+1721
+01:05:53,104 --> 01:05:55,361
+vary the contrast or
+brightness of your image
+
+1722
+01:05:55,361 --> 01:05:56,830
+during training.
+
+1723
+01:05:56,830 --> 01:05:58,168
+You can get a little bit more complex
+
+1724
+01:05:58,168 --> 01:05:59,998
+with color jittering,
+as well, where you try
+
+1725
+01:05:59,998 --> 01:06:01,910
+to make color jitters that are maybe in
+
+1726
+01:06:01,910 --> 01:06:05,127
+the PCA directions of your
+data space or whatever,
+
+1727
+01:06:05,127 --> 01:06:07,168
+where you do some color jittering
+
+1728
+01:06:07,168 --> 01:06:10,024
+in some data-dependent way, but that's a
+
+1729
+01:06:10,024 --> 01:06:11,941
+little bit less common.
+
+1730
+01:06:12,977 --> 01:06:15,135
+In general, data
+augmentation is this really
+
+1731
+01:06:15,135 --> 01:06:16,402
+general thing that you can apply
+
+1732
+01:06:16,402 --> 01:06:18,522
+to just about any problem.
+
+1733
+01:06:18,522 --> 01:06:20,206
+Whatever problem you're trying to solve,
+
+1734
+01:06:20,206 --> 01:06:22,054
+you kind of think about what are the ways
+
+1735
+01:06:22,054 --> 01:06:24,146
+that I can transform my data without
+
+1736
+01:06:24,146 --> 01:06:25,425
+changing the label?
+
+1737
+01:06:25,425 --> 01:06:26,721
+Now during training, you just apply
+
+1738
+01:06:26,721 --> 01:06:29,630
+these random transformations
+to your input data.
+
+1739
+01:06:29,630 --> 01:06:31,703
+This sort of has a regularizing effect
+
+1740
+01:06:31,703 --> 01:06:33,683
+on the network because
+you're, again, adding
+
+1741
+01:06:33,683 --> 01:06:35,856
+some kind of stochasticity
+during training,
+
+1742
+01:06:35,856 --> 01:06:39,439
+and then marginalizing
+it out at test time.
+
+1743
+01:06:40,540 --> 01:06:43,131
+Now we've seen three
+examples of this pattern,
+
+1744
+01:06:43,131 --> 01:06:45,717
+dropout, batch normalization,
+data augmentation,
+
+1745
+01:06:45,717 --> 01:06:47,639
+but there's many other examples, as well.
+
+1746
+01:06:47,639 --> 01:06:49,456
+Once you have this pattern in your mind,
+
+1747
+01:06:49,456 --> 01:06:51,067
+you'll kind of recognize this thing
+
+1748
+01:06:51,067 --> 01:06:53,534
+as you read other papers sometimes.
+
+1749
+01:06:53,534 --> 01:06:55,520
+There's another kind of
+related idea to dropout
+
+1750
+01:06:55,520 --> 01:06:57,207
+called DropConnect.
+
+1751
+01:06:57,207 --> 01:06:59,339
+With DropConnect, it's the same idea,
+
+1752
+01:06:59,339 --> 01:07:01,978
+but rather than zeroing
+out the activations
+
+1753
+01:07:01,978 --> 01:07:03,952
+at every forward pass, instead we randomly
+
+1754
+01:07:03,952 --> 01:07:06,750
+zero out some of the values
+of the weight matrix instead.
+
+1755
+01:07:06,750 --> 01:07:10,137
+Again, it kind of has this similar flavor.
+
+1756
+01:07:10,137 --> 01:07:13,367
+Another kind of cool idea that I like,
+
+1757
+01:07:13,367 --> 01:07:14,913
+this one's not so commonly used, but I
+
+1758
+01:07:14,913 --> 01:07:16,766
+just think it's a really cool idea,
+
+1759
+01:07:16,766 --> 01:07:19,885
+is this idea of fractional max pooling.
+
+1760
+01:07:19,885 --> 01:07:22,057
+Normally when you do
+two-by-two max pooling,
+
+1761
+01:07:22,057 --> 01:07:24,294
+you have these fixed two-by-two regions
+
+1762
+01:07:24,294 --> 01:07:26,642
+over which you pool over
+in the forward pass,
+
+1763
+01:07:26,642 --> 01:07:29,552
+but now with fractional max pooling,
+
+1764
+01:07:29,552 --> 01:07:32,185
+every time we have our pooling layer,
+
+1765
+01:07:32,185 --> 01:07:33,872
+we're going to randomize exactly the pool
+
+1766
+01:07:33,872 --> 01:07:36,336
+that the regions over which we pool.
+
+1767
+01:07:36,336 --> 01:07:38,197
+Here in the example on the right,
+
+1768
+01:07:38,197 --> 01:07:39,971
+I've shown three different sets
+
+1769
+01:07:39,971 --> 01:07:41,954
+of random pooling regions
+that you might see
+
+1770
+01:07:41,954 --> 01:07:43,555
+during training.
+
+1771
+01:07:43,555 --> 01:07:46,720
+Now during test time, you kind of average
+
+1772
+01:07:46,720 --> 01:07:49,342
+the stochasticity out by
+trying many different,
+
+1773
+01:07:49,342 --> 01:07:52,882
+by either sticking to some
+fixed set of pooling regions.
+
+1774
+01:07:52,882 --> 01:07:55,189
+or drawing many samples
+and averaging over them.
+
+1775
+01:07:55,189 --> 01:07:56,519
+That's kind of a cool idea, even though
+
+1776
+01:07:56,519 --> 01:07:59,512
+it's not so commonly used.
+
+1777
+01:07:59,512 --> 01:08:01,793
+Another really kind of surprising paper
+
+1778
+01:08:01,793 --> 01:08:04,878
+in this paradigm that actually came out
+
+1779
+01:08:04,878 --> 01:08:06,375
+in the last year, so this is new since
+
+1780
+01:08:06,375 --> 01:08:08,612
+the last time we taught
+the class, is this idea
+
+1781
+01:08:08,612 --> 01:08:10,396
+of stochastic depth.
+
+1782
+01:08:10,396 --> 01:08:13,087
+Here we have a network on the left.
+
+1783
+01:08:13,087 --> 01:08:15,975
+The idea is that we have
+a very deep network.
+
+1784
+01:08:15,975 --> 01:08:17,760
+We're going to randomly
+drop layers from the network
+
+1785
+01:08:17,760 --> 01:08:19,015
+during training.
+
+1786
+01:08:19,015 --> 01:08:21,459
+During training, we're going to eliminate
+
+1787
+01:08:21,459 --> 01:08:23,046
+some layers and only use some subset
+
+1788
+01:08:23,046 --> 01:08:24,598
+of the layers during training.
+
+1789
+01:08:24,599 --> 01:08:27,339
+Now during test time, we'll
+use the whole network.
+
+1790
+01:08:27,339 --> 01:08:28,747
+This is kind of crazy.
+
+1791
+01:08:28,747 --> 01:08:30,736
+It's kind of amazing that this works,
+
+1792
+01:08:30,736 --> 01:08:32,337
+but this tends to have kind of a similar
+
+1793
+01:08:32,337 --> 01:08:33,955
+regularizing effect as dropout
+
+1794
+01:08:33,955 --> 01:08:35,795
+and these other strategies.
+
+1795
+01:08:35,795 --> 01:08:38,470
+But again, this is super,
+super cutting-edge research.
+
+1796
+01:08:38,470 --> 01:08:40,693
+This is not super
+commonly used in practice,
+
+1797
+01:08:40,694 --> 01:08:42,527
+but it is a cool idea.
+
+1798
+01:08:45,179 --> 01:08:49,096
+Any last minute questions
+about regularization?
+
+1799
+01:08:50,429 --> 01:08:52,201
+No? Use it. It's a good idea.
+
+1800
+01:08:52,201 --> 01:08:53,158
+Yeah?
+
+1801
+01:08:53,158 --> 01:08:57,531
+- [Student] [speaks too low to hear]
+
+1802
+01:08:57,531 --> 01:08:58,669
+- The question is do you usually use
+
+1803
+01:08:58,669 --> 01:09:01,669
+more than one regularization method?
+
+1804
+01:09:04,810 --> 01:09:07,065
+You should generally be
+using batch normalization
+
+1805
+01:09:07,066 --> 01:09:08,515
+as kind of a good thing to have
+
+1806
+01:09:08,515 --> 01:09:10,237
+in most networks nowadays because it
+
+1807
+01:09:10,237 --> 01:09:13,135
+helps you converge, especially
+for very deep things.
+
+1808
+01:09:13,135 --> 01:09:15,399
+In many cases, batch normalization alone
+
+1809
+01:09:15,399 --> 01:09:18,228
+tends to be enough, but then sometimes
+
+1810
+01:09:18,228 --> 01:09:20,608
+if batch normalization
+alone is not enough,
+
+1811
+01:09:20,608 --> 01:09:22,227
+then you can consider adding dropout
+
+1812
+01:09:22,227 --> 01:09:25,689
+or other thing once you see
+your network overfitting.
+
+1813
+01:09:25,689 --> 01:09:27,882
+You generally don't do
+a blind cross-validation
+
+1814
+01:09:27,883 --> 01:09:29,011
+over these things.
+
+1815
+01:09:29,011 --> 01:09:31,009
+Instead, you add them in in a targeted way
+
+1816
+01:09:31,010 --> 01:09:34,427
+once you see your network is overfitting.
+
+1817
+01:09:36,885 --> 01:09:39,466
+One quick thing, it's this
+idea of transfer learning.
+
+1818
+01:09:39,466 --> 01:09:41,225
+We've kind of seen with regularization,
+
+1819
+01:09:41,225 --> 01:09:43,004
+we can help reduce the gap between
+
+1820
+01:09:43,004 --> 01:09:45,336
+train and test error by
+adding these different
+
+1821
+01:09:45,336 --> 01:09:47,503
+regularization strategies.
+
+1822
+01:09:49,388 --> 01:09:51,576
+One problem with overfitting is sometimes
+
+1823
+01:09:51,576 --> 01:09:53,497
+you overfit 'cause you
+don't have enough data.
+
+1824
+01:09:53,497 --> 01:09:55,117
+You want to use a big, powerful model,
+
+1825
+01:09:55,117 --> 01:09:57,400
+but that big, powerful
+model just is going to
+
+1826
+01:09:57,400 --> 01:10:00,929
+overfit too much on your small dataset.
+
+1827
+01:10:00,929 --> 01:10:03,316
+Regularization is one way to combat that,
+
+1828
+01:10:03,316 --> 01:10:06,394
+but another way is through
+using transfer learning.
+
+1829
+01:10:06,394 --> 01:10:08,667
+Transfer learning kind of busts this myth
+
+1830
+01:10:08,667 --> 01:10:11,180
+that you don't need a huge amount of data
+
+1831
+01:10:11,180 --> 01:10:13,215
+in order to train a CNN.
+
+1832
+01:10:13,215 --> 01:10:15,785
+The idea is really simple.
+
+1833
+01:10:15,785 --> 01:10:18,296
+You'll maybe first take some CNN.
+
+1834
+01:10:18,296 --> 01:10:21,283
+Here is kind of a VGG style architecture.
+
+1835
+01:10:21,283 --> 01:10:23,078
+You'll take your CNN, you'll train it
+
+1836
+01:10:23,078 --> 01:10:25,516
+in a very large dataset, like ImageNet,
+
+1837
+01:10:25,516 --> 01:10:26,709
+where you actually have enough data
+
+1838
+01:10:26,709 --> 01:10:28,524
+to train the whole network.
+
+1839
+01:10:28,524 --> 01:10:30,488
+Now the idea is that you want to apply
+
+1840
+01:10:30,488 --> 01:10:32,715
+the features from this dataset to some
+
+1841
+01:10:32,715 --> 01:10:35,081
+small dataset that you care about.
+
+1842
+01:10:35,081 --> 01:10:37,078
+Maybe instead of classifying the 1,000
+
+1843
+01:10:37,078 --> 01:10:39,627
+ImageNet categories,
+now you want to classify
+
+1844
+01:10:39,627 --> 01:10:41,775
+10 dog breeds or something like that.
+
+1845
+01:10:41,775 --> 01:10:43,349
+You only have a small dataset.
+
+1846
+01:10:43,349 --> 01:10:46,402
+Here, our small dataset
+only has C classes.
+
+1847
+01:10:46,402 --> 01:10:48,900
+Then what you'll typically
+do is for this last
+
+1848
+01:10:48,900 --> 01:10:51,421
+fully connected layer that is going from
+
+1849
+01:10:51,421 --> 01:10:54,453
+the last layer features
+to the final class scores,
+
+1850
+01:10:54,453 --> 01:10:58,620
+this now, you need to
+reinitialize that matrix randomly.
+
+1851
+01:11:00,136 --> 01:11:02,191
+For ImageNet, it was a 4,096-by-1,000
+
+1852
+01:11:02,191 --> 01:11:03,437
+dimensional matrix.
+
+1853
+01:11:03,437 --> 01:11:06,542
+Now for your new classes, it might
+
+1854
+01:11:06,542 --> 01:11:09,667
+be 4,096-by-C or by 10 or whatever.
+
+1855
+01:11:09,667 --> 01:11:12,154
+You reinitialize this
+last matrix randomly,
+
+1856
+01:11:12,154 --> 01:11:14,470
+freeze the weights of
+all the previous layers
+
+1857
+01:11:14,470 --> 01:11:17,406
+and now just basically
+train a linear classifier,
+
+1858
+01:11:17,406 --> 01:11:19,682
+and only train the
+parameters of this last layer
+
+1859
+01:11:19,682 --> 01:11:22,432
+and let it converge on your data.
+
+1860
+01:11:24,273 --> 01:11:25,750
+This tends to work pretty well if you only
+
+1861
+01:11:25,750 --> 01:11:29,241
+have a very small dataset to work with.
+
+1862
+01:11:29,241 --> 01:11:31,373
+Now if you have a little bit more data,
+
+1863
+01:11:31,373 --> 01:11:32,874
+another thing you can try is actually
+
+1864
+01:11:32,874 --> 01:11:35,651
+fine tuning the whole network.
+
+1865
+01:11:35,651 --> 01:11:37,910
+After that top layer converges and after
+
+1866
+01:11:37,910 --> 01:11:40,051
+you learn that last layer for your data,
+
+1867
+01:11:40,051 --> 01:11:42,683
+then you can consider
+actually trying to update
+
+1868
+01:11:42,683 --> 01:11:45,420
+the whole network, as well.
+
+1869
+01:11:45,420 --> 01:11:47,532
+If you have more data,
+then you might consider
+
+1870
+01:11:47,532 --> 01:11:49,919
+updating larger parts of the network.
+
+1871
+01:11:49,919 --> 01:11:52,304
+A general strategy here is that when
+
+1872
+01:11:52,304 --> 01:11:54,461
+you're updating the
+network, you want to drop
+
+1873
+01:11:54,461 --> 01:11:56,628
+the learning rate from
+its initial learning rate
+
+1874
+01:11:56,628 --> 01:11:59,972
+because probably the original parameters
+
+1875
+01:11:59,972 --> 01:12:02,129
+in this network that converged on ImageNet
+
+1876
+01:12:02,129 --> 01:12:03,458
+probably worked pretty well generally,
+
+1877
+01:12:03,458 --> 01:12:05,222
+and you just want to change
+them a very small amount
+
+1878
+01:12:05,222 --> 01:12:09,090
+to tune performance for your dataset.
+
+1879
+01:12:09,090 --> 01:12:10,708
+Then when you're working
+with transfer learning,
+
+1880
+01:12:10,708 --> 01:12:12,728
+you kind of imagine this two-by-two grid
+
+1881
+01:12:12,728 --> 01:12:15,975
+of scenarios where on
+the one side, you have
+
+1882
+01:12:15,975 --> 01:12:17,605
+maybe very small amounts of data for your
+
+1883
+01:12:17,605 --> 01:12:19,181
+dataset, or very large amount of data
+
+1884
+01:12:19,181 --> 01:12:20,598
+for your dataset.
+
+1885
+01:12:21,673 --> 01:12:24,786
+Then maybe your data is
+very similar to images.
+
+1886
+01:12:24,786 --> 01:12:27,023
+Like, ImageNet has a lot
+of pictures of animals
+
+1887
+01:12:27,023 --> 01:12:29,265
+and plants and stuff like that.
+
+1888
+01:12:29,265 --> 01:12:31,043
+If you want to just classify other types
+
+1889
+01:12:31,043 --> 01:12:33,046
+of animals and plants
+and other types of images
+
+1890
+01:12:33,046 --> 01:12:35,820
+like that, then you're
+in pretty good shape.
+
+1891
+01:12:35,820 --> 01:12:38,025
+Then generally what you do is if your data
+
+1892
+01:12:38,025 --> 01:12:42,233
+is very similar to
+something like ImageNet,
+
+1893
+01:12:42,233 --> 01:12:43,820
+if you have a very small amount of data,
+
+1894
+01:12:43,820 --> 01:12:46,026
+you can just basically
+train a linear classifier
+
+1895
+01:12:46,026 --> 01:12:47,685
+on top of features, extracted using
+
+1896
+01:12:47,685 --> 01:12:49,346
+an ImageNet model.
+
+1897
+01:12:49,346 --> 01:12:52,121
+If you have a little bit
+more data to work with,
+
+1898
+01:12:52,121 --> 01:12:55,271
+then you might imagine
+fine tuning your data.
+
+1899
+01:12:55,271 --> 01:12:56,730
+However, you sometimes get in trouble
+
+1900
+01:12:56,730 --> 01:12:59,240
+if your data looks very
+different from ImageNet.
+
+1901
+01:12:59,240 --> 01:13:01,108
+Maybe if you're working with maybe
+
+1902
+01:13:01,108 --> 01:13:03,635
+medical images that
+are X-rays or CAT scans
+
+1903
+01:13:03,635 --> 01:13:05,258
+or something that looks very different
+
+1904
+01:13:05,258 --> 01:13:07,266
+from images in ImageNet, in that case,
+
+1905
+01:13:07,266 --> 01:13:09,557
+you maybe need to get a
+little bit more creative.
+
+1906
+01:13:09,557 --> 01:13:11,332
+Sometimes it still works well here,
+
+1907
+01:13:11,332 --> 01:13:13,634
+but those last layer features might not
+
+1908
+01:13:13,634 --> 01:13:14,893
+be so informative.
+
+1909
+01:13:14,893 --> 01:13:17,174
+You might consider
+reinitializing larger parts
+
+1910
+01:13:17,174 --> 01:13:18,305
+of the network and getting a little bit
+
+1911
+01:13:18,305 --> 01:13:21,992
+more creative and trying
+more experiments here.
+
+1912
+01:13:21,992 --> 01:13:23,417
+This is somewhat mitigated if you have
+
+1913
+01:13:23,417 --> 01:13:25,759
+a large amount of data in
+your very different dataset
+
+1914
+01:13:25,759 --> 01:13:26,966
+'cause then you can actually fine tune
+
+1915
+01:13:26,966 --> 01:13:29,500
+larger parts of the network.
+
+1916
+01:13:29,500 --> 01:13:31,193
+Another point I'd like
+to make is this idea
+
+1917
+01:13:31,193 --> 01:13:33,072
+of transfer learning is super pervasive.
+
+1918
+01:13:33,072 --> 01:13:36,145
+It's actually the norm,
+rather than the exception.
+
+1919
+01:13:36,145 --> 01:13:37,677
+As you read computer vision papers,
+
+1920
+01:13:37,677 --> 01:13:39,523
+you'll often see system diagrams like this
+
+1921
+01:13:39,523 --> 01:13:41,047
+for different tasks.
+
+1922
+01:13:41,047 --> 01:13:42,587
+On the left, we're working
+with object detection.
+
+1923
+01:13:42,587 --> 01:13:45,191
+On the right, we're working
+with image captioning.
+
+1924
+01:13:45,191 --> 01:13:46,764
+Both of these models have a CNN
+
+1925
+01:13:46,764 --> 01:13:48,872
+that's kind of processing the image.
+
+1926
+01:13:48,872 --> 01:13:51,118
+In almost all applications
+of computer vision
+
+1927
+01:13:51,118 --> 01:13:53,131
+these days, most people are not training
+
+1928
+01:13:53,131 --> 01:13:54,398
+these things from scratch.
+
+1929
+01:13:54,398 --> 01:13:56,344
+Almost always, that CNN will be pretrained
+
+1930
+01:13:56,344 --> 01:13:58,273
+on ImageNet, and then
+potentially fine tuned
+
+1931
+01:13:58,273 --> 01:14:00,458
+for the task at hand.
+
+1932
+01:14:00,458 --> 01:14:03,098
+Also, in the captioning
+sense, sometimes you can
+
+1933
+01:14:03,098 --> 01:14:05,872
+actually pretrain some word vectors
+
+1934
+01:14:05,872 --> 01:14:07,574
+relating to the language, as well.
+
+1935
+01:14:07,574 --> 01:14:09,847
+You maybe pretrain the CNN on ImageNet,
+
+1936
+01:14:09,847 --> 01:14:11,214
+pretrain some word vectors on a large
+
+1937
+01:14:11,214 --> 01:14:12,954
+text corpus, and then
+fine tune the whole thing
+
+1938
+01:14:12,954 --> 01:14:14,628
+for your dataset.
+
+1939
+01:14:14,628 --> 01:14:16,188
+Although in the case
+of captioning, I think
+
+1940
+01:14:16,188 --> 01:14:17,927
+this pretraining with word vectors tends
+
+1941
+01:14:17,927 --> 01:14:19,392
+to be a little bit less common
+
+1942
+01:14:19,392 --> 01:14:22,763
+and a little bit less critical.
+
+1943
+01:14:22,763 --> 01:14:24,384
+The takeaway for your projects,
+
+1944
+01:14:24,384 --> 01:14:26,554
+and more generally as you
+work on different models,
+
+1945
+01:14:26,554 --> 01:14:29,988
+is that whenever you
+have some large dataset,
+
+1946
+01:14:29,988 --> 01:14:31,105
+whenever you have some problem that you
+
+1947
+01:14:31,105 --> 01:14:33,710
+want to tackle, but you
+don't have a large dataset,
+
+1948
+01:14:33,710 --> 01:14:37,601
+then what you should
+generally do is download
+
+1949
+01:14:37,601 --> 01:14:39,679
+some pretrained model
+that's relatively close
+
+1950
+01:14:39,679 --> 01:14:42,158
+to the task you care
+about, and then either
+
+1951
+01:14:42,158 --> 01:14:43,859
+reinitialize parts of
+that model or fine tune
+
+1952
+01:14:43,859 --> 01:14:45,344
+that model for your data.
+
+1953
+01:14:45,344 --> 01:14:48,404
+That tends to work pretty
+well, even if you have
+
+1954
+01:14:48,404 --> 01:14:49,693
+only a modest amount of training data
+
+1955
+01:14:49,693 --> 01:14:51,161
+to work with.
+
+1956
+01:14:51,161 --> 01:14:52,998
+Because this is such a common strategy,
+
+1957
+01:14:52,998 --> 01:14:54,167
+all of the different deep learning
+
+1958
+01:14:54,167 --> 01:14:56,314
+software packages out there provide
+
+1959
+01:14:56,314 --> 01:14:58,223
+a model zoo where you can just download
+
+1960
+01:14:58,223 --> 01:15:01,584
+pretrained versions of various models.
+
+1961
+01:15:01,584 --> 01:15:04,009
+In summary today, we
+talked about optimization,
+
+1962
+01:15:04,009 --> 01:15:06,528
+which is about how to
+improve the training loss.
+
+1963
+01:15:06,528 --> 01:15:08,568
+We talked about regularization,
+which is improving
+
+1964
+01:15:08,568 --> 01:15:11,369
+your performance on the test data.
+
+1965
+01:15:11,369 --> 01:15:13,323
+Model ensembling kind of fit into there.
+
+1966
+01:15:13,323 --> 01:15:14,724
+We also talked about transfer learning,
+
+1967
+01:15:14,724 --> 01:15:16,223
+which is how you can actually do better
+
+1968
+01:15:16,223 --> 01:15:17,925
+with less data.
+
+1969
+01:15:17,925 --> 01:15:19,551
+These are all super useful strategies.
+
+1970
+01:15:19,551 --> 01:15:22,425
+You should use them in
+your projects and beyond.
+
+1971
+01:15:22,425 --> 01:15:24,717
+Next time, we'll talk
+more concretely about
+
+1972
+01:15:24,717 --> 01:15:25,723
+some of the different deep learning
+
+1973
+01:15:25,723 --> 00:00:00,000
+software packages out there.
+
