@@ -2,30 +2,52 @@
 Translation project of [CS231N 2017 lecture video](https://www.youtube.com/playlist?list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk)  
 Also see [CS231N Website](http://cs231n.stanford.edu/)
 
+----------
 ## Instructors:
     Fei-Fei Li: http://vision.stanford.edu/feifeili/  
     Justin Johnson: http://cs.stanford.edu/people/jcjohns/  
     Serena Yeung: http://ai.stanford.edu/~syyeung/  
 
+----------
+## Prerequisites
+    Video Player with codecs which might be let you watch..
+        Recommendation
+            Windows : PotPlayer(kakao)
+            Linux   : SM Player
+            IOS     : "Whatever you can"
+
+----------
 ## Usage
 
-    root
-    └── eng
-        └── Subtitles in English.
-    └── kor 
-        └── Subtitles in Korean.
-    └── lagacy
-        └── You dont need this.
+1. Download lecture videos from youtube
+    - Use Downloader like [4k video downloader](https://www.4kdownload.com/ko/products/product-videodownloader) (Maybe support Windows, linux, MacOS)
+    - Download this [link](https://www.youtube.com/playlist?list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk)
+    - If you use "4k video downloader", you can download whole lectures "at once" not "each" (use Playlist !!!).
+      
+    
 
- Please see  
+2. and Apply subtitles  
+
+
+        root
+        └── eng
+            └── Subtitles in English.
+        └── kor 
+            └── Subtitles in Korean.
+        └── lagacy
+            └── You dont need this.
+
+----------
+## Table of Contents (CS231N 2017)
+
+
+ Please see also
 1. Detailed syllabus 
  [[2017]](http://cs231n.stanford.edu/2017/syllabus.html) 
  [[2018]](http://cs231n.stanford.edu/syllabus.html)
-2. Lecture Vodeos
+2. Lecture Vodeos Playlist
 [[2017]](https://www.youtube.com/playlist?list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk) 
 [[2018]](https://www.youtube.com/playlist?list=PLkt2uSq6rBVctENoVBg1TpCC7OQi31AlC)
-
-## Table of Contents (2017)
 
 | Lecture  | Description       |Video(youtube)      |slides      | Subtitles|
 |:--------:|:-----------------:|:-----------:|:--------:|:--------:|
@@ -46,4 +68,15 @@ Also see [CS231N Website](http://cs231n.stanford.edu/)
 | 15       |Efficient Methods and Hardware for Deep Learning|[video]|[2018]<p>[2017]|[eng]<p>[kor]
 | 16       |Adversarial Examples and Adversarial Training|[video]|[2018]<p>[2017]|[eng]<p>[kor]
 
+
+
+
+----------
+## Screenshot
+
+![alt_tag](url.png)
+
+----------
 ## Contributors
+
+----------
