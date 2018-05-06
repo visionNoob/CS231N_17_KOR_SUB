@@ -74,7 +74,7 @@ Also see [CS231N Website](http://cs231n.stanford.edu/)
 ----------
 ## Screenshot
 
-![alt_tag](url.png)
+![alt_tag](samples.png)
 
 ----------
 ## Contributors
