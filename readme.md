@@ -49,7 +49,7 @@ Also see [CS231N Website](http://cs231n.stanford.edu/)
 [[2017]](https://www.youtube.com/playlist?list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk) 
 [[2018]](https://www.youtube.com/playlist?list=PLkt2uSq6rBVctENoVBg1TpCC7OQi31AlC)
 
-| Lecture  | Description       |Videos(youtube)      |slides      | Subtitles|
+| Lecture  | Description       |Videos(youtube)      |Slides      | Subtitles|
 |:--------:|:-----------------:|:-----------:|:--------:|:--------:|
 | 1        |Introduction to Convolutional Neural Networks for Visual Recognition|[video](https://www.youtube.com/watch?v=vT1JzLTH4G4&t=0s&index=1&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk)|[slide](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture1.pdf)|[english](https://github.com/insurgent92/cs231n_spring_2017/blob/master/eng/Lecture%201%20_%20Introduction%20to%20Convolutional%20Neural%20Networks%20for%20Visual%20Recognition.srt)<p>[korean](https://github.com/insurgent92/cs231n_spring_2017/raw/master/kor/Lecture%201%20%20%20Introduction%20to%20Convolutional%20Neural%20Networks%20for%20Visual%20Recognition.ko.srt)
 | 2        |Image Classification|[video](https://www.youtube.com/watch?v=OoUX-nOEjG0&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk&index=1)|[slide](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture2.pdf)|[english](https://github.com/insurgent92/cs231n_spring_2017/blob/master/eng/Lecture%202%20_%20Image%20Classification.srt)<p>[korean](https://github.com/insurgent92/cs231n_spring_2017/raw/master/kor/Lecture%202%20%20%20Image%20Classification.ko.srt)
