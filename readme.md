@@ -20,10 +20,9 @@ Also see [CS231N Website](http://cs231n.stanford.edu/)
 ## Usage
 
 1. Download lecture videos from youtube
-    - Use Downloader like [4k video downloader](https://www.4kdownload.com/ko/products/product-videodownloader) (Maybe support Windows, linux, MacOS)
-    - Download this [link](https://www.youtube.com/playlist?list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk)
-    - If you use "4k video downloader", you can download whole lectures "at once" not "each" (use Playlist !!!).
-      
+    - Use Downloader like [4k video downloader](https://www.4kdownload.com/ko/products/product-videodownloader) (Maybe support Windows, Linux(Ubuntu), MacOS)
+    - Download this [Youtube Playlist](https://www.youtube.com/playlist?list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk) using Downloader
+    - If you use "4k video downloader", you can download whole lectures "at once" not "each", using Playlist.      
     
 
 2. and Apply subtitles  
