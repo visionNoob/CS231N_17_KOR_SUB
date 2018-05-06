@@ -78,5 +78,9 @@ Also see [CS231N Website](http://cs231n.stanford.edu/)
 
 ----------
 ## Contributors
-
+- Jaewon Lee (Image Processing & Computer Vision Lab, KNU)
+- 
 ----------
+
+## LICENSE
+MIT
