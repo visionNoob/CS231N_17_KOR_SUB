@@ -1,17 +1,6 @@
 # Korean Subtitles for CS231N Spring 2017 
 # CS231N 한글번역
-# Update Note
-    2018.05.27
-    Lecture 1 : Complete(Roughly)
-    Lecture 2 : Complete(Roughly)
-    Lecture 3 : Complete(Roughly)
-    Lecture 4 : Complete(Roughly)
-    Lecture 5 : Complete(Roughly)
-    Lecture 6 : Complete(Roughly)
-    Lecture 7 : ****Now Here!****
-    Lecture 8 : Not Yet
-    Lecture 9 : Not Yet
-    ...
+
 Translation project of [CS231N 2017 lecture video](https://www.youtube.com/playlist?list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk)  
 Also see [CS231N Website](http://cs231n.stanford.edu/)
 
@@ -46,6 +35,20 @@ Also see [CS231N Website](http://cs231n.stanford.edu/)
         └── kor 
             └── Subtitles in Korean.
 
+----------
+
+## Update Note
+    2018.05.27
+    Lecture 1 : Complete(Roughly)
+    Lecture 2 : Complete(Roughly)
+    Lecture 3 : Complete(Roughly)
+    Lecture 4 : Complete(Roughly)
+    Lecture 5 : Complete(Roughly)
+    Lecture 6 : Complete(Roughly)
+    Lecture 7 : ****Now Here!****
+    Lecture 8 : Not Yet
+    Lecture 9 : Not Yet
+    ...
 ----------
 ## Table of Contents (CS231N 2017)
 
