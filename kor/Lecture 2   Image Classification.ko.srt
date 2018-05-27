@@ -1,4 +1,9 @@
-﻿1
+﻿0
+00:00:00,000 --> 00:00:06,000
+Translated by visionNoob, KNU
+https://github.com/insurgent92/CS231N_17_KOR_SUB
+
+1
 00:00:06,971 --> 00:00:10,106
 CS231n 두번째 시간에 오신걸 환영합니다.
 
