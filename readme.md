@@ -37,16 +37,20 @@ Also see [CS231N Website](http://cs231n.stanford.edu/)
 ----------
 
 ## Update Note
-    2018.05.27
+    2018.05.27 - 
+    2018 06 15 - Complete Lecture 7(Roughly)
+
     Lecture 1 : Complete(Roughly)
     Lecture 2 : Complete(Roughly)
     Lecture 3 : Complete(Roughly)
     Lecture 4 : Complete(Roughly)
     Lecture 5 : Complete(Roughly)
     Lecture 6 : Complete(Roughly)
-    Lecture 7 : ****Now Here!****
-    Lecture 8 : Not Yet
+    Lecture 7 : Complete(Roughly)
+    Lecture 8 : ****Now Here!****
     Lecture 9 : Not Yet
+    Lecture 10 : Not Yet
+    Lecture 11 : Not Yet
     ...
 ----------
 ## Table of Contents (CS231N 2017)
@@ -68,7 +72,7 @@ Also see [CS231N Website](http://cs231n.stanford.edu/)
 | 4        |Introduction to Neural Networks|[video](https://www.youtube.com/watch?v=d14TUNcbn1k&index=3&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk)|[slide](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture4.pdf)|[english](https://github.com/insurgent92/cs231n_spring_2017/blob/master/eng/Lecture%204%20_%20Introduction%20to%20Neural%20Networks.srt)<p>[korean](https://github.com/insurgent92/CS231N_17_KOR_SUB/blob/master/kor/Lecture%204%20%20%20Introduction%20to%20Neural%20Networks.ko.srt)
 | 5        |Convolutional Neural Networks|[video](https://www.youtube.com/watch?v=bNb2fEVKeEo&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk&index=4)|[slide](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture5.pdf)|[english](https://github.com/insurgent92/cs231n_spring_2017/blob/master/eng/Lecture%205%20_%20Convolutional%20Neural%20Networks.srt)<p>[korean](https://github.com/insurgent92/CS231N_17_KOR_SUB/blob/master/kor/Lecture%205%20%20%20Convolutional%20Neural%20Networks.ko.srt)
 | 6        |Training Neural Networks I|[video](https://www.youtube.com/watch?v=wEoyxE0GP2M&index=5&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk)|[slide](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture6.pdf)|[english](https://github.com/insurgent92/cs231n_spring_2017/blob/master/eng/Lecture%206%20_%20Training%20Neural%20Networks%20I.srt)<p>[korean](https://github.com/insurgent92/CS231N_17_KOR_SUB/blob/master/kor/Lecture%206%20%20%20Training%20Neural%20Networks%20I.ko.srt)
-| 7        |Training Neural Networks II|[video](https://www.youtube.com/watch?v=_JB0AO7QxSA&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk&index=6)|[slide](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture7.pdf)|[english](https://github.com/insurgent92/cs231n_spring_2017/blob/master/eng/Lecture%207%20_%20Training%20Neural%20Networks%20II.srt)<p>[korean]
+| 7        |Training Neural Networks II|[video](https://www.youtube.com/watch?v=_JB0AO7QxSA&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk&index=6)|[slide](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture7.pdf)|[english](https://github.com/insurgent92/cs231n_spring_2017/blob/master/eng/Lecture%207%20_%20Training%20Neural%20Networks%20II.srt)<p>[korean](https://github.com/insurgent92/CS231N_17_KOR_SUB/blob/master/kor/Lecture%207%20%20%20Training%20Neural%20Networks%20II.ko.srt)
 | 8        |Deep Learning Software|[video](https://www.youtube.com/watch?v=6SlgtELqOWc&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk&index=7)|[slide](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture8.pdf)|[english](https://github.com/insurgent92/cs231n_spring_2017/blob/master/eng/Lecture%208%20_%20Deep%20Learning%20Software.srt)<p>[korean]
 | 9        |CNN Architectures|[video](https://www.youtube.com/watch?v=DAOcjicFr1Y&index=8&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk)|[slide](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture9.pdf)|[english](https://github.com/insurgent92/cs231n_spring_2017/blob/master/eng/Lecture%209%20_%20CNN%20Architectures.srt)<p>[korean]
 | 10       |Recurrent Neural Networks|[video](https://www.youtube.com/watch?v=6niqTuYFZLQ&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk&index=9)|[slide](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture10.pdf)|[english](https://github.com/insurgent92/cs231n_spring_2017/blob/master/eng/Lecture%2010%20_%20Recurrent%20Neural%20Networks.srt)<p>[korean]
