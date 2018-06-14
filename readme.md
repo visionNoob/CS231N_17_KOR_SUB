@@ -58,11 +58,14 @@ Also see [CS231N Website](http://cs231n.stanford.edu/)
 
  Please see also
 1. Detailed syllabus 
- [[2017]](http://cs231n.stanford.edu/2017/syllabus.html) 
+ [[2016]](http://cs231n.stanford.edu/2016/syllabus.html)
+ [[2017]](http://cs231n.stanford.edu/2017/syllabus.html)
  [[2018]](http://cs231n.stanford.edu/syllabus.html)
+
 2. Lecture Vodeos Playlist
+[[2016]](https://www.youtube.com/playlist?list=PLkt2uSq6rBVctENoVBg1TpCC7OQi31AlC)
 [[2017]](https://www.youtube.com/playlist?list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk) 
-[[2018]](https://www.youtube.com/playlist?list=PLkt2uSq6rBVctENoVBg1TpCC7OQi31AlC)
+[2018 is not in public] 
 
 | Lecture  | Description       |Videos(youtube)      |Slides      | Subtitles|
 |:--------:|:-----------------:|:-----------:|:--------:|:--------:|
