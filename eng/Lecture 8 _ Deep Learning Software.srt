@@ -2449,3152 +2449,1416 @@ There's some examples in
 TF-Slim, and in Keras.
 
 496
-00:50:11,112 --> 00:50:14,072
-'Cause remember retrained
-models are super important
+00:50:11,112 --> 00:50:15,874
+'Cause remember pretrained models are super
+important when you're training your own things.
 
 497
-00:50:14,072 --> 00:50:15,874
-when you're training your own things.
+00:50:15,874 --> 00:50:21,072
+There's also this idea of Tensorboard where you can
+load up your, I don't want to get into details,
 
 498
-00:50:15,874 --> 00:50:17,931
-There's also this idea of Tensorboard
+00:50:21,072 --> 00:50:27,747
+but Tensorboard you can add sort of instrumentation to your code and
+then plot losses and things as you go through the training process.
 
 499
-00:50:17,931 --> 00:50:19,634
-where you can load up your,
+00:50:27,747 --> 00:50:32,760
+TensorFlow also let's you run distributed where you can
+break up a computational graph run on different machines.
 
 500
-00:50:19,634 --> 00:50:21,072
-I don't want to get into details,
+00:50:32,760 --> 00:50:37,613
+That's super cool but I think probably not anyone
+outside of Google is really using that to great success
 
 501
-00:50:21,072 --> 00:50:22,834
-but Tensorboard you can
-add sort of instrumentation
+00:50:37,613 --> 00:50:44,193
+these days, but if you do want to run distributed stuff
+probably TensorFlow is the main game in town for that.
 
 502
-00:50:22,834 --> 00:50:24,733
-to your code and then
-plot losses and things
+00:50:44,193 --> 00:50:51,533
+A side note is that a lot of the design of TensorFlow is kind of spiritually
+inspired by this earlier framework called Theano from Montreal.
 
 503
-00:50:24,733 --> 00:50:27,747
-as you go through the training process.
+00:50:51,533 --> 00:50:55,933
+I don't want to go through the details here,
+just if you go through these slides on your own,
 
 504
-00:50:27,747 --> 00:50:29,535
-TensorFlow also let's you run distributed
+00:50:55,933 --> 00:50:59,979
+you can see that the code for Theano ends
+up looking very similar to TensorFlow.
 
 505
-00:50:29,535 --> 00:50:31,372
-where you can break up
-a computational graph
+00:50:59,979 --> 00:51:03,512
+Where we define some variables, we do some
+forward pass, we compute some gradients,
 
 506
-00:50:31,372 --> 00:50:32,760
-run on different machines.
+00:51:03,512 --> 00:51:08,034
+and we compile some function, then we run the
+function over and over to train the network.
 
 507
-00:50:32,760 --> 00:50:35,222
-That's super cool but I
-think probably not anyone
-
-508
-00:50:35,222 --> 00:50:37,613
-outside of Google is really
-using that to great success
-
-509
-00:50:37,613 --> 00:50:40,733
-these days, but if you do
-want to run distributed stuff
-
-510
-00:50:40,733 --> 00:50:44,193
-probably TensorFlow is the
-main game in town for that.
-
-511
-00:50:44,193 --> 00:50:46,834
-A side note is that a lot
-of the design of TensorFlow
-
-512
-00:50:46,834 --> 00:50:49,992
-is kind of spiritually inspired
-by this earlier framework
-
-513
-00:50:49,992 --> 00:50:51,533
-called Theano from Montreal.
-
-514
-00:50:51,533 --> 00:50:54,008
-I don't want to go
-through the details here,
-
-515
-00:50:54,008 --> 00:50:55,933
-just if you go through
-these slides on your own,
-
-516
-00:50:55,933 --> 00:50:58,127
-you can see that the code
-for Theano ends up looking
-
-517
-00:50:58,127 --> 00:50:59,979
-very similar to TensorFlow.
-
-518
-00:50:59,979 --> 00:51:01,420
-Where we define some variables,
-
-519
-00:51:01,420 --> 00:51:03,512
-we do some forward pass,
-we compute some gradients,
-
-520
-00:51:03,512 --> 00:51:05,978
-and we compile some function,
-then we run the function
-
-521
-00:51:05,978 --> 00:51:08,034
-over and over to train the network.
-
-522
 00:51:08,034 --> 00:51:10,290
 So it kind of looks a lot like TensorFlow.
 
-523
-00:51:10,290 --> 00:51:13,010
-So we still have a lot to get through,
+508
+00:51:10,290 --> 00:51:16,671
+So we still have a lot to get through, so I'm going to
+move on to PyTorch and maybe take questions at the end.
 
-524
-00:51:13,010 --> 00:51:14,462
-so I'm going to move on to PyTorch
+509
+00:51:16,671 --> 00:51:26,397
+So, PyTorch from Facebook is kind of different from TensorFlow in that we
+have sort of three explicit different layers of abstraction inside PyTorch.
 
-525
-00:51:14,462 --> 00:51:16,671
-and maybe take questions at the end.
+510
+00:51:26,397 --> 00:51:30,619
+So PyTorch has this tensor object
+which is just like a Numpy array.
 
-526
-00:51:16,671 --> 00:51:20,770
-So, PyTorch from Facebook
-is kind of different from
+511
+00:51:30,619 --> 00:51:36,770
+It's just an imperative array, it doesn't know
+anything about deep learning, but it can run with GPU.
 
-527
-00:51:20,770 --> 00:51:22,868
-TensorFlow in that we have
-sort of three explicit
+512
+00:51:36,770 --> 00:51:44,093
+We have this variable object which is a node in a computational graph which
+builds up computational graphs, lets you compute gradients, that sort of thing.
 
-528
-00:51:22,868 --> 00:51:26,397
-different layers of
-abstraction inside PyTorch.
+513
+00:51:44,093 --> 00:51:50,766
+And we have a module object which is a neural network layer that
+you can compose together these modules to build big networks.
 
-529
-00:51:26,397 --> 00:51:29,415
-So PyTorch has this tensor
-object which is just like a
+514
+00:51:50,766 --> 00:52:01,457
+So if you kind of want to think about rough equivalents between PyTorch and TensorFlow you can
+think of the PyTorch tensor as fulfilling the same role as the Numpy array in TensorFlow.
 
-530
-00:51:29,415 --> 00:51:30,619
-Numpy array.
+515
+00:52:01,457 --> 00:52:08,803
+The PyTorch variable is similar to the TensorFlow tensor or variable
+or placeholder, which are all sort of nodes in a computational graph.
 
-531
-00:51:30,619 --> 00:51:33,603
-It's just an imperative array,
-it doesn't know anything
+516
+00:52:08,803 --> 00:52:18,448
+And now the PyTorch module is kind of equivalent to these higher level things
+from tf.slim or tf.layers or sonnet or these other higher level frameworks.
 
-532
-00:51:33,603 --> 00:51:36,770
-about deep learning,
-but it can run with GPU.
+517
+00:52:18,448 --> 00:52:24,072
+So right away one thing to notice about PyTorch is
+that because it ships with this high level abstraction
 
-533
-00:51:36,770 --> 00:51:38,676
-We have this variable
-object which is a node in a
+518
+00:52:24,072 --> 00:52:29,780
+and like one really nice higher level abstraction called
+modules on its own, there's sort of less choice involved.
 
-534
-00:51:38,676 --> 00:51:42,274
-computational graph which
-builds up computational graphs,
+519
+00:52:29,780 --> 00:52:36,642
+Just stick with nnmodules and you'll be good to go. You don't
+need to worry about which higher level wrapper to use.
 
-535
-00:51:42,274 --> 00:51:44,093
-lets you compute gradients,
-that sort of thing.
-
-536
-00:51:44,093 --> 00:51:46,312
-And we have a module object
-which is a neural network
-
-537
-00:51:46,312 --> 00:51:48,573
-layer that you can compose
-together these modules
-
-538
-00:51:48,573 --> 00:51:50,766
-to build big networks.
-
-539
-00:51:50,766 --> 00:51:52,973
-So if you kind of want to
-think about rough equivalents
-
-540
-00:51:52,973 --> 00:51:55,971
-between PyTorch and TensorFlow
-you can think of the
-
-541
-00:51:55,971 --> 00:51:58,759
-PyTorch tensor as fulfilling the same role
-
-542
-00:51:58,759 --> 00:52:01,457
-as the Numpy array in TensorFlow.
-
-543
-00:52:01,457 --> 00:52:04,602
-The PyTorch variable is similar
-to the TensorFlow tensor
-
-544
-00:52:04,602 --> 00:52:07,549
-or variable or placeholder,
-which are all sort of nodes
-
-545
-00:52:07,549 --> 00:52:08,803
-in a computational graph.
-
-546
-00:52:08,803 --> 00:52:11,970
-And now the PyTorch module
-is kind of equivalent
-
-547
-00:52:11,970 --> 00:52:16,288
-to these higher level things
-from tf.slim or tf.layers
-
-548
-00:52:16,288 --> 00:52:18,448
-or sonnet or these other
-higher level frameworks.
-
-549
-00:52:18,448 --> 00:52:21,102
-So right away one thing
-to notice about PyTorch
-
-550
-00:52:21,102 --> 00:52:24,072
-is that because it ships with
-this high level abstraction
-
-551
-00:52:24,072 --> 00:52:26,696
-and like one really nice
-higher level abstraction
-
-552
-00:52:26,696 --> 00:52:28,947
-called modules on its own,
-there's sort of less choice
-
-553
-00:52:28,947 --> 00:52:29,780
-involved.
-
-554
-00:52:29,780 --> 00:52:32,534
-Just stick with nnmodules
-and you'll be good to go.
-
-555
-00:52:32,534 --> 00:52:35,809
-You don't need to worry about
-which higher level wrapper
-
-556
-00:52:35,809 --> 00:52:36,642
-to use.
-
-557
+520
 00:52:37,777 --> 00:52:41,944
 So PyTorch tensors, as I said,
 are just like Numpy arrays
 
-558
-00:52:43,660 --> 00:52:46,181
-so here on the right we've done
-an entire two layer network
+521
+00:52:43,660 --> 00:52:47,787
+so here on the right we've done an entire two
+layer network using entirely PyTorch tensors.
 
-559
-00:52:46,181 --> 00:52:47,787
-using entirely PyTorch tensors.
+522
+00:52:47,787 --> 00:52:53,910
+One thing to note is that we're not importing Numpy here at all
+anymore. We're just doing all these operations using PyTorch tensors.
 
-560
-00:52:47,787 --> 00:52:50,279
-One thing to note is that
-we're not importing Numpy here
+523
+00:52:53,910 --> 00:53:01,245
+And this code looks exactly like the two layer net
+code that you wrote in Numpy on the first homework.
 
-561
-00:52:50,279 --> 00:52:51,379
-at all anymore.
+524
+00:53:01,245 --> 00:53:07,127
+So you set up some random data, you use some
+operations to compute the forward pass.
 
-562
-00:52:51,379 --> 00:52:53,910
-We're just doing all these
-operations using PyTorch tensors.
+525
+00:53:07,127 --> 00:53:10,165
+And then we're explicitly viewing
+the backward pass ourself.
 
-563
-00:52:53,910 --> 00:52:58,624
-And this code looks exactly
-like the two layer net code
+526
+00:53:10,165 --> 00:53:15,980
+Just sort of backhopping through the network, through
+the operations, just as you did on homework one.
 
-564
-00:52:58,624 --> 00:53:01,245
-that you wrote in Numpy
-on the first homework.
+527
+00:53:15,980 --> 00:53:22,672
+And now we're doing a manual update of the weights using
+a learning rate and using our computed gradients.
 
-565
-00:53:01,245 --> 00:53:05,774
-So you set up some random
-data, you use some operations
+528
+00:53:22,672 --> 00:53:27,785
+But the major difference between the PyTorch
+tensor and Numpy arrays is that they run on GPU
 
-566
-00:53:05,774 --> 00:53:07,127
-to compute the forward pass.
+529
+00:53:27,785 --> 00:53:33,034
+so all you have to do to make this code
+run on GPU is use a different data type.
 
-567
-00:53:07,127 --> 00:53:09,332
-And then we're explicitly
-viewing the backward pass
+530
+00:53:33,034 --> 00:53:42,816
+Rather than using torch.FloatTensor, you do torch.cuda.FloatTensor, cast all
+of your tensors to this new datatype and everything runs magically on the GPU.
 
-568
-00:53:09,332 --> 00:53:10,165
-ourself.
-
-569
-00:53:10,165 --> 00:53:12,794
-Just sort of backhopping
-through the network,
-
-570
-00:53:12,794 --> 00:53:15,980
-through the operations, just
-as you did on homework one.
-
-571
-00:53:15,980 --> 00:53:18,241
-And now we're doing a
-manual update of the weights
-
-572
-00:53:18,241 --> 00:53:22,672
-using a learning rate and
-using our computed gradients.
-
-573
-00:53:22,672 --> 00:53:24,681
-But the major difference
-between the PyTorch tensor
-
-574
-00:53:24,681 --> 00:53:27,785
-and Numpy arrays is that they run on GPU
-
-575
-00:53:27,785 --> 00:53:30,651
-so all you have to do
-to make this code run on
-
-576
-00:53:30,651 --> 00:53:33,034
-GPU is use a different data type.
-
-577
-00:53:33,034 --> 00:53:35,092
-Rather than using torch.FloatTensor,
-
-578
-00:53:35,092 --> 00:53:39,259
-you do torch.cuda.FloatTensor,
-cast all of your tensors
-
-579
-00:53:40,152 --> 00:53:42,174
-to this new datatype and
-everything runs magically
-
-580
-00:53:42,174 --> 00:53:43,709
-on the GPU.
-
-581
+531
 00:53:43,709 --> 00:53:47,637
 You should think of PyTorch
 tensors as just Numpy plus GPU.
 
-582
-00:53:47,637 --> 00:53:49,401
-That's exactly what it
-is, nothing specific
+532
+00:53:47,637 --> 00:53:50,818
+That's exactly what it is, nothing
+specific to deep learning.
 
-583
-00:53:49,401 --> 00:53:50,818
-to deep learning.
-
-584
+533
 00:53:52,638 --> 00:53:55,278
 So the next layer of abstraction
 in PyTorch is the variable.
 
-585
-00:53:55,278 --> 00:53:58,440
-So this is, once we moved
-from tensors to variables
+534
+00:53:55,278 --> 00:54:03,460
+So this is, once we moved from tensors to variables now we're building computational
+graphs and we're able to take gradients automatically and everything like that.
 
-586
-00:53:58,440 --> 00:54:00,702
-now we're building computational graphs
+535
+00:54:03,460 --> 00:54:12,744
+So here, if X is a variable, then x.data is a tensor and x.grad is another
+variable containing the gradients of the loss with respect to that tensor.
 
-587
-00:54:00,702 --> 00:54:02,194
-and we're able to take
-gradients automatically
+536
+00:54:14,007 --> 00:54:17,246
+So x.grad.data is an actual tensor
+containing those gradients.
 
-588
-00:54:02,194 --> 00:54:03,460
-and everything like that.
-
-589
-00:54:03,460 --> 00:54:07,627
-So here, if X is a variable,
-then x.data is a tensor
-
-590
-00:54:08,890 --> 00:54:12,164
-and x.grad is another variable
-containing the gradients
-
-591
-00:54:12,164 --> 00:54:14,007
-of the loss with respect to that tensor.
-
-592
-00:54:14,007 --> 00:54:15,913
-So x.grad.data is an
-actual tensor containing
-
-593
-00:54:15,913 --> 00:54:17,246
-those gradients.
-
-594
+537
 00:54:18,972 --> 00:54:22,387
 And PyTorch tensors and variables
 have the exact same API.
 
-595
-00:54:22,387 --> 00:54:25,606
-So any code that worked on
-PyTorch tensors you can just
+538
+00:54:22,387 --> 00:54:28,457
+So any code that worked on PyTorch tensors you can just
+make them variables instead and run the same code,
 
-596
-00:54:25,606 --> 00:54:28,457
-make them variables instead
-and run the same code,
+539
+00:54:28,457 --> 00:54:34,459
+except now you're building up a computational graph
+rather than just doing these imperative operations.
 
-597
-00:54:28,457 --> 00:54:30,292
-except now you're building
-up a computational graph
+540
+00:54:35,943 --> 00:54:47,461
+So here when we create these variables each call to the variable constructor wraps a PyTorch tensor
+and then also gives a flag whether or not we want to compute gradients with respect to this variable.
 
-598
-00:54:30,292 --> 00:54:34,459
-rather than just doing
-these imperative operations.
+541
+00:54:47,461 --> 00:54:54,073
+And now in the forward pass it looks exactly like it did before in the
+variable in the case with tensors because they have the same API.
 
-599
-00:54:35,943 --> 00:54:38,553
-So here when we create these variables
+542
+00:54:54,073 --> 00:54:59,683
+So now we're computing our predictions, we're computing
+our loss in kind of this imperative kind of way.
 
-600
-00:54:38,553 --> 00:54:41,234
-each call to the variable
-constructor wraps a PyTorch
+543
+00:54:59,683 --> 00:55:05,251
+And then we call loss.backwards and now
+all these gradients come out for us.
 
-601
-00:54:41,234 --> 00:54:43,652
-tensor and then also gives
-a flag whether or not
+544
+00:55:05,251 --> 00:55:11,528
+And then we can make a gradient update step on our weights
+using the gradients that are now present in the w1.grad.data.
 
-602
-00:54:43,652 --> 00:54:47,461
-we want to compute gradients
-with respect to this variable.
+545
+00:55:11,528 --> 00:55:18,137
+So this ends up looking quite like the Numpy
+case, except all the gradients come for free.
 
-603
-00:54:47,461 --> 00:54:49,412
-And now in the forward
-pass it looks exactly like
+546
+00:55:18,137 --> 00:55:23,353
+One thing to note that's kind of different between
+PyTorch and TensorFlow is that in a TensorFlow case
 
-604
-00:54:49,412 --> 00:54:52,012
-it did before in the variable
-in the case with tensors
-
-605
-00:54:52,012 --> 00:54:54,073
-because they have the same API.
-
-606
-00:54:54,073 --> 00:54:55,667
-So now we're computing our predictions,
-
-607
-00:54:55,667 --> 00:54:58,431
-we're computing our loss
-in kind of this imperative
-
-608
-00:54:58,431 --> 00:54:59,683
-kind of way.
-
-609
-00:54:59,683 --> 00:55:03,492
-And then we call loss.backwards
-and now all these gradients
-
-610
-00:55:03,492 --> 00:55:05,251
-come out for us.
-
-611
-00:55:05,251 --> 00:55:06,790
-And then we can make
-a gradient update step
-
-612
-00:55:06,790 --> 00:55:09,214
-on our weights using the
-gradients that are now present
-
-613
-00:55:09,214 --> 00:55:11,528
-in the w1.grad.data.
-
-614
-00:55:11,528 --> 00:55:16,227
-So this ends up looking
-quite like the Numpy case,
-
-615
-00:55:16,227 --> 00:55:18,137
-except all the gradients come for free.
-
-616
-00:55:18,137 --> 00:55:20,596
-One thing to note that's
-kind of different between
-
-617
-00:55:20,596 --> 00:55:23,353
-PyTorch and TensorFlow is
-that in a TensorFlow case
-
-618
-00:55:23,353 --> 00:55:25,289
+547
+00:55:23,353 --> 00:55:27,132
 we were building up this explicit graph,
-
-619
-00:55:25,289 --> 00:55:27,132
 then running the graph many times.
 
-620
-00:55:27,132 --> 00:55:30,308
-Here in PyTorch, instead
-we're building up a new graph
+548
+00:55:27,132 --> 00:55:32,152
+Here in PyTorch, instead we're building up a
+new graph every time we do a forward pass.
 
-621
-00:55:30,308 --> 00:55:32,152
-every time we do a forward pass.
+549
+00:55:32,152 --> 00:55:37,058
+And this makes the code look a bit cleaner. And it has
+some other implications that we'll get to in a bit.
 
-622
-00:55:32,152 --> 00:55:33,887
-And this makes the code
-look a bit cleaner.
-
-623
-00:55:33,887 --> 00:55:35,284
-And it has some other
-implications that we'll
-
-624
-00:55:35,284 --> 00:55:37,058
-get to in a bit.
-
-625
+550
 00:55:37,058 --> 00:55:40,630
 So in PyTorch you can define
 your own new autograd functions
 
-626
+551
 00:55:40,630 --> 00:55:42,933
 by defining the forward and
 backward in terms of tensors.
 
-627
-00:55:42,933 --> 00:55:45,954
-This ends up looking kind
-of like the module layers
+552
+00:55:42,933 --> 00:55:48,303
+This ends up looking kind of like the module
+layers code that you write for homework two.
 
-628
-00:55:45,954 --> 00:55:48,303
-code that you write for homework two.
+553
+00:55:48,303 --> 00:55:54,433
+Where you can implement forward and backward using tensor
+operations and then stick these things inside computational graph.
 
-629
-00:55:48,303 --> 00:55:50,404
-Where you can implement
-forward and backward using
+554
+00:55:54,433 --> 00:56:00,654
+So here we're defining our own relu and then
+we can actually go in and use our own relu
 
-630
-00:55:50,404 --> 00:55:52,676
-tensor operations and then
-stick these things inside
+555
+00:56:00,654 --> 00:56:05,214
+operation and now stick it inside our computational
+graph and define our own operations this way.
 
-631
-00:55:52,676 --> 00:55:54,433
-computational graph.
+556
+00:56:05,214 --> 00:56:09,097
+But most of the time you will probably not
+need to define your own autograd operations.
 
-632
-00:55:54,433 --> 00:55:56,297
-So here we're defining our own relu
+557
+00:56:09,097 --> 00:56:14,246
+Most of the times the operations you need
+will mostly be already implemented for you.
 
-633
-00:55:56,297 --> 00:56:00,654
-and then we can actually
-go in and use our own relu
+558
+00:56:14,246 --> 00:56:23,349
+So in TensorFlow we saw, if we can move to something like Keras or TF.Learn and this
+gives us a higher level API to work with, rather than this raw computational graphs.
 
-634
-00:56:00,654 --> 00:56:02,754
-operation and now stick it
-inside our computational graph
+559
+00:56:23,349 --> 00:56:30,948
+The equivalent in PyTorch is the nn package. Where it provides
+these high level wrappers for working with these things.
 
-635
-00:56:02,754 --> 00:56:05,214
-and define our own operations this way.
+560
+00:56:31,882 --> 00:56:37,772
+But unlike TensorFlow there's only one of them. And it works
+pretty well, so just use that if you're using PyTorch.
 
-636
-00:56:05,214 --> 00:56:06,857
-But most of the time you
-will probably not need
+561
+00:56:37,772 --> 00:56:44,436
+So here, this ends up kind of looking like Keras where we define our
+model as some sequence of layers. Our linear and relu operations.
 
-637
-00:56:06,857 --> 00:56:09,097
-to define your own autograd operations.
+562
+00:56:44,436 --> 00:56:49,816
+And we use some loss function defined in the
+nn package that's our mean squared error loss.
 
-638
-00:56:09,097 --> 00:56:10,814
-Most of the times the
-operations you need will
+563
+00:56:49,816 --> 00:56:55,214
+And now inside each iteration of our loop we can run
+data forward through the model to get our predictions.
 
-639
-00:56:10,814 --> 00:56:14,246
-mostly be already implemented for you.
+564
+00:56:55,214 --> 00:56:59,054
+We can run the predictions forward through
+the loss function to get our scale or loss,
 
-640
-00:56:14,246 --> 00:56:16,293
-So in TensorFlow we saw,
+565
+00:56:59,054 --> 00:57:04,021
+then we can call loss.backward, get all our gradients for
+free and then loop over the parameters of the models
 
-641
-00:56:16,293 --> 00:56:19,054
-if we can move to something
-like Keras or TF.Learn
-
-642
-00:56:19,054 --> 00:56:21,253
-and this gives us a higher
-level API to work with,
-
-643
-00:56:21,253 --> 00:56:23,349
-rather than this raw computational graphs.
-
-644
-00:56:23,349 --> 00:56:25,433
-The equivalent in PyTorch
-is the nn package.
-
-645
-00:56:25,433 --> 00:56:29,448
-Where it provides these high
-level wrappers for working
-
-646
-00:56:29,448 --> 00:56:30,948
-with these things.
-
-647
-00:56:31,882 --> 00:56:33,454
-But unlike TensorFlow
-there's only one of them.
-
-648
-00:56:33,454 --> 00:56:35,837
-And it works pretty well,
-so just use that if you're
-
-649
-00:56:35,837 --> 00:56:37,772
-using PyTorch.
-
-650
-00:56:37,772 --> 00:56:39,374
-So here, this ends up
-kind of looking like Keras
-
-651
-00:56:39,374 --> 00:56:42,196
-where we define our model
-as some sequence of layers.
-
-652
-00:56:42,196 --> 00:56:44,436
-Our linear and relu operations.
-
-653
-00:56:44,436 --> 00:56:47,574
-And we use some loss function
-defined in the nn package
-
-654
-00:56:47,574 --> 00:56:49,816
-that's our mean squared error loss.
-
-655
-00:56:49,816 --> 00:56:51,593
-And now inside each iteration of our loop
-
-656
-00:56:51,593 --> 00:56:53,716
-we can run data forward
-through the model to get
-
-657
-00:56:53,716 --> 00:56:55,214
-our predictions.
-
-658
-00:56:55,214 --> 00:56:57,511
-We can run the predictions
-forward through the loss function
-
-659
-00:56:57,511 --> 00:56:59,054
-to get our scale or loss,
-
-660
-00:56:59,054 --> 00:57:01,177
-then we can call loss.backward,
-get all our gradients
-
-661
-00:57:01,177 --> 00:57:04,021
-for free and then loop over
-the parameters of the models
-
-662
-00:57:04,021 --> 00:57:06,143
+566
+00:57:04,021 --> 00:57:07,273
 and do our explicit gradient
-descent step to update
+descent step to update the models.
 
-663
-00:57:06,143 --> 00:57:07,273
-the models.
+567
+00:57:07,273 --> 00:57:12,749
+And again we see that we're sort of building up this new
+computational graph every time we do a forward pass.
 
-664
-00:57:07,273 --> 00:57:09,054
-And again we see that we're
-sort of building up this
+568
+00:57:12,749 --> 00:57:17,017
+And just like we saw in TensorFlow, PyTorch
+provides these optimizer operations
 
-665
-00:57:09,054 --> 00:57:12,749
-new computational graph every
-time we do a forward pass.
+569
+00:57:17,017 --> 00:57:23,000
+that kind of abstract away this updating logic and
+implement fancier update rules like Adam and whatnot.
 
-666
-00:57:12,749 --> 00:57:14,714
-And just like we saw in TensorFlow,
+570
+00:57:23,000 --> 00:57:28,771
+So here we're constructing an optimizer object telling it
+that we want it to optimize over the parameters of the model.
 
-667
-00:57:14,714 --> 00:57:17,017
-PyTorch provides these
-optimizer operations
-
-668
-00:57:17,017 --> 00:57:19,655
-that kind of abstract
-away this updating logic
-
-669
-00:57:19,655 --> 00:57:21,758
-and implement fancier
-update rules like Adam
-
-670
-00:57:21,758 --> 00:57:23,000
-and whatnot.
-
-671
-00:57:23,000 --> 00:57:25,038
-So here we're constructing
-an optimizer object
-
-672
-00:57:25,038 --> 00:57:27,034
-telling it that we want
-it to optimize over the
-
-673
-00:57:27,034 --> 00:57:28,771
-parameters of the model.
-
-674
+571
 00:57:28,771 --> 00:57:31,115
 Giving it some learning rate
 under the hyper parameters.
 
-675
-00:57:31,115 --> 00:57:33,438
-And now after we compute our gradients
+572
+00:57:31,115 --> 00:57:39,810
+And now after we compute our gradients we can just call optimizer.step
+and it updates all the parameters of the model for us right here.
 
-676
-00:57:33,438 --> 00:57:35,356
-we can just call
-optimizer.step and it updates
-
-677
-00:57:35,356 --> 00:57:39,810
-all the parameters of the
-model for us right here.
-
-678
-00:57:39,810 --> 00:57:41,951
-So another common thing
-you'll do in PyTorch
-
-679
-00:57:41,951 --> 00:57:44,714
+573
+00:57:39,810 --> 00:57:44,714
+So another common thing you'll do in PyTorch
 a lot is define your own nn modules.
 
-680
-00:57:44,714 --> 00:57:47,268
-So typically you'll write your own class
+574
+00:57:44,714 --> 00:57:51,801
+So typically you'll write your own class which defines
+you entire model as a single new nn module class.
 
-681
-00:57:47,268 --> 00:57:49,961
-which defines you entire model as a single
+575
+00:57:51,801 --> 00:58:01,043
+And a module is just kind of a neural network layer that can contain either
+other other modules or trainable weights or other other kinds of state.
 
-682
-00:57:49,961 --> 00:57:51,801
-new nn module class.
+576
+00:58:01,043 --> 00:58:07,051
+So in this case we can redo the two layer net
+example by defining our own nn module class.
 
-683
-00:57:51,801 --> 00:57:54,979
-And a module is just kind
-of a neural network layer
-
-684
-00:57:54,979 --> 00:57:57,678
-that can contain either
-other other modules
-
-685
-00:57:57,678 --> 00:58:01,043
-or trainable weights or
-other other kinds of state.
-
-686
-00:58:01,043 --> 00:58:04,142
-So in this case we can redo
-the two layer net example
-
-687
-00:58:04,142 --> 00:58:07,051
-by defining our own nn module class.
-
-688
-00:58:07,051 --> 00:58:09,925
-So now here in the
-initializer of the class
-
-689
-00:58:09,925 --> 00:58:11,672
+577
+00:58:07,051 --> 00:58:11,672
+So now here in the initializer of the class
 we're assigning this linear1 and linear2.
 
-690
-00:58:11,672 --> 00:58:13,853
-We're constructing
-these new module objects
+578
+00:58:11,672 --> 00:58:17,257
+We're constructing these new module objects
+and then store them inside of our own class.
 
-691
-00:58:13,853 --> 00:58:17,257
-and then store them
-inside of our own class.
+579
+00:58:17,257 --> 00:58:26,466
+And now in the forward pass we can use both our own internal modules as well as
+arbitrary autograd operations on variables to compute the output of our network.
 
-692
-00:58:17,257 --> 00:58:20,335
-And now in the forward pass
-we can use both our own
+580
+00:58:26,466 --> 00:58:31,594
+So here we receive the, inside this forward
+method here, the input x as a variable,
 
-693
-00:58:20,335 --> 00:58:22,832
-internal modules as well as
-arbitrary autograd operations
+581
+00:58:31,594 --> 00:58:35,817
+then we pass the variable to our
+self.linear1 for the first layer.
 
-694
-00:58:22,832 --> 00:58:26,466
-on variables to compute
-the output of our network.
-
-695
-00:58:26,466 --> 00:58:29,782
-So here we receive the, inside
-this forward method here,
-
-696
-00:58:29,782 --> 00:58:31,594
-the input acts as a variable,
-
-697
-00:58:31,594 --> 00:58:34,213
-then we pass the variable
-to our self.linear1
-
-698
-00:58:34,213 --> 00:58:35,817
-for the first layer.
-
-699
+582
 00:58:35,817 --> 00:58:38,129
 We use an autograd op
 clamp to complete the relu,
 
-700
-00:58:38,129 --> 00:58:40,233
-we pass the output of
-that to the second linear
+583
+00:58:38,129 --> 00:58:42,233
+we pass the output of that to the second
+linear and then that gives us our output.
 
-701
-00:58:40,233 --> 00:58:42,233
-and then that gives us our output.
+584
+00:58:42,233 --> 00:58:46,633
+And now the rest of this code for training
+this thing looks pretty much the same.
 
-702
-00:58:42,233 --> 00:58:44,732
-And now the rest of this
-code for training this thing
+585
+00:58:46,633 --> 00:58:54,676
+Where we build an optimizer and loop over and on ever iteration feed data to
+the model, compute the gradients with loss.backwards, call optimizer.step.
 
-703
-00:58:44,732 --> 00:58:46,633
-looks pretty much the same.
+586
+00:58:54,676 --> 00:59:01,817
+So this is like relatively characteristic of what you
+might see in a lot of PyTorch type training scenarios.
 
-704
-00:58:46,633 --> 00:58:48,455
-Where we build an optimizer and loop over
+587
+00:59:01,817 --> 00:59:11,166
+Where you define your own class, defining your own model that contains other modules and
+whatnot and then you have some explicit training loop like this that runs it and updates it.
 
-705
-00:58:48,455 --> 00:58:50,916
-and on ever iteration
-feed data to the model,
+588
+00:59:11,166 --> 00:59:18,873
+One kind of nice quality of life thing that you have in PyTorch is a
+dataloader. So a dataloader can handle building minibatches for you.
 
-706
-00:58:50,916 --> 00:58:52,777
-compute the gradients with loss.backwards,
+589
+00:59:18,873 --> 00:59:27,273
+It can handle some of the multi-threading that we talked about for you, where it can actually
+use multiple threads in the background to build many batches for you and stream off disk.
 
-707
-00:58:52,777 --> 00:58:54,676
-call optimizer.step.
+590
+00:59:27,273 --> 00:59:33,221
+So here a dataloader wraps a dataset and
+provides some of these abstractions for you.
 
-708
-00:58:54,676 --> 00:58:57,924
-So this is like relatively characteristic
+591
+00:59:33,221 --> 00:59:40,208
+And in practice when you want to run your own data, you typically will write
+your own dataset class which knows how to read your particular type of data
 
-709
-00:58:57,924 --> 00:59:00,233
-of what you might see
-in a lot of PyTorch type
+592
+00:59:40,208 --> 00:59:44,458
+off whatever source you want and then wrap
+it in a data loader and train with that.
 
-710
-00:59:00,233 --> 00:59:01,817
-training scenarios.
+593
+00:59:44,458 --> 00:59:52,233
+So, here we can see that now we're iterating over the dataloader
+object and at every iteration this is yielding minibatches of data.
 
-711
-00:59:01,817 --> 00:59:02,964
-Where you define your own class,
+594
+00:59:52,233 --> 00:59:58,409
+And it's internally handling the shuffling of the data and
+multithreaded dataloading and all this sort of stuff for you.
 
-712
-00:59:02,964 --> 00:59:04,932
-defining your own model
-that contains other modules
+595
+00:59:58,409 --> 01:00:04,161
+So this is kind of a completely PyTorch example and a lot of
+PyTorch training code ends up looking something like this.
 
-713
-00:59:04,932 --> 00:59:07,103
-and whatnot and then you
-have some explicit training
-
-714
-00:59:07,103 --> 00:59:11,166
-loop like this that
-runs it and updates it.
-
-715
-00:59:11,166 --> 00:59:13,353
-One kind of nice quality
-of life thing that you have
-
-716
-00:59:13,353 --> 00:59:16,057
-in PyTorch is a dataloader.
-
-717
-00:59:16,057 --> 00:59:18,873
-So a dataloader can handle
-building minibatches for you.
-
-718
-00:59:18,873 --> 00:59:21,273
-It can handle some of the
-multi-threading that we talked
-
-719
-00:59:21,273 --> 00:59:23,876
-about for you, where it can
-actually use multiple threads
-
-720
-00:59:23,876 --> 00:59:25,934
-in the background to
-build many batches for you
-
-721
-00:59:25,934 --> 00:59:27,273
-and stream off disk.
-
-722
-00:59:27,273 --> 00:59:30,777
-So here a dataloader wraps
-a dataset and provides
-
-723
-00:59:30,777 --> 00:59:33,221
-some of these abstractions for you.
-
-724
-00:59:33,221 --> 00:59:35,562
-And in practice when you
-want to run your own data,
-
-725
-00:59:35,562 --> 00:59:38,138
-you typically will write
-your own dataset class
-
-726
-00:59:38,138 --> 00:59:40,208
-which knows how to read
-your particular type of data
-
-727
-00:59:40,208 --> 00:59:42,251
-off whatever source you
-want and then wrap it in
-
-728
-00:59:42,251 --> 00:59:44,458
-a data loader and train with that.
-
-729
-00:59:44,458 --> 00:59:47,631
-So, here we can see that
-now we're iterating over
-
-730
-00:59:47,631 --> 00:59:50,444
-the dataloader object
-and at every iteration
-
-731
-00:59:50,444 --> 00:59:52,233
-this is yielding minibatches of data.
-
-732
-00:59:52,233 --> 00:59:55,527
-And it's internally handling
-the shuffling of the data
-
-733
-00:59:55,527 --> 00:59:57,576
-and multithreaded dataloading
-and all this sort of stuff
-
-734
-00:59:57,576 --> 00:59:58,409
-for you.
-
-735
-00:59:58,409 --> 01:00:00,654
-So this is kind of a
-completely PyTorch example
-
-736
-01:00:00,654 --> 01:00:02,494
-and a lot of PyTorch
-training code ends up looking
-
-737
-01:00:02,494 --> 01:00:04,161
-something like this.
-
-738
+596
 01:00:05,583 --> 01:00:07,587
 PyTorch provides pretrained models.
 
-739
-01:00:07,587 --> 01:00:09,469
-And this is probably the
-slickest pretrained model
+597
+01:00:07,587 --> 01:00:11,521
+And this is probably the slickest
+pretrained model experience I've ever seen.
 
-740
-01:00:09,469 --> 01:00:11,521
-experience I've ever seen.
-
-741
+598
 01:00:11,521 --> 01:00:14,268
 You just say torchvision.models.alexnet
 pretained=true.
 
-742
-01:00:14,268 --> 01:00:16,951
-That'll go down in the background,
-download the pretrained
+599
+01:00:14,268 --> 01:00:18,759
+That'll go down in the background, download the pretrained
+weights for you if you don't already have them,
 
-743
-01:00:16,951 --> 01:00:18,759
-weights for you if you
-don't already have them,
+600
+01:00:18,759 --> 01:00:24,242
+and then it's right there, you're good
+to go. So this is super easy to use.
 
-744
-01:00:18,759 --> 01:00:21,052
-and then it's right
-there, you're good to go.
-
-745
-01:00:21,052 --> 01:00:24,242
-So this is super easy to use.
-
-746
+601
 01:00:24,242 --> 01:00:27,094
 PyTorch also has, there's
 also a package called Visdom
 
-747
-01:00:27,094 --> 01:00:30,253
-that lets you visualize some
-of these loss statistics
+602
+01:00:27,094 --> 01:00:33,600
+that lets you visualize some of these loss
+statistics somewhat similar to Tensorboard.
 
-748
-01:00:30,253 --> 01:00:33,600
-somewhat similar to Tensorboard.
+603
+01:00:33,600 --> 01:00:38,569
+So that's kind of nice, I haven't actually gotten a chance to play
+around with this myself so I can't really speak to how useful it is,
 
-749
-01:00:33,600 --> 01:00:35,168
-So that's kind of nice,
-I haven't actually gotten
+604
+01:00:38,569 --> 01:00:45,907
+but one of the major differences between Tensorboard and Visdom is that
+Tensorboard actually lets you visualize the structure of the computational graph.
 
-750
-01:00:35,168 --> 01:00:36,934
-a chance to play around with
-this myself so I can't really
+605
+01:00:45,907 --> 01:00:50,989
+Which is really cool, a really useful debugging strategy.
+And Visdom does not have that functionality yet.
 
-751
-01:00:36,934 --> 01:00:38,569
-speak to how useful it is,
+606
+01:00:50,989 --> 01:00:54,761
+But I've never really used this myself
+so I can't really speak to its utility.
 
-752
-01:00:38,569 --> 01:00:40,927
-but one of the major
-differences between Tensorboard
+607
+01:00:56,350 --> 01:01:05,491
+As a bit of an aside, PyTorch is kind of an evolution of, kind of a newer updated version
+of an older framework called Torch which I worked with a lot in the last couple of years.
 
-753
-01:00:40,927 --> 01:00:43,769
-and Visdom is that Tensorboard
-actually lets you visualize
+608
+01:01:05,491 --> 01:01:13,280
+And I don't want to go through the details here, but PyTorch is pretty much
+better in a lot of ways than the old Lua Torch, but they actually share a lot
 
-754
-01:00:43,769 --> 01:00:45,907
-the structure of the computational graph.
+609
+01:01:13,280 --> 01:01:18,100
+of the sameback end C code for computing with
+tensors and GPU operations on tensors and whatnot.
 
-755
-01:00:45,907 --> 01:00:47,984
-Which is really cool, a really
-useful debugging strategy.
+610
+01:01:18,100 --> 01:01:23,369
+So if you look through this Torch example, some of it ends up
+looking kind of similar to PyTorch, some of it's a bit different.
 
-756
-01:00:47,984 --> 01:00:50,989
-And Visdom does not have
-that functionality yet.
-
-757
-01:00:50,989 --> 01:00:53,011
-But I've never really used
-this myself so I can't really
-
-758
-01:00:53,011 --> 01:00:54,761
-speak to its utility.
-
-759
-01:00:56,350 --> 01:00:58,627
-As a bit of an aside, PyTorch
-is kind of an evolution of,
-
-760
-01:00:58,627 --> 01:01:01,747
-kind of a newer updated
-version of an older framework
-
-761
-01:01:01,747 --> 01:01:04,086
-called Torch which I worked
-with a lot in the last
-
-762
-01:01:04,086 --> 01:01:05,491
-couple of years.
-
-763
-01:01:05,491 --> 01:01:07,577
-And I don't want to go
-through the details here,
-
-764
-01:01:07,577 --> 01:01:10,569
-but PyTorch is pretty much
-better in a lot of ways
-
-765
-01:01:10,569 --> 01:01:13,280
-than the old Lua Torch, but
-they actually share a lot
-
-766
-01:01:13,280 --> 01:01:15,657
-of the same back end C code
-for computing with tensors
-
-767
-01:01:15,657 --> 01:01:18,100
-and GPU operations on tensors and whatnot.
-
-768
-01:01:18,100 --> 01:01:19,554
-So if you look through this Torch example,
-
-769
-01:01:19,554 --> 01:01:21,906
-some of it ends up looking
-kind of similar to PyTorch,
-
-770
-01:01:21,906 --> 01:01:23,369
-some of it's a bit different.
-
-771
+611
 01:01:23,369 --> 01:01:25,957
 Maybe you can step through this offline.
 
-772
-01:01:25,957 --> 01:01:28,361
-But kind of the high
-level differences between
+612
+01:01:25,957 --> 01:01:33,011
+But kind of the high level differences between Torch and PyTorch are
+that Torch is actually in Lua, not Python, unlike these other things.
 
-773
-01:01:28,361 --> 01:01:31,229
-Torch and PyTorch are that
-Torch is actually in Lua,
-
-774
-01:01:31,229 --> 01:01:33,011
-not Python, unlike these other things.
-
-775
+613
 01:01:33,011 --> 01:01:37,748
 So learning Lua is a bit of
 a turn off for some people.
 
-776
+614
 01:01:37,748 --> 01:01:40,009
 Torch doesn't have autograd.
 
-777
-01:01:40,009 --> 01:01:41,710
-Torch is also older, so it's more stable,
+615
+01:01:40,009 --> 01:01:44,324
+Torch is also older, so it's more stable, less susceptible
+to bugs, there's maybe more example code for Torch.
 
-778
-01:01:41,710 --> 01:01:43,491
-less susceptible to bugs,
-there's maybe more example code
-
-779
-01:01:43,491 --> 01:01:44,324
-for Torch.
-
-780
+616
 01:01:45,230 --> 01:01:47,214
 They're about the same speeds,
 that's not really a concern.
 
-781
-01:01:47,214 --> 01:01:49,827
-But in PyTorch it's in
-Python which is great,
+617
+01:01:47,214 --> 01:01:54,531
+But in PyTorch it's in Python which is great, you've got
+autograd which makes it a lot simpler to write complex models.
 
-782
-01:01:49,827 --> 01:01:52,270
-you've got autograd which
-makes it a lot simpler
+618
+01:01:54,531 --> 01:01:59,670
+In Lua Torch you end up writing a lot of your own back
+prop code sometimes, so that's a little bit annoying.
 
-783
-01:01:52,270 --> 01:01:54,531
-to write complex models.
+619
+01:01:59,670 --> 01:02:06,051
+But PyTorch is newer, there's less existing code, it's still
+subject to change. So it's a little bit more of an adventure.
 
-784
-01:01:54,531 --> 01:01:56,422
-In Lua Torch you end up
-writing a lot of your own
+620
+01:02:06,051 --> 01:02:17,765
+But at least for me, I kind of prefer, I don't really see much reason for myself to use Torch over
+PyTorch anymore at this time. So I'm pretty much using PyTorch exclusively for all my work these days.
 
-785
-01:01:56,422 --> 01:01:59,670
-back prop code sometimes, so
-that's a little bit annoying.
+621
+01:02:18,606 --> 01:02:22,531
+We talked about this a little bit about
+this idea of static versus dynamic graphs.
 
-786
-01:01:59,670 --> 01:02:01,650
-But PyTorch is newer,
-there's less existing code,
+622
+01:02:22,531 --> 01:02:26,291
+And this is one of the main distinguishing
+features between PyTorch and TensorFlow.
 
-787
-01:02:01,650 --> 01:02:03,689
-it's still subject to change.
+623
+01:02:26,291 --> 01:02:38,145
+So we saw in TensorFlow you have these two stages of operation where first you build up this computational
+graph, then you run the computational graph over and over again many many times reusing that same graph.
 
-788
-01:02:03,689 --> 01:02:06,051
-So it's a little bit more of an adventure.
+624
+01:02:38,145 --> 01:02:42,403
+That's called a static computational
+graph 'cause there's only one of them.
 
-789
-01:02:06,051 --> 01:02:08,145
-But at least for me, I kind of prefer,
+625
+01:02:42,403 --> 01:02:48,771
+And we saw PyTorch is quite different where we're actually building up
+this new computational graph, this new fresh thing on every forward pass.
 
-790
-01:02:08,145 --> 01:02:10,162
-I don't really see much reason for myself
-
-791
-01:02:10,162 --> 01:02:13,228
-to use Torch over PyTorch
-anymore at this time.
-
-792
-01:02:13,228 --> 01:02:15,848
-So I'm pretty much using
-PyTorch exclusively for
-
-793
-01:02:15,848 --> 01:02:17,765
-all my work these days.
-
-794
-01:02:18,606 --> 01:02:20,557
-We talked about this a
-little bit about this idea
-
-795
-01:02:20,557 --> 01:02:22,531
-of static versus dynamic graphs.
-
-796
-01:02:22,531 --> 01:02:24,350
-And this is one of the main
-distinguishing features
-
-797
-01:02:24,350 --> 01:02:26,291
-between PyTorch and TensorFlow.
-
-798
-01:02:26,291 --> 01:02:29,416
-So we saw in TensorFlow
-you have these two stages
-
-799
-01:02:29,416 --> 01:02:31,667
-of operation where first you build up this
-
-800
-01:02:31,667 --> 01:02:34,371
-computational graph, then you
-run the computational graph
-
-801
-01:02:34,371 --> 01:02:37,246
-over and over again many
-many times reusing that same
-
-802
-01:02:37,246 --> 01:02:38,145
-graph.
-
-803
-01:02:38,145 --> 01:02:40,209
-That's called a static
-computational graph 'cause there's
-
-804
-01:02:40,209 --> 01:02:42,403
-only one of them.
-
-805
-01:02:42,403 --> 01:02:44,940
-And we saw PyTorch is quite
-different where we're actually
-
-806
-01:02:44,940 --> 01:02:46,829
-building up this new computational graph,
-
-807
-01:02:46,829 --> 01:02:48,771
-this new fresh thing
-on every forward pass.
-
-808
+626
 01:02:48,771 --> 01:02:52,259
 That's called a dynamic
 computational graph.
 
-809
-01:02:52,259 --> 01:02:54,075
-For kind of simple cases,
-with kind of feed forward
+627
+01:02:52,259 --> 01:02:57,053
+For kind of simple cases, with kind of feed forward neural
+networks, it doesn't really make a huge difference,
 
-810
-01:02:54,075 --> 01:02:57,053
-neural networks, it doesn't
-really make a huge difference,
-
-811
-01:02:57,053 --> 01:02:58,467
+628
+01:02:57,053 --> 01:03:00,225
 the code ends up kind of similarly
-
-812
-01:02:58,467 --> 01:03:00,225
 and they work kind of similarly,
 
-813
-01:03:00,225 --> 01:03:02,079
-but I do want to talk a bit
-about some of the implications
+629
+01:03:00,225 --> 01:03:07,102
+but I do want to talk a bit about some of the implications of
+static versus dynamic. And what are the tradeoffs of those two.
 
-814
-01:03:02,079 --> 01:03:04,227
-of static versus dynamic.
+630
+01:03:07,102 --> 01:03:15,286
+So one kind of nice idea with static graphs is that because we're kind of
+building up one computational graph once, and then reusing it many times,
 
-815
-01:03:04,227 --> 01:03:07,102
-And what are the tradeoffs of those two.
+631
+01:03:15,286 --> 01:03:19,571
+the framework might have the opportunity to
+go in and do optimizations on that graph.
 
-816
-01:03:07,102 --> 01:03:08,947
-So one kind of nice
-idea with static graphs
+632
+01:03:19,571 --> 01:03:26,809
+And kind of fuse some operations, reorder some operations, figure out the
+most efficient way to operate that graph so it can be really efficient.
 
-817
-01:03:08,947 --> 01:03:11,331
-is that because we're
-kind of building up one
+633
+01:03:26,809 --> 01:03:33,039
+And because we're going to reuse that graph many times,
+maybe that optimization process is expensive up front,
 
-818
-01:03:11,331 --> 01:03:15,286
-computational graph once, and
-then reusing it many times,
+634
+01:03:33,039 --> 01:03:37,230
+but we can amortize that cost with the speedups that
+we've gotten when we run the graph many many times.
 
-819
-01:03:15,286 --> 01:03:17,355
-the framework might have
-the opportunity to go in
+635
+01:03:37,230 --> 01:03:44,085
+So as kind of a concrete example, maybe if you write some graph which
+has convolution and relu operations kind of one after another,
 
-820
-01:03:17,355 --> 01:03:19,571
-and do optimizations on that graph.
+636
+01:03:44,085 --> 01:03:54,530
+you might imagine that some fancy graph optimizer could go in and actually
+output, like emit custom code which has fused operations, fusing the convolution
 
-821
-01:03:19,571 --> 01:03:22,821
-And kind of fuse some operations,
-reorder some operations,
+637
+01:03:54,530 --> 01:04:03,445
+and the relu so now it's computing the same thing as the code you
+wrote, but now might be able to be executed more efficiently.
 
-822
-01:03:22,821 --> 01:03:24,520
-figure out the most
-efficient way to operate
+638
+01:04:03,445 --> 01:04:10,419
+So I'm not too sure on exactly what the state in
+practice of TensorFlow graph optimization is right now,
 
-823
-01:03:24,520 --> 01:03:26,809
-that graph so it can be really efficient.
+639
+01:04:10,419 --> 01:04:20,131
+but at least in principle, this is one place where static graph really,
+you can have the potential for doing this optimization in static graphs
 
-824
-01:03:26,809 --> 01:03:28,725
-And because we're going
-to reuse that graph
-
-825
-01:03:28,725 --> 01:03:31,790
-many times, maybe that
-optimization process
-
-826
-01:03:31,790 --> 01:03:33,039
-is expensive up front,
-
-827
-01:03:33,039 --> 01:03:34,947
-but we can amortize that
-cost with the speedups
-
-828
-01:03:34,947 --> 01:03:37,230
-that we've gotten when we run
-the graph many many times.
-
-829
-01:03:37,230 --> 01:03:40,162
-So as kind of a concrete example,
-
-830
-01:03:40,162 --> 01:03:41,814
-maybe if you write some
-graph which has convolution
-
-831
-01:03:41,814 --> 01:03:44,085
-and relu operations kind
-of one after another,
-
-832
-01:03:44,085 --> 01:03:48,250
-you might imagine that
-some fancy graph optimizer
-
-833
-01:03:48,250 --> 01:03:51,865
-could go in and actually
-output, like emit custom code
-
-834
-01:03:51,865 --> 01:03:54,530
-which has fused operations,
-fusing the convolution
-
-835
-01:03:54,530 --> 01:03:56,371
-and the relu so now it's
-computing the same thing
-
-836
-01:03:56,371 --> 01:04:00,525
-as the code you wrote, but
-now might be able to be
-
-837
-01:04:00,525 --> 01:04:03,445
-executed more efficiently.
-
-838
-01:04:03,445 --> 01:04:07,909
-So I'm not too sure on exactly
-what the state in practice
-
-839
-01:04:07,909 --> 01:04:10,419
-of TensorFlow graph
-optimization is right now,
-
-840
-01:04:10,419 --> 01:04:14,469
-but at least in principle,
-this is one place where
-
-841
-01:04:14,469 --> 01:04:17,747
-static graph really, you
-can have the potential for
-
-842
-01:04:17,747 --> 01:04:20,131
-doing this optimization in static graphs
-
-843
+640
 01:04:20,131 --> 01:04:24,298
 where maybe it would be not so
 tractable for dynamic graphs.
 
-844
-01:04:25,504 --> 01:04:26,937
-Another kind of subtle point
-about static versus dynamic
+641
+01:04:25,504 --> 01:04:28,931
+Another kind of subtle point about static
+versus dynamic is this idea of serialization.
 
-845
-01:04:26,937 --> 01:04:28,931
-is this idea of serialization.
+642
+01:04:28,931 --> 01:04:34,026
+So with a static graph you can imagine that
+you write this code that builds up the graph
 
-846
-01:04:28,931 --> 01:04:32,347
-So with a static graph you
-can imagine that you write
+643
+01:04:34,026 --> 01:04:39,571
+and then once you've built the graph, you have this data structure
+in memory that represents the entire structure of your network.
 
-847
-01:04:32,347 --> 01:04:34,026
-this code that builds up the graph
-
-848
-01:04:34,026 --> 01:04:35,641
-and then once you've built the graph,
-
-849
-01:04:35,641 --> 01:04:37,667
-you have this data structure
-in memory that represents
-
-850
-01:04:37,667 --> 01:04:39,571
-the entire structure of your network.
-
-851
-01:04:39,571 --> 01:04:41,226
+644
+01:04:39,571 --> 01:04:42,428
 And now you could take that data structure
-
-852
-01:04:41,226 --> 01:04:42,428
 and just serialize it to disk.
 
-853
-01:04:42,428 --> 01:04:44,528
-And now you've got the whole
-structure of your network
+645
+01:04:42,428 --> 01:04:45,996
+And now you've got the whole structure
+of your network saved in some file.
 
-854
-01:04:44,528 --> 01:04:45,996
-saved in some file.
+646
+01:04:45,996 --> 01:04:55,450
+And then you could later re-load that thing and then run that computational graph without access
+to the original code that built it. So this would be kind of nice in a deployment scenario.
 
-855
-01:04:45,996 --> 01:04:48,711
-And then you could later
-rear load that thing
+647
+01:04:55,450 --> 01:05:00,424
+You might imagine that you might want to train your
+network in Python because it's maybe easier to work with,
 
-856
-01:04:48,711 --> 01:04:51,627
-and then run that computational
-graph without access
+648
+01:05:00,424 --> 01:05:07,759
+but then after you serialize that network and then you could deploy it now in maybe a
+C++ environment where you don't need to use the original code that built the graph.
 
-857
-01:04:51,627 --> 01:04:53,630
-to the original code that built it.
-
-858
-01:04:53,630 --> 01:04:55,450
-So this would be kind of nice
-in a deployment scenario.
-
-859
-01:04:55,450 --> 01:04:57,606
-You might imagine that you
-might want to train your
-
-860
-01:04:57,606 --> 01:05:00,424
-network in Python because it's
-maybe easier to work with,
-
-861
-01:05:00,424 --> 01:05:01,788
-but then after you serialize that network
-
-862
-01:05:01,788 --> 01:05:04,170
-and then you could deploy
-it now in maybe a C++
-
-863
-01:05:04,170 --> 01:05:06,409
-environment where you don't
-need to use the original
-
-864
-01:05:06,409 --> 01:05:07,759
-code that built the graph.
-
-865
+649
 01:05:07,759 --> 01:05:10,909
 So that's kind of a nice
 advantage of static graphs.
 
-866
-01:05:10,909 --> 01:05:12,510
-Whereas with a dynamic graph,
-because we're interleaving
+650
+01:05:10,909 --> 01:05:15,793
+Whereas with a dynamic graph, because we're interleaving
+these processes of graph building and graph execution,
 
-867
-01:05:12,510 --> 01:05:15,793
-these processes of graph
-building and graph execution,
+651
+01:05:15,793 --> 01:05:22,012
+you kind of need the original code at all times
+if you want to reuse that model in the future.
 
-868
-01:05:15,793 --> 01:05:17,822
-you kind of need the
-original code at all times
+652
+01:05:22,012 --> 01:05:29,163
+On the other hand, some advantages for dynamic graphs are that it kind of makes,
+it just makes your code a lot cleaner and a lot easier in a lot of scenarios.
 
-869
-01:05:17,822 --> 01:05:22,012
-if you want to reuse
-that model in the future.
+653
+01:05:29,163 --> 01:05:38,624
+So for example, suppose that we want to do some conditional operation where depending
+on the value of some variable Z, we want to do different operations to compute Y.
 
-870
-01:05:22,012 --> 01:05:24,390
-On the other hand, some
-advantages for dynamic graphs
+654
+01:05:39,723 --> 01:05:45,070
+Where if Z is positive, we want to use one weight matrix,
+if Z is negative we want to use a different weight matrix.
 
-871
-01:05:24,390 --> 01:05:26,921
-are that it kind of makes,
-it just makes your code
-
-872
-01:05:26,921 --> 01:05:29,163
-a lot cleaner and a lot
-easier in a lot of scenarios.
-
-873
-01:05:29,163 --> 01:05:31,264
-So for example, suppose
-that we want to do some
-
-874
-01:05:31,264 --> 01:05:34,501
-conditional operation where
-depending on the value
-
-875
-01:05:34,501 --> 01:05:37,541
-of some variable Z, we want
-to do different operations
-
-876
-01:05:37,541 --> 01:05:38,624
-to compute Y.
-
-877
-01:05:39,723 --> 01:05:42,123
-Where if Z is positive, we
-want to use one weight matrix,
-
-878
-01:05:42,123 --> 01:05:45,070
-if Z is negative we want to
-use a different weight matrix.
-
-879
+655
 01:05:45,070 --> 01:05:47,981
 And we just want to switch off
 between these two alternatives.
 
-880
-01:05:47,981 --> 01:05:50,720
-In PyTorch because we're
-using dynamic graphs,
+656
+01:05:47,981 --> 01:05:52,011
+In PyTorch because we're using
+dynamic graphs, it's super simple.
 
-881
-01:05:50,720 --> 01:05:52,011
-it's super simple.
+657
+01:05:52,011 --> 01:06:00,795
+Your code kind of looks exactly like you would expect, exactly what you would
+do in Numpy. You can just use normal Python control flow to handle this thing.
 
-882
-01:05:52,011 --> 01:05:54,101
-Your code kind of looks
-exactly like you would expect,
+658
+01:06:00,795 --> 01:06:05,563
+And now because we're building up the graph each time,
+each time we perform this operation will take one
 
-883
-01:05:54,101 --> 01:05:56,400
-exactly what you would do in Numpy.
+659
+01:06:05,563 --> 01:06:10,864
+of the two paths and build up maybe a different graph
+on each forward pass, but for any graph that we do
 
-884
-01:05:56,400 --> 01:05:58,877
-You can just use normal
-Python control flow
+660
+01:06:10,864 --> 01:06:14,337
+end up building up, we can back
+propagate through it just fine.
 
-885
-01:05:58,877 --> 01:06:00,795
-to handle this thing.
-
-886
-01:06:00,795 --> 01:06:03,264
-And now because we're building
-up the graph each time,
-
-887
-01:06:03,264 --> 01:06:05,563
-each time we perform this
-operation will take one
-
-888
-01:06:05,563 --> 01:06:08,021
-of the two paths and build
-up maybe a different graph
-
-889
-01:06:08,021 --> 01:06:10,864
-on each forward pass, but
-for any graph that we do
-
-890
-01:06:10,864 --> 01:06:13,104
-end up building up, we can
-back propagate through it
-
-891
-01:06:13,104 --> 01:06:14,337
-just fine.
-
-892
+661
 01:06:14,337 --> 01:06:15,941
 And the code is very
 clean, easy to work with.
 
-893
-01:06:15,941 --> 01:06:18,843
-Now in TensorFlow the
-situations is a little bit more
+662
+01:06:15,941 --> 01:06:23,201
+Now in TensorFlow the situations is a little bit
+more complicated because we build the graph once,
 
-894
-01:06:18,843 --> 01:06:23,201
-complicated because we
-build the graph once,
+663
+01:06:23,201 --> 01:06:28,400
+this control flow operator kind of needs to be
+an explicit operator in the TensorFlow graph.
 
-895
-01:06:23,201 --> 01:06:25,219
-this control flow operator
-kind of needs to be
+664
+01:06:28,400 --> 01:06:36,818
+And now, so them you can see that we have this tf.cond call which is kind
+of like a TensorFlow version of an if statement, but now it's baked into
 
-896
-01:06:25,219 --> 01:06:28,400
-an explicit operator in
-the TensorFlow graph.
+665
+01:06:36,818 --> 01:06:40,741
+the computational graph rather than
+using sort of Python control flow.
 
-897
-01:06:28,400 --> 01:06:31,301
-And now, so them you can
-see that we have this
+666
+01:06:40,741 --> 01:06:48,729
+And the problem is that because we only build the graph once, all the potential
+paths of control flow that our program might flow through need to be baked
 
-898
-01:06:31,301 --> 01:06:34,319
-tf.cond call which is kind
-of like a TensorFlow version
-
-899
-01:06:34,319 --> 01:06:36,818
-of an if statement,
-but now it's baked into
-
-900
-01:06:36,818 --> 01:06:38,838
-the computational graph
-rather than using sort of
-
-901
-01:06:38,838 --> 01:06:40,741
-Python control flow.
-
-902
-01:06:40,741 --> 01:06:43,473
-And the problem is that
-because we only build the graph
-
-903
-01:06:43,473 --> 01:06:46,123
-once, all the potential
-paths of control flow that
-
-904
-01:06:46,123 --> 01:06:48,729
-our program might flow
-through need to be baked
-
-905
-01:06:48,729 --> 01:06:51,200
+667
+01:06:48,729 --> 01:06:52,523
 into the graph at the time we
-construct it before we ever
+construct it before we ever run it.
 
-906
-01:06:51,200 --> 01:06:52,523
-run it.
+668
+01:06:52,523 --> 01:07:03,360
+So that means that any kind of control flow operators that you want to have need to be not Python control
+flow operators, you need to use some kind of magic, special tensor flow operations to do control flow.
 
-907
-01:06:52,523 --> 01:06:54,353
-So that means that any kind
-of control flow operators
-
-908
-01:06:54,353 --> 01:06:58,394
-that you want to have need
-to be not Python control flow
-
-909
-01:06:58,394 --> 01:07:00,409
-operators, you need to
-use some kind of magic,
-
-910
-01:07:00,409 --> 01:07:03,360
-special tensor flow
-operations to do control flow.
-
-911
+669
 01:07:03,360 --> 01:07:05,527
 In this case this tf.cond.
 
-912
-01:07:06,713 --> 01:07:09,400
-Another kind of similar
-situation happens if you want to
+670
+01:07:06,713 --> 01:07:10,763
+Another kind of similar situation
+happens if you want to have loops.
 
-913
-01:07:09,400 --> 01:07:10,763
-have loops.
+671
+01:07:10,763 --> 01:07:19,839
+So suppose that we want to compute some kind of recurrent relationships where maybe
+Y T is equal to Y T minus one plus X T times some weight matrix W and depending on
 
-914
-01:07:10,763 --> 01:07:12,684
-So suppose that we want to
-compute some kind of recurrent
+672
+01:07:19,839 --> 01:07:26,436
+each time we do this, every time we compute this,
+we might have a different sized sequence of data.
 
-915
-01:07:12,684 --> 01:07:16,607
-relationships where maybe Y
-T is equal to Y T minus one
+673
+01:07:26,436 --> 01:07:33,371
+And no matter the length of our sequence of data, we just want to compute
+this same recurrence relation no matter the size of the input sequence.
 
-916
-01:07:16,607 --> 01:07:19,839
-plus X T times some weight
-matrix W and depending on
+674
+01:07:33,371 --> 01:07:39,489
+So in PyTorch this is super easy. We can
+just kind of use a normal for loop in Python
 
-917
-01:07:19,839 --> 01:07:23,077
-each time we do this,
-every time we compute this,
+675
+01:07:39,489 --> 01:07:47,095
+to just loop over the number of times that we want to unroll and now depending on
+the size of the input data, our computational graph will end up as different sizes,
 
-918
-01:07:23,077 --> 01:07:26,436
-we might have a different
-sized sequence of data.
+676
+01:07:47,095 --> 01:07:51,694
+but that's fine, we can just back propagate
+through each one, one at a time.
 
-919
-01:07:26,436 --> 01:07:28,265
-And no matter the length
-of our sequence of data,
-
-920
-01:07:28,265 --> 01:07:30,217
-we just want to compute this
-same recurrence relation
-
-921
-01:07:30,217 --> 01:07:33,371
-no matter the size of the input sequence.
-
-922
-01:07:33,371 --> 01:07:35,796
-So in PyTorch this is super easy.
-
-923
-01:07:35,796 --> 01:07:39,489
-We can just kind of use a
-normal for loop in Python
-
-924
-01:07:39,489 --> 01:07:41,534
-to just loop over the number
-of times that we want to
-
-925
-01:07:41,534 --> 01:07:44,436
-unroll and now depending on
-the size of the input data,
-
-926
-01:07:44,436 --> 01:07:47,095
-our computational graph will
-end up as different sizes,
-
-927
-01:07:47,095 --> 01:07:49,737
-but that's fine, we can
-just back propagate through
-
-928
-01:07:49,737 --> 01:07:51,694
-each one, one at a time.
-
-929
+677
 01:07:51,694 --> 01:07:55,782
 Now in TensorFlow this
 becomes a little bit uglier.
 
-930
-01:07:55,782 --> 01:07:58,494
-And again, because we need
-to construct the graph
+678
+01:07:55,782 --> 01:08:06,364
+And again, because we need to construct the graph all at once up front, this control
+flow looping construct again needs to be an explicit node in the TensorFlow graph.
 
-931
-01:07:58,494 --> 01:08:02,398
-all at once up front, this
-control flow looping construct
+679
+01:08:06,364 --> 01:08:13,517
+So I hope you remember your functional programming because you'll have to
+use those kinds of operators to implement looping constructs in TensorFlow.
 
-932
-01:08:02,398 --> 01:08:06,364
-again needs to be an explicit
-node in the TensorFlow graph.
+680
+01:08:13,517 --> 01:08:23,024
+So in this case, for this particular recurrence relationship you can use a foldl
+operation and pass in, sort of implement this particular loop in terms of a foldl.
 
-933
-01:08:06,364 --> 01:08:08,084
-So I hope you remember
-your functional programming
+681
+01:08:24,100 --> 01:08:28,734
+But what this basically means is that you have this
+sense that TensorFlow is almost building its own entire
 
-934
-01:08:08,084 --> 01:08:10,432
-because you'll have to use
-those kinds of operators
+682
+01:08:28,734 --> 01:08:33,212
+programming language, using the
+language of computational graphs.
 
-935
-01:08:10,432 --> 01:08:13,517
-to implement looping
-constructs in TensorFlow.
+683
+01:08:33,212 --> 01:08:37,215
+And any kind of control flow operator, or any
+kind of data structure needs to be rolled
 
-936
-01:08:13,517 --> 01:08:16,292
-So in this case, for this
-particular recurrence relationship
+684
+01:08:37,215 --> 01:08:44,216
+into the computational graph so you can't really utilize all
+your favorite paradigms for working imperatively in Python.
 
-937
-01:08:16,292 --> 01:08:18,857
-you can use a foldl operation and pass in,
+685
+01:08:44,216 --> 01:08:52,804
+You kind of need to relearn a whole separate set of control flow operators. And if you
+want to do any kinds of control flow inside your computational graph using TensorFlow.
 
-938
-01:08:18,857 --> 01:08:23,024
-sort of implement this particular
-loop in terms of a foldl.
+686
+01:08:52,804 --> 01:08:58,238
+So at least for me, I find that kind of confusing, a
+little bit hard to wrap my head around sometimes,
 
-939
-01:08:24,100 --> 01:08:26,200
-But what this basically means
-is that you have this sense
+687
+01:08:58,238 --> 01:09:06,722
+and I kind of like that using PyTorch dynamic graphs, you can just use your
+favorite imperative programming constructs and it all works just fine.
 
-940
-01:08:26,201 --> 01:08:28,734
-that TensorFlow is almost
-building its own entire
+688
+01:09:07,737 --> 01:09:21,579
+By the way, there actually is some very new library called TensorFlow Fold which is another one of these
+layers on top of TensorFlow that lets you implement dynamic graphs, you kind of write your own code
 
-941
-01:08:28,734 --> 01:08:31,214
-programming language,
-using the language of
+689
+01:09:22,416 --> 01:09:32,277
+using TensorFlow Fold that looks kind of like a dynamic graph operation and then TensorFlow Fold
+does some magic for you and somehow implements that in terms of the static TensorFlow graphs.
 
-942
-01:08:31,214 --> 01:08:33,212
-computational graphs.
+690
+01:09:32,277 --> 01:09:37,357
+This is a super new paper that's being
+presented at ICLR this week in France.
 
-943
-01:08:33,212 --> 01:08:34,821
-And any kind of control flow operator,
+691
+01:09:37,358 --> 01:09:41,694
+So I haven't had the chance to like
+dive in and play with this yet.
 
-944
-01:08:34,821 --> 01:08:37,215
-or any kind of data
-structure needs to be rolled
+692
+01:09:41,694 --> 01:09:46,455
+But my initial impression was that it does add some
+amount of dynamic graphs to TensorFlow but it is still
 
-945
-01:08:37,215 --> 01:08:40,014
-into the computational graph
-so you can't really utilize
+693
+01:09:46,455 --> 01:09:51,952
+a bit more awkward to work with than the sort
+of native dynamic graphs you have in PyTorch.
 
-946
-01:08:40,014 --> 01:08:42,595
-all your favorite paradigms
-for working imperatively
+694
+01:09:51,952 --> 01:09:57,257
+So then, I thought it might be nice to motivate like
+why would we care about dynamic graphs in general?
 
-947
-01:08:42,595 --> 01:08:44,216
-in Python.
-
-948
-01:08:44,216 --> 01:08:46,195
-You kind of need to relearn
-a whole separate set
-
-949
-01:08:46,196 --> 01:08:47,956
-of control flow operators.
-
-950
-01:08:47,956 --> 01:08:49,991
-And if you want to do
-any kinds of control flow
-
-951
-01:08:49,991 --> 01:08:52,804
-inside your computational
-graph using TensorFlow.
-
-952
-01:08:52,804 --> 01:08:56,252
-So at least for me, I find
-that kind of confusing,
-
-953
-01:08:56,252 --> 01:08:58,238
-a little bit hard to wrap
-my head around sometimes,
-
-954
-01:08:58,238 --> 01:09:01,259
-and I kind of like that
-using PyTorch dynamic graphs,
-
-955
-01:09:01,259 --> 01:09:03,555
-you can just use your favorite
-imperative programming
-
-956
-01:09:03,555 --> 01:09:06,722
-constructs and it all works just fine.
-
-957
-01:09:07,737 --> 01:09:12,051
-By the way, there actually
-is some very new library
-
-958
-01:09:12,051 --> 01:09:15,732
-called TensorFlow Fold which
-is another one of these
-
-959
-01:09:15,732 --> 01:09:17,662
-layers on top of TensorFlow
-that lets you implement
-
-960
-01:09:17,662 --> 01:09:21,579
-dynamic graphs, you kind
-of write your own code
-
-961
-01:09:22,416 --> 01:09:24,986
-using TensorFlow Fold that
-looks kind of like a dynamic
-
-962
-01:09:24,986 --> 01:09:27,977
-graph operation and then
-TensorFlow Fold does some magic
-
-963
-01:09:27,977 --> 01:09:30,617
-for you and somehow implements
-that in terms of the
-
-964
-01:09:30,617 --> 01:09:32,277
-static TensorFlow graphs.
-
-965
-01:09:32,277 --> 01:09:35,225
-This is a super new paper
-that's being presented
-
-966
-01:09:35,225 --> 01:09:37,357
-at ICLR this week in France.
-
-967
-01:09:37,358 --> 01:09:39,737
-So I haven't had the chance
-to like dive in and play
-
-968
-01:09:39,737 --> 01:09:41,694
-with this yet.
-
-969
-01:09:41,694 --> 01:09:44,252
-But my initial impression
-was that it does add some
-
-970
-01:09:44,252 --> 01:09:46,455
-amount of dynamic graphs to
-TensorFlow but it is still
-
-971
-01:09:46,455 --> 01:09:48,798
-a bit more awkward to work
-with than the sort of native
-
-972
-01:09:48,798 --> 01:09:51,952
-dynamic graphs you have in PyTorch.
-
-973
-01:09:51,952 --> 01:09:54,527
-So then, I thought it
-might be nice to motivate
-
-974
-01:09:54,527 --> 01:09:57,257
-like why would we care about
-dynamic graphs in general?
-
-975
+695
 01:09:57,257 --> 01:10:00,257
 So one option is recurrent networks.
 
-976
-01:10:01,177 --> 01:10:03,256
-So you can see that for
-something like image captioning
+696
+01:10:01,177 --> 01:10:07,612
+So you can see that for something like image captioning we use a
+recurrent network which operates over sequences of different lengths.
 
-977
-01:10:03,256 --> 01:10:05,715
-we use a recurrent network
-which operates over
+697
+01:10:07,612 --> 01:10:13,337
+In this case, the sentence that we want to generate
+as a caption is a sequence and that sequence can vary
 
-978
-01:10:05,715 --> 01:10:07,612
-sequences of different lengths.
-
-979
-01:10:07,612 --> 01:10:10,798
-In this case, the sentence
-that we want to generate
-
-980
-01:10:10,798 --> 01:10:13,337
-as a caption is a sequence
-and that sequence can vary
-
-981
+698
 01:10:13,337 --> 01:10:15,636
 depending on our input data.
 
-982
-01:10:15,636 --> 01:10:18,414
-So now you can see that we
-have this dynamism in the thing
+699
+01:10:15,636 --> 01:10:21,694
+So now you can see that we have this dynamism in the
+thing where depending on the size of the sentence,
 
-983
-01:10:18,414 --> 01:10:21,694
-where depending on the
-size of the sentence,
+700
+01:10:21,694 --> 01:10:25,716
+our computational graph might need
+to have more or fewer elements.
 
-984
-01:10:21,694 --> 01:10:24,136
-our computational graph
-might need to have more
-
-985
-01:10:24,136 --> 01:10:25,716
-or fewer elements.
-
-986
+701
 01:10:25,716 --> 01:10:29,920
 So that's one kind of common
 application of dynamic graphs.
 
-987
-01:10:29,920 --> 01:10:34,115
-For those of you who
-took CS224N last quarter,
-
-988
-01:10:34,115 --> 01:10:36,377
+702
+01:10:29,920 --> 01:10:36,377
+For those of you who took CS224N last quarter,
 you saw this idea of recursive networks
 
-989
-01:10:36,377 --> 01:10:38,674
-where sometimes in natural
-language processing
+703
+01:10:36,377 --> 01:10:47,337
+where sometimes in natural language processing you might, for example, compute a parsed tree of a
+sentence and then you want to have a neural network kind of operate recursively up this parse tree.
 
-990
-01:10:38,674 --> 01:10:41,316
-you might, for example,
-compute a parsed tree
+704
+01:10:47,337 --> 01:10:56,856
+So having a neural network that kind of works, it's not just a sequential sequence of layers, but
+instead it's kind of working over some graph or tree structure instead where now each data point
 
-991
-01:10:41,316 --> 01:10:43,934
-of a sentence and then
-you want to have a neural
-
-992
-01:10:43,934 --> 01:10:47,337
-network kind of operate
-recursively up this parse tree.
-
-993
-01:10:47,337 --> 01:10:49,291
-So having a neural network
-that kind of works,
-
-994
-01:10:49,291 --> 01:10:51,817
-it's not just a sequential
-sequence of layers,
-
-995
-01:10:51,817 --> 01:10:54,516
-but instead it's kind of
-working over some graph
-
-996
-01:10:54,516 --> 01:10:56,856
-or tree structure instead
-where now each data point
-
-997
+705
 01:10:56,856 --> 01:10:58,732
 might have a different
 graph or tree structure
 
-998
-01:10:58,732 --> 01:11:00,756
-so the structure of
-the computational graph
+706
+01:10:58,732 --> 01:11:05,714
+so the structure of the computational graph then kind of mirrors the structure
+of the input data. And it could vary from data point to data point.
 
-999
-01:11:00,756 --> 01:11:03,194
-then kind of mirrors the
-structure of the input data.
+707
+01:11:05,714 --> 01:11:10,316
+So this type of thing seems kind of complicated
+and hairy to implement using TensorFlow,
 
-1000
-01:11:03,194 --> 01:11:05,714
-And it could vary from
-data point to data point.
+708
+01:11:10,316 --> 01:11:14,887
+but in PyTorch you can just kind of use like normal
+Python control flow and it'll work out just fine.
 
-1001
-01:11:05,714 --> 01:11:07,934
-So this type of thing seems
-kind of complicated and
+709
+01:11:16,574 --> 01:11:23,678
+Another bit of more research application is this really cool idea that
+I like called neuromodule networks for visual question answering.
 
-1002
-01:11:07,934 --> 01:11:10,316
-hairy to implement using TensorFlow,
+710
+01:11:23,678 --> 01:11:31,737
+So here the idea is that we want to ask some questions about images where
+we maybe input this image of cats and dogs, there's some question,
 
-1003
-01:11:10,316 --> 01:11:12,478
-but in PyTorch you can just kind of use
+711
+01:11:31,737 --> 01:11:43,594
+what color is the cat, and then internally the system can read the question and that has these different
+specialized neural network modules for performing operations like asking for colors and finding cats.
 
-1004
-01:11:12,478 --> 01:11:14,054
-like normal Python control
-flow and it'll work out
+712
+01:11:43,594 --> 01:11:49,838
+And then depending on the text of the question, it can
+compile this custom architecture for answering the question.
 
-1005
-01:11:14,054 --> 01:11:14,887
-just fine.
-
-1006
-01:11:16,574 --> 01:11:19,198
-Another bit of more researchy
-application is this really
-
-1007
-01:11:19,198 --> 01:11:21,614
-cool idea that I like
-called neuromodule networks
-
-1008
-01:11:21,614 --> 01:11:23,678
-for visual question answering.
-
-1009
-01:11:23,678 --> 01:11:26,718
-So here the idea is that we
-want to ask some questions
-
-1010
-01:11:26,718 --> 01:11:29,278
-about images where we
-maybe input this image
-
-1011
-01:11:29,278 --> 01:11:31,737
-of cats and dogs, there's some question,
-
-1012
-01:11:31,737 --> 01:11:34,756
-what color is the cat, and
-then internally the system
-
-1013
-01:11:34,756 --> 01:11:37,614
-can read the question and
-that has these different
-
-1014
-01:11:37,614 --> 01:11:39,758
-specialized neural network
-modules for performing
-
-1015
-01:11:39,758 --> 01:11:43,594
-operations like asking for
-colors and finding cats.
-
-1016
-01:11:43,594 --> 01:11:45,915
-And then depending on
-the text of the question,
-
-1017
-01:11:45,915 --> 01:11:48,193
-it can compile this custom
-architecture for answering
-
-1018
-01:11:48,193 --> 01:11:49,838
-the question.
-
-1019
-01:11:49,838 --> 01:11:52,294
+713
+01:11:49,838 --> 01:11:55,094
 And now if we asked a different question,
-
-1020
-01:11:52,294 --> 01:11:55,094
 like are there more cats than dogs?
 
-1021
-01:11:55,094 --> 01:11:58,241
-Now we have maybe the
-same basic set of modules
+714
+01:11:55,094 --> 01:12:03,076
+Now we have maybe the same basic set of modules for doing things like finding
+cats and dogs and counting, but they're arranged in a different order.
 
-1022
-01:11:58,241 --> 01:12:00,534
-for doing things like finding
-cats and dogs and counting,
+715
+01:12:03,076 --> 01:12:07,716
+So we get this dynamism again where different data points
+might give rise to different computational graphs.
 
-1023
-01:12:00,534 --> 01:12:03,076
-but they're arranged in a different order.
-
-1024
-01:12:03,076 --> 01:12:05,177
-So we get this dynamism again
-where different data points
-
-1025
-01:12:05,177 --> 01:12:07,716
-might give rise to different
-computational graphs.
-
-1026
-01:12:07,716 --> 01:12:09,635
-But this is a bit more
-of a researchy thing
-
-1027
-01:12:09,635 --> 01:12:12,574
+716
+01:12:07,716 --> 01:12:12,574
+But this is a bit more of a research thing
 and maybe not so main stream right now.
 
-1028
-01:12:12,574 --> 01:12:15,037
-But as kind of a bigger
-point, I think that there's
+717
+01:12:12,574 --> 01:12:19,214
+But as kind of a bigger point, I think that there's a lot of cool, creative
+applications that people could do with dynamic computational graphs
 
-1029
-01:12:15,037 --> 01:12:17,198
-a lot of cool, creative
-applications that people
+718
+01:12:19,214 --> 01:12:23,471
+and maybe there aren't so many right now, just
+because it's been so painful to work with them.
 
-1030
-01:12:17,198 --> 01:12:19,214
-could do with dynamic computational graphs
+719
+01:12:23,471 --> 01:12:30,596
+So I think that there's a lot of opportunity for doing
+cool, creative things with dynamic computational graphs.
 
-1031
-01:12:19,214 --> 01:12:21,577
-and maybe there aren't so many right now,
-
-1032
-01:12:21,577 --> 01:12:23,471
-just because it's been so
-painful to work with them.
-
-1033
-01:12:23,471 --> 01:12:25,577
-So I think that there's
-a lot of opportunity
-
-1034
-01:12:25,577 --> 01:12:27,396
-for doing cool, creative things with
-
-1035
-01:12:27,396 --> 01:12:30,596
-dynamic computational graphs.
-
-1036
-01:12:30,596 --> 01:12:32,297
+720
+01:12:30,596 --> 01:12:34,078
 And maybe if you come up with cool ideas,
-
-1037
-01:12:32,297 --> 01:12:34,078
 we'll feature it in lecture next year.
 
-1038
-01:12:34,078 --> 01:12:37,612
-So I wanted to talk
-very briefly about Caffe
-
-1039
-01:12:37,612 --> 01:12:39,854
+721
+01:12:34,078 --> 01:12:39,854
+So I wanted to talk very briefly about Caffe
 which is this framework from Berkeley.
 
-1040
-01:12:39,854 --> 01:12:43,795
-Which Caffe is somewhat
-different from the other
+722
+01:12:39,854 --> 01:12:48,815
+Which Caffe is somewhat different from the other deep learning frameworks where you
+in many cases you can actually train networks without writing any code yourself.
 
-1041
-01:12:43,795 --> 01:12:45,774
-deep learning frameworks
-where you in many cases
+723
+01:12:48,815 --> 01:12:53,214
+You kind of just call into these pre-existing binaries,
+set up some configuration files and in many cases
 
-1042
-01:12:45,774 --> 01:12:47,454
-you can actually train
-networks without writing
-
-1043
-01:12:47,454 --> 01:12:48,815
-any code yourself.
-
-1044
-01:12:48,815 --> 01:12:50,798
-You kind of just call into
-these pre-existing binaries,
-
-1045
-01:12:50,798 --> 01:12:53,214
-set up some configuration
-files and in many cases
-
-1046
+724
 01:12:53,214 --> 01:12:56,697
 you can train on data without
 writing any of your own code.
 
-1047
-01:12:56,697 --> 01:13:00,078
-So, you may be first,
-you convert your data
+725
+01:12:56,697 --> 01:13:03,054
+So, you may be first, you convert your data into
+some format like HDF5 or LMDB and there exists
 
-1048
-01:13:00,078 --> 01:13:03,054
-into some format like HDF5
-or LMDB and there exists
+726
+01:13:03,054 --> 01:13:08,638
+some scripts inside Caffe that can just convert like folders
+of images and text files into these formats for you.
 
-1049
-01:13:03,054 --> 01:13:06,014
-some scripts inside Caffe
-that can just convert like
+727
+01:13:08,638 --> 01:13:19,934
+You need to define, now instead of writing code to define the structure of your computational graph,
+instead you edit some text file called a prototxt which sets up the structure of the computational graph.
 
-1050
-01:13:06,014 --> 01:13:08,638
-folders of images and text files
-into these formats for you.
+728
+01:13:19,934 --> 01:13:30,875
+Here the structure is that we read from some input HDF5 file, we perform some inner product,
+we compute some loss and the whole structure of the graph is set up in this text file.
 
-1051
-01:13:08,638 --> 01:13:12,537
-You need to define, now
-instead of writing code
+729
+01:13:30,875 --> 01:13:35,956
+One kind of downside here is that these files
+can get really ugly for very large networks.
 
-1052
-01:13:12,537 --> 01:13:14,478
-to define the structure of
-your computational graph,
+730
+01:13:35,956 --> 01:13:44,253
+So for something like the 152 layer ResNet model, which by the way was trained
+in Caffe originally, then this prototxt file ends up almost 7000 lines long.
 
-1053
-01:13:14,478 --> 01:13:17,414
-instead you edit some text
-file called a prototxt
+731
+01:13:44,253 --> 01:13:51,817
+So people are not writing these by hand. People will sometimes
+will like write python scripts to generate these prototxt files.
 
-1054
-01:13:17,414 --> 01:13:19,934
-which sets up the structure
-of the computational graph.
-
-1055
-01:13:19,934 --> 01:13:22,997
-Here the structure is that
-we read from some input
-
-1056
-01:13:22,997 --> 01:13:26,537
-HDF5 file, we perform some inner product,
-
-1057
-01:13:26,537 --> 01:13:28,974
-we compute some loss
-and the whole structure
-
-1058
-01:13:28,974 --> 01:13:30,875
-of the graph is set up in this text file.
-
-1059
-01:13:30,875 --> 01:13:33,653
-One kind of downside
-here is that these files
-
-1060
-01:13:33,653 --> 01:13:35,956
-can get really ugly for
-very large networks.
-
-1061
-01:13:35,956 --> 01:13:38,455
-So for something like the
-152 layer ResNet model,
-
-1062
-01:13:38,455 --> 01:13:41,535
-which by the way was
-trained in Caffe originally,
-
-1063
-01:13:41,535 --> 01:13:44,253
-then this prototxt file ends
-up almost 7000 lines long.
-
-1064
-01:13:44,253 --> 01:13:47,278
-So people are not writing these by hand.
-
-1065
-01:13:47,278 --> 01:13:49,887
-People will sometimes will
-like write python scripts
-
-1066
-01:13:49,887 --> 01:13:51,817
-to generate these prototxt files.
-
-1067
+732
 01:13:51,817 --> 01:13:53,275
 [laughter]
 
-1068
-01:13:53,275 --> 01:13:55,154
-Then you're kind in the
-realm of rolling your own
+733
+01:13:53,275 --> 01:13:58,974
+Then you're kind in the realm of rolling your own computational graph
+abstraction. That's probably not a good idea, but I've seen that before.
 
-1069
-01:13:55,154 --> 01:13:56,318
-computational graph abstraction.
+734
+01:13:58,974 --> 01:14:07,497
+Then, rather than having some optimizer object, instead there's
+some solver, you define some solver things inside another prototxt.
 
-1070
-01:13:56,318 --> 01:13:58,974
-That's probably not a good
-idea, but I've seen that before.
-
-1071
-01:13:58,974 --> 01:14:02,238
-Then, rather than having
-some optimizer object,
-
-1072
-01:14:02,238 --> 01:14:05,316
-instead there's some solver,
-you define some solver things
-
-1073
-01:14:05,316 --> 01:14:07,497
-inside another prototxt.
-
-1074
-01:14:07,497 --> 01:14:09,118
+735
+01:14:07,497 --> 01:14:11,036
 This defines your learning rate,
-
-1075
-01:14:09,118 --> 01:14:11,036
 your optimization algorithm and whatnot.
 
-1076
-01:14:11,036 --> 01:14:12,334
-And then once you do all these things,
+736
+01:14:11,036 --> 01:14:17,278
+And then once you do all these things, you can just run the Caffe
+binary with the train command and it all happens magically.
 
-1077
-01:14:12,334 --> 01:14:14,174
-you can just run the Caffe
-binary with the train command
+737
+01:14:17,278 --> 01:14:21,294
+Cafee has a model zoo with a bunch of
+pretrained models, that's pretty useful.
 
-1078
-01:14:14,174 --> 01:14:17,278
-and it all happens magically.
+738
+01:14:21,294 --> 01:14:25,438
+Caffe has a Python interface but
+it's not super well documented.
 
-1079
-01:14:17,278 --> 01:14:19,577
-Cafee has a model zoo with a
-bunch of pretrained models,
+739
+01:14:25,438 --> 01:14:31,455
+You kind of need to read the source code of the python interface to
+see what it can do, so that's kind of annoying. But it does work.
 
-1080
-01:14:19,577 --> 01:14:21,294
-that's pretty useful.
+740
+01:14:31,455 --> 01:14:40,174
+So, kind of my general thing about Caffe is that it's maybe good
+for feed forward models, it's maybe good for production scenarios,
 
-1081
-01:14:21,294 --> 01:14:23,454
-Caffe has a Python
-interface but it's not super
-
-1082
-01:14:23,454 --> 01:14:25,438
-well documented.
-
-1083
-01:14:25,438 --> 01:14:27,358
-You kind of need to read the
-source code of the python
-
-1084
-01:14:27,358 --> 01:14:29,017
-interface to see what it can do,
-
-1085
-01:14:29,017 --> 01:14:30,116
-so that's kind of annoying.
-
-1086
-01:14:30,116 --> 01:14:31,455
-But it does work.
-
-1087
-01:14:31,455 --> 01:14:35,622
-So, kind of my general thing
-about Caffe is that it's
-
-1088
-01:14:36,596 --> 01:14:38,334
-maybe good for feed forward models,
-
-1089
-01:14:38,334 --> 01:14:40,174
-it's maybe good for production scenarios,
-
-1090
+741
 01:14:40,174 --> 01:14:42,796
 because it doesn't depend on Python.
 
-1091
-01:14:42,796 --> 01:14:45,075
-But probably for research
-these days, I've seen Caffe
+742
+01:14:42,796 --> 01:14:47,358
+But probably for research these days, I've
+seen Caffe being used maybe a little bit less.
 
-1092
-01:14:45,075 --> 01:14:47,358
-being used maybe a little bit less.
+743
+01:14:47,358 --> 01:14:51,417
+Although I think it is still pretty commonly
+used in industry again for production.
 
-1093
-01:14:47,358 --> 01:14:49,597
-Although I think it is
-still pretty commonly used
-
-1094
-01:14:49,597 --> 01:14:51,417
-in industry again for production.
-
-1095
+744
 01:14:51,417 --> 01:14:54,410
 I promise one slide, one
 or two slides on Caffe 2.
 
-1096
+745
 01:14:54,410 --> 01:14:58,596
 So Caffe 2 is the successor to
 Caffe which is from Facebook.
 
-1097
+746
 01:14:58,596 --> 01:15:02,432
 It's super new, it was
 only released a week ago.
 
-1098
+747
 01:15:02,432 --> 01:15:04,436
 [laughter]
 
-1099
-01:15:04,436 --> 01:15:06,617
-So I really haven't had
-the time to form a super
+748
+01:15:04,436 --> 01:15:09,314
+So I really haven't had the time to form a
+super educated opinion about Caffe 2 yet,
 
-1100
-01:15:06,617 --> 01:15:09,314
-educated opinion about Caffe 2 yet,
-
-1101
+749
 01:15:09,314 --> 01:15:12,318
 but it uses static graphs
 kind of similar to TensorFlow.
 
-1102
-01:15:12,318 --> 01:15:15,198
-Kind of like Caffe one
-the core is written in C++
+750
+01:15:12,318 --> 01:15:17,817
+Kind of like Caffe one the core is written
+in C++ and they have some Python interface.
 
-1103
-01:15:15,198 --> 01:15:17,817
-and they have some Python interface.
+751
+01:15:17,817 --> 01:15:21,518
+The difference is that now you no longer need to write
+your own Python scripts to generate prototxt files.
 
-1104
-01:15:17,817 --> 01:15:19,694
-The difference is that
-now you no longer need to
+752
+01:15:21,518 --> 01:15:29,657
+You can kind of define your computational graph structure all in Python,
+kind of looking with an API that looks kind of like TensorFlow.
 
-1105
-01:15:19,694 --> 01:15:21,518
-write your own Python scripts
-to generate prototxt files.
+753
+01:15:29,657 --> 01:15:34,596
+But then you can spit out, you can serialize this
+computational graph structure to a prototxt file.
 
-1106
-01:15:21,518 --> 01:15:25,312
-You can kind of define your
-computational graph structure
+754
+01:15:34,596 --> 01:15:38,676
+And then once your model is trained and whatnot, then
+we get this benefit that we talked about of static
 
-1107
-01:15:25,312 --> 01:15:28,170
-all in Python, kind of
-looking with an API that looks
+755
+01:15:38,676 --> 01:15:43,534
+graphs where you can, you don't need the original
+training code now in order to deploy a trained model.
 
-1108
-01:15:28,170 --> 01:15:29,657
-kind of like TensorFlow.
+756
+01:15:43,534 --> 01:15:49,417
+So one interesting thing is that you've seen
+Google maybe has one major deep running framework,
 
-1109
-01:15:29,657 --> 01:15:31,854
-But then you can spit out,
-you can serialize this
+757
+01:15:49,417 --> 01:15:53,761
+which is TensorFlow, where Facebook
+has these two, PyTorch and Caffe 2.
 
-1110
-01:15:31,854 --> 01:15:34,596
-computational graph
-structure to a prototxt file.
-
-1111
-01:15:34,596 --> 01:15:36,777
-And then once your model
-is trained and whatnot,
-
-1112
-01:15:36,777 --> 01:15:38,676
-then we get this benefit that
-we talked about of static
-
-1113
-01:15:38,676 --> 01:15:41,257
-graphs where you can, you
-don't need the original
-
-1114
-01:15:41,257 --> 01:15:43,534
-training code now in order
-to deploy a trained model.
-
-1115
-01:15:43,534 --> 01:15:46,958
-So one interesting thing
-is that you've seen Google
-
-1116
-01:15:46,958 --> 01:15:49,417
-maybe has one major
-deep running framework,
-
-1117
-01:15:49,417 --> 01:15:52,094
-which is TensorFlow, where
-Facebook has these two,
-
-1118
-01:15:52,094 --> 01:15:53,761
-PyTorch and Caffe 2.
-
-1119
+758
 01:15:54,596 --> 01:15:57,252
 So these are kind of
 different philosophies.
 
-1120
-01:15:57,252 --> 01:15:59,751
-Google's kind of trying to
-build one framework to rule
+759
+01:15:57,252 --> 01:16:02,847
+Google's kind of trying to build one framework to rule them all
+that maybe works for every possible scenario for deep learning.
 
-1121
-01:15:59,751 --> 01:16:01,569
-them all that maybe works
-for every possible scenario
+760
+01:16:02,847 --> 01:16:07,852
+This is kind of nice because it consolidates all efforts onto
+one framework. It means you only need to learn one thing
 
-1122
-01:16:01,569 --> 01:16:02,847
-for deep learning.
+761
+01:16:07,852 --> 01:16:13,772
+and it'll work across many different scenarios including like distributed
+systems, production, deployment, mobile, research, everything.
 
-1123
-01:16:02,847 --> 01:16:04,609
-This is kind of nice because
-it consolidates all efforts
-
-1124
-01:16:04,609 --> 01:16:06,209
-onto one framework.
-
-1125
-01:16:06,209 --> 01:16:07,852
-It means you only need to learn one thing
-
-1126
-01:16:07,852 --> 01:16:09,464
-and it'll work across
-many different scenarios
-
-1127
-01:16:09,464 --> 01:16:11,708
-including like distributed
-systems, production,
-
-1128
-01:16:11,708 --> 01:16:13,772
-deployment, mobile, research, everything.
-
-1129
+762
 01:16:13,772 --> 01:16:15,706
 Only need to learn one framework
 to do all these things.
 
-1130
+763
 01:16:15,706 --> 01:16:18,151
 Whereas Facebook is taking a
 bit of a different approach.
 
-1131
-01:16:18,151 --> 01:16:20,849
-Where PyTorch is really more specialized,
+764
+01:16:18,151 --> 01:16:26,071
+Where PyTorch is really more specialized, more geared towards research so
+in terms of writing research code and quickly iterating on your ideas,
 
-1132
-01:16:20,849 --> 01:16:23,591
-more geared towards research
-so in terms of writing
+765
+01:16:26,071 --> 01:16:32,951
+that's super easy in PyTorch, but for things like running in production,
+running on mobile devices, PyTorch doesn't have a lot of great support.
 
-1133
-01:16:23,591 --> 01:16:26,071
-research code and quickly
-iterating on your ideas,
+766
+01:16:32,951 --> 01:16:37,710
+Instead, Caffe 2 is kind of geared toward
+those more production oriented use cases.
 
-1134
-01:16:26,071 --> 01:16:27,948
-that's super easy in
-PyTorch, but for things like
+767
+01:16:39,567 --> 01:16:47,350
+So my kind of general study, my general, overall advice about like
+which framework to use for which problems is kind of that both,
 
-1135
-01:16:27,948 --> 01:16:30,869
-running in production,
-running on mobile devices,
+768
+01:16:47,350 --> 01:16:53,510
+I think TensorFlow is a pretty safe bet for just
+about any project that you want to start new, right?
 
-1136
-01:16:30,869 --> 01:16:32,951
-PyTorch doesn't have a
-lot of great support.
+769
+01:16:53,510 --> 01:16:58,849
+Because it is sort of one framework to rule them
+all, it can be used for just about any circumstance.
 
-1137
-01:16:32,951 --> 01:16:35,210
-Instead, Caffe 2 is kind
-of geared toward those more
+770
+01:16:58,849 --> 01:17:05,207
+However, you probably need to pair it with a higher level wrapper
+and if you want dynamic graphs, you're maybe out of luck.
 
-1138
-01:16:35,210 --> 01:16:37,710
-production oriented use cases.
+771
+01:17:05,207 --> 01:17:13,190
+Some of the code ends up looking a little bit uglier in my opinion, but maybe
+that's kind of a cosmetic detail and it doesn't really matter that much.
 
-1139
-01:16:39,567 --> 01:16:42,929
-So my kind of general study,
-my general, overall advice
-
-1140
-01:16:42,929 --> 01:16:45,409
-about like which framework
-to use for which problems
-
-1141
-01:16:45,409 --> 01:16:47,350
-is kind of that both,
-
-1142
-01:16:47,350 --> 01:16:50,172
-I think TensorFlow is a
-pretty safe bet for just about
-
-1143
-01:16:50,172 --> 01:16:53,510
-any project that you
-want to start new, right?
-
-1144
-01:16:53,510 --> 01:16:56,168
-Because it is sort of one
-framework to rule them all,
-
-1145
-01:16:56,168 --> 01:16:58,849
-it can be used for just
-about any circumstance.
-
-1146
-01:16:58,849 --> 01:17:01,166
-However, you probably
-need to pair it with a
-
-1147
-01:17:01,166 --> 01:17:03,510
-higher level wrapper and
-if you want dynamic graphs,
-
-1148
-01:17:03,510 --> 01:17:05,207
-you're maybe out of luck.
-
-1149
-01:17:05,207 --> 01:17:07,152
-Some of the code ends up
-looking a little bit uglier
-
-1150
-01:17:07,152 --> 01:17:10,226
-in my opinion, but maybe that's
-kind of a cosmetic detail
-
-1151
-01:17:10,226 --> 01:17:13,190
-and it doesn't really matter that much.
-
-1152
+772
 01:17:13,190 --> 01:17:15,809
 I personally think PyTorch
 is really great for research.
 
-1153
-01:17:15,809 --> 01:17:18,675
-If you're focused on just
-writing research code,
+773
+01:17:15,809 --> 01:17:21,233
+If you're focused on just writing research
+code, I think PyTorch is a great choice.
 
-1154
-01:17:18,675 --> 01:17:21,233
-I think PyTorch is a great choice.
+774
+01:17:21,233 --> 01:17:25,649
+But it's a bit newer, has less community support, less
+code out there, so it could be a bit of an adventure.
 
-1155
-01:17:21,233 --> 01:17:23,830
-But it's a bit newer, has
-less community support,
+775
+01:17:25,649 --> 01:17:29,969
+If you want more of a well trodden path,
+TensorFlow might be a better choice.
 
-1156
-01:17:23,830 --> 01:17:25,649
-less code out there, so it
-could be a bit of an adventure.
+776
+01:17:29,969 --> 01:17:34,710
+If you're interested in production deployment, you
+should probably look at Caffe, Caffe 2 or TensorFlow.
 
-1157
-01:17:25,649 --> 01:17:28,412
-If you want more of a well
-trodden path, TensorFlow
+777
+01:17:34,710 --> 01:17:41,270
+And if you're really focused on mobile deployment, I think
+TensorFlow and Caffe 2 both have some built in support for that.
 
-1158
-01:17:28,412 --> 01:17:29,969
-might be a better choice.
+778
+01:17:41,270 --> 01:17:47,393
+So it's kind of unfortunately, there's not just like one global best
+framework, it kind of depends on what you're actually trying to do,
 
-1159
-01:17:29,969 --> 01:17:32,365
-If you're interested in
-production deployment,
+779
+01:17:47,393 --> 01:17:52,045
+what applications you anticipate but theses are
+kind of my general advice on those things.
 
-1160
-01:17:32,365 --> 01:17:34,710
-you should probably look at
-Caffe, Caffe 2 or TensorFlow.
-
-1161
-01:17:34,710 --> 01:17:37,017
-And if you're really focused
-on mobile deployment,
-
-1162
-01:17:37,017 --> 01:17:39,312
-I think TensorFlow and Caffe
-2 both have some built in
-
-1163
-01:17:39,312 --> 01:17:41,270
-support for that.
-
-1164
-01:17:41,270 --> 01:17:43,325
-So it's kind of unfortunately,
-there's not just like
-
-1165
-01:17:43,325 --> 01:17:45,009
-one global best framework,
-it kind of depends
-
-1166
-01:17:45,009 --> 01:17:47,393
-on what you're actually trying to do,
-
-1167
-01:17:47,393 --> 01:17:49,212
-what applications you anticipate
-but theses are kind of
-
-1168
-01:17:49,212 --> 01:17:52,045
-my general advice on those things.
-
-1169
+780
 01:17:53,169 --> 01:17:55,691
-So next time we'll talk
-about some case studies
-
-1170
-01:17:55,691 --> 00:00:00,000
+So next time we'll talk about some case studies of
+various of CNN architectures.
