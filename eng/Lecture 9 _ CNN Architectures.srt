@@ -2040,3164 +2040,2781 @@ And so the hypothesis of the ResNet creators is that
 the problem is actually an optimization problem.
 
 420
-00:50:10,253 --> 00:50:13,361
+00:50:10,253 --> 00:50:15,611
 Deeper models are just harder to optimize,
-
-421
-00:50:13,361 --> 00:50:15,611
 than more shallow networks.
 
+421
+00:50:16,835 --> 00:50:23,263
+And the reasoning was that well, a deeper model should be
+able to perform at least as well as a shallower model.
+
 422
-00:50:16,835 --> 00:50:18,507
-And the reasoning was that well,
-
-423
-00:50:18,507 --> 00:50:20,679
-a deeper model should be
-able to perform at least
-
-424
-00:50:20,679 --> 00:50:23,263
-as well as a shallower model.
-
-425
 00:50:23,263 --> 00:50:25,428
 You can have actually a
 solution by construction
 
-426
+423
 00:50:25,428 --> 00:50:27,835
 where you just take the learned layers
 
-427
+424
 00:50:27,835 --> 00:50:29,676
 from your shallower model, you just
 
-428
+425
 00:50:29,676 --> 00:50:32,330
 copy these over and then
 for the remaining additional
 
-429
+426
 00:50:32,330 --> 00:50:35,192
 deeper layers you just
 add identity mappings.
 
-430
+427
 00:50:35,192 --> 00:50:38,092
 So by construction this
 should be working just as well
 
-431
-00:50:36,803 --> 00:50:43,383
-
-
-432
+428
 00:50:38,092 --> 00:50:39,533
 as the shallower layer.
 
-433
+429
 00:50:39,533 --> 00:50:42,277
 And your model that weren't
 able to learn properly,
 
-434
+430
 00:50:42,277 --> 00:50:46,295
 it should be able to learn at least this.
 
-435
-00:50:43,383 --> 00:50:50,723
-
-
-436
+431
 00:50:46,295 --> 00:50:49,878
 And so motivated by
 this their solution was
 
-437
+432
 00:50:51,608 --> 00:50:56,184
 well how can we make it
 easier for our architecture,
 
-438
-00:50:55,123 --> 00:50:59,169
-
-
-439
+433
 00:50:56,184 --> 00:50:59,086
 our model to learn these
 kinds of solutions,
 
-440
+434
 00:50:59,086 --> 00:51:00,594
 or at least something like this?
 
-441
+435
 00:51:00,594 --> 00:51:05,493
 And so their idea is well
 instead of just stacking
 
-442
-00:51:02,702 --> 00:51:07,224
-
-
-443
+436
 00:51:05,493 --> 00:51:07,865
 all these layers on top
 of each other and having
 
-444
+437
 00:51:07,865 --> 00:51:11,794
 every layer try and learn
 some underlying mapping
 
-445
-00:51:09,480 --> 00:51:15,861
-
-
-446
+438
 00:51:11,794 --> 00:51:16,754
 of a desired function, lets
 instead have these blocks,
 
-447
+439
 00:51:16,754 --> 00:51:19,662
 where we try and fit a residual mapping,
 
-448
+440
 00:51:19,662 --> 00:51:21,708
 instead of a direct mapping.
 
-449
+441
 00:51:21,708 --> 00:51:24,053
 And so what this looks
 like is here on this right
 
-450
+442
 00:51:24,053 --> 00:51:28,220
 where the input to these block
 is just the input coming in
 
-451
-00:51:25,587 --> 00:51:29,809
-
-
-452
+443
 00:51:29,818 --> 00:51:33,985
 and here we are going to
 use our, here on the side,
 
-453
-00:51:35,960 --> 00:51:43,283
-
-
-454
+444
 00:51:37,338 --> 00:51:40,241
 we're going to use our
 layers to try and fit
 
-455
+445
 00:51:40,241 --> 00:51:43,408
 some residual of our desire to H of X,
 
-456
-00:51:43,283 --> 00:51:49,956
-
-
-457
+446
 00:51:44,332 --> 00:51:48,499
 minus X instead of the desired
 function H of X directly.
 
-458
+447
 00:51:49,450 --> 00:51:53,004
 And so basically at the
 end of this block we take
 
-459
-00:51:49,956 --> 00:52:00,647
-
-
-460
+448
 00:51:53,004 --> 00:51:55,827
 the step connection on
 this right here, this loop,
 
-461
+449
 00:51:55,827 --> 00:51:58,977
 where we just take our input,
 we just use pass it through
 
-462
+450
 00:51:58,977 --> 00:52:02,536
 as an identity, and so if
 we had no weight layers
 
-463
-00:52:00,647 --> 00:52:07,993
-
-
-464
+451
 00:52:02,536 --> 00:52:04,292
 in between it was just
 going to be the identity
 
-465
+452
 00:52:04,292 --> 00:52:07,241
 it would be the same thing
 as the output, but now we use
 
-466
+453
 00:52:07,241 --> 00:52:10,145
 our additional weight
 layers to learn some delta,
 
-467
-00:52:07,993 --> 00:52:17,638
-
-
-468
+454
 00:52:10,145 --> 00:52:12,562
 for some residual from our X.
 
-469
+455
 00:52:14,067 --> 00:52:15,794
 And so now the output
 of this is going to be
 
-470
+456
 00:52:15,794 --> 00:52:19,127
 just our original R X plus some residual
 
-471
-00:52:17,638 --> 00:52:23,262
-
-
-472
+457
 00:52:20,085 --> 00:52:21,193
 that we're going to call it.
 
-473
+458
 00:52:21,193 --> 00:52:24,502
 It's basically a delta
 and so the idea is that
 
-474
-00:52:23,262 --> 00:52:28,970
-
-
-475
+459
 00:52:24,502 --> 00:52:28,428
 now the output it should
 be easy for example,
 
-476
+460
 00:52:28,428 --> 00:52:31,428
 in the case where identity is ideal,
 
-477
-00:52:28,970 --> 00:52:35,832
-
-
-478
+461
 00:52:32,510 --> 00:52:36,268
 to just squash all of
 these weights of F of X
 
-479
+462
 00:52:36,268 --> 00:52:39,249
 from our weight layers
 just set it to all zero
 
-480
-00:52:36,967 --> 00:52:41,134
-
-
-481
+463
 00:52:39,249 --> 00:52:41,498
 for example, then we're
 just going to get identity
 
-482
+464
 00:52:41,498 --> 00:52:43,509
 as the output, and we can get something,
 
-483
+465
 00:52:43,509 --> 00:52:47,021
 for example, close to this
 solution by construction
 
-484
+466
 00:52:47,021 --> 00:52:48,578
 that we had earlier.
 
-485
+467
 00:52:48,578 --> 00:52:50,504
 Right, so this is just
 a network architecture
 
-486
+468
 00:52:50,504 --> 00:52:52,638
 that says okay, let's try and fit this,
 
-487
+469
 00:52:52,638 --> 00:52:56,764
 learn how our weight layers
 residual, and be something
 
-488
-00:52:53,100 --> 00:53:00,435
-
-
-489
+470
 00:52:56,764 --> 00:53:00,962
 close, that way it'll more
 likely be something close to X,
 
-490
+471
 00:53:00,962 --> 00:53:03,341
 it's just modifying X,
 than to learn exactly
 
-491
+472
 00:53:03,341 --> 00:53:05,388
 this full mapping of what it should be.
 
-492
+473
 00:53:05,388 --> 00:53:08,249
 Okay, any questions about this?
 
-493
-00:53:06,317 --> 00:53:09,355
-
-
-494
+474
 00:53:08,249 --> 00:53:09,189
 [student speaks off mic]
 
-495
+475
 00:53:09,189 --> 00:53:12,689
 - Question is is there the same dimension?
 
-496
+476
 00:53:13,770 --> 00:53:17,603
 So yes these two paths
 are the same dimension.
 
-497
-00:53:15,170 --> 00:53:21,862
-
-
-498
+477
 00:53:18,752 --> 00:53:21,573
 In general either it's the same dimension,
 
-499
+478
 00:53:21,573 --> 00:53:23,856
 or what they actually
 do is they have these
 
-500
-00:53:21,862 --> 00:53:26,975
-
-
-501
+479
 00:53:23,856 --> 00:53:26,761
 projections and shortcuts
 and they have different ways
 
-502
+480
 00:53:26,761 --> 00:53:30,980
 of padding to make things work
 out to be the same dimension.
 
-503
-00:53:26,975 --> 00:53:32,224
-
-
-504
+481
 00:53:30,980 --> 00:53:32,288
 Depth wise.
 
-505
+482
 00:53:32,288 --> 00:53:33,395
 Yes
 
-506
+483
 00:53:33,395 --> 00:53:34,953
 - [Student] When you use the word residual
 
-507
+484
 00:53:34,953 --> 00:53:39,120
 you were talking about [mumbles off mic]
 
-508
-00:53:42,899 --> 00:53:46,827
-
-
-509
+485
 00:53:45,857 --> 00:53:48,597
 - So the question is what
 exactly do we mean by
 
-510
-00:53:46,827 --> 00:53:50,008
-
-
-511
+486
 00:53:48,597 --> 00:53:52,158
 residual this output
 of this transformation
 
-512
+487
 00:53:52,158 --> 00:53:53,638
 is a residual?
 
-513
+488
 00:53:53,638 --> 00:53:57,609
 So we can think of our output
 here right as this F of X
 
-514
-00:53:54,468 --> 00:54:02,650
-
-
-515
+489
 00:53:57,609 --> 00:54:01,899
 plus X, where F of X is the
 output of our transformation
 
-516
+490
 00:54:01,899 --> 00:54:05,536
 and then X is our input,
 just passed through
 
-517
-00:54:02,650 --> 00:54:11,934
-
-
-518
+491
 00:54:05,536 --> 00:54:06,650
 by the identity.
 
-519
+492
 00:54:06,650 --> 00:54:09,795
 So we'd like to using a plain layer,
 
-520
+493
 00:54:09,795 --> 00:54:12,044
 what we're trying to do is learn something
 
-521
+494
 00:54:12,044 --> 00:54:15,477
 like H of X, but what we saw
 earlier is that it's hard
 
-522
-00:54:13,197 --> 00:54:16,436
-
-
-523
+495
 00:54:15,477 --> 00:54:17,198
 to learn H of X.
 
-524
+496
 00:54:17,198 --> 00:54:20,671
 It's a good H of X as we
 get very deep networks.
 
-525
-00:54:18,162 --> 00:54:21,577
-
-
-526
+497
 00:54:20,671 --> 00:54:22,961
 And so here the idea is
 let's try and break it down
 
-527
-00:54:21,577 --> 00:54:27,647
-
-
-528
+498
 00:54:22,961 --> 00:54:26,491
 instead of as H of X is
 equal to F of X plus,
 
-529
+499
 00:54:26,491 --> 00:54:29,438
 and let's just try and learn F of X.
 
-530
-00:54:27,647 --> 00:54:33,649
-
-
-531
+500
 00:54:29,438 --> 00:54:32,838
 And so instead of learning
 directly this H of X
 
-532
+501
 00:54:32,838 --> 00:54:35,531
 we just want to learn what
 is it that we need to add
 
-533
+502
 00:54:35,531 --> 00:54:39,741
 or subtract to our input as
 we move on to the next layer.
 
-534
+503
 00:54:39,741 --> 00:54:43,350
 So you can think of it as
 kind of modifying this input,
 
-535
+504
 00:54:43,350 --> 00:54:44,659
 in place in a sense.
 
-536
+505
 00:54:44,659 --> 00:54:45,889
 We have--
 
-537
+506
 00:54:45,889 --> 00:54:49,121
 [interrupted by student mumbling off mic]
 
-538
-00:54:46,651 --> 00:54:53,263
-
-
-539
+507
 00:54:49,121 --> 00:54:50,844
 - The question is, when we're
 saying the word residual
 
-540
+508
 00:54:50,844 --> 00:54:52,438
 are we talking about F of X?
 
-541
+509
 00:54:52,438 --> 00:54:53,547
 Yeah.
 
-542
+510
 00:54:53,547 --> 00:54:55,712
 So F of X is what we're
 calling the residual.
 
-543
+511
 00:54:55,712 --> 00:54:58,129
 And it just has that meaning.
 
-544
-00:54:58,873 --> 00:55:04,441
-
-
-545
+512
 00:55:01,477 --> 00:55:03,941
 Yes another question.
 
-546
+513
 00:55:03,941 --> 00:55:07,441
 [student mumbles off mic]
 
-547
-00:55:04,441 --> 00:55:10,718
-
-
-548
+514
 00:55:11,319 --> 00:55:13,524
 - So the question is in
 practice do we just sum
 
-549
+515
 00:55:13,524 --> 00:55:16,670
 F of X and X together, or
 do we learn some weighted
 
-550
+516
 00:55:16,670 --> 00:55:20,145
 combination and you just do a direct sum.
 
-551
-00:55:17,327 --> 00:55:22,543
-
-
-552
+517
 00:55:20,145 --> 00:55:22,789
 Because when you do a direct sum,
 
-553
+518
 00:55:22,789 --> 00:55:26,059
 this is the idea of let
 me just learn what is it
 
-554
+519
 00:55:26,059 --> 00:55:28,809
 I have to add or subtract onto X.
 
-555
-00:55:26,322 --> 00:55:31,342
-
-
-556
+520
 00:55:30,652 --> 00:55:34,463
 Is this clear to everybody,
 the main intuition?
 
-557
-00:55:31,342 --> 00:55:36,248
-
-
-558
+521
 00:55:34,463 --> 00:55:35,361
 Question.
 
-559
+522
 00:55:35,361 --> 00:55:38,778
 [student speaks off mic]
 
-560
-00:55:36,248 --> 00:55:39,820
-
-
-561
+523
 00:55:40,721 --> 00:55:43,055
 - Yeah, so the question
 is not clear why is it
 
-562
+524
 00:55:43,055 --> 00:55:45,013
 that learning the
 residual should be easier
 
-563
+525
 00:55:45,013 --> 00:55:47,099
 than learning the direct mapping?
 
-564
+526
 00:55:47,099 --> 00:55:49,799
 And so this is just their hypotheses,
 
-565
-00:55:47,493 --> 00:55:53,623
-
-
-566
+527
 00:55:49,799 --> 00:55:54,371
 and a hypotheses is that if
 we're learning the residual
 
-567
+528
 00:55:54,371 --> 00:55:58,747
 you just have to learn
 what's the delta to X right?
 
-568
+529
 00:55:58,747 --> 00:56:02,137
 And if our hypotheses is that generally
 
-569
-00:55:59,844 --> 00:56:04,404
-
-
-570
+530
 00:56:02,137 --> 00:56:06,359
 even something like our
 solution by construction,
 
-571
-00:56:04,404 --> 00:56:08,287
-
-
-572
+531
 00:56:06,359 --> 00:56:09,880
 where we had some number
 of these shallow layers
 
-573
-00:56:08,287 --> 00:56:13,436
-
-
-574
+532
 00:56:09,880 --> 00:56:12,908
 that were learned and we had
 all these identity mappings
 
-575
+533
 00:56:12,908 --> 00:56:16,101
 at the top this was a
 solution that should have been
 
-576
-00:56:13,436 --> 00:56:22,539
-
-
-577
+534
 00:56:16,101 --> 00:56:19,409
 good, and so that implies that
 maybe a lot of these layers,
 
-578
+535
 00:56:19,409 --> 00:56:22,347
 actually something just close to identity,
 
-579
+536
 00:56:22,347 --> 00:56:23,985
 would be a good layer
 
-580
+537
 00:56:23,985 --> 00:56:26,282
 And so because of that,
 now we formulate this
 
-581
+538
 00:56:26,282 --> 00:56:29,358
 as being able to learn the identity
 
-582
+539
 00:56:29,358 --> 00:56:30,954
 plus just a little delta.
 
-583
+540
 00:56:30,954 --> 00:56:34,315
 And if really the identity
 is best we just make
 
-584
+541
 00:56:34,315 --> 00:56:36,763
 F of X squashes transformation
 to just be zero,
 
-585
+542
 00:56:36,763 --> 00:56:38,852
 which is something that's relatively,
 
-586
+543
 00:56:38,852 --> 00:56:40,363
 might seem easier to learn,
 
-587
+544
 00:56:40,363 --> 00:56:42,699
 also we're able to get
 things that are close
 
-588
+545
 00:56:42,699 --> 00:56:44,784
 to identity mappings.
 
-589
-00:56:43,626 --> 00:56:49,006
-
-
-590
+546
 00:56:44,784 --> 00:56:47,117
 And so again this is not
 something that's necessarily
 
-591
+547
 00:56:47,117 --> 00:56:50,966
 proven or anything it's just
 the intuition and hypothesis,
 
-592
-00:56:49,006 --> 00:56:54,404
-
-
-593
+548
 00:56:50,966 --> 00:56:54,038
 and then we'll also see
 later some works where people
 
-594
+549
 00:56:54,038 --> 00:56:55,723
 are actually trying to
 challenge this and say oh maybe
 
-595
-00:56:54,404 --> 00:56:58,244
-
-
-596
+550
 00:56:55,723 --> 00:56:58,708
 it's not actually the residuals
 that are so necessary,
 
-597
+551
 00:56:58,708 --> 00:57:02,259
 but at least this is the
 hypothesis for this paper,
 
-598
+552
 00:57:02,259 --> 00:57:05,295
 and in practice using this model,
 
-599
-00:57:03,211 --> 00:57:06,463
-
-
-600
+553
 00:57:05,295 --> 00:57:07,507
 it was able to do very well.
 
-601
-00:57:06,463 --> 00:57:11,939
-
-
-602
+554
 00:57:07,507 --> 00:57:08,810
 Question.
 
-603
+555
 00:57:08,810 --> 00:57:12,227
 [student speaks off mic]
 
-604
-00:57:11,939 --> 00:57:16,207
-
-
-605
-00:57:16,207 --> 00:57:22,190
-
-
-606
-00:57:22,190 --> 00:57:27,961
-
-
-607
-00:57:27,961 --> 00:57:30,305
-
-
-608
-00:57:30,305 --> 00:57:39,000
-
-
-609
-00:57:39,000 --> 00:57:43,904
-
-
-610
+556
 00:57:41,813 --> 00:57:44,584
 - Yes so the question is
 have people tried other ways
 
-611
+557
 00:57:44,584 --> 00:57:49,128
 of combining the inputs
 from previous layers and yes
 
-612
+558
 00:57:49,128 --> 00:57:51,746
 so this is basically a very
 active area of research
 
-613
+559
 00:57:51,746 --> 00:57:54,208
 on and how we formulate
 all these connections,
 
-614
+560
 00:57:54,208 --> 00:57:56,747
 and what's connected to what
 in all of these structures.
 
-615
+561
 00:57:56,747 --> 00:57:59,364
 So we'll see a few more
 examples of different network
 
-616
+562
 00:57:59,364 --> 00:58:03,695
 architectures briefly later
 but this is an active area
 
-617
-00:58:00,233 --> 00:58:06,241
-
-
-618
+563
 00:58:03,695 --> 00:58:04,695
 of research.
 
-619
+564
 00:58:05,658 --> 00:58:09,435
 OK so we basically have all
 of these residual blocks
 
-620
-00:58:06,241 --> 00:58:10,862
-
-
-621
+565
 00:58:09,435 --> 00:58:12,093
 that are stacked on top of each other.
 
-622
-00:58:10,862 --> 00:58:16,447
-
-
-623
+566
 00:58:12,093 --> 00:58:14,788
 We can see the full resident architecture.
 
-624
+567
 00:58:14,788 --> 00:58:17,940
 Each of these residual blocks
 has two three by three conv
 
-625
-00:58:16,447 --> 00:58:25,656
-
-
-626
+568
 00:58:17,940 --> 00:58:22,475
 layers as part of this block
 and there's also been work
 
-627
+569
 00:58:22,475 --> 00:58:25,669
 just saying that this happens
 to be a good configuration
 
-628
+570
 00:58:25,669 --> 00:58:27,299
 that works well.
 
-629
+571
 00:58:27,299 --> 00:58:29,828
 We stack all these blocks
 together very deeply.
 
-630
+572
 00:58:29,828 --> 00:58:33,351
 Another thing like with
 this very deep architecture
 
-631
-00:58:30,784 --> 00:58:35,007
-
-
-632
+573
 00:58:33,351 --> 00:58:37,101
 it's basically also
 enabling up to 150 layers
 
-633
-00:58:35,007 --> 00:58:37,319
-
-
-634
-00:58:37,319 --> 00:58:41,423
-
-
-635
+574
 00:58:41,421 --> 00:58:45,171
 deep of this, and then
 what we do is we stack
 
-636
+575
 00:58:46,582 --> 00:58:48,915
 all these and periodically we also double
 
-637
+576
 00:58:48,915 --> 00:58:51,232
 the number of filters
 and down sample spatially
 
-638
+577
 00:58:51,232 --> 00:58:53,982
 using stride two when we do that.
 
-639
-00:58:53,866 --> 00:59:01,007
-
-
-640
+578
 00:58:55,856 --> 00:58:58,509
 And then we have this additional [mumbles]
 
-641
+579
 00:58:58,509 --> 00:59:02,025
 at the very beginning of our network
 
-642
-00:59:01,007 --> 00:59:10,356
-
-
-643
+580
 00:59:02,025 --> 00:59:02,858
 and at the end we also hear,
 
-644
+581
 00:59:02,858 --> 00:59:03,867
 don't have any fully connected layers
 
-645
+582
 00:59:03,867 --> 00:59:06,034
 and we just have a global
 average pooling layer
 
-646
+583
 00:59:06,034 --> 00:59:08,641
 that's going to average
 over everything spatially,
 
-647
+584
 00:59:08,641 --> 00:59:12,808
 and then be input into the
 last 1000 way classification.
 
-648
-00:59:10,356 --> 00:59:18,063
-
-
-649
+585
 00:59:14,694 --> 00:59:16,991
 So this is the full ResNet architecture
 
-650
+586
 00:59:16,991 --> 00:59:19,523
 and it's very simple and
 elegant just stacking up
 
-651
-00:59:18,063 --> 00:59:26,463
-
-
-652
+587
 00:59:19,523 --> 00:59:21,935
 all of these ResNet blocks
 on top of each other,
 
-653
+588
 00:59:21,935 --> 00:59:26,222
 and they have total depths
 of up to 34, 50, 100,
 
-654
+589
 00:59:26,222 --> 00:59:29,389
 and they tried up to 152 for ImageNet.
 
-655
-00:59:26,463 --> 00:59:32,411
-
-
-656
-00:59:32,411 --> 00:59:39,398
-
-
-657
+590
 00:59:34,230 --> 00:59:38,559
 OK so one additional
 thing just to know is that
 
-658
+591
 00:59:38,559 --> 00:59:41,059
 for a very deep network,
 so the ones that are more
 
-659
-00:59:39,398 --> 00:59:43,648
-
-
-660
+592
 00:59:41,059 --> 00:59:43,964
 than 50 layers deep, they
 also use bottleneck layers
 
-661
+593
 00:59:43,964 --> 00:59:46,663
 similar to what GoogleNet did
 in order to improve efficiency
 
-662
+594
 00:59:46,663 --> 00:59:51,055
 and so within each block
 now you're going to,
 
-663
+595
 00:59:51,055 --> 00:59:53,835
 what they did is, have this
 one by one conv filter,
 
-664
-00:59:51,423 --> 00:59:57,599
-
-
-665
+596
 00:59:53,835 --> 00:59:57,195
 that first projects it
 down to a smaller depth.
 
-666
+597
 00:59:57,195 --> 01:00:00,964
 So again if we are looking
 at let's say 28 by 28
 
-667
-00:59:57,599 --> 01:00:03,351
-
-
-668
+598
 01:00:00,964 --> 01:00:04,277
 by 256 implant, we do
 this one by one conv,
 
-669
+599
 01:00:04,277 --> 01:00:06,116
 it's taking it's
 projecting the depth down.
 
-670
-01:00:04,773 --> 01:00:06,777
-
-
-671
+600
 01:00:06,116 --> 01:00:07,949
 We get 28 by 28 by 64.
 
-672
-01:00:06,777 --> 01:00:10,711
-
-
-673
+601
 01:00:09,107 --> 01:00:11,410
 Now your convolution
 your three by three conv,
 
-674
+602
 01:00:11,410 --> 01:00:14,999
 in here they only have
 one, is operating over this
 
-675
-01:00:13,458 --> 01:00:17,949
-
-
-676
+603
 01:00:14,999 --> 01:00:18,486
 reduced step so it's going
 to be less expensive,
 
-677
+604
 01:00:18,486 --> 01:00:21,071
 and then afterwards they have another
 
-678
+605
 01:00:21,071 --> 01:00:23,811
 one by one conv that
 projects the depth back up
 
-679
+606
 01:00:23,811 --> 01:00:27,370
 to 256, and so, this is
 the actual block that
 
-680
-01:00:26,284 --> 01:00:32,790
-
-
-681
+607
 01:00:27,370 --> 01:00:29,870
 you'll see in deeper networks.
 
-682
+608
 01:00:33,021 --> 01:00:37,808
 So in practice the ResNet
 also uses batch normalization
 
-683
+609
 01:00:37,808 --> 01:00:41,282
 after every conv layer, they
 use Xavier initialization
 
-684
+610
 01:00:41,282 --> 01:00:45,449
 with an extra scaling factor
 that they helped introduce
 
-685
-01:00:45,097 --> 01:00:50,179
-
-
-686
+611
 01:00:46,411 --> 01:00:50,578
 to improve the initialization
 trained with SGD + momentum.
 
-687
-01:00:50,179 --> 01:00:53,951
-
-
-688
+612
 01:00:51,604 --> 01:00:53,812
 Their learning rate they
 use a similar learning rate
 
-689
+613
 01:00:53,812 --> 01:00:56,470
 type of schedule where you
 decay your learning rate
 
-690
+614
 01:00:56,470 --> 01:00:59,470
 when your validation error plateaus.
 
-691
+615
 01:01:01,751 --> 01:01:04,541
 Mini batch size 256, a
 little bit of weight decay
 
-692
+616
 01:01:04,541 --> 01:01:05,874
 and no drop out.
 
-693
+617
 01:01:07,645 --> 01:01:10,180
 And so experimentally they
 were able to show that they
 
-694
+618
 01:01:10,180 --> 01:01:11,900
 were able to train these
 very deep networks,
 
-695
+619
 01:01:11,900 --> 01:01:13,581
 without degrading.
 
-696
-01:01:12,470 --> 01:01:17,290
-
-
-697
+620
 01:01:13,581 --> 01:01:16,772
 They were able to have
 basically good gradient flow
 
-698
+621
 01:01:16,772 --> 01:01:19,060
 coming all the way back
 down through the network.
 
-699
-01:01:17,290 --> 01:01:22,559
-
-
-700
+622
 01:01:19,060 --> 01:01:22,625
 They tried up to 152 layers on ImageNet,
 
-701
+623
 01:01:22,625 --> 01:01:26,632
 1200 on Cifar, which is a,
 you have played with it,
 
-702
-01:01:25,147 --> 01:01:32,201
-
-
-703
+624
 01:01:26,632 --> 01:01:30,715
 but a smaller data set
 and they also saw that now
 
-704
+625
 01:01:31,994 --> 01:01:34,746
 you're deeper networks are
 able to achieve lower training
 
-705
-01:01:32,201 --> 01:01:36,938
-
-
-706
+626
 01:01:34,746 --> 01:01:36,303
 errors as expected.
 
-707
+627
 01:01:36,303 --> 01:01:39,418
 So you don't have the same strange plots
 
-708
-01:01:36,938 --> 01:01:39,199
-
-
-709
+628
 01:01:39,418 --> 01:01:43,031
 that we saw earlier where the behavior
 
-710
+629
 01:01:43,031 --> 01:01:44,543
 was in the wrong direction.
 
-711
+630
 01:01:44,543 --> 01:01:47,450
 And so from here they were
 able to sweep first place
 
-712
-01:01:46,404 --> 01:01:53,721
-
-
-713
+631
 01:01:47,450 --> 01:01:49,534
 at all of the ILSVRC competitions,
 
-714
+632
 01:01:49,534 --> 01:01:52,760
 and all of the COCO competitions in 2015
 
-715
+633
 01:01:52,760 --> 01:01:54,843
 by a significant margins.
 
-716
-01:01:53,721 --> 01:01:58,860
-
-
-717
+634
 01:01:56,152 --> 01:02:00,764
 Their total top five error
 was 3.6 % for a classification
 
-718
-01:01:58,860 --> 01:02:05,241
-
-
-719
+635
 01:02:00,764 --> 01:02:04,816
 and this is actually better
 than human performance
 
-720
+636
 01:02:04,816 --> 01:02:06,649
 in the ImageNet paper.
 
-721
-01:02:05,241 --> 01:02:16,955
-
-
-722
+637
 01:02:08,902 --> 01:02:12,054
 There was also a human
 metric that came from
 
-723
+638
 01:02:12,054 --> 01:02:16,221
 actually [mumbles] our
 lab Andre Kapathy spent
 
-724
+639
 01:02:17,213 --> 01:02:21,130
 like a week training
 himself and then basically
 
-725
-01:02:17,796 --> 01:02:21,721
-
-
-726
+640
 01:02:22,317 --> 01:02:24,730
 did all of, did this task himself
 
-727
+641
 01:02:24,730 --> 01:02:28,531
 and was I think somewhere around 5-ish %,
 
-728
-01:02:25,481 --> 01:02:37,335
-
-
-729
+642
 01:02:28,531 --> 01:02:30,774
 and so I was basically able to do
 
-730
+643
 01:02:30,774 --> 01:02:34,191
 better than the then that human at least.
 
-731
+644
 01:02:36,175 --> 01:02:40,262
 Okay, so these are kind
 of the main networks
 
-732
-01:02:37,335 --> 01:02:41,593
-
-
-733
+645
 01:02:40,262 --> 01:02:42,069
 that have been used recently.
 
-734
+646
 01:02:42,069 --> 01:02:44,401
 We had AlexNet starting off with first,
 
-735
+647
 01:02:44,401 --> 01:02:48,004
 VGG and GoogleNet are still very popular,
 
-736
+648
 01:02:48,004 --> 01:02:51,157
 but ResNet is the most
 recent best performing model
 
-737
+649
 01:02:51,157 --> 01:02:55,290
 that if you're looking for
 something training a new network
 
-738
-01:02:51,449 --> 01:02:56,243
-
-
-739
+650
 01:02:55,290 --> 01:02:56,885
 ResNet is available, you should try
 
-740
+651
 01:02:56,885 --> 01:02:58,218
 working with it.
 
-741
+652
 01:03:00,154 --> 01:03:04,034
 So just quickly looking at
 some of this getting a better
 
-742
+653
 01:03:04,034 --> 01:03:06,403
 sense of the complexity involved.
 
-743
+654
 01:03:06,403 --> 01:03:08,288
 So here we have some
 plots that are sorted by
 
-744
+655
 01:03:08,288 --> 01:03:12,038
 performance so this is
 top one accuracy here,
 
-745
+656
 01:03:13,193 --> 01:03:15,275
 and higher is better.
 
-746
+657
 01:03:15,275 --> 01:03:17,077
 And so you'll see a lot
 of these models that we
 
-747
+658
 01:03:17,077 --> 01:03:19,007
 talked about, as well as
 some different versions
 
-748
+659
 01:03:19,007 --> 01:03:21,540
 of them so, this
 GoogleNet inception thing,
 
-749
+660
 01:03:21,540 --> 01:03:25,456
 I think there's like V2,
 V3 and the best one here
 
-750
+661
 01:03:25,456 --> 01:03:28,325
 is V4, which is actually
 a ResNet plus inception
 
-751
-01:03:25,999 --> 01:03:32,229
-
-
-752
+662
 01:03:28,325 --> 01:03:31,389
 combination, so these are just kind of
 
-753
+663
 01:03:31,389 --> 01:03:34,010
 more incremental, smaller
 changes that they've
 
-754
-01:03:32,229 --> 01:03:36,420
-
-
-755
+664
 01:03:34,010 --> 01:03:36,745
 built on top of them,
 and so that's the best
 
-756
+665
 01:03:36,745 --> 01:03:39,159
 performing model here.
 
-757
+666
 01:03:39,159 --> 01:03:41,946
 And if we look on the
 right, these plots of their
 
-758
+667
 01:03:41,946 --> 01:03:45,446
 computational complexity here it's sorted.
 
-759
-01:03:43,275 --> 01:03:53,720
-
-
-760
+668
 01:03:47,686 --> 01:03:50,799
 The Y axis is your top one accuracy
 
-761
+669
 01:03:50,799 --> 01:03:52,313
 so higher is better.
 
-762
+670
 01:03:52,313 --> 01:03:56,413
 The X axis is your operations
 and so the more to the right,
 
-763
-01:03:53,720 --> 01:04:02,635
-
-
-764
+671
 01:03:56,413 --> 01:03:58,939
 the more ops you're doing,
 the more computationally
 
-765
+672
 01:03:58,939 --> 01:04:01,646
 expensive and then the bigger the circle,
 
-766
+673
 01:04:01,646 --> 01:04:03,074
 your circle is your memory usage,
 
-767
+674
 01:04:03,074 --> 01:04:05,287
 so the gray circles are referenced here,
 
-768
+675
 01:04:05,287 --> 01:04:07,251
 but the bigger the circle
 the more memory usage
 
-769
+676
 01:04:07,251 --> 01:04:11,014
 and so here we can see
 that VGG these green ones
 
-770
-01:04:09,609 --> 01:04:19,321
-
-
-771
+677
 01:04:11,014 --> 01:04:13,342
 are kind of the least efficient.
 
-772
+678
 01:04:13,342 --> 01:04:15,099
 They have the biggest memory,
 
-773
+679
 01:04:15,099 --> 01:04:16,206
 the most operations,
 
-774
+680
 01:04:16,206 --> 01:04:18,623
 but they they do pretty well.
 
-775
+681
 01:04:19,838 --> 01:04:22,411
 GoogleNet is the most efficient here.
 
-776
+682
 01:04:22,411 --> 01:04:24,947
 It's way down on the operation side,
 
-777
+683
 01:04:24,947 --> 01:04:29,275
 as well as a small little
 circle for memory usage.
 
-778
-01:04:28,121 --> 01:04:33,216
-
-
-779
+684
 01:04:29,275 --> 01:04:33,249
 AlexNet, our earlier
 model, has lowest accuracy.
 
-780
+685
 01:04:33,249 --> 01:04:35,175
 It's relatively smaller compute, because
 
-781
+686
 01:04:35,175 --> 01:04:37,994
 it's a smaller network, but
 it's also not particularly
 
-782
+687
 01:04:37,994 --> 01:04:39,411
 memory efficient.
 
-783
-01:04:38,761 --> 01:04:41,618
-
-
-784
+688
 01:04:41,309 --> 01:04:46,216
 And then ResNet here, we
 have moderate efficiency.
 
-785
+689
 01:04:41,618 --> 01:04:45,186
 
 
-786
+690
 01:04:45,186 --> 01:04:54,640
 
 
-787
+691
 01:04:46,216 --> 01:04:48,500
 It's kind of in the middle,
 both in terms of memory
 
-788
+692
 01:04:48,500 --> 01:04:52,500
 and operations, and it
 has the highest accuracy.
 
-789
+693
 01:04:54,640 --> 01:04:59,614
 
 
-790
+694
 01:04:56,029 --> 01:04:58,028
 And so here also are
 some additional plots.
 
-791
+695
 01:04:58,028 --> 01:05:00,808
 You can look at these
 more on your own time,
 
-792
+696
 01:04:59,614 --> 01:05:06,949
 
 
-793
+697
 01:05:00,808 --> 01:05:03,790
 but this plot on the left is
 showing the forward pass time
 
-794
+698
 01:05:03,790 --> 01:05:07,015
 and so this is in milliseconds
 and you can up at the top
 
-795
+699
 01:05:07,015 --> 01:05:10,443
 VGG forward passes about 200
 milliseconds you can get about
 
-796
+700
 01:05:10,443 --> 01:05:12,656
 five frames per second with this,
 
-797
+701
 01:05:12,656 --> 01:05:14,868
 and this is sorted in order.
 
-798
+702
 01:05:14,868 --> 01:05:17,649
 There's also this plot on
 the right looking at power
 
-799
+703
 01:05:17,649 --> 01:05:21,774
 consumption and if you look
 more at this paper here,
 
-800
+704
 01:05:21,774 --> 01:05:24,883
 there's further analysis of
 these kinds of computational
 
-801
+705
 01:05:24,883 --> 01:05:25,883
 comparisons.
 
-802
+706
 01:05:28,353 --> 01:05:37,814
 
 
-803
+707
 01:05:30,604 --> 01:05:33,508
 So these were the main
 architectures that you should
 
-804
+708
 01:05:33,508 --> 01:05:35,966
 really know in-depth and be familiar with,
 
-805
+709
 01:05:35,966 --> 01:05:38,750
 and be thinking about actively using.
 
-806
+710
 01:05:38,750 --> 01:05:40,468
 But now I'm going just
 to go briefly through
 
-807
+711
 01:05:40,468 --> 01:05:42,346
 some other architectures
 that are just good
 
-808
+712
 01:05:42,346 --> 01:05:45,513
 to know either historical inspirations
 
-809
+713
 01:05:44,260 --> 01:05:47,171
 
 
-810
+714
 01:05:46,480 --> 01:05:49,230
 or more recent areas of research.
 
-811
+715
 01:05:47,171 --> 01:05:51,201
 
 
-812
+716
 01:05:50,716 --> 01:05:52,759
 So the first one Network in Network,
 
-813
+717
 01:05:51,201 --> 01:05:59,985
 
 
-814
+718
 01:05:52,759 --> 01:05:56,342
 this is from 2014, and
 the idea behind this
 
-815
+719
 01:06:00,529 --> 01:06:05,524
 is that we have these
 vanilla convolutional layers
 
-816
+720
 01:06:05,524 --> 01:06:09,451
 but we also have these,
 this introduces the idea of
 
-817
+721
 01:06:09,451 --> 01:06:12,683
 MLP conv layers they call
 it, which are micro networks
 
-818
+722
 01:06:10,054 --> 01:06:13,527
 
 
-819
+723
 01:06:12,683 --> 01:06:14,687
 or basically network within networth, the
 
-820
+724
 01:06:13,527 --> 01:06:15,131
 
 
-821
+725
 01:06:14,687 --> 01:06:16,118
 name of the paper.
 
-822
+726
 01:06:16,118 --> 01:06:20,278
 Where within each conv
 layer trying to stack an MLP
 
-823
+727
 01:06:20,278 --> 01:06:23,152
 with a couple of fully
 connected layers on top of
 
-824
+728
 01:06:23,152 --> 01:06:25,483
 just the standard conv
 and be able to compute
 
-825
+729
 01:06:25,483 --> 01:06:28,179
 more abstract features for these local
 
-826
+730
 01:06:28,179 --> 01:06:29,167
 patches right.
 
-827
+731
 01:06:29,167 --> 01:06:31,207
 So instead of sliding
 just a conv filter around,
 
-828
+732
 01:06:31,207 --> 01:06:35,343
 it's sliding a slightly
 more complex hierarchical
 
-829
+733
 01:06:35,343 --> 01:06:39,970
 set of filters around
 and using that to get the
 
-830
+734
 01:06:36,008 --> 01:06:39,931
 
 
-831
+735
 01:06:39,970 --> 01:06:41,975
 activation maps.
 
-832
+736
 01:06:41,975 --> 01:06:45,282
 And so, it uses these fully connected,
 
-833
+737
 01:06:45,282 --> 01:06:47,941
 or basically one by one
 conv kind of layers.
 
-834
+738
 01:06:47,941 --> 01:06:50,191
 It's going to stack them all up like the
 
-835
+739
 01:06:50,191 --> 01:06:52,891
 bottom diagram here where
 we just have these networks
 
-836
+740
 01:06:51,713 --> 01:07:02,550
 
 
-837
+741
 01:06:52,891 --> 01:06:57,196
 within networks stacked
 in each of the layers.
 
-838
+742
 01:06:57,196 --> 01:07:00,665
 And the main reason to know this is just
 
-839
+743
 01:07:00,665 --> 01:07:04,015
 it was kind of a precursor
 to GoogleNet and ResNet
 
-840
+744
 01:07:02,550 --> 01:07:04,717
 
 
-841
+745
 01:07:04,015 --> 01:07:07,774
 in 2014 with this idea
 of bottleneck layers
 
-842
+746
 01:07:05,903 --> 01:07:09,953
 
 
-843
+747
 01:07:07,774 --> 01:07:10,102
 that you saw used very heavily in there.
 
-844
+748
 01:07:10,102 --> 01:07:13,018
 And it also had a little bit
 of philosophical inspiration
 
-845
+749
 01:07:13,018 --> 01:07:16,578
 for GoogleNet for this idea
 of a local network typology
 
-846
+750
 01:07:16,578 --> 01:07:19,153
 network in network that they also used,
 
-847
+751
 01:07:19,153 --> 01:07:22,070
 with a different kind of structure.
 
-848
+752
 01:07:24,238 --> 01:07:28,612
 Now I'm going to talk
 about a series of works,
 
-849
+753
 01:07:25,626 --> 01:07:32,561
 
 
-850
+754
 01:07:28,612 --> 01:07:31,315
 on, or works since ResNet
 that are mostly geared
 
-851
+755
 01:07:31,315 --> 01:07:33,845
 towards improving resNet
 and so this is more recent
 
-852
+756
 01:07:32,561 --> 01:07:38,679
 
 
-853
+757
 01:07:33,845 --> 01:07:36,759
 research has been done since then.
 
-854
+758
 01:07:36,759 --> 01:07:38,113
 I'm going to go over these pretty fast,
 
-855
+759
 01:07:38,113 --> 01:07:39,911
 and so just at a very high level.
 
-856
+760
 01:07:38,679 --> 01:07:46,285
 
 
-857
+761
 01:07:39,911 --> 01:07:41,337
 If you're interested in
 any of these you should
 
-858
+762
 01:07:41,337 --> 01:07:44,754
 look at the papers, to have more details.
 
-859
+763
 01:07:45,755 --> 01:07:49,876
 So the authors of ResNet
 a little bit later on
 
-860
+764
 01:07:46,285 --> 01:07:50,884
 
 
-861
+765
 01:07:49,876 --> 01:07:54,043
 in 2016 also had this paper
 where they improved the
 
-862
+766
 01:07:50,884 --> 01:07:54,972
 
 
-863
+767
 01:07:55,066 --> 01:07:56,742
 ResNet block design.
 
-864
+768
 01:07:56,742 --> 01:08:00,517
 And so they basically
 adjusted what were the layers
 
-865
+769
 01:08:00,517 --> 01:08:03,015
 that were in the ResNet block path,
 
-866
+770
 01:08:03,015 --> 01:08:06,489
 and showed this new
 structure was able to have
 
-867
+771
 01:08:06,489 --> 01:08:10,214
 a more direct path in order
 for propagating information
 
-868
+772
 01:08:10,214 --> 01:08:13,901
 throughout the network,
 and you want to have a good
 
-869
+773
 01:08:12,707 --> 01:08:22,214
 
 
-870
+774
 01:08:13,901 --> 01:08:16,073
 path to propagate
 information all the way up,
 
-871
+775
 01:08:16,073 --> 01:08:18,861
 and then back up all the way down again.
 
-872
+776
 01:08:18,861 --> 01:08:21,434
 And so they showed that this
 new block was better for that
 
-873
+777
 01:08:21,435 --> 01:08:25,319
 and was able to give better performance.
 
-874
+778
 01:08:23,290 --> 01:08:27,924
 
 
-875
+779
 01:08:25,319 --> 01:08:28,959
 There's also a Wide Residual
 networks which this paper
 
-876
+780
 01:08:27,924 --> 01:08:32,402
 
 
-877
+781
 01:08:28,959 --> 01:08:33,591
 argued that while ResNets
 made networks much deeper
 
-878
+782
 01:08:32,402 --> 01:08:36,405
 
 
-879
+783
 01:08:33,591 --> 01:08:35,877
 as well as added these
 residual connections
 
-880
+784
 01:08:35,877 --> 01:08:39,396
 and their argument was
 that residuals are really
 
-881
+785
 01:08:36,405 --> 01:08:43,406
 
 
-882
+786
 01:08:39,396 --> 01:08:40,228
 the important factor.
 
-883
+787
 01:08:40,228 --> 01:08:41,524
 Having this residual construction,
 
-884
+788
 01:08:41,525 --> 01:08:45,290
 and not necessarily having
 extremely deep networks.
 
-885
+789
 01:08:43,406 --> 01:08:51,994
 
 
-886
+790
 01:08:45,290 --> 01:08:49,467
 And so what they did was they
 used wider residual blocks,
 
-887
+791
 01:08:49,467 --> 01:08:51,892
 and so what this means is
 just more filters in every
 
-888
+792
 01:08:51,892 --> 01:08:52,794
 conv layer.
 
-889
+793
 01:08:52,794 --> 01:08:55,996
 So before we might have
 F filters per layer
 
-890
+794
 01:08:55,997 --> 01:08:59,308
 and they use these factors
 of K and said well,
 
-891
+795
 01:08:57,428 --> 01:09:05,912
 
 
-892
+796
 01:08:59,308 --> 01:09:02,662
 every layer it's going to be
 F times K filters instead.
 
-893
+797
 01:09:02,663 --> 01:09:06,622
 And so, using these
 wider layers they showed
 
-894
+798
 01:09:06,622 --> 01:09:09,002
 that their 50 layer wide
 ResNet was able to out-perform
 
-895
+799
 01:09:06,927 --> 01:09:20,769
 
 
-896
+800
 01:09:09,002 --> 01:09:11,502
 the 152 layer original ResNet,
 
-897
+801
 01:09:13,754 --> 01:09:16,289
 and it also had the
 additional advantages of
 
-898
+802
 01:09:16,289 --> 01:09:20,703
 increasing with this,
 even with the same amount
 
-899
+803
 01:09:20,703 --> 01:09:23,035
 of parameters, tit's more
 computationally efficient
 
-900
+804
 01:09:21,606 --> 01:09:31,467
 
 
-901
+805
 01:09:23,035 --> 01:09:25,777
 because you can parallelize
 these with operations
 
-902
+806
 01:09:25,777 --> 01:09:26,922
 more easily.
 
-903
+807
 01:09:26,923 --> 01:09:30,333
 Right just convolutions with more neurons
 
-904
+808
 01:09:30,333 --> 01:09:32,750
 just spread across more kernels
 
-905
+809
 01:09:31,467 --> 01:09:36,547
 
 
-906
+810
 01:09:32,750 --> 01:09:35,620
 as opposed to depth
 that's more sequential,
 
-907
+811
 01:09:35,620 --> 01:09:38,606
 so it's more computationally
 efficient to increase
 
-908
+812
 01:09:36,548 --> 01:09:40,884
 
 
-909
+813
 01:09:38,606 --> 01:09:39,546
 your width.
 
-910
+814
 01:09:39,546 --> 01:09:41,294
 So here you can see
 this work is starting to
 
-911
+815
 01:09:41,294 --> 01:09:43,592
 trying to understand the
 contributions of width
 
-912
+816
 01:09:43,593 --> 01:09:46,740
 and depth and residual connections,
 
-913
+817
 01:09:45,645 --> 01:09:51,142
 
 
-914
+818
 01:09:46,740 --> 01:09:49,817
 and making some arguments
 for one way versus the other.
 
-915
+819
 01:09:49,817 --> 01:09:53,317
 And this other paper around the same time,
 
-916
+820
 01:09:51,142 --> 01:09:56,447
 
 
-917
+821
 01:09:55,064 --> 01:09:58,125
 I think maybe a little
 bit later, is ResNeXt,
 
-918
+822
 01:09:56,447 --> 01:09:59,447
 
 
-919
+823
 01:09:58,125 --> 01:10:01,791
 and so this is again,
 the creators of ResNet
 
-920
+824
 01:10:00,367 --> 01:10:06,802
 
 
-921
+825
 01:10:01,791 --> 01:10:04,383
 continuing to work on
 pushing the architecture.
 
-922
+826
 01:10:04,383 --> 01:10:08,300
 And here they also had
 this idea of okay, let's
 
-923
+827
 01:10:06,802 --> 01:10:12,527
 
 
-924
+828
 01:10:09,699 --> 01:10:12,932
 indeed tackle this width
 thing more but instead of just
 
-925
+829
 01:10:12,932 --> 01:10:15,019
 increasing the width
 of this residual block
 
-926
+830
 01:10:15,019 --> 01:10:18,576
 through more filters they have structure.
 
-927
+831
 01:10:18,576 --> 01:10:22,525
 And so within each residual
 block, multiple parallel
 
-928
+832
 01:10:20,884 --> 01:10:24,906
 
 
-929
+833
 01:10:22,525 --> 01:10:24,534
 pathways and they're going to call
 
-930
+834
 01:10:24,534 --> 01:10:26,415
 the total number of these
 pathways the cardinality.
 
-931
+835
 01:10:24,906 --> 01:10:29,110
 
 
-932
+836
 01:10:26,415 --> 01:10:30,498
 And so it's basically
 taking the one ResNet block
 
-933
+837
 01:10:29,110 --> 01:10:35,567
 
 
-934
+838
 01:10:32,576 --> 01:10:35,531
 with the bottlenecks and having
 it be relatively thinner,
 
-935
+839
 01:10:35,531 --> 01:10:38,395
 but having multiple of
 these done in parallel.
 
-936
+840
 01:10:38,395 --> 01:10:42,563
 And so here you can also
 see that this both have some
 
-937
+841
 01:10:42,563 --> 01:10:44,452
 relation to this idea of wide networks,
 
-938
+842
 01:10:44,452 --> 01:10:49,287
 as well as to has some connection
 to the inception module
 
-939
+843
 01:10:46,527 --> 01:10:56,046
 
 
-940
+844
 01:10:49,287 --> 01:10:51,651
 as well right where we
 have these parallel,
 
-941
+845
 01:10:51,651 --> 01:10:54,023
 these layers operating in parallel.
 
-942
+846
 01:10:54,023 --> 01:10:58,190
 And so now this ResNeXt has
 some flavor of that as well.
 
-943
+847
 01:10:56,046 --> 01:10:57,922
 
 
-944
+848
 01:10:57,922 --> 01:11:04,904
 
 
-945
+849
 01:11:00,838 --> 01:11:04,843
 So another approach
 towards improving ResNets
 
-946
+850
 01:11:04,843 --> 01:11:08,635
 was this idea called Stochastic
 Depth and in this work
 
-947
+851
 01:11:08,635 --> 01:11:11,747
 the motivation is well let's look more
 
-948
+852
 01:11:09,506 --> 01:11:14,077
 
 
-949
+853
 01:11:11,747 --> 01:11:13,878
 at this depth problem.
 
-950
+854
 01:11:13,878 --> 01:11:18,045
 Once you get deeper and
 deeper the typical problems
 
-951
+855
 01:11:15,764 --> 01:11:22,868
 
 
-952
+856
 01:11:19,575 --> 01:11:21,537
 that you're going to have
 vanishing gradients right.
 
-953
+857
 01:11:21,537 --> 01:11:26,064
 You're not able to, your
 gradients will get smaller
 
-954
+858
 01:11:22,868 --> 01:11:30,927
 
 
-955
+859
 01:11:26,064 --> 01:11:28,267
 and eventually vanish as
 you're trying to back propagate
 
-956
+860
 01:11:28,267 --> 01:11:32,071
 them over very long layers,
 or a large number of layers.
 
-957
+861
 01:11:30,927 --> 01:11:42,784
 
 
-958
+862
 01:11:32,071 --> 01:11:35,193
 And so what their motivation
 is well let's try to have
 
-959
+863
 01:11:35,193 --> 01:11:39,608
 short networks during training
 and they use this idea
 
-960
+864
 01:11:39,608 --> 01:11:43,045
 of dropping out a subset of
 the layers during training.
 
-961
+865
 01:11:43,045 --> 01:11:45,664
 And so for a subset of the
 layers they just drop out
 
-962
+866
 01:11:45,664 --> 01:11:48,436
 the weights and they just set
 it to identity connection,
 
-963
+867
 01:11:48,436 --> 01:11:52,569
 and now what you get is you
 have these shorter networks
 
-964
+868
 01:11:49,028 --> 01:11:54,284
 
 
-965
+869
 01:11:52,569 --> 01:11:54,615
 during training, you can pass back your
 
-966
+870
 01:11:54,615 --> 01:11:56,126
 gradients better.
 
-967
+871
 01:11:56,126 --> 01:11:59,533
 It's also a little more
 efficient, and then it's
 
-968
+872
 01:11:59,533 --> 01:12:01,535
 kind of like the drop out right.
 
-969
+873
 01:12:01,535 --> 01:12:04,074
 It has this sort of flavor
 that you've seen before.
 
-970
+874
 01:12:02,266 --> 01:12:06,906
 
 
-971
+875
 01:12:04,074 --> 01:12:06,441
 And then at test time you want
 to use the full deep network
 
-972
+876
 01:12:06,441 --> 01:12:08,108
 that you've trained.
 
-973
+877
 01:12:06,906 --> 01:12:11,764
 
 
-974
+878
 01:12:10,446 --> 01:12:12,781
 So these are some of the
 works that looking at the
 
-975
+879
 01:12:11,764 --> 01:12:18,404
 
 
-976
+880
 01:12:12,781 --> 01:12:14,830
 resident architecture, trying
 to understand different
 
-977
+881
 01:12:14,830 --> 01:12:19,038
 aspects of it and trying
 to improve ResNet training.
 
-978
+882
 01:12:19,038 --> 01:12:22,431
 And so there's also some
 works now that are going
 
-979
+883
 01:12:22,431 --> 01:12:25,046
 beyond ResNet that are
 saying well what are some non
 
-980
+884
 01:12:22,661 --> 01:12:29,786
 
 
-981
+885
 01:12:25,046 --> 01:12:29,306
 ResNet architectures that
 maybe can also work better,
 
-982
+886
 01:12:29,306 --> 01:12:32,253
 or comparable or better to ResNets.
 
-983
+887
 01:12:29,786 --> 01:12:33,268
 
 
-984
+888
 01:12:32,253 --> 01:12:35,769
 And so one idea is
 FractalNet, which came out
 
-985
+889
 01:12:33,268 --> 01:12:39,044
 
 
-986
+890
 01:12:35,769 --> 01:12:38,472
 pretty recently, and the
 argument in FractalNet
 
-987
+891
 01:12:38,472 --> 01:12:41,502
 is that while residual
 representations maybe
 
-988
+892
 01:12:39,044 --> 01:12:48,005
 
 
-989
+893
 01:12:41,502 --> 01:12:43,429
 are not actually necessary,
 so this goes back
 
-990
+894
 01:12:43,429 --> 01:12:45,273
 to what we were talking about earlier.
 
-991
+895
 01:12:45,273 --> 01:12:47,776
 What's the motivation of
 residual networks and it seems
 
-992
+896
 01:12:47,776 --> 01:12:49,946
 to make sense and there's, you know,
 
-993
+897
 01:12:48,005 --> 01:12:52,404
 
 
-994
+898
 01:12:49,946 --> 01:12:52,645
 good reasons for why this
 should help but in this paper
 
-995
+899
 01:12:52,645 --> 01:12:55,790
 they're saying that well here
 is a different architecture
 
-996
+900
 01:12:55,790 --> 01:12:58,407
 that we're introducing, there's
 no residual representations.
 
-997
+901
 01:12:58,407 --> 01:13:01,074
 We think that the key is
 more about transitioning
 
-998
+902
 01:13:01,074 --> 01:13:03,898
 effectively from shallow to deep networks,
 
-999
+903
 01:13:02,244 --> 01:13:07,828
 
 
-1000
+904
 01:13:03,898 --> 01:13:06,393
 and so they have this fractal architecture
 
-1001
+905
 01:13:06,393 --> 01:13:09,091
 which has if you look on the right here,
 
-1002
+906
 01:13:07,828 --> 01:13:19,124
 
 
-1003
+907
 01:13:09,091 --> 01:13:13,258
 these layers where they compose
 it in this fractal fashion.
 
-1004
+908
 01:13:14,769 --> 01:13:17,389
 And so there's both
 shallow and deep pathways
 
-1005
+909
 01:13:17,389 --> 01:13:18,639
 to your output.
 
-1006
+910
 01:13:20,045 --> 01:13:22,459
 And so they have these
 different length pathways,
 
-1007
+911
 01:13:22,459 --> 01:13:25,236
 they train them with
 dropping out sub paths,
 
-1008
+912
 01:13:25,236 --> 01:13:29,568
 and so again it has this
 dropout kind of flavor,
 
-1009
+913
 01:13:29,568 --> 01:13:32,341
 and then at test time they'll
 use the entire fractal network
 
-1010
+914
 01:13:30,065 --> 01:13:35,146
 
 
-1011
+915
 01:13:32,341 --> 01:13:35,036
 and they show that this was able to
 
-1012
+916
 01:13:35,036 --> 01:13:37,203
 get very good performance.
 
-1013
+917
 01:13:39,047 --> 01:13:42,143
 There's another idea
 called Densely Connected
 
-1014
+918
 01:13:42,143 --> 01:13:44,886
 convolutional Networks,
 DenseNet, and this idea
 
-1015
+919
 01:13:43,443 --> 01:13:51,007
 
 
-1016
+920
 01:13:44,886 --> 01:13:47,587
 is now we have these
 blocks that are called
 
-1017
+921
 01:13:47,587 --> 01:13:48,567
 dense blocks.
 
-1018
+922
 01:13:48,567 --> 01:13:50,778
 And within each block
 each layer is going to be
 
-1019
+923
 01:13:50,778 --> 01:13:54,428
 connected to every other layer after it,
 
-1020
+924
 01:13:51,007 --> 01:13:52,465
 
 
-1021
+925
 01:13:52,465 --> 01:13:58,164
 
 
-1022
+926
 01:13:54,428 --> 01:13:55,940
 in this feed forward fashion.
 
-1023
+927
 01:13:55,940 --> 01:13:57,502
 So within this block,
 your input to the block
 
-1024
+928
 01:13:57,502 --> 01:14:00,362
 is also the input to
 every other conv layer,
 
-1025
+929
 01:13:58,164 --> 01:14:06,687
 
 
-1026
+930
 01:14:00,362 --> 01:14:03,954
 and as you compute each conv output,
 
-1027
+931
 01:14:03,954 --> 01:14:05,799
 those outputs are now connected to every
 
-1028
+932
 01:14:05,799 --> 01:14:08,779
 layer after and then,
 these are all concatenated
 
-1029
+933
 01:14:06,687 --> 01:14:10,226
 
 
-1030
+934
 01:14:08,779 --> 01:14:11,690
 as input to the conv
 layer, and they do some
 
-1031
+935
 01:14:10,226 --> 01:14:16,468
 
 
-1032
+936
 01:14:11,690 --> 01:14:15,452
 they have some other
 processes for reducing
 
-1033
+937
 01:14:15,452 --> 01:14:18,643
 the dimensions and keeping efficient.
 
-1034
+938
 01:14:16,468 --> 01:14:20,484
 
 
-1035
+939
 01:14:18,643 --> 01:14:22,519
 And so their main takeaway from this,
 
-1036
+940
 01:14:20,484 --> 01:14:24,628
 
 
-1037
+941
 01:14:22,519 --> 01:14:26,033
 is that they argue that
 this is alleviating
 
-1038
+942
 01:14:24,628 --> 01:14:30,645
 
 
-1039
+943
 01:14:26,033 --> 01:14:28,980
 a vanishing gradient problem
 because you have all of these
 
-1040
+944
 01:14:28,980 --> 01:14:30,863
 very dense connections.
 
-1041
+945
 01:14:30,863 --> 01:14:34,912
 It strengthens feature propagation
 and then also encourages
 
-1042
+946
 01:14:34,912 --> 01:14:37,324
 future use right because
 there are so many of these
 
-1043
+947
 01:14:37,324 --> 01:14:40,997
 connections each feature
 map that you're learning
 
-1044
+948
 01:14:39,364 --> 01:14:41,986
 
 
-1045
+949
 01:14:40,997 --> 01:14:43,820
 is input in multiple
 later layers and being
 
-1046
+950
 01:14:41,986 --> 01:14:46,548
 
 
-1047
+951
 01:14:43,820 --> 01:14:45,487
 used multiple times.
 
-1048
+952
 01:14:46,548 --> 01:14:50,607
 
 
-1049
+953
 01:14:47,906 --> 01:14:50,003
 So these are just a
 couple of ideas that are
 
-1050
+954
 01:14:50,003 --> 01:14:54,215
 you know alternatives or
 what can we do that's not
 
-1051
+955
 01:14:50,607 --> 01:14:53,600
 
 
-1052
+956
 01:14:54,215 --> 01:14:57,026
 ResNets and yet is still performing either
 
-1053
+957
 01:14:57,026 --> 01:14:59,974
 comparably or better to
 ResNets and so this is
 
-1054
+958
 01:14:57,786 --> 01:15:01,622
 
 
-1055
+959
 01:14:59,974 --> 01:15:03,006
 another very active area
 of current research.
 
-1056
+960
 01:15:01,622 --> 01:15:03,626
 
 
-1057
+961
 01:15:03,006 --> 01:15:04,691
 You can see that a lot of this is looking
 
-1058
+962
 01:15:03,626 --> 01:15:08,504
 
 
-1059
+963
 01:15:04,691 --> 01:15:08,247
 at the way how different layers
 are connected to each other
 
-1060
+964
 01:15:08,247 --> 01:15:11,830
 and how depth is managed
 in these networks.
 
-1061
+965
 01:15:08,504 --> 01:15:11,508
 
 
-1062
+966
 01:15:11,508 --> 01:15:17,007
 
 
-1063
+967
 01:15:13,528 --> 01:15:14,998
 And so one last thing
 that I wanted to mention
 
-1064
+968
 01:15:14,998 --> 01:15:17,991
 quickly, is just efficient networks.
 
-1065
+969
 01:15:17,991 --> 01:15:21,021
 So this idea of efficiency
 and you saw that GoogleNet
 
-1066
+970
 01:15:21,021 --> 01:15:23,406
 was a work that was
 looking into this direction
 
-1067
+971
 01:15:23,406 --> 01:15:26,430
 of how can we have efficient
 networks which are important
 
-1068
+972
 01:15:26,430 --> 01:15:29,450
 for you know a lot of
 practical usage both training
 
-1069
+973
 01:15:29,450 --> 01:15:33,994
 as well as especially
 deployment and so this is
 
-1070
+974
 01:15:33,994 --> 01:15:37,927
 another recent network
 that's called SqueezeNet
 
-1071
+975
 01:15:37,927 --> 01:15:39,934
 which is looking at
 very efficient networks.
 
-1072
+976
 01:15:39,934 --> 01:15:41,618
 They have these things
 called fire modules,
 
-1073
+977
 01:15:41,618 --> 01:15:44,285
 which consists of a
 squeeze layer with a lot of
 
-1074
+978
 01:15:42,724 --> 01:15:48,607
 
 
-1075
+979
 01:15:44,285 --> 01:15:46,864
 one by one filters and
 then this feeds then into
 
-1076
+980
 01:15:46,864 --> 01:15:49,645
 an expand layer with one by
 one and three by three filters,
 
-1077
+981
 01:15:48,607 --> 01:15:52,951
 
 
-1078
+982
 01:15:49,645 --> 01:15:52,680
 and they're showing that with
 this kind of architecture
 
-1079
+983
 01:15:52,680 --> 01:15:57,010
 they're able to get AlexNet
 level accuracy on ImageNet,
 
-1080
+984
 01:15:53,786 --> 01:15:56,442
 
 
-1081
+985
 01:15:57,010 --> 01:15:59,220
 but with 50 times fewer parameters,
 
-1082
+986
 01:15:59,220 --> 01:16:02,330
 and then you can further do
 network compression on this
 
-1083
+987
 01:16:02,330 --> 01:16:06,093
 to get up to 500 times
 smaller than AlexNet
 
-1084
+988
 01:16:06,093 --> 01:16:10,095
 and just have the whole
 network just be 0.5 megs.
 
-1085
+989
 01:16:07,042 --> 01:16:12,962
 
 
-1086
+990
 01:16:10,095 --> 01:16:12,881
 And so this is a direction
 of how do we have
 
-1087
+991
 01:16:12,881 --> 01:16:14,762
 efficient networks model compression
 
-1088
+992
 01:16:14,762 --> 01:16:17,145
 that we'll cover more in a lecture later,
 
-1089
+993
 01:16:17,145 --> 01:16:20,062
 but just giving you a hint of that.
 
-1090
+994
 01:16:21,856 --> 01:16:25,541
 OK so today in summary we've
 talked about different kinds
 
-1091
+995
 01:16:25,541 --> 01:16:26,809
 of CNN Architectures.
 
-1092
+996
 01:16:26,809 --> 01:16:29,758
 We looked in-depth at four
 of the main architectures
 
-1093
+997
 01:16:29,758 --> 01:16:31,555
 that you'll see in wide usage.
 
-1094
+998
 01:16:31,555 --> 01:16:35,553
 AlexNet, one of the early,
 very popular networks.
 
-1095
+999
 01:16:32,141 --> 01:16:36,900
 
 
-1096
+1000
 01:16:35,553 --> 01:16:38,832
 VGG and GoogleNet which
 are still widely used.
 
-1097
+1001
 01:16:38,832 --> 01:16:42,885
 But ResNet is kind of
 taking over as the thing
 
-1098
+1002
 01:16:42,885 --> 01:16:45,906
 that you should be
 looking most when you can.
 
-1099
+1003
 01:16:45,906 --> 01:16:47,133
 We also looked at these other networks
 
-1100
+1004
 01:16:47,133 --> 01:16:49,337
 in a little bit more depth at a brief
 
-1101
+1005
 01:16:49,337 --> 01:16:50,587
 level overview.
 
-1102
+1006
 01:16:51,921 --> 01:16:54,505
 And so the takeaway that these
 models that are available
 
-1103
+1007
 01:16:52,700 --> 01:16:58,039
 
 
-1104
+1008
 01:16:54,505 --> 01:16:57,164
 they're in a lot of
 [mumbles] so you can use them
 
-1105
+1009
 01:16:57,164 --> 01:16:58,228
 when you need them.
 
-1106
+1010
 01:16:58,228 --> 01:17:00,275
 There's a trend toward
 extremely deep networks,
 
-1107
+1011
 01:17:00,275 --> 01:17:03,994
 but there's also significant
 research now around
 
-1108
+1012
 01:17:03,994 --> 01:17:06,827
 the design of how do we connect layers,
 
-1109
+1013
 01:17:04,397 --> 01:17:12,380
 
 
-1110
+1014
 01:17:06,827 --> 01:17:09,975
 skip connections, what
 is connected to what,
 
-1111
+1015
 01:17:09,975 --> 01:17:13,533
 and also using these to
 design your architecture
 
-1112
+1016
 01:17:12,380 --> 01:17:14,999
 
 
-1113
+1017
 01:17:13,533 --> 01:17:15,419
 to improve gradient flow.
 
-1114
+1018
 01:17:15,419 --> 01:17:18,203
 There's an even more recent
 trend towards examining
 
-1115
+1019
 01:17:18,203 --> 01:17:21,436
 what's the necessity
 of depth versus width,
 
-1116
+1020
 01:17:20,423 --> 01:17:24,839
 
 
-1117
+1021
 01:17:21,436 --> 01:17:22,748
 residual connections.
 
-1118
+1022
 01:17:22,748 --> 01:17:24,548
 Trade offs, what's
 actually helping matters,
 
-1119
+1023
 01:17:24,548 --> 01:17:27,546
 and so there's a lot of these recent works
 
-1120
+1024
 01:17:24,839 --> 01:17:29,159
 
 
-1121
+1025
 01:17:27,546 --> 01:17:29,343
 in this direction that you can look into
 
-1122
+1026
 01:17:29,343 --> 01:17:31,380
 some of the ones I pointed
 out if you are interested.
 
-1123
+1027
 01:17:31,380 --> 01:17:33,597
 And next time we'll talk about
 Recurrent neural networks.
 
-1124
+1028
 01:17:33,597 --> -00:00:00,810
 
 
-1125
+1029
 01:17:33,900 --> 01:17:40,460
 
 
-1126
+1030
 01:17:40,460 --> 01:17:46,583
 
 
-1127
+1031
 01:17:46,583 --> 01:17:51,235
 
 
-1128
+1032
 01:17:52,359 --> 01:17:54,881
