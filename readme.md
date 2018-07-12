@@ -37,10 +37,9 @@ Also see [CS231N Website](http://cs231n.stanford.edu/)
 ----------
 
 ## Update Note
-    2018.05.27 - 
-    2018 06 15 - Complete Lecture 7(Roughly)
-    2018 06 25 - Complete Lecture 8(Roughly) 
-    2018 06 25 - Complete Lecture 8(Roughly) 
+    2015.05.23 - Complete Lecture 6(Roughly)
+    2018.06.14 - Complete Lecture 7(Roughly)
+    2018 06 26 - Complete Lecture 8(Roughly) 
     2018 07 27 - Complete Lecture 1(First Revision) 
     2018 07 09 - Complete Lecture 9(Roughly) 
 
