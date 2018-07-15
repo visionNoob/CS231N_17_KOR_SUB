@@ -8,12 +8,13 @@ Also see [CS231N Website](http://cs231n.stanford.edu/)
 ## Announcements
     CS231N 한글번역 프로젝트입니다. 
     Stanford의 CS231N는 Convolutional Neural Network를 중심으로 Deep Learning를 배울 수 있는 
-    현존하는 가장 좋은 강의입니다. 이 좋은 강의를 언어의 장벽으로 듣지 못하는 한국 분들이 많다는 소식이 너무 안타까워서 프로젝트를 시작했습니다. 많은 분들이 이 강의를 듣고 행복했으면 좋겠습니다.
+    현존하는 가장 좋은 강의입니다. 이 좋은 강의를 언어의 장벽으로 듣지 못하는 한국 분들이 많다는
+    소식이 너무 안타까워서 프로젝트를 시작했습니다. 많은 분들이 이 강의를 듣고 행복했으면 좋겠습니다.
     
     CS231N에 의 대상은 다음과 같습니다. 
     1) Deep Learning을 처음 접하는 초급자
     2) Deep Learning을 어느정도 알지만 심도깊게 배우고 싶은 중급자
-    3) Deep Learning의 트렌드를 살펴보고 싶은 상급자 
+    3) Deep Learning의 트렌드를 살펴 보고자 하는 상급자 
 
     자세한 Prerequisites은 Lecture 1을 참고하시기 바랍니다. 
     
@@ -23,7 +24,8 @@ Also see [CS231N Website](http://cs231n.stanford.edu/)
 
     현재 draft 버전은 오역, 오타, 싱크 등 문제가 많습니다. 
     오역, 오타, 싱크 문제는 지속적으로 업데이트하고 있으며, first revision을 작업중입니다. 
-    first revision이 draft버전보다 많이 개선된 버전이므로 참고해주시기 바랍니다. 감사합니다 XD 
+    first revision이 draft버전보다 많이 개선된 버전이므로 참고해주시기 바랍니다. 
+    다시 한번 모두에게 감사드립니다 XD
 ----------
 ## Instructors
     Fei-Fei Li: http://vision.stanford.edu/feifeili/  
