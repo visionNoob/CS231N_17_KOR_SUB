@@ -18,14 +18,16 @@ Also see [CS231N Website](http://cs231n.stanford.edu/)
 
     자세한 Prerequisites은 Lecture 1을 참고하시기 바랍니다. 
     
-    P.S. 
     많은 분들의 관심과 격려로 힘내고 있습니다. 감사합니다 :D
-    그리고 또한 많은 분들께서 오역, 오타관련 Issues, Pull requests, Email 등을 보내주시고 계십니다. 특히 오타 찾는게 정말 힘든데 이렇게 도와주시니 정말 감사할 따릅입니다 :D 
+    그리고 또한 많은 분들께서 오역, 오타관련 Issues, Pull requests, Email 등을 
+    보내주시고 계십니다. 특히 오타 찾는게 정말 힘든데 이렇게 도와주시니 정말 감사할 따릅입니다 :D 
 
     현재 draft 버전은 오역, 오타, 싱크 등 문제가 많습니다. 
     오역, 오타, 싱크 문제는 지속적으로 업데이트하고 있으며, first revision을 작업중입니다. 
     first revision이 draft버전보다 많이 개선된 버전이므로 참고해주시기 바랍니다. 
     다시 한번 모두에게 감사드립니다 XD
+
+    
 ----------
 ## Instructors
     Fei-Fei Li: http://vision.stanford.edu/feifeili/  
