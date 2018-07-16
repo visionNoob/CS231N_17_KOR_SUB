@@ -68,9 +68,10 @@ Also see [CS231N Website](http://cs231n.stanford.edu/)
     2018 06 26 - Complete Lecture 8(draft) 
     2018 07 27 - Complete Lecture 1(First Revision) 
     2018 07 09 - Complete Lecture 9(draft) 
+    2018 07 16 - Complete Lecture 2(First Revision) 
 
     Lecture 1 : Complete(draft + First Revision) 
-    Lecture 2 : Complete(draft)
+    Lecture 2 : Complete(draft + First Revision)
     Lecture 3 : Complete(draft)
     Lecture 4 : Complete(draft)
     Lecture 5 : Complete(draft)
@@ -101,7 +102,7 @@ Also see [CS231N Website](http://cs231n.stanford.edu/)
 | Lecture  | Description       |Videos(youtube)      |Slides      | Subtitles| Status |
 |:--------:|:-----------------:|:-----------:|:--------:|:--------:|:----:|
 | 1        |Introduction to Convolutional Neural Networks for Visual Recognition|[video](https://www.youtube.com/watch?v=vT1JzLTH4G4&t=0s&index=1&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk)|[slide](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture1.pdf)|[english](https://github.com/insurgent92/cs231n_spring_2017/blob/master/eng/Lecture%201%20_%20Introduction%20to%20Convolutional%20Neural%20Networks%20for%20Visual%20Recognition.srt)<p>[korean](https://github.com/insurgent92/CS231N_17_KOR_SUB/blob/master/kor/Lecture%201%20%20%20Introduction%20to%20Convolutional%20Neural%20Networks%20for%20Visual%20Recognition.ko.srt)|First Revision|
-| 2        |Image Classification|[video](https://www.youtube.com/watch?v=OoUX-nOEjG0&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk&index=1)|[slide](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture2.pdf)|[english](https://github.com/insurgent92/cs231n_spring_2017/blob/master/eng/Lecture%202%20_%20Image%20Classification.srt)<p>[korean](https://github.com/insurgent92/CS231N_17_KOR_SUB/blob/master/kor/Lecture%202%20%20%20Image%20Classification.ko.srt)|draft|
+| 2        |Image Classification|[video](https://www.youtube.com/watch?v=OoUX-nOEjG0&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk&index=1)|[slide](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture2.pdf)|[english](https://github.com/insurgent92/cs231n_spring_2017/blob/master/eng/Lecture%202%20_%20Image%20Classification.srt)<p>[korean](https://github.com/insurgent92/CS231N_17_KOR_SUB/blob/master/kor/Lecture%202%20%20%20Image%20Classification.ko.srt)|First Revision|
 | 3        |Loss Functions and Optimization|[video](https://www.youtube.com/watch?v=h7iBpEHGVNc&index=2&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk)|[slide](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture3.pdf)|[english](https://github.com/insurgent92/cs231n_spring_2017/blob/master/eng/Lecture%203%20_%20Loss%20Functions%20and%20Optimization.srt)<p>[korean](https://github.com/insurgent92/CS231N_17_KOR_SUB/blob/master/kor/Lecture%203%20%20%20Loss%20Functions%20and%20Optimization.ko.srt)|draft|
 | 4        |Introduction to Neural Networks|[video](https://www.youtube.com/watch?v=d14TUNcbn1k&index=3&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk)|[slide](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture4.pdf)|[english](https://github.com/insurgent92/cs231n_spring_2017/blob/master/eng/Lecture%204%20_%20Introduction%20to%20Neural%20Networks.srt)<p>[korean](https://github.com/insurgent92/CS231N_17_KOR_SUB/blob/master/kor/Lecture%204%20%20%20Introduction%20to%20Neural%20Networks.ko.srt)|draft|
 | 5        |Convolutional Neural Networks|[video](https://www.youtube.com/watch?v=bNb2fEVKeEo&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk&index=4)|[slide](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture5.pdf)|[english](https://github.com/insurgent92/cs231n_spring_2017/blob/master/eng/Lecture%205%20_%20Convolutional%20Neural%20Networks.srt)<p>[korean](https://github.com/insurgent92/CS231N_17_KOR_SUB/blob/master/kor/Lecture%205%20%20%20Convolutional%20Neural%20Networks.ko.srt)|draft|
