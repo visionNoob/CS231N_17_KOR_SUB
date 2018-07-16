@@ -27,7 +27,6 @@ Also see [CS231N Website](http://cs231n.stanford.edu/)
     first revision이 draft버전보다 많이 개선된 버전이므로 참고해주시기 바랍니다. 
     다시 한번 모두에게 감사드립니다 XD
 
-    
 ----------
 ## Instructors
     Fei-Fei Li: http://vision.stanford.edu/feifeili/  
@@ -61,6 +60,9 @@ Also see [CS231N Website](http://cs231n.stanford.edu/)
 ----------
 
 ## Update Note
+    Pull Request는 1st Revision 버전부터 해주시면 감사하겠습니다! 
+    draft 버전은 제가 밑바닥부터 수정하기 때문에 Pull Request받기 어렵습니다. :( 
+
     2015.05.23 - Complete Lecture 6(draft)
     2018.06.14 - Complete Lecture 7(draft)
     2018 06 26 - Complete Lecture 8(draft) 
