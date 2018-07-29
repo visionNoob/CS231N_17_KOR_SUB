@@ -1,4 +1,9 @@
-﻿1
+﻿0
+00:00:00,000 --> 00:00:06,000
+Translated by visionNoob, KNU
+https://github.com/insurgent92/CS231N_17_KOR_SUB
+
+1
 00:00:14,752 --> 00:00:21,696
 9강입니다. 오늘은 CNN 아키텍쳐들을
 한번 알아보겠습니다.
