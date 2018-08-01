@@ -1449,5236 +1449,2121 @@ So instead, we kind of take small samples,
 small mini batches instead,
 
 292
-00:30:02,520 --> 00:30:05,290
-and use mini batches of data
-to compute gradient stops
+00:30:02,520 --> 00:30:08,053
+and use mini batches of data to compute gradient
+stops in any kind of image classification case.
 
 293
-00:30:05,290 --> 00:30:08,053
-in any kind of image classification case.
-
-294
 00:30:08,053 --> 00:30:08,886
 Question?
 
+294
+00:30:12,441 --> 00:30:15,989
+Is this kind of, the question is, is this
+kind of making the Mark Hobb assumption?
+
 295
-00:30:12,441 --> 00:30:14,415
-Is this kind of, the question is,
+00:30:15,989 --> 00:30:20,581
+No, not really. Because we're carrying
+this hidden state forward in time forever.
 
 296
-00:30:14,415 --> 00:30:15,989
-is this kind of making
-the Mark Hobb assumption?
+00:30:21,442 --> 00:30:25,792
+It's making a Marcovian assumption in the
+sense that, conditioned on the hidden state,
 
 297
-00:30:15,989 --> 00:30:17,239
-No, not really.
+00:30:25,792 --> 00:30:31,101
+but the hidden state is all that we need to
+predict the entire future of the sequence.
 
 298
-00:30:18,100 --> 00:30:20,001
-Because we're carrying
-this hidden state forward
+00:30:31,101 --> 00:30:35,941
+But that assumption is kind of built into the
+recurrent neural network formula from the start.
 
 299
-00:30:20,001 --> 00:30:21,442
-in time forever.
-
-300
-00:30:21,442 --> 00:30:23,512
-It's making a Marcovian assumption
-
-301
-00:30:23,512 --> 00:30:25,792
-in the sense that, conditioned
-on the hidden state,
-
-302
-00:30:25,792 --> 00:30:27,733
-but the hidden state is all that we need
-
-303
-00:30:27,733 --> 00:30:28,971
-to predict the entire future
-
-304
-00:30:28,971 --> 00:30:31,101
-of the sequence.
-
-305
-00:30:31,101 --> 00:30:33,019
-But that assumption is kind of built
-
-306
-00:30:33,019 --> 00:30:35,012
-into the recurrent neural network formula
-
-307
-00:30:35,012 --> 00:30:35,941
-from the start.
-
-308
-00:30:35,941 --> 00:30:37,269
+00:30:35,941 --> 00:30:39,032
 And that's not really particular
-
-309
-00:30:37,269 --> 00:30:39,032
 to back propagation through time.
 
+300
+00:30:39,032 --> 00:30:51,239
+Back propagation through time, or sorry, truncated back prop though time is just the way to approximate
+these gradients without going making a backwards pass through your potentially very large sequence of data.
+
+301
+00:30:52,677 --> 00:30:59,649
+This all sounds very complicated and confusing and it sounds like a lot
+of code to write, but in fact, this can acutally be pretty concise.
+
+302
+00:30:59,649 --> 00:31:07,474
+Andrea has this example of what he calls min-char-rnn, that
+does all of this stuff in just like a 112 lines of Python.
+
+303
+00:31:07,474 --> 00:31:11,725
+It handles building the vocabulary. It trains the
+model with truncated back propagation through time.
+
+304
+00:31:11,725 --> 00:31:16,584
+And then, it can actually sample from
+that model in actually not too much code.
+
+305
+00:31:16,584 --> 00:31:20,862
+So even though this sounds like kind of a big,
+scary process, it's actually not too difficult.
+
+306
+00:31:20,862 --> 00:31:27,954
+I'd encourage you, if you're confused, to maybe go check this out and step through the
+code on your own time, and see, kind of, all of these concrete steps happening in code.
+
+307
+00:31:27,954 --> 00:31:34,473
+So this is all in just a single file, all using numpy
+with no dependencies. This was relatively easy to read.
+
+308
+00:31:35,584 --> 00:31:41,593
+So then, once we have this idea of training a recurrent neural
+network language model, we can actually have a lot of fun with this.
+
+309
+00:31:41,593 --> 00:31:52,304
+And we can take in, sort of, any text that we want. Take in, like, whatever random text you can think of from
+the internet, train our recurrent neural network language model on this text, and then generate new text.
+
 310
-00:30:39,032 --> 00:30:40,372
-Back propagation through time,
+00:31:52,304 --> 00:32:02,634
+So in this example, we took this entire text of all of Shakespeare's works, and then
+used that to train a recurrent neural network language model on all of Shakespeare.
 
 311
-00:30:40,372 --> 00:30:43,061
-or sorry, truncated back prop though time
+00:32:02,634 --> 00:32:11,584
+And you can see that the beginning of training, it's kind of producing maybe random gibberish garbage,
+but throughout the course of training, it ends up producing things that seem relatively reasonable.
 
 312
-00:30:43,061 --> 00:30:44,352
-is just the way to
-approximate these gradients
+00:32:11,584 --> 00:32:18,224
+And after you've, after this model has been trained pretty well,
+then it produces text that seems, kind of, Shakespeare-esque to me.
 
 313
-00:30:44,352 --> 00:30:47,072
-without going making a backwards pass
+00:32:18,224 --> 00:32:24,754
+"Why do what that day," replied, whatever, right, you can
+read this. Like, it kind of looks kind of like Shakespeare.
 
 314
-00:30:47,072 --> 00:30:51,239
-through your potentially
-very large sequence of data.
+00:32:24,754 --> 00:32:31,264
+And if you actually train this model even more, and let it converge
+even further, and then sample these even longer sequences,
 
 315
-00:30:52,677 --> 00:30:55,301
-This all sounds very
-complicated and confusing
+00:32:31,264 --> 00:32:35,864
+you can see that it learns all kinds of crazy cool
+stuff that really looks like a Shakespeare play.
 
 316
-00:30:55,301 --> 00:30:56,871
-and it sounds like a lot of code to write,
+00:32:35,864 --> 00:32:40,016
+It knows that it uses, maybe, these
+headings to say who's speaking.
 
 317
-00:30:56,871 --> 00:30:59,649
-but in fact, this can
-acutally be pretty concise.
+00:32:40,016 --> 00:32:45,565
+Then it produces these bits of text that have crazy
+dialogue that sounds kind of Shakespeare-esque.
 
 318
-00:30:59,649 --> 00:31:03,418
-Andrea has this example of
-what he calls min-char-rnn,
-
-319
-00:31:03,418 --> 00:31:04,816
-that does all of this stuff
-
-320
-00:31:04,816 --> 00:31:07,474
-in just like a 112 lines of Python.
-
-321
-00:31:07,474 --> 00:31:09,045
-It handles building the vocabulary.
-
-322
-00:31:09,045 --> 00:31:09,925
-It trains the model
-
-323
-00:31:09,925 --> 00:31:11,725
-with truncated back
-propagation through time.
-
-324
-00:31:11,725 --> 00:31:13,936
-And then, it can actually
-sample from that model
-
-325
-00:31:13,936 --> 00:31:16,584
-in actually not too much code.
-
-326
-00:31:16,584 --> 00:31:17,925
-So even though this sounds like
-
-327
-00:31:17,925 --> 00:31:18,965
-kind of a big, scary process,
-
-328
-00:31:18,965 --> 00:31:20,862
-it's actually not too difficult.
-
-329
-00:31:20,862 --> 00:31:22,314
-I'd encourage you, if you're confused,
-
-330
-00:31:22,314 --> 00:31:23,456
-to maybe go check this out
-
-331
-00:31:23,456 --> 00:31:25,125
-and step through the
-code on your own time,
-
-332
-00:31:25,125 --> 00:31:27,074
-and see, kind of, all
-of these concrete steps
-
-333
-00:31:27,074 --> 00:31:27,954
-happening in code.
-
-334
-00:31:27,954 --> 00:31:30,184
-So this is all in just a single file,
-
-335
-00:31:30,184 --> 00:31:31,723
-all using numpy with no dependencies.
-
-336
-00:31:31,723 --> 00:31:34,473
-This was relatively easy to read.
-
-337
-00:31:35,584 --> 00:31:36,896
-So then, once we have this idea
-
-338
-00:31:36,896 --> 00:31:39,056
-of training a recurrent
-neural network language model,
-
-339
-00:31:39,056 --> 00:31:41,593
-we can actually have a
-lot of fun with this.
-
-340
-00:31:41,593 --> 00:31:43,984
-And we can take in, sort
-of, any text that we want.
-
-341
-00:31:43,984 --> 00:31:46,424
-Take in, like, whatever
-random text you can think of
-
-342
-00:31:46,424 --> 00:31:47,384
-from the internet,
-
-343
-00:31:47,384 --> 00:31:49,656
-train our recurrent neural
-network language model
-
-344
-00:31:49,656 --> 00:31:50,616
-on this text,
-
-345
-00:31:50,616 --> 00:31:52,304
-and then generate new text.
-
-346
-00:31:52,304 --> 00:31:55,502
-So in this example, we
-took this entire text
-
-347
-00:31:55,502 --> 00:31:57,394
-of all of Shakespeare's works,
-
-348
-00:31:57,394 --> 00:31:59,314
-and then used that to train
-
-349
-00:31:59,314 --> 00:32:00,885
-a recurrent neural network language model
-
-350
-00:32:00,885 --> 00:32:02,634
-on all of Shakespeare.
-
-351
-00:32:02,634 --> 00:32:03,896
-And you can see that the
-beginning of training,
-
-352
-00:32:03,896 --> 00:32:05,773
-it's kind of producing maybe
-random gibberish garbage,
-
-353
-00:32:05,773 --> 00:32:08,216
-but throughout the course of training,
-
-354
-00:32:08,216 --> 00:32:11,584
-it ends up producing things
-that seem relatively reasonable.
-
-355
-00:32:11,584 --> 00:32:12,784
-And after you've,
-
-356
-00:32:12,784 --> 00:32:14,272
-after this model has
-been trained pretty well,
-
-357
-00:32:14,272 --> 00:32:16,104
-then it produces text that seems,
-
-358
-00:32:16,104 --> 00:32:18,224
-kind of, Shakespeare-esque to me.
-
-359
-00:32:18,224 --> 00:32:20,264
-"Why do what that day," replied,
-
-360
-00:32:20,264 --> 00:32:23,184
-whatever, right, you can read this.
-
-361
-00:32:23,184 --> 00:32:24,754
-Like, it kind of looks
-kind of like Shakespeare.
-
-362
-00:32:24,754 --> 00:32:27,184
-And if you actually train
-this model even more,
-
-363
-00:32:27,184 --> 00:32:28,765
-and let it converge even further,
-
-364
-00:32:28,765 --> 00:32:31,264
-and then sample these
-even longer sequences,
-
-365
-00:32:31,264 --> 00:32:33,904
-you can see that it learns
-all kinds of crazy cool stuff
-
-366
-00:32:33,904 --> 00:32:35,864
-that really looks like a Shakespeare play.
-
-367
-00:32:35,864 --> 00:32:38,856
-It knows that it uses,
-maybe, these headings
-
-368
-00:32:38,856 --> 00:32:40,016
-to say who's speaking.
-
-369
-00:32:40,016 --> 00:32:42,224
-Then it produces these bits of text
-
-370
-00:32:42,224 --> 00:32:43,736
-that have crazy dialogue
-
-371
-00:32:43,736 --> 00:32:45,565
-that sounds kind of Shakespeare-esque.
-
-372
-00:32:45,565 --> 00:32:46,714
+00:32:45,565 --> 00:32:47,744
 It knows to put line breaks
-
-373
-00:32:46,714 --> 00:32:47,744
 in between these different things.
 
-374
-00:32:47,744 --> 00:32:49,342
-And this is all, like, really cool,
+319
+00:32:47,744 --> 00:32:52,958
+And this is all, like, really cool, all just
+sort of learned from the structure of the data.
 
-375
-00:32:49,342 --> 00:32:52,958
-all just sort of learned from
-the structure of the data.
+320
+00:32:52,958 --> 00:33:02,725
+We can actually get even crazier than this. This was one of my favorite
+examples. I found online, there's this. Is anyone a mathematician in this room?
 
-376
-00:32:52,958 --> 00:32:55,536
-We can actually get
-even crazier than this.
+321
+00:33:02,725 --> 00:33:07,325
+Has anyone taken an algebraic topology course by
+any chance? Wow, a couple, that's impressive.
 
-377
-00:32:55,536 --> 00:32:58,368
-This was one of my favorite examples.
+322
+00:33:07,325 --> 00:33:15,114
+So you probably know more algebraic topology than me, but I
+found this open source algebraic topology textbook online.
 
-378
-00:32:58,368 --> 00:33:00,443
-I found online, there's this.
+323
+00:33:15,114 --> 00:33:19,554
+It's just a whole bunch of tech files that
+are like this super dense mathematics.
 
-379
-00:33:00,443 --> 00:33:02,725
-Is anyone a mathematician in this room?
+324
+00:33:19,554 --> 00:33:26,325
+And LaTac, cause LaTac is sort of this, let's you write
+equations and diagrams and everything just using plain text.
 
-380
-00:33:02,725 --> 00:33:05,914
-Has anyone taken an algebraic
-topology course by any chance?
+325
+00:33:26,325 --> 00:33:33,146
+We can actually train our recurrent neural network language model
+on the raw Latac source code of this algebraic topology textbook.
 
-381
-00:33:05,914 --> 00:33:07,325
-Wow, a couple, that's impressive.
+326
+00:33:33,146 --> 00:33:41,446
+And if we do that, then after we sample from the model, then we
+get something that seems like, kind of like algebraic topology.
 
-382
-00:33:07,325 --> 00:33:10,765
-So you probably know more
-algebraic topology than me,
-
-383
-00:33:10,765 --> 00:33:12,165
-but I found this open source
-
-384
-00:33:12,165 --> 00:33:15,114
-algebraic topology textbook online.
-
-385
-00:33:15,114 --> 00:33:16,514
-It's just a whole bunch of tech files
-
-386
-00:33:16,514 --> 00:33:19,554
-that are like this
-super dense mathematics.
-
-387
-00:33:19,554 --> 00:33:22,593
-And LaTac, cause LaTac is sort of this,
-
-388
-00:33:22,593 --> 00:33:24,774
-let's you write equations and diagrams
-
-389
-00:33:24,774 --> 00:33:26,325
-and everything just using plain text.
-
-390
-00:33:26,325 --> 00:33:27,455
-We can actually train our
-
-391
-00:33:27,455 --> 00:33:28,816
-recurrent neural network language model
-
-392
-00:33:28,816 --> 00:33:31,457
-on the raw Latac source code
-
-393
-00:33:31,457 --> 00:33:33,146
-of this algebraic topology textbook.
-
-394
-00:33:33,146 --> 00:33:37,687
-And if we do that, then after
-we sample from the model,
-
-395
-00:33:37,687 --> 00:33:39,208
-then we get something that seems like,
-
-396
-00:33:39,208 --> 00:33:41,446
-kind of like algebraic topology.
-
-397
-00:33:41,446 --> 00:33:43,797
+327
+00:33:41,446 --> 00:33:46,679
 So it knows to like put equations.
-
-398
-00:33:43,797 --> 00:33:46,679
 It puts all kinds of crazy stuff.
 
-399
-00:33:46,679 --> 00:33:48,717
-It's like, to prove study,
+328
+00:33:46,679 --> 00:33:52,773
+It's like, to prove study, we see that F sub U is a
+covering of x prime, blah, blah, blah, blah, blah.
 
-400
-00:33:48,717 --> 00:33:51,574
-we see that F sub U is
-a covering of x prime,
+329
+00:33:52,773 --> 00:33:56,576
+It knows where to put unions. It knows
+to put squares at the end of proofs.
 
-401
-00:33:51,574 --> 00:33:52,773
-blah, blah, blah, blah, blah.
-
-402
-00:33:52,773 --> 00:33:53,992
-It knows where to put unions.
-
-403
-00:33:53,992 --> 00:33:56,576
-It knows to put squares
-at the end of proofs.
-
-404
-00:33:56,576 --> 00:33:57,528
+330
+00:33:56,576 --> 00:34:00,026
 It makes lemmas.
-
-405
-00:33:57,528 --> 00:34:00,026
 It makes references to previous lemmas.
 
-406
-00:34:00,026 --> 00:34:01,225
-Right, like we hear, like.
+331
+00:34:00,026 --> 00:34:08,417
+Right, like we hear, like. It's namely a bi-lemma question. We see
+that R is geometrically something. So it's actually pretty crazy.
 
-407
-00:34:01,225 --> 00:34:03,781
-It's namely a bi-lemma question.
-
-408
-00:34:03,781 --> 00:34:05,917
-We see that R is geometrically something.
-
-409
-00:34:05,917 --> 00:34:08,417
-So it's actually pretty crazy.
-
-410
+332
 00:34:09,496 --> 00:34:12,913
 It also sometimes tries to make diagrams.
 
-411
-00:34:14,239 --> 00:34:16,132
-For those of you that have
-taken algebraic topology,
+333
+00:34:14,239 --> 00:34:19,313
+For those of you that have taken algebraic topology, you know that these
+commutative diagrams are kind of a thing that you work with a lot
 
-412
-00:34:16,132 --> 00:34:17,322
-you know that these commutative diagrams
+334
+00:34:19,313 --> 00:34:26,379
+So it kind of got the general gist of how to make those
+diagrams, but they actually don't make any sense.
 
-413
-00:34:17,322 --> 00:34:19,313
-are kind of a thing
-that you work with a lot
+335
+00:34:26,380 --> 00:34:32,728
+And actually, one of my favorite examples
+here is that it sometimes omits proofs.
 
-414
-00:34:19,313 --> 00:34:21,153
-So it kind of got the general gist
+336
+00:34:32,728 --> 00:34:39,694
+So it'll sometimes say, it'll sometimes say something like
+theorem, blah, blah, blah, blah, blah, proof omitted.
 
-415
-00:34:21,154 --> 00:34:22,353
-of how to make those diagrams,
+337
+00:34:39,695 --> 00:34:45,392
+This thing kind of has gotten the gist of
+how some of these math textbooks look like.
 
-416
-00:34:22,353 --> 00:34:26,379
-but they actually don't make any sense.
+338
+00:34:47,831 --> 00:34:53,497
+We can have a lot of fun with this. So we also tried training one
+of these models on the entire source code of the Linux kernel.
 
-417
-00:34:26,380 --> 00:34:28,130
-And actually,
-
-418
-00:34:28,130 --> 00:34:29,440
-one of my favorite examples here
-
-419
-00:34:29,440 --> 00:34:32,728
-is that it sometimes omits proofs.
-
-420
-00:34:32,728 --> 00:34:33,788
-So it'll sometimes say,
-
-421
-00:34:33,789 --> 00:34:35,418
-it'll sometimes say something like
-
-422
-00:34:35,418 --> 00:34:39,695
-theorem, blah, blah, blah,
-blah, blah, proof omitted.
-
-423
-00:34:39,695 --> 00:34:41,559
-This thing kind of has gotten the gist
-
-424
-00:34:41,559 --> 00:34:45,392
-of how some of these
-math textbooks look like.
-
-425
-00:34:47,831 --> 00:34:49,122
-We can have a lot of fun with this.
-
-426
-00:34:49,123 --> 00:34:50,792
-So we also tried training
-one of these models
-
-427
-00:34:50,792 --> 00:34:53,498
-on the entire source
-code of the Linux kernel.
-
-428
-00:34:53,498 --> 00:34:55,791
+339
+00:34:53,498 --> 00:34:56,801
 'Cause again, this character level stuff
-
-429
-00:34:55,792 --> 00:34:56,801
 that we can train on,
 
-430
-00:34:56,801 --> 00:34:58,630
-And then, when we sample this,
+340
+00:34:56,801 --> 00:35:01,483
+And then, when we sample this, it
+acutally again looks like C source code.
 
-431
-00:34:58,630 --> 00:35:01,483
-it acutally again looks
-like C source code.
+341
+00:35:01,483 --> 00:35:06,192
+- It knows how to write if statements.
+- It has, like, pretty good code formatting skills.
 
-432
-00:35:01,483 --> 00:35:03,534
-It knows how to write if statements.
+342
+00:35:06,192 --> 00:35:09,552
+It knows to indent after these if
+statements. It knows to put curly braces.
 
-433
-00:35:03,534 --> 00:35:06,192
-It has, like, pretty good
-code formatting skills.
+343
+00:35:09,552 --> 00:35:15,052
+It actually even makes comments about
+some things that are usually nonsense.
 
-434
-00:35:06,192 --> 00:35:08,110
-It knows to indent after
-these if statements.
+344
+00:35:15,052 --> 00:35:23,355
+One problem with this model is that it knows how to declare
+variables. But it doesn't always use the variables that it declares.
 
-435
-00:35:08,110 --> 00:35:09,552
-It knows to put curly braces.
+345
+00:35:23,355 --> 00:35:27,554
+And sometimes it tries to use variables that
+haven't been declared. This wouldn't compile.
 
-436
-00:35:09,552 --> 00:35:12,289
-It actually even makes
-comments about some things
-
-437
-00:35:12,289 --> 00:35:15,052
-that are usually nonsense.
-
-438
-00:35:15,052 --> 00:35:18,089
-One problem with this model is that
-
-439
-00:35:18,089 --> 00:35:19,842
-it knows how to declare variables.
-
-440
-00:35:19,842 --> 00:35:23,355
-But it doesn't always use the
-variables that it declares.
-
-441
-00:35:23,355 --> 00:35:24,414
-And sometimes it tries
-
-442
-00:35:24,414 --> 00:35:26,134
-to use variables that
-haven't been declared.
-
-443
-00:35:26,134 --> 00:35:27,554
-This wouldn't compile.
-
-444
-00:35:27,554 --> 00:35:28,814
+346
+00:35:27,554 --> 00:35:30,555
 I would not recommend sending this
-
-445
-00:35:28,814 --> 00:35:30,555
 as a pull request to Linux.
 
-446
-00:35:30,555 --> 00:35:34,606
-This thing also figures
-out how to recite the GNU,
+347
+00:35:30,555 --> 00:35:37,867
+This thing also figures out how to recite the
+GNU, this GNU license character by character.
 
-447
-00:35:34,606 --> 00:35:37,867
-this GNU license character by character.
+348
+00:35:37,867 --> 00:35:44,962
+It kind of knows that you need to recite the GNU license and after the
+license comes some includes, then some other includes, then source code.
 
-448
-00:35:37,867 --> 00:35:40,454
-It kind of knows that you
-need to recite the GNU license
-
-449
-00:35:40,454 --> 00:35:42,696
-and after the license comes some includes,
-
-450
-00:35:42,696 --> 00:35:44,962
-then some other includes,
-then source code.
-
-451
-00:35:44,962 --> 00:35:46,864
-This thing has actually
-learned quite a lot
-
-452
-00:35:46,864 --> 00:35:48,836
+349
+00:35:44,962 --> 00:35:48,836
+This thing has actually learned quite a lot
 about the general structure of the data.
 
-453
-00:35:48,836 --> 00:35:50,096
-Where, again, during training,
+350
+00:35:48,836 --> 00:35:53,398
+Where, again, during training, all we asked this model to
+do was try to predict the next character in the sequence.
 
-454
-00:35:50,096 --> 00:35:51,518
-all we asked this model to do
-
-455
-00:35:51,518 --> 00:35:53,398
-was try to predict the next
-character in the sequence.
-
-456
+351
 00:35:53,398 --> 00:35:55,406
 We didn't tell it any of this structure,
 
-457
-00:35:55,406 --> 00:35:57,534
-but somehow, just through the course
+352
+00:35:55,406 --> 00:36:03,355
+but somehow, just through the course of this training process, it
+learned a lot about the latent structure in the sequential data.
 
-458
-00:35:57,534 --> 00:35:58,856
-of this training process,
-
-459
-00:35:58,856 --> 00:36:01,438
-it learned a lot about
-the latent structure
-
-460
-00:36:01,438 --> 00:36:03,355
-in the sequential data.
-
-461
-00:36:05,808 --> 00:36:07,406
+353
+00:36:05,808 --> 00:36:10,246
 Yeah, so it knows how to write code.
-
-462
-00:36:07,406 --> 00:36:10,246
 It does a lot of cool stuff.
 
-463
-00:36:10,246 --> 00:36:13,575
-I had this paper with
-Andre a couple years ago
+354
+00:36:10,246 --> 00:36:20,856
+I had this paper with Andre a couple years ago where we trained a bunch of these models and then we wanted to
+try to poke into the brains of these models and figure out like what are they doing and why are they working.
 
-464
-00:36:13,575 --> 00:36:14,966
-where we trained a bunch of these models
+355
+00:36:20,856 --> 00:36:28,165
+So we saw, in our, these recurring neural networks has this hidden
+vector which is, maybe, some vector that's updated over every time step.
 
-465
-00:36:14,966 --> 00:36:17,176
-and then we wanted to try
-to poke into the brains
+356
+00:36:28,165 --> 00:36:34,176
+And then what we wanted to try to figure out is could we find some
+elements of this vector that have some Symantec interpretable meaning.
 
-466
-00:36:17,176 --> 00:36:18,009
-of these models
+357
+00:36:34,176 --> 00:36:39,917
+So what we did is we trained a neural network language model,
+one of these character level models on one of these data sets,
 
-467
-00:36:18,009 --> 00:36:19,376
-and figure out like what are they doing
+358
+00:36:39,917 --> 00:36:47,923
+and then we picked one of the elements in that hidden vector and now we look
+at what is the value of that hidden vector over the course of a sequence
 
-468
-00:36:19,376 --> 00:36:20,856
-and why are they working.
+359
+00:36:47,923 --> 00:36:52,206
+to try to get some sense of maybe what these
+different hidden states are looking for.
 
-469
-00:36:20,856 --> 00:36:22,027
-So we saw, in our,
-
-470
-00:36:22,027 --> 00:36:23,386
-these recurring neural networks
-
-471
-00:36:23,386 --> 00:36:24,947
-has this hidden vector which is,
-
-472
-00:36:24,947 --> 00:36:28,165
-maybe, some vector that's
-updated over every time step.
-
-473
-00:36:28,165 --> 00:36:29,838
-And then what we wanted
-to try to figure out is
-
-474
-00:36:29,838 --> 00:36:32,158
-could we find some elements of this vector
-
-475
-00:36:32,158 --> 00:36:34,176
-that have some Symantec
-interpretable meaning.
-
-476
-00:36:34,176 --> 00:36:35,336
-So what we did is
-
-477
-00:36:35,336 --> 00:36:37,096
-we trained a neural
-network language model,
-
-478
-00:36:37,096 --> 00:36:38,507
-one of these character level models
-
-479
-00:36:38,507 --> 00:36:39,917
-on one of these data sets,
-
-480
-00:36:39,917 --> 00:36:42,965
-and then we picked one of the
-elements in that hidden vector
-
-481
-00:36:42,965 --> 00:36:45,406
-and now we look at what is the
-value of that hidden vector
-
-482
-00:36:45,406 --> 00:36:47,923
-over the course of a sequence
-
-483
-00:36:47,923 --> 00:36:49,926
-to try to get some sense of maybe
-
-484
-00:36:49,926 --> 00:36:52,206
-what these different hidden
-states are looking for.
-
-485
-00:36:52,206 --> 00:36:54,086
-When you do this, a lot
-of them end up looking
-
-486
-00:36:54,086 --> 00:36:56,406
+360
+00:36:52,206 --> 00:36:56,406
+When you do this, a lot of them end up looking
 kind of like random gibberish garbage.
 
-487
-00:36:56,406 --> 00:36:57,736
-So here again, what we've done,
+361
+00:36:56,406 --> 00:37:02,686
+So here again, what we've done, is we've picked one element of that
+vector, and now we run the sequence forward through the trained model,
 
-488
-00:36:57,736 --> 00:36:59,806
-is we've picked one
-element of that vector,
+362
+00:37:02,686 --> 00:37:10,876
+and now the color of each character corresponds to the magnitude of that single scaler
+element of the hidden vector at every time step when it's reading the sequence.
 
-489
-00:36:59,806 --> 00:37:01,467
-and now we run the sequence forward
+363
+00:37:10,876 --> 00:37:15,883
+So you can see that a lot of the vectors in these
+hidden states are kind of not very interpretable.
 
-490
-00:37:01,467 --> 00:37:02,686
-through the trained model,
+364
+00:37:15,883 --> 00:37:21,396
+It seems like they're kind of doing some of this low level
+language modeling to figure out what character should come next.
 
-491
-00:37:02,686 --> 00:37:04,056
-and now the color of each character
-
-492
-00:37:04,056 --> 00:37:07,271
-corresponds to the
-magnitude of that single
-
-493
-00:37:07,271 --> 00:37:09,446
-scaler element of the hidden
-vector at every time step
-
-494
-00:37:09,446 --> 00:37:10,876
-when it's reading the sequence.
-
-495
-00:37:10,876 --> 00:37:12,006
-So you can see that a lot
-
-496
-00:37:12,006 --> 00:37:13,958
-of the vectors in these hidden states
-
-497
-00:37:13,958 --> 00:37:15,883
-are kind of not very interpretable.
-
-498
-00:37:15,883 --> 00:37:17,404
-It seems like they're
-kind of doing some of this
-
-499
-00:37:17,404 --> 00:37:19,158
-low level language modeling
-
-500
-00:37:19,158 --> 00:37:21,396
-to figure out what
-character should come next.
-
-501
+365
 00:37:21,396 --> 00:37:23,438
 But some of them end up quite nice.
 
-502
+366
 00:37:23,438 --> 00:37:26,375
 So here we found this vector
 that is looking for quotes.
 
-503
-00:37:26,375 --> 00:37:28,507
-You can see that there's
-this one hidden element,
+367
+00:37:26,375 --> 00:37:32,486
+You can see that there's this one hidden element, this one
+element in the vector, that is off, off, off, off, off blue
 
-504
-00:37:28,507 --> 00:37:30,318
-this one element in the vector,
+368
+00:37:32,486 --> 00:37:38,303
+and then once it hits a quote, it turns on and
+remains on for the duration of this quote.
 
-505
-00:37:30,318 --> 00:37:32,486
-that is off, off, off, off, off blue
+369
+00:37:39,187 --> 00:37:42,598
+And now when we hit the second quotation
+mark, then that cell turns off.
 
-506
-00:37:32,486 --> 00:37:33,827
-and then once it hits a quote,
+370
+00:37:42,598 --> 00:37:48,856
+So somehow, even though this model was only trained to predict the
+next character in a sequence, it somehow learned that a useful thing,
 
-507
-00:37:33,827 --> 00:37:37,136
-it turns on and remains
-on for the duration
+371
+00:37:48,856 --> 00:37:54,222
+in order to do this, might be to have
+some cell that's trying to detect quotes.
 
-508
-00:37:37,136 --> 00:37:38,303
-of this quote.
+372
+00:37:54,222 --> 00:38:00,104
+We also found this other cell that is, looks like it's
+counting the number of characters since a line break.
 
-509
-00:37:39,187 --> 00:37:41,025
-And now when we hit the
-second quotation mark,
+373
+00:38:00,104 --> 00:38:07,055
+So you can see that at the beginning of each line, this element starts
+off at zero. Throughout the course of the line, it's gradually more red,
 
-510
-00:37:41,025 --> 00:37:42,598
-then that cell turns off.
+374
+00:38:07,055 --> 00:38:11,976
+so that value increases. And then after the
+new line character, it resets to zero.
 
-511
-00:37:42,598 --> 00:37:44,958
-So somehow, even though
-this model was only trained
+375
+00:38:11,976 --> 00:38:19,545
+So you can imagine that maybe this cell is letting the network keep
+track of when it needs to write to produce these new line characters.
 
-512
-00:37:44,958 --> 00:37:46,606
-to predict the next
-character in a sequence,
-
-513
-00:37:46,606 --> 00:37:48,856
-it somehow learned that a useful thing,
-
-514
-00:37:48,856 --> 00:37:49,976
-in order to do this,
-
-515
-00:37:49,976 --> 00:37:54,222
-might be to have some cell
-that's trying to detect quotes.
-
-516
-00:37:54,222 --> 00:37:55,507
-We also found this other cell
-
-517
-00:37:55,507 --> 00:37:58,956
-that is, looks like it's
-counting the number of characters
-
-518
-00:37:58,956 --> 00:38:00,104
-since a line break.
-
-519
-00:38:00,104 --> 00:38:01,507
-So you can see that at the
-beginning of each line,
-
-520
-00:38:01,507 --> 00:38:04,176
-this element starts off at zero.
-
-521
-00:38:04,176 --> 00:38:05,536
-Throughout the course of the line,
-
-522
-00:38:05,536 --> 00:38:07,055
-it's gradually more red,
-
-523
-00:38:07,055 --> 00:38:08,486
-so that value increases.
-
-524
-00:38:08,486 --> 00:38:10,078
-And then after the new line character,
-
-525
-00:38:10,078 --> 00:38:11,976
-it resets to zero.
-
-526
-00:38:11,976 --> 00:38:13,356
-So you can imagine that maybe this cell
-
-527
-00:38:13,356 --> 00:38:15,336
-is letting the network keep track
-
-528
-00:38:15,336 --> 00:38:16,966
-of when it needs to write
-
-529
-00:38:16,966 --> 00:38:19,545
-to produce these new line characters.
-
-530
-00:38:19,545 --> 00:38:20,936
+376
+00:38:19,545 --> 00:38:22,987
 We also found some that,
-
-531
-00:38:20,936 --> 00:38:22,987
 when we trained on the linux source code,
 
-532
-00:38:22,987 --> 00:38:25,307
-we found some examples that are turning on
+377
+00:38:22,987 --> 00:38:33,838
+we found some examples that are turning on inside the conditions of if statements. So this maybe
+allows the network to differentiate whether it's outside an if statement or inside that condition,
 
-533
-00:38:25,307 --> 00:38:27,158
-inside the conditions of if statements.
-
-534
-00:38:27,158 --> 00:38:29,216
-So this maybe allows the network
-
-535
-00:38:29,216 --> 00:38:32,364
-to differentiate whether
-it's outside an if statement
-
-536
-00:38:32,364 --> 00:38:33,838
-or inside that condition,
-
-537
+378
 00:38:33,838 --> 00:38:35,806
 which might help it model
 these sequences better.
 
-538
-00:38:35,806 --> 00:38:38,976
-We also found some that
-turn on in comments,
+379
+00:38:35,806 --> 00:38:44,765
+We also found some that turn on in comments, or some that
+seem like they're counting the number of indentation levels.
 
-539
-00:38:38,976 --> 00:38:41,467
-or some that seem like they're counting
+380
+00:38:44,765 --> 00:38:50,758
+This is all just really cool stuff because it's saying that even though
+we are only trying to train this model to predict next characters,
 
-540
-00:38:41,467 --> 00:38:44,765
-the number of indentation levels.
-
-541
-00:38:44,765 --> 00:38:46,298
-This is all just really cool stuff
-
-542
-00:38:46,298 --> 00:38:47,488
-because it's saying that
-
-543
-00:38:47,488 --> 00:38:49,630
-even though we are only
-trying to train this model
-
-544
-00:38:49,630 --> 00:38:50,758
-to predict next characters,
-
-545
-00:38:50,758 --> 00:38:52,229
+381
+00:38:50,758 --> 00:38:55,646
 it somehow ends up learning a lot
-
-546
-00:38:52,229 --> 00:38:55,646
 of useful structure about the input data.
 
-547
-00:38:57,161 --> 00:38:59,307
-One kind of thing that we often use,
+382
+00:38:57,161 --> 00:39:05,528
+One kind of thing that we often use, so this is not really been computer vision so
+far, and we need to pull this back to computer vision since this is a vision class.
 
-548
-00:38:59,307 --> 00:39:01,718
-so this is not really been
-computer vision so far,
-
-549
-00:39:01,718 --> 00:39:03,878
-and we need to pull this
-back to computer vision
-
-550
-00:39:03,878 --> 00:39:05,528
-since this is a vision class.
-
-551
-00:39:05,528 --> 00:39:07,107
+383
+00:39:05,528 --> 00:39:08,747
 We've alluded many times to this
-
-552
-00:39:07,107 --> 00:39:08,747
 image captioning model
 
-553
-00:39:08,747 --> 00:39:10,528
-where we want to build
-models that can input
+384
+00:39:08,747 --> 00:39:14,376
+- where we want to build models that can input
+- an image and then output a caption in natural language.
 
-554
-00:39:10,528 --> 00:39:14,376
-an image and then output a
-caption in natural language.
+385
+00:39:14,376 --> 00:39:19,787
+There were a bunch of papers a couple years ago
+that all had relatively similar approaches.
 
-555
-00:39:14,376 --> 00:39:17,408
-There were a bunch of
-papers a couple years ago
+386
+00:39:19,787 --> 00:39:25,026
+But I'm showing the figure from the paper
+from our lab in a totally un-biased way.
 
-556
-00:39:17,408 --> 00:39:19,787
-that all had relatively
-similar approaches.
+387
+00:39:26,876 --> 00:39:35,608
+But, the idea here is that the caption is this variably length sequence that we
+might, the sequence might have different numbers of words for different captions.
 
-557
-00:39:19,787 --> 00:39:22,776
-But I'm showing the figure
-from the paper from our lab
+388
+00:39:35,608 --> 00:39:39,947
+So this is a totally natural fit for a
+recurrent neural network language model.
 
-558
-00:39:22,776 --> 00:39:25,026
-in a totally un-biased way.
+389
+00:39:39,947 --> 00:39:50,379
+So then what this model looks like is we have some convolutional network which will input the, which
+will take as input the image, and we've seen a lot about how convolution networks work at this point,
 
-559
-00:39:26,876 --> 00:39:29,198
-But, the idea here is that the caption
+390
+00:39:50,379 --> 00:39:58,928
+and that convolutional network will produce a summary vector of the image which will then
+feed into the first time step of one of these recurrent neural network language models
 
-560
-00:39:29,198 --> 00:39:31,648
-is this variably length
-sequence that we might,
-
-561
-00:39:31,648 --> 00:39:34,198
-the sequence might have different numbers
-
-562
-00:39:34,198 --> 00:39:35,608
-of words for different captions.
-
-563
-00:39:35,608 --> 00:39:37,059
-So this is a totally natural fit
-
-564
-00:39:37,059 --> 00:39:39,947
-for a recurrent neural
-network language model.
-
-565
-00:39:39,947 --> 00:39:41,598
-So then what this model looks like
-
-566
-00:39:41,598 --> 00:39:43,878
-is we have some convolutional network
-
-567
-00:39:43,878 --> 00:39:44,958
-which will input the,
-
-568
-00:39:44,958 --> 00:39:46,786
-which will take as input the image,
-
-569
-00:39:46,786 --> 00:39:48,397
-and we've seen a lot about how
-
-570
-00:39:48,397 --> 00:39:50,379
-convolution networks work at this point,
-
-571
-00:39:50,379 --> 00:39:52,753
-and that convolutional
-network will produce
-
-572
-00:39:52,753 --> 00:39:54,569
-a summary vector of the image
-
-573
-00:39:54,569 --> 00:39:56,227
-which will then feed
-into the first time step
-
-574
-00:39:56,227 --> 00:39:58,928
-of one of these recurrent
-neural network language models
-
-575
+391
 00:39:58,928 --> 00:40:02,888
 which will then produce words
 of the caption one at a time.
 
-576
-00:40:02,888 --> 00:40:04,945
-So the way that this kind
-of works at test time
+392
+00:40:02,888 --> 00:40:06,425
+So the way that this kind of works at
+test time after the model is trained
 
-577
-00:40:04,945 --> 00:40:06,425
-after the model is trained
+393
+00:40:06,425 --> 00:40:11,178
+looks almost exactly the same as these character
+level language models that we saw a little bit ago.
 
-578
-00:40:06,425 --> 00:40:07,847
-looks almost exactly the same
+394
+00:40:11,178 --> 00:40:18,638
+We'll take our input image, feed it through our convolutional network.
+But now instead of taking the softmax scores from an image net model,
 
-579
-00:40:07,847 --> 00:40:09,665
-as these character level language models
+395
+00:40:18,638 --> 00:40:24,915
+we'll instead take this 4,096 dimensional
+vector from the end of the model,
 
-580
-00:40:09,665 --> 00:40:11,178
-that we saw a little bit ago.
+396
+00:40:24,915 --> 00:40:31,377
+and we'll take that vector and use it to
+summarize the whole content of the image.
 
-581
-00:40:11,178 --> 00:40:12,699
-We'll take our input image,
+397
+00:40:31,377 --> 00:40:39,528
+Now, remember when we talked about RNN language models, we said that we need to see
+the language model with that first initial input to tell it to start generating text.
 
-582
-00:40:12,699 --> 00:40:14,499
-feed it through our convolutional network.
+398
+00:40:39,528 --> 00:40:49,006
+So in this case, we'll give it some special start token, which is just saying, hey, this is the
+start of a sentence. Please start generating some text conditioned on this image information.
 
-583
-00:40:14,499 --> 00:40:16,987
-But now instead of
-taking the softmax scores
+399
+00:40:49,006 --> 00:40:57,107
+So now previously, we saw that in this RNN language model, we had these
+matrices that were taking the previous, the input at the current time step
 
-584
-00:40:16,987 --> 00:40:18,638
-from an image net model,
+400
+00:40:57,107 --> 00:41:01,240
+and the hidden state of the previous time step and
+combining those to get the next hidden state.
 
-585
-00:40:18,638 --> 00:40:22,997
-we'll instead take this
-4,096 dimensional vector
-
-586
-00:40:22,997 --> 00:40:24,915
-from the end of the model,
-
-587
-00:40:24,915 --> 00:40:27,998
-and we'll take that vector and use it
-
-588
-00:40:29,038 --> 00:40:31,377
-to summarize the whole
-content of the image.
-
-589
-00:40:31,377 --> 00:40:34,208
-Now, remember when we talked
-about RNN language models,
-
-590
-00:40:34,208 --> 00:40:36,379
-we said that we need to
-see the language model
-
-591
-00:40:36,379 --> 00:40:37,947
-with that first initial input
-
-592
-00:40:37,947 --> 00:40:39,528
-to tell it to start generating text.
-
-593
-00:40:39,528 --> 00:40:42,118
-So in this case, we'll give
-it some special start token,
-
-594
-00:40:42,118 --> 00:40:45,236
-which is just saying, hey, this
-is the start of a sentence.
-
-595
-00:40:45,236 --> 00:40:46,728
-Please start generating some text
-
-596
-00:40:46,728 --> 00:40:49,006
-conditioned on this image information.
-
-597
-00:40:49,006 --> 00:40:52,338
-So now previously, we saw that
-in this RNN language model,
-
-598
-00:40:52,338 --> 00:40:55,328
-we had these matrices that
-were taking the previous,
-
-599
-00:40:55,328 --> 00:40:57,107
-the input at the current time step
-
-600
-00:40:57,107 --> 00:40:58,558
-and the hidden state of
-the previous time step
-
-601
-00:40:58,558 --> 00:41:01,240
-and combining those to
-get the next hidden state.
-
-602
+401
 00:41:01,240 --> 00:41:04,678
 Well now, we also need to add
 in this image information.
 
-603
-00:41:04,678 --> 00:41:06,667
-So one way, people play
-around with exactly
+402
+00:41:04,678 --> 00:41:13,105
+So one way, people play around with exactly different ways to incorporate this
+image information, but one simple way is just to add a third weight matrix that is
 
-604
-00:41:06,667 --> 00:41:09,288
-different ways to incorporate
-this image information,
+403
+00:41:14,561 --> 00:41:18,598
+adding in this image information at every
+time step to compute the next hidden state.
 
-605
-00:41:09,288 --> 00:41:10,688
-but one simple way is just to add
-
-606
-00:41:10,688 --> 00:41:13,105
-a third weight matrix that is
-
-607
-00:41:14,561 --> 00:41:16,779
-adding in this image
-information at every time step
-
-608
-00:41:16,779 --> 00:41:18,598
-to compute the next hidden state.
-
-609
-00:41:18,598 --> 00:41:21,145
+404
+00:41:18,598 --> 00:41:23,635
 So now, we'll compute this distribution
-
-610
-00:41:21,145 --> 00:41:23,635
 over all scores in our vocabulary
 
-611
-00:41:23,635 --> 00:41:25,056
-and here, our vocabulary is something
+405
+00:41:23,635 --> 00:41:27,307
+and here, our vocabulary is something like all
+English words, so it could be pretty large.
 
-612
-00:41:25,056 --> 00:41:25,907
-like all English words,
+406
+00:41:27,307 --> 00:41:32,099
+We'll sample from that distribution and now pass
+that word back as input at the next time step.
 
-613
-00:41:25,907 --> 00:41:27,307
-so it could be pretty large.
+407
+00:41:32,099 --> 00:41:39,546
+And that will then feed that word in, again get a distribution over
+all words in the vocab, and again sample to produce the next word.
 
-614
-00:41:27,307 --> 00:41:28,699
-We'll sample from that distribution
+408
+00:41:39,546 --> 00:41:47,538
+So then, after that thing is all done, we'll maybe
+generate, we'll generate this complete sentence.
 
-615
-00:41:28,699 --> 00:41:32,099
-and now pass that word back as
-input at the next time step.
+409
+00:41:47,538 --> 00:41:54,347
+We stop generation once we sample the special ends token, which
+kind of corresponds to the period at the end of the sentence.
 
-616
-00:41:32,099 --> 00:41:34,488
-And that will then feed that word in,
+410
+00:41:54,347 --> 00:42:00,328
+Then once the network samples this ends token, we stop generation
+and we're done and we've gotten our caption for this image.
 
-617
-00:41:34,488 --> 00:41:37,418
-again get a distribution
-over all words in the vocab,
+411
+00:42:00,328 --> 00:42:06,739
+And now, during training, we trained this thing to generate, like
+we put an end token at the end of every caption during training
 
-618
-00:41:37,418 --> 00:41:39,546
-and again sample to produce the next word.
+412
+00:42:06,739 --> 00:42:10,907
+so that the network kind of learned during training
+that end tokens come at the end of sequences.
 
-619
-00:41:39,546 --> 00:41:42,248
-So then, after that thing is all done,
+413
+00:42:10,907 --> 00:42:16,848
+So then, during test time, it tends to sample
+these end tokens once it's done generating.
 
-620
-00:41:42,248 --> 00:41:44,477
-we'll maybe generate,
-
-621
-00:41:44,477 --> 00:41:47,538
-we'll generate this complete sentence.
-
-622
-00:41:47,538 --> 00:41:50,956
-We stop generation once we
-sample the special ends token,
-
-623
-00:41:50,956 --> 00:41:52,887
-which kind of corresponds to the period
-
-624
-00:41:52,887 --> 00:41:54,347
-at the end of the sentence.
-
-625
-00:41:54,347 --> 00:41:56,419
-Then once the network
-samples this ends token,
-
-626
-00:41:56,419 --> 00:41:57,859
-we stop generation and we're done
-
-627
-00:41:57,859 --> 00:42:00,328
-and we've gotten our
-caption for this image.
-
-628
-00:42:00,328 --> 00:42:01,798
-And now, during training,
-
-629
-00:42:01,798 --> 00:42:03,419
-we trained this thing to generate,
-
-630
-00:42:03,419 --> 00:42:04,939
-like we put an end token at the end
-
-631
-00:42:04,939 --> 00:42:06,739
-of every caption during training
-
-632
-00:42:06,739 --> 00:42:08,408
-so that the network kind
-of learned during training
-
-633
-00:42:08,408 --> 00:42:10,907
-that end tokens come at
-the end of sequences.
-
-634
-00:42:10,907 --> 00:42:12,958
-So then, during test time,
-
-635
-00:42:12,958 --> 00:42:14,739
-it tends to sample these end tokens
-
-636
-00:42:14,739 --> 00:42:16,848
-once it's done generating.
-
-637
-00:42:16,848 --> 00:42:18,457
+414
+00:42:16,848 --> 00:42:20,139
 So we trained this model
-
-638
-00:42:18,457 --> 00:42:20,139
 in kind of a completely supervised way.
 
-639
-00:42:20,139 --> 00:42:21,547
-You can find data sets
+415
+00:42:20,139 --> 00:42:24,763
+You can find data sets that have images
+together with natural language captions.
 
-640
-00:42:21,547 --> 00:42:24,763
-that have images together with
-natural language captions.
-
-641
-00:42:24,763 --> 00:42:26,805
+416
+00:42:24,763 --> 00:42:28,666
 Microsoft COCO is probably the biggest
-
-642
-00:42:26,805 --> 00:42:28,666
 and most widely used for this task.
 
-643
-00:42:28,666 --> 00:42:30,191
-But you can just train this model
+417
+00:42:28,666 --> 00:42:47,837
+But you can just train this model in a purely supervised way. And then backpropagate through to jointly train both this recurrent neural network language model and then
+also pass gradients back into this final layer of this the CNN and additionally update the weights of the CNN to jointly tune all parts of the model to perform this task.
 
-644
-00:42:30,191 --> 00:42:31,883
-in a purely supervised way.
+418
+00:42:47,837 --> 00:42:52,438
+Once you train these models, they actually
+do some pretty reasonable things.
 
-645
-00:42:31,883 --> 00:42:34,935
-And then backpropagate
-through to jointly train
-
-646
-00:42:34,935 --> 00:42:37,653
-both this recurrent neural
-network language model
-
-647
-00:42:37,653 --> 00:42:38,635
-and then also pass gradients
-
-648
-00:42:38,635 --> 00:42:40,846
-back into this final layer of this the CNN
-
-649
-00:42:40,846 --> 00:42:42,396
-and additionally update the weights
-
-650
-00:42:42,396 --> 00:42:45,580
-of the CNN to jointly tune
-all parts of the model
-
-651
-00:42:45,580 --> 00:42:47,837
-to perform this task.
-
-652
-00:42:47,837 --> 00:42:49,528
-Once you train these models,
-
-653
-00:42:49,528 --> 00:42:52,438
-they actually do some
-pretty reasonable things.
-
-654
-00:42:52,438 --> 00:42:54,997
+419
+00:42:52,438 --> 00:42:56,689
 These are some real results from a model,
-
-655
-00:42:54,997 --> 00:42:56,689
 from one of these trained models,
 
-656
-00:42:56,689 --> 00:42:58,226
+420
+00:42:56,689 --> 00:43:00,995
 and it says things like a cat sitting
-
-657
-00:42:58,226 --> 00:43:00,995
 on a suitcase on the floor,
 
-658
+421
 00:43:00,995 --> 00:43:02,583
 which is pretty impressive.
 
-659
+422
 00:43:02,583 --> 00:43:04,975
 It knows about cats
 sitting on a tree branch,
 
-660
+423
 00:43:04,975 --> 00:43:06,499
 which is also pretty cool.
 
-661
-00:43:06,499 --> 00:43:07,796
+424
+00:43:06,499 --> 00:43:09,631
 It knows about two people walking
-
-662
-00:43:07,796 --> 00:43:09,631
 on the beach with surfboards.
 
-663
-00:43:09,631 --> 00:43:11,755
-So these models are
-actually pretty powerful
+425
+00:43:09,631 --> 00:43:16,635
+So these models are actually pretty powerful and can
+produce relatively complex captions to describe the image.
 
-664
-00:43:11,755 --> 00:43:14,642
-and can produce relatively
-complex captions
-
-665
-00:43:14,642 --> 00:43:16,635
-to describe the image.
-
-666
-00:43:16,635 --> 00:43:17,630
+426
+00:43:16,635 --> 00:43:19,808
 But that being said,
-
-667
-00:43:17,630 --> 00:43:19,808
 these models are really not perfect.
 
-668
-00:43:19,808 --> 00:43:21,227
+427
+00:43:19,808 --> 00:43:24,319
 They're not magical.
-
-669
-00:43:21,227 --> 00:43:24,319
 Just like any machine learning model,
 
-670
-00:43:24,319 --> 00:43:25,629
-if you try to run them on data
+428
+00:43:24,319 --> 00:43:28,830
+if you try to run them on data that was very different
+from the training data, they don't work very well.
 
-671
-00:43:25,629 --> 00:43:27,458
-that was very different
-from the training data,
+429
+00:43:28,830 --> 00:43:33,317
+So for example, this example, it says
+a woman is holding a cat in her hand.
 
-672
-00:43:27,458 --> 00:43:28,830
-they don't work very well.
-
-673
-00:43:28,830 --> 00:43:30,364
-So for example, this example,
-
-674
-00:43:30,364 --> 00:43:33,317
-it says a woman is
-holding a cat in her hand.
-
-675
+430
 00:43:33,317 --> 00:43:35,421
 There's clearly no cat in the image.
 
-676
-00:43:35,421 --> 00:43:36,863
-But she is wearing a fur coat,
+431
+00:43:35,421 --> 00:43:41,359
+But she is wearing a fur coat, and maybe the texture
+of that coat kind of looked like a cat to the model.
 
-677
-00:43:36,863 --> 00:43:38,106
-and maybe the texture of that coat
+432
+00:43:41,359 --> 00:43:44,379
+Over here, we see a woman standing
+on a beach holding a surfboard.
 
-678
-00:43:38,106 --> 00:43:41,359
-kind of looked like a cat to the model.
+433
+00:43:44,379 --> 00:43:47,892
+Well, she's definitely not holding a
+surfboard and she's doing a handstand,
 
-679
-00:43:41,359 --> 00:43:42,903
-Over here, we see a
-woman standing on a beach
+434
+00:43:47,892 --> 00:43:51,820
+which is maybe the interesting part of that
+image, and the model totally missed that.
 
-680
-00:43:42,903 --> 00:43:44,379
-holding a surfboard.
+435
+00:43:51,820 --> 00:43:58,238
+Also, over here, we see this example where there's this
+picture of a spider web in the tree branch, and it totally,
 
-681
-00:43:44,379 --> 00:43:46,744
-Well, she's definitely
-not holding a surfboard
-
-682
-00:43:46,744 --> 00:43:47,892
-and she's doing a handstand,
-
-683
-00:43:47,892 --> 00:43:49,909
-which is maybe the interesting
-part of that image,
-
-684
-00:43:49,909 --> 00:43:51,820
-and the model totally missed that.
-
-685
-00:43:51,820 --> 00:43:53,623
-Also, over here, we see this example
-
-686
-00:43:53,623 --> 00:43:56,137
-where there's this picture of a spider web
-
-687
-00:43:56,137 --> 00:43:57,168
-in the tree branch,
-
-688
-00:43:57,168 --> 00:43:58,238
-and it totally,
-
-689
-00:43:58,238 --> 00:43:59,071
+436
+00:43:58,238 --> 00:44:00,382
 and it says something like
-
-690
-00:43:59,071 --> 00:44:00,382
 a bird sitting on a tree branch.
 
-691
-00:44:00,382 --> 00:44:01,802
-So it totally missed the spider,
+437
+00:44:00,382 --> 00:44:05,139
+So it totally missed the spider, but during
+training, it never really saw examples of spiders.
 
-692
-00:44:01,802 --> 00:44:03,144
-but during training,
-
-693
-00:44:03,144 --> 00:44:05,139
-it never really saw examples of spiders.
-
-694
-00:44:05,139 --> 00:44:06,722
+438
+00:44:05,139 --> 00:44:08,217
 It just knows that birds sit
-
-695
-00:44:06,722 --> 00:44:08,217
 on tree branches during training.
 
-696
+439
 00:44:08,217 --> 00:44:10,152
 So it kind of makes these
 reasonable mistakes.
 
-697
-00:44:10,152 --> 00:44:10,985
-Or here at the bottom,
+440
+00:44:10,152 --> 00:44:14,338
+Or here at the bottom, it can't really tell the difference
+between this guy throwing and catching the ball,
 
-698
-00:44:10,985 --> 00:44:12,155
-it can't really tell the difference
-
-699
-00:44:12,155 --> 00:44:14,338
-between this guy throwing
-and catching the ball,
-
-700
-00:44:14,338 --> 00:44:15,712
-but it does know that
-it's a baseball player
-
-701
-00:44:15,712 --> 00:44:17,709
+441
+00:44:14,338 --> 00:44:17,709
+but it does know that it's a baseball player
 and there's balls and things involved.
 
-702
-00:44:17,709 --> 00:44:19,347
-So again, just want to
-say that these models
+442
+00:44:17,709 --> 00:44:20,441
+So again, just want to say that
+these models are not perfect.
 
-703
-00:44:19,347 --> 00:44:20,441
-are not perfect.
+443
+00:44:20,441 --> 00:44:25,109
+They work pretty well when you ask them to caption
+images that were similar to the training data,
 
-704
-00:44:20,441 --> 00:44:23,313
-They work pretty well when
-you ask them to caption images
-
-705
-00:44:23,313 --> 00:44:25,109
-that were similar to the training data,
-
-706
-00:44:25,109 --> 00:44:26,711
+444
+00:44:25,109 --> 00:44:29,188
 but they definitely have a hard time
-
-707
-00:44:26,711 --> 00:44:29,188
 generalizing far beyond that.
 
-708
-00:44:29,188 --> 00:44:30,560
-So another thing you'll sometimes see
+445
+00:44:29,188 --> 00:44:34,152
+So another thing you'll sometimes see is this
+slightly more advanced model called Attention,
 
-709
-00:44:30,560 --> 00:44:34,152
-is this slightly more advanced
-model called Attention,
+446
+00:44:34,152 --> 00:44:41,036
+where now when we're generating the words of this caption, we can allow
+the model to steer it's attention to different parts of the image.
 
-710
-00:44:34,152 --> 00:44:36,447
-where now when we're generating
-the words of this caption,
-
-711
-00:44:36,447 --> 00:44:39,120
-we can allow the model
-to steer it's attention
-
-712
-00:44:39,120 --> 00:44:41,036
-to different parts of the image.
-
-713
+447
 00:44:41,036 --> 00:44:44,670
 And I don't want to spend
 too much time on this.
 
-714
-00:44:44,670 --> 00:44:46,859
-But the general way
-that this works is that
+448
+00:44:44,670 --> 00:44:48,925
+But the general way that this works is
+that now our convolutional network,
 
-715
-00:44:46,859 --> 00:44:48,925
-now our convolutional network,
+449
+00:44:48,925 --> 00:44:59,954
+rather than producing a single vector summarizing the entire image, now it produces some grid of
+vectors that summarize the, that give maybe one vector for each spatial location in the image.
 
-716
-00:44:48,925 --> 00:44:50,664
-rather than producing a single vector
+450
+00:44:59,954 --> 00:45:06,618
+And now, when we, when this model runs forward, in
+addition to sampling the vocabulary at every time step,
 
-717
-00:44:50,664 --> 00:44:52,227
-summarizing the entire image,
+451
+00:45:06,618 --> 00:45:11,263
+it also produces a distribution over the
+locations in the image where it wants to look.
 
-718
-00:44:52,227 --> 00:44:54,274
-now it produces some grid of vectors
+452
+00:45:11,263 --> 00:45:18,276
+And now this distribution over image locations can be seen as a
+kind of a tension of where the model should look during training.
 
-719
-00:44:54,274 --> 00:44:55,683
-that summarize the,
+453
+00:45:18,276 --> 00:45:23,155
+So now that first hidden state computes
+this distribution over image locations,
 
-720
-00:44:55,683 --> 00:44:58,503
-that give maybe one vector
-for each spatial location
+454
+00:45:23,155 --> 00:45:31,372
+which then goes back to the set of vectors to give a single summary
+vector that maybe focuses the attention on one part of that image.
 
-721
-00:44:58,503 --> 00:44:59,954
-in the image.
+455
+00:45:31,372 --> 00:45:36,508
+And now that summary vector gets fed, as an additional
+input, at the next time step of the neural network.
 
-722
-00:44:59,954 --> 00:45:00,787
-And now, when we,
-
-723
-00:45:00,787 --> 00:45:03,304
-when this model runs forward,
-
-724
-00:45:03,304 --> 00:45:06,618
-in addition to sampling the
-vocabulary at every time step,
-
-725
-00:45:06,618 --> 00:45:08,523
-it also produces a distribution
-
-726
-00:45:08,523 --> 00:45:09,964
-over the locations in the image
-
-727
-00:45:09,964 --> 00:45:11,263
-where it wants to look.
-
-728
-00:45:11,263 --> 00:45:13,581
-And now this distribution
-over image locations
-
-729
-00:45:13,581 --> 00:45:15,561
-can be seen as a kind of a tension
-
-730
-00:45:15,561 --> 00:45:18,276
-of where the model should
-look during training.
-
-731
-00:45:18,276 --> 00:45:19,397
-So now that first hidden state
-
-732
-00:45:19,397 --> 00:45:23,155
-computes this distribution
-over image locations,
-
-733
-00:45:23,155 --> 00:45:26,316
-which then goes back to the set of vectors
-
-734
-00:45:26,316 --> 00:45:27,832
-to give a single summary vector
-
-735
-00:45:27,832 --> 00:45:31,372
-that maybe focuses the attention
-on one part of that image.
-
-736
-00:45:31,372 --> 00:45:32,795
-And now that summary vector gets fed,
-
-737
-00:45:32,795 --> 00:45:34,422
-as an additional input,
-
-738
-00:45:34,422 --> 00:45:36,508
-at the next time step
-of the neural network.
-
-739
+456
 00:45:36,508 --> 00:45:38,278
 And now again, it will
 produce two outputs.
 
-740
-00:45:38,278 --> 00:45:40,414
-One is our distribution
-over vocabulary words.
+457
+00:45:38,278 --> 00:45:43,714
+One is our distribution over vocabulary words. And
+the other is a distribution over image locations.
 
-741
-00:45:40,414 --> 00:45:43,714
-And the other is a distribution
-over image locations.
+458
+00:45:43,714 --> 00:45:49,160
+This whole process will continue, and it will sort
+of do these two different things at every time step.
 
-742
-00:45:43,714 --> 00:45:45,402
-This whole process will continue,
+459
+00:45:50,296 --> 00:45:58,298
+And after you train the model, then you can see that it kind of will shift it's
+attention around the image for every word that it generates in the caption.
 
-743
-00:45:45,402 --> 00:45:47,577
-and it will sort of do
-these two different things
+460
+00:45:58,298 --> 00:46:04,436
+Here you can see that it produced the caption,
+a bird is flying over, I can't see that far.
 
-744
-00:45:47,577 --> 00:45:49,160
-at every time step.
+461
+00:46:04,436 --> 00:46:12,473
+But you can see that its attention is shifting around different
+parts of the image for each word in the caption that it generates.
 
-745
-00:45:50,296 --> 00:45:51,390
-And after you train the model,
+462
+00:46:14,112 --> 00:46:19,147
+There's this notion of hard attention versus soft
+attention, which I don't really want to get into too much,
 
-746
-00:45:51,390 --> 00:45:53,905
-then you can see that it kind of
+463
+00:46:19,147 --> 00:46:26,614
+but with this idea of soft attention, we're kind of taking a
+weighted combination of all features from all image locations,
 
-747
-00:45:53,905 --> 00:45:56,104
-will shift it's attention around the image
+464
+00:46:26,614 --> 00:46:34,259
+whereas in the hard attention case, we're forcing the model to select
+exactly one location to look at in the image at each time step.
 
-748
-00:45:56,104 --> 00:45:58,298
-for every word that it
-generates in the caption.
+465
+00:46:34,259 --> 00:46:38,277
+So the hard attention case where we're selecting
+exactly one image location is a little bit tricky
 
-749
-00:45:58,298 --> 00:45:59,827
-Here you can see that it
+466
+00:46:38,277 --> 00:46:46,247
+because that is not really a differentiable function, so you need to do something slightly
+fancier than vanilla backpropagation in order to just train the model in that scenario.
 
-750
-00:45:59,827 --> 00:46:02,723
-produced the caption,
-a bird is flying over,
+467
+00:46:46,247 --> 00:46:51,498
+And I think we'll talk about that a little bit
+later in the lecture on reinforcement learning.
 
-751
-00:46:02,723 --> 00:46:04,436
-I can't see that far.
+468
+00:46:51,498 --> 00:46:57,415
+Now, when you look at after you train one of these
+attention models and then run it on to generate captions,
 
-752
-00:46:04,436 --> 00:46:06,474
-But you can see that its attention
+469
+00:46:57,415 --> 00:47:04,067
+you can see that it tends to focus it's attention on maybe the salient
+or semanticly meaningful part of the image when generating captions.
 
-753
-00:46:06,474 --> 00:46:08,556
-is shifting around
-different parts of the image
-
-754
-00:46:08,556 --> 00:46:12,473
-for each word in the
-caption that it generates.
-
-755
-00:46:14,112 --> 00:46:15,417
-There's this notion of hard attention
-
-756
-00:46:15,417 --> 00:46:16,544
-versus soft attention,
-
-757
-00:46:16,544 --> 00:46:19,147
-which I don't really want
-to get into too much,
-
-758
-00:46:19,147 --> 00:46:21,434
-but with this idea of soft attention,
-
-759
-00:46:21,434 --> 00:46:24,405
-we're kind of taking
-a weighted combination
-
-760
-00:46:24,405 --> 00:46:26,614
-of all features from all image locations,
-
-761
-00:46:26,614 --> 00:46:28,275
-whereas in the hard attention case,
-
-762
-00:46:28,275 --> 00:46:31,004
-we're forcing the model to
-select exactly one location
-
-763
-00:46:31,004 --> 00:46:34,259
-to look at in the image at each time step.
-
-764
-00:46:34,259 --> 00:46:35,123
-So the hard attention case
-
-765
-00:46:35,123 --> 00:46:36,946
-where we're selecting
-exactly one image location
-
-766
-00:46:36,946 --> 00:46:38,277
-is a little bit tricky
-
-767
-00:46:38,277 --> 00:46:41,270
-because that is not really
-a differentiable function,
-
-768
-00:46:41,270 --> 00:46:42,774
-so you need to do
-something slightly fancier
-
-769
-00:46:42,774 --> 00:46:44,292
-than vanilla backpropagation
-
-770
-00:46:44,292 --> 00:46:46,247
-in order to just train the
-model in that scenario.
-
-771
-00:46:46,247 --> 00:46:48,145
-And I think we'll talk about
-that a little bit later
-
-772
-00:46:48,145 --> 00:46:51,498
-in the lecture on reinforcement learning.
-
-773
-00:46:51,498 --> 00:46:53,577
-Now, when you look at after you train
-
-774
-00:46:53,577 --> 00:46:54,750
-one of these attention models
-
-775
-00:46:54,750 --> 00:46:57,415
-and then run it on to generate captions,
-
-776
-00:46:57,415 --> 00:46:59,326
-you can see that it tends
-to focus it's attention
-
-777
-00:46:59,326 --> 00:47:01,980
-on maybe the salient or
-semanticly meaningful part
-
-778
-00:47:01,980 --> 00:47:04,067
-of the image when generating captions.
-
-779
-00:47:04,067 --> 00:47:06,419
+470
+00:47:04,067 --> 00:47:08,413
 You can see that the caption was a woman
-
-780
-00:47:06,419 --> 00:47:08,413
 is throwing a frisbee in a park
 
-781
-00:47:08,413 --> 00:47:10,257
-and you can see that this attention mask,
+471
+00:47:08,413 --> 00:47:14,516
+and you can see that this attention mask, when it generated the
+word, when the model generated the word frisbee, at the same time,
 
-782
-00:47:10,257 --> 00:47:11,637
-when it generated the word,
+472
+00:47:14,516 --> 00:47:18,976
+it was focusing it's attention on this image
+region that actually contains the frisbee.
 
-783
-00:47:11,637 --> 00:47:13,648
-when the model generated the word frisbee,
+473
+00:47:18,976 --> 00:47:24,542
+This is actually really cool. We did not tell the
+model where it should be looking at every time step.
 
-784
-00:47:13,648 --> 00:47:14,516
-at the same time,
-
-785
-00:47:14,516 --> 00:47:17,403
-it was focusing it's
-attention on this image region
-
-786
-00:47:17,403 --> 00:47:18,976
-that actually contains the frisbee.
-
-787
-00:47:18,976 --> 00:47:20,644
-This is actually really cool.
-
-788
-00:47:20,644 --> 00:47:23,410
-We did not tell the model
-where it should be looking
-
-789
-00:47:23,410 --> 00:47:24,542
-at every time step.
-
-790
-00:47:24,542 --> 00:47:26,552
+474
+00:47:24,542 --> 00:47:27,955
 It sort of figured all that out for itself
-
-791
-00:47:26,552 --> 00:47:27,955
 during the training process.
 
-792
-00:47:27,955 --> 00:47:29,716
-Because somehow, it
-figured out that looking
+475
+00:47:27,955 --> 00:47:32,721
+Because somehow, it figured out that looking at that
+image region was the right thing to do for this image.
 
-793
-00:47:29,716 --> 00:47:31,540
-at that image region was
-the right thing to do
-
-794
-00:47:31,540 --> 00:47:32,721
-for this image.
-
-795
+476
 00:47:32,721 --> 00:47:34,610
 And because everything in
 this model is differentiable,
 
-796
-00:47:34,610 --> 00:47:35,998
-because we can backpropagate
+477
+00:47:34,610 --> 00:47:42,541
+because we can backpropagate through all these soft attention steps, all
+of this soft attention stuff just comes out through the training process.
 
-797
-00:47:35,998 --> 00:47:38,161
-through all these soft attention steps,
-
-798
-00:47:38,161 --> 00:47:39,592
-all of this soft attention stuff
-
-799
-00:47:39,592 --> 00:47:42,541
-just comes out through
-the training process.
-
-800
+478
 00:47:42,541 --> 00:47:45,297
 So that's really, really cool.
 
-801
-00:47:45,297 --> 00:47:47,345
-By the way, this idea of
-recurrent neural networks
+479
+00:47:45,297 --> 00:47:51,565
+By the way, this idea of recurrent neural networks and attention
+actually gets used in other tasks beyond image captioning.
 
-802
-00:47:47,345 --> 00:47:49,975
-and attention actually
-gets used in other tasks
-
-803
-00:47:49,975 --> 00:47:51,565
-beyond image captioning.
-
-804
-00:47:51,565 --> 00:47:53,169
+480
+00:47:51,565 --> 00:47:54,691
 One recent example is this idea
-
-805
-00:47:53,169 --> 00:47:54,691
 of visual question answering.
 
-806
-00:47:54,691 --> 00:47:58,195
-So here, our model is going
-to take two things as input.
+481
+00:47:54,691 --> 00:48:04,010
+So here, our model is going to take two things as input. It's going to take an image and
+it will also take a natural language question that's asking some question about the image.
 
-807
-00:47:58,195 --> 00:47:59,259
-It's going to take an image
+482
+00:48:04,010 --> 00:48:10,163
+Here, we might see this image on the left and we might ask the
+question, what endangered animal is featured on the truck?
 
-808
-00:47:59,259 --> 00:48:01,608
-and it will also take a
-natural language question
+483
+00:48:10,163 --> 00:48:19,027
+And now the model needs to select from one of these four natural language answers about
+which of these answers correctly answers that question in the context of the image.
 
-809
-00:48:01,608 --> 00:48:04,010
-that's asking some
-question about the image.
+484
+00:48:19,027 --> 00:48:24,774
+So you can imagine kind of stitching this model
+together using CNNs and RNNs in kind of a natural way.
 
-810
-00:48:04,010 --> 00:48:06,122
-Here, we might see this image on the left
-
-811
-00:48:06,122 --> 00:48:07,536
-and we might ask the question,
-
-812
-00:48:07,536 --> 00:48:10,163
-what endangered animal
-is featured on the truck?
-
-813
-00:48:10,163 --> 00:48:11,915
-And now the model needs to select from one
-
-814
-00:48:11,915 --> 00:48:13,835
-of these four natural language answers
-
-815
-00:48:13,835 --> 00:48:17,327
-about which of these answers
-correctly answers that question
-
-816
-00:48:17,327 --> 00:48:19,027
-in the context of the image.
-
-817
-00:48:19,027 --> 00:48:21,586
-So you can imagine kind of
-stitching this model together
-
-818
-00:48:21,586 --> 00:48:24,774
-using CNNs and RNNs in
-kind of a natural way.
-
-819
-00:48:24,774 --> 00:48:26,274
+485
+00:48:24,774 --> 00:48:29,701
 Now, we're in this
-
-820
-00:48:28,125 --> 00:48:29,701
 many to one scenario,
 
-821
-00:48:29,701 --> 00:48:31,978
+486
+00:48:29,701 --> 00:48:33,566
 where now our model needs to take as input
-
-822
-00:48:31,978 --> 00:48:33,566
 this natural language sequence,
 
-823
-00:48:33,566 --> 00:48:35,552
-so we can imagine running
-a recurrent neural network
+487
+00:48:33,566 --> 00:48:40,111
+so we can imagine running a recurrent neural network over each element of
+that input question, to now summarize the input question in a single vector.
 
-824
-00:48:35,552 --> 00:48:37,485
-over each element of that input question,
-
-825
-00:48:37,485 --> 00:48:40,111
-to now summarize the input
-question in a single vector.
-
-826
+488
 00:48:40,111 --> 00:48:43,928
 And then we can have a CNN
 to again summarize the image,
 
-827
-00:48:43,928 --> 00:48:46,012
-and now combine both
-the vector from the CNN
+489
+00:48:43,928 --> 00:48:51,645
+and now combine both the vector from the CNN and the vector from the
+question and coding RNN to then predict a distribution over answers.
 
-828
-00:48:46,012 --> 00:48:49,531
-and the vector from the
-question and coding RNN
+490
+00:48:51,645 --> 00:48:59,175
+We also sometimes, you'll also sometimes see this idea of soft spacial
+attention being incorporated into things like visual question answering.
 
-829
-00:48:49,531 --> 00:48:51,645
-to then predict a
-distribution over answers.
+491
+00:48:59,175 --> 00:49:07,062
+So you can see that here, this model is also having the spatial attention
+over the image when it's trying to determine answers to the questions.
 
-830
-00:48:51,645 --> 00:48:52,786
-We also sometimes,
-
-831
-00:48:52,786 --> 00:48:54,416
-you'll also sometimes see this idea
-
-832
-00:48:54,416 --> 00:48:56,275
-of soft spacial attention
-being incorporated
-
-833
-00:48:56,275 --> 00:48:59,175
-into things like visual
-question answering.
-
-834
-00:48:59,175 --> 00:49:00,394
-So you can see that here,
-
-835
-00:49:00,394 --> 00:49:03,956
-this model is also having
-the spatial attention
-
-836
-00:49:03,956 --> 00:49:05,342
-over the image when it's trying
-
-837
-00:49:05,342 --> 00:49:07,062
-to determine answers to the questions.
-
-838
+492
 00:49:07,062 --> 00:49:09,062
 Just to, yeah, question?
 
-839
-00:49:18,715 --> 00:49:19,548
+493
+00:49:18,715 --> 00:49:20,878
 So the question is
-
-840
-00:49:19,548 --> 00:49:20,878
 How are the different inputs combined?
 
-841
-00:49:20,878 --> 00:49:23,116
-Do you mean like the
-encoded question vector
+494
+00:49:20,878 --> 00:49:25,998
+Do you mean like the encoded question
+vector and the encoded image vector?
 
-842
-00:49:23,116 --> 00:49:25,998
-and the encoded image vector?
+495
+00:49:25,998 --> 00:49:30,395
+Yeah, so the question is how are the encoded
+image and the encoded question vector combined?
 
-843
-00:49:25,998 --> 00:49:27,188
-Yeah, so the question is
+496
+00:49:30,395 --> 00:49:34,847
+Kind of the simplest thing to do is just to concatenate
+them and stick them into fully connected layers.
 
-844
-00:49:27,188 --> 00:49:28,445
-how are the encoded image
+497
+00:49:34,847 --> 00:49:37,864
+That's probably the most common and
+that's probably the first thing to try.
 
-845
-00:49:28,445 --> 00:49:30,395
-and the encoded question vector combined?
+498
+00:49:37,864 --> 00:49:44,389
+Sometimes people do slightly fancier things where they might try to have multiplicative
+interactions between those two vectors to allow a more powerful function.
 
-846
-00:49:30,395 --> 00:49:31,756
-Kind of the simplest thing to do
+499
+00:49:44,389 --> 00:49:48,050
+But generally, concatenation is
+kind of a good first thing to try.
 
-847
-00:49:31,756 --> 00:49:32,885
-is just to concatenate them
+500
+00:49:49,426 --> 00:49:55,084
+Okay, so now we've talked about a bunch of scenarios where RNNs are
+used for different kinds of problems. And I think it's super cool
 
-848
-00:49:32,885 --> 00:49:34,847
-and stick them into
-fully connected layers.
+501
+00:49:55,084 --> 00:50:04,072
+because it allows you to start tackling really complicated problems
+combining images and computer vision with natural language processing.
 
-849
-00:49:34,847 --> 00:49:35,883
-That's probably the most common
+502
+00:50:04,072 --> 00:50:08,870
+And you can see that we can kind of stith together these
+models like Lego blocks and attack really complicated things,
 
-850
-00:49:35,883 --> 00:49:37,864
-and that's probably
-the first thing to try.
+503
+00:50:08,870 --> 00:50:16,736
+Like image captioning or visual question answering just by stitching
+together these relatively simple types of neural network modules.
 
-851
-00:49:37,864 --> 00:49:39,396
-Sometimes people do
-slightly fancier things
+504
+00:50:18,708 --> 00:50:26,274
+But I'd also like to mention that so far, we've talked about this idea of
+a single recurrent network layer, where we have sort of one hidden state,
 
-852
-00:49:39,396 --> 00:49:41,673
-where they might try to have
-multiplicative interactions
+505
+00:50:26,274 --> 00:50:32,581
+and another thing that you'll see pretty commonly is
+this idea of a multilayer recurrent neural network.
 
-853
-00:49:41,673 --> 00:49:42,885
-between those two vectors
+506
+00:50:32,581 --> 00:50:44,554
+Here, this is a three layer recurrent neural network, so now our input goes in, goes into, goes
+in and produces a sequence of hidden states from the first recurrent neural network layer.
 
-854
-00:49:42,885 --> 00:49:44,389
-to allow a more powerful function.
+507
+00:50:44,554 --> 00:50:50,468
+And now, after we run kind of one recurrent neural network
+layer, then we have this whole sequence of hidden states.
 
-855
-00:49:44,389 --> 00:49:46,467
-But generally, concatenation
-is kind of a good
+508
+00:50:50,468 --> 00:50:56,474
+And now, we can use the sequence of hidden states as an
+input sequence to another recurrent neural network layer.
 
-856
-00:49:46,467 --> 00:49:48,050
-first thing to try.
+509
+00:50:56,474 --> 00:51:01,577
+And then you can just imagine, which will then produce
+another sequence of hidden states from the second RNN layer.
 
-857
-00:49:49,426 --> 00:49:51,727
-Okay, so now we've talked
-about a bunch of scenarios
+510
+00:51:01,577 --> 00:51:04,181
+And then you can just imagine stacking
+these things on top of each other,
 
-858
-00:49:51,727 --> 00:49:54,083
-where RNNs are used for
-different kinds of problems.
+511
+00:51:04,181 --> 00:51:09,398
+cause we know that we've seen in other contexts that
+deeper models tend to perform better for various problems.
 
-859
-00:49:54,083 --> 00:49:55,084
-And I think it's super cool
+512
+00:51:09,398 --> 00:51:18,215
+And the same kind of holds in RNNs as well. For many problems, you'll see maybe
+a two or three layer recurrent neural network model is pretty commonly used.
 
-860
-00:49:55,084 --> 00:49:56,758
-because it allows you to
-
-861
-00:49:56,758 --> 00:49:58,855
-start tackling really complicated problems
-
-862
-00:49:58,855 --> 00:50:02,386
-combining images and computer vision
-
-863
-00:50:02,386 --> 00:50:04,072
-with natural language processing.
-
-864
-00:50:04,072 --> 00:50:05,794
-And you can see that we
-can kind of stith together
-
-865
-00:50:05,794 --> 00:50:06,776
-these models like Lego blocks
-
-866
-00:50:06,776 --> 00:50:08,870
-and attack really complicated things,
-
-867
-00:50:08,870 --> 00:50:11,369
-Like image captioning or
-visual question answering
-
-868
-00:50:11,369 --> 00:50:14,069
-just by stitching together
-these relatively simple
-
-869
-00:50:14,069 --> 00:50:16,736
-types of neural network modules.
-
-870
-00:50:18,708 --> 00:50:20,861
-But I'd also like to mention that
-
-871
-00:50:20,861 --> 00:50:22,359
-so far, we've talked about this idea
-
-872
-00:50:22,359 --> 00:50:24,060
-of a single recurrent network layer,
-
-873
-00:50:24,060 --> 00:50:26,274
-where we have sort of one hidden state,
-
-874
-00:50:26,274 --> 00:50:29,404
-and another thing that
-you'll see pretty commonly
-
-875
-00:50:29,404 --> 00:50:32,581
-is this idea of a multilayer
-recurrent neural network.
-
-876
-00:50:32,581 --> 00:50:36,577
-Here, this is a three layer
-recurrent neural network,
-
-877
-00:50:36,577 --> 00:50:38,535
-so now our input goes in,
-
-878
-00:50:38,535 --> 00:50:42,292
-goes into, goes in and produces
-a sequence of hidden states
-
-879
-00:50:42,292 --> 00:50:44,554
-from the first recurrent
-neural network layer.
-
-880
-00:50:44,554 --> 00:50:46,309
-And now, after we run kind of
-
-881
-00:50:46,309 --> 00:50:47,893
-one recurrent neural network layer,
-
-882
-00:50:47,893 --> 00:50:50,468
-then we have this whole
-sequence of hidden states.
-
-883
-00:50:50,468 --> 00:50:52,991
-And now, we can use the
-sequence of hidden states
-
-884
-00:50:52,991 --> 00:50:54,733
-as an input sequence to another
-
-885
-00:50:54,733 --> 00:50:56,474
-recurrent neural network layer.
-
-886
-00:50:56,474 --> 00:50:57,801
-And then you can just imagine,
-
-887
-00:50:57,801 --> 00:50:59,757
-which will then produce another
-sequence of hidden states
-
-888
-00:50:59,757 --> 00:51:01,577
-from the second RNN layer.
-
-889
-00:51:01,577 --> 00:51:02,410
-And then you can just imagine
-
-890
-00:51:02,410 --> 00:51:04,181
-stacking these things
-on top of each other,
-
-891
-00:51:04,181 --> 00:51:06,108
-cause we know that we've
-seen in other contexts
-
-892
-00:51:06,108 --> 00:51:08,253
-that deeper models tend to perform better
-
-893
-00:51:08,253 --> 00:51:09,398
-for various problems.
-
-894
-00:51:09,398 --> 00:51:11,851
-And the same kind of
-holds in RNNs as well.
-
-895
-00:51:11,851 --> 00:51:14,377
-For many problems, you'll see maybe a two
-
-896
-00:51:14,377 --> 00:51:16,714
-or three layer recurrent
-neural network model
-
-897
-00:51:16,714 --> 00:51:18,215
-is pretty commonly used.
-
-898
+513
 00:51:18,215 --> 00:51:22,086
 You typically don't see
 super deep models in RNNs.
 
-899
-00:51:22,086 --> 00:51:25,449
-So generally, like two,
-three, four layer RNNs
+514
+00:51:22,086 --> 00:51:29,327
+So generally, like two, three, four layer
+RNNs is maybe as deep as you'll typically go.
 
-900
-00:51:25,449 --> 00:51:29,327
-is maybe as deep as you'll typically go.
+515
+00:51:29,327 --> 00:51:38,222
+Then, I think it's also really interesting and important to think about,
+now we've seen kind of what kinds of problems these RNNs can be used for,
 
-901
-00:51:29,327 --> 00:51:32,231
-Then, I think it's also really
-interesting and important
+516
+00:51:38,222 --> 00:51:43,229
+but then you need to think a little bit more carefully about
+exactly what happens to these models when we try to train them.
 
-902
-00:51:32,231 --> 00:51:33,500
-to think about,
+517
+00:51:43,229 --> 00:51:47,447
+So here, I've drawn this little vanilla
+RNN cell that we've talked about so far.
 
-903
-00:51:33,500 --> 00:51:34,714
-now we've seen kind of
+518
+00:51:47,447 --> 00:51:55,307
+So here, we're taking our current input, x t, and our previous hidden
+state, h t minus one, and then we stack, those are two vectors.
 
-904
-00:51:34,714 --> 00:51:38,222
-what kinds of problems
-these RNNs can be used for,
+519
+00:51:55,307 --> 00:52:05,783
+So we can just stack them together. And then perform this matrix multiplication with our weight matrix,
+to give our, and then squash that output through a tanh, and that will give us our next hidden state.
 
-905
-00:51:38,222 --> 00:51:40,079
-but then you need to think
-a little bit more carefully
-
-906
-00:51:40,079 --> 00:51:41,795
-about exactly what happens to these models
-
-907
-00:51:41,795 --> 00:51:43,229
-when we try to train them.
-
-908
-00:51:43,229 --> 00:51:45,704
-So here, I've drawn this
-little vanilla RNN cell
-
-909
-00:51:45,704 --> 00:51:47,447
-that we've talked about so far.
-
-910
-00:51:47,447 --> 00:51:50,639
-So here, we're taking
-our current input, x t,
-
-911
-00:51:50,639 --> 00:51:52,971
-and our previous hidden
-state, h t minus one,
-
-912
-00:51:52,971 --> 00:51:55,307
-and then we stack, those are two vectors.
-
-913
-00:51:55,307 --> 00:51:57,359
-So we can just stack them together.
-
-914
-00:51:57,359 --> 00:51:59,033
-And then perform this
-matrix multiplication
-
-915
-00:51:59,033 --> 00:52:00,431
-with our weight matrix,
-
-916
-00:52:00,431 --> 00:52:01,911
-to give our,
-
-917
-00:52:01,911 --> 00:52:03,798
-and then squash that
-output through a tanh,
-
-918
-00:52:03,798 --> 00:52:05,783
-and that will give us
-our next hidden state.
-
-919
-00:52:05,783 --> 00:52:07,687
-And that's kind of the
-basic functional form
-
-920
-00:52:07,687 --> 00:52:10,131
+520
+00:52:05,783 --> 00:52:10,131
+And that's kind of the basic functional form
 of this vanilla recurrent neural network.
 
-921
-00:52:10,131 --> 00:52:11,347
-But then, we need to think about
+521
+00:52:10,131 --> 00:52:17,738
+But then, we need to think about what happens in this architecture
+during the backward pass when we try to compute gradients?
 
-922
-00:52:11,347 --> 00:52:14,080
-what happens in this architecture
+522
+00:52:17,738 --> 00:52:27,477
+So then if we think about trying to compute, so then during the backwards pass, we'll
+receive the derivative of our h t, we'll receive derivative of loss with respect to h t.
 
-923
-00:52:14,080 --> 00:52:17,738
-during the backward pass when
-we try to compute gradients?
+523
+00:52:28,568 --> 00:52:34,632
+And during the backward pass through the cell, we'll need to
+compute derivative of loss to the respect of h t minus one.
 
-924
-00:52:17,738 --> 00:52:19,435
-So then if we think
-about trying to compute,
+524
+00:52:34,632 --> 00:52:39,881
+Then, when we compute this backward pass, we see that
+the gradient flows backward through this red path.
 
-925
-00:52:19,435 --> 00:52:21,426
-so then during the backwards pass,
+525
+00:52:39,881 --> 00:52:45,958
+So first, that gradient will flow backwards through this tanh gate, and
+then it will flow backwards through this matrix multiplication gate.
 
-926
-00:52:21,426 --> 00:52:24,759
-we'll receive the derivative of our h t,
+526
+00:52:45,958 --> 00:52:54,711
+And then, as we've seen in the homework and when implementing these matrix
+multiplication layers, when you backpropagate through this matrix multiplication gate,
 
-927
-00:52:25,850 --> 00:52:27,075
-we'll receive derivative of loss
-
-928
-00:52:27,075 --> 00:52:28,568
-with respect to h t.
-
-929
-00:52:28,568 --> 00:52:30,885
-And during the backward
-pass through the cell,
-
-930
-00:52:30,885 --> 00:52:32,720
-we'll need to compute derivative of loss
-
-931
-00:52:32,720 --> 00:52:34,632
-to the respect of h t minus one.
-
-932
-00:52:34,632 --> 00:52:37,026
-Then, when we compute this backward pass,
-
-933
-00:52:37,026 --> 00:52:38,601
-we see that the gradient flows backward
-
-934
-00:52:38,601 --> 00:52:39,881
-through this red path.
-
-935
-00:52:39,881 --> 00:52:41,706
-So first, that gradient
-will flow backwards
-
-936
-00:52:41,706 --> 00:52:43,068
-through this tanh gate,
-
-937
-00:52:43,068 --> 00:52:44,036
-and then it will flow backwards
-
-938
-00:52:44,036 --> 00:52:45,958
-through this matrix multiplication gate.
-
-939
-00:52:45,958 --> 00:52:48,644
-And then, as we've seen in the homework
-
-940
-00:52:48,644 --> 00:52:52,054
-and when implementing these
-matrix multiplication layers,
-
-941
-00:52:52,054 --> 00:52:53,252
-when you backpropagate through
-
-942
-00:52:53,252 --> 00:52:54,711
-this matrix multiplication gate,
-
-943
-00:52:54,711 --> 00:52:56,785
+527
+00:52:54,711 --> 00:52:58,457
 you end up mulitplying by the transpose
-
-944
-00:52:56,785 --> 00:52:58,457
 of that weight matrix.
 
-945
-00:52:58,457 --> 00:53:00,642
-So that means that every
-time we backpropagate
+528
+00:52:58,457 --> 00:53:08,024
+So that means that every time we backpropagate through one of these vanilla
+RNN cells, we end up multiplying by some part of the weight matrix.
 
-946
-00:53:00,642 --> 00:53:03,857
-through one of these vanilla RNN cells,
+529
+00:53:09,110 --> 00:53:16,599
+So now if you imagine that we are sticking many of these recurrent neural network
+cells in sequence, because again this is an RNN. We want a model sequences.
 
-947
-00:53:03,857 --> 00:53:08,024
-we end up multiplying by some
-part of the weight matrix.
+530
+00:53:16,599 --> 00:53:20,921
+Now if you imagine what happens to the gradient
+flow through a sequence of these layers,
 
-948
-00:53:09,110 --> 00:53:11,124
-So now if you imagine
-that we are sticking many
-
-949
-00:53:11,124 --> 00:53:13,834
-of these recurrent neural
-network cells in sequence,
-
-950
-00:53:13,834 --> 00:53:15,413
-because again this is an RNN.
-
-951
-00:53:15,413 --> 00:53:16,599
-We want a model sequences.
-
-952
-00:53:16,599 --> 00:53:18,976
-Now if you imagine what
-happens to the gradient flow
-
-953
-00:53:18,976 --> 00:53:20,921
-through a sequence of these layers,
-
-954
+531
 00:53:20,921 --> 00:53:23,770
 then something kind of
 fishy starts to happen.
 
-955
-00:53:23,770 --> 00:53:25,207
-Because now, when we want to compute
+532
+00:53:23,770 --> 00:53:30,810
+Because now, when we want to compute the gradient of the loss with respect
+to h zero, we need to backpropagate through every one of these RNN cells.
 
-956
-00:53:25,207 --> 00:53:27,863
-the gradient of the loss
-with respect to h zero,
+533
+00:53:30,810 --> 00:53:35,641
+And every time you backpropagate through one cell,
+you'll pick up one of these w transpose factors.
 
-957
-00:53:27,863 --> 00:53:29,440
-we need to backpropagate through every one
+534
+00:53:35,641 --> 00:53:44,967
+So that means that the final expression for the gradient on h zero will
+involve many, many factors of this weight matrix, which could be kind of bad.
 
-958
-00:53:29,440 --> 00:53:30,810
-of these RNN cells.
+535
+00:53:44,967 --> 00:53:50,138
+Maybe don't think about the weight, the
+matrix case, but imagine a scaler case.
 
-959
-00:53:30,810 --> 00:53:32,903
-And every time you
-backpropagate through one cell,
+536
+00:53:50,138 --> 00:53:54,563
+If we end up, if we have some scaler and we multiply
+by that same number over and over and over again,
 
-960
-00:53:32,903 --> 00:53:35,641
-you'll pick up one of
-these w transpose factors.
+537
+00:53:54,563 --> 00:54:00,269
+maybe not for four examples, but for something
+like a hundred or several hundred time steps,
 
-961
-00:53:35,641 --> 00:53:38,176
-So that means that the final expression
-
-962
-00:53:38,176 --> 00:53:40,289
-for the gradient on h zero
-
-963
-00:53:40,289 --> 00:53:42,161
-will involve many, many factors
-
-964
-00:53:42,161 --> 00:53:43,550
-of this weight matrix,
-
-965
-00:53:43,550 --> 00:53:44,967
-which could be kind of bad.
-
-966
-00:53:44,967 --> 00:53:46,976
-Maybe don't think about the weight,
-
-967
-00:53:46,976 --> 00:53:48,329
-the matrix case,
-
-968
-00:53:48,329 --> 00:53:50,138
-but imagine a scaler case.
-
-969
-00:53:50,138 --> 00:53:51,877
-If we end up, if we have some scaler
-
-970
-00:53:51,877 --> 00:53:53,662
-and we multiply by that
-same number over and over
-
-971
-00:53:53,662 --> 00:53:54,563
-and over again,
-
-972
-00:53:54,563 --> 00:53:56,038
-maybe not for four examples,
-
-973
-00:53:56,038 --> 00:53:57,133
-but for something like a hundred
-
-974
-00:53:57,133 --> 00:54:00,269
-or several hundred time steps,
-
-975
-00:54:00,269 --> 00:54:01,832
+538
+00:54:00,269 --> 00:54:03,835
 then multiplying by the same number
-
-976
-00:54:01,832 --> 00:54:03,835
 over and over again is really bad.
 
-977
-00:54:03,835 --> 00:54:05,244
-In the scaler case,
+539
+00:54:03,835 --> 00:54:14,069
+In the scaler case, it's either going to explode in the case that that number is greater than one
+or it's going to vanish towards zero in the case that number is less than one in absolute value.
 
-978
-00:54:05,244 --> 00:54:06,756
-it's either going to explode
+540
+00:54:14,069 --> 00:54:18,186
+And the only way in which this will not
+happen is if that number is exactly one,
 
-979
-00:54:06,756 --> 00:54:08,971
-in the case that that
-number is greater than one
-
-980
-00:54:08,971 --> 00:54:10,504
-or it's going to vanish towards zero
-
-981
-00:54:10,504 --> 00:54:12,912
-in the case that number is less than one
-
-982
-00:54:12,912 --> 00:54:14,069
-in absolute value.
-
-983
-00:54:14,069 --> 00:54:16,355
-And the only way in which
-this will not happen
-
-984
-00:54:16,355 --> 00:54:18,186
-is if that number is exactly one,
-
-985
+541
 00:54:18,186 --> 00:54:20,911
 which is actually very
 rare to happen in practice.
 
-986
-00:54:20,911 --> 00:54:22,569
-That leaves us to,
-
-987
-00:54:22,569 --> 00:54:25,229
-that same intuition
+542
+00:54:20,911 --> 00:54:25,229
+That leaves us to, that same intuition
 extends to the matrix case,
 
-988
-00:54:25,229 --> 00:54:27,560
-but now, rather than the absolute
-value of a scaler number,
+543
+00:54:25,229 --> 00:54:32,071
+but now, rather than the absolute value of a scaler number, you instead need
+to look at the largest, the largest singular value of this weight matrix.
 
-989
-00:54:27,560 --> 00:54:29,261
-you instead need to look at the largest,
+544
+00:54:32,071 --> 00:54:46,079
+Now if that largest singular value is greater than one, then during this backward pass, when we multiply by the weight
+matrix over and over, that gradient on h w, on h zero, sorry, will become very, very large, when that matrix is too large.
 
-990
-00:54:29,261 --> 00:54:32,071
-the largest singular value
-of this weight matrix.
-
-991
-00:54:32,071 --> 00:54:34,707
-Now if that largest singular
-value is greater than one,
-
-992
-00:54:34,707 --> 00:54:36,502
-then during this backward pass,
-
-993
-00:54:36,502 --> 00:54:38,824
-when we multiply by the
-weight matrix over and over,
-
-994
-00:54:38,824 --> 00:54:42,135
-that gradient on h w, on h zero, sorry,
-
-995
-00:54:42,135 --> 00:54:43,915
-will become very, very large,
-
-996
-00:54:43,915 --> 00:54:46,079
-when that matrix is too large.
-
-997
+545
 00:54:46,079 --> 00:54:48,947
 And that's something we call
 the exploding gradient problem.
 
-998
-00:54:48,947 --> 00:54:52,047
-Where now this gradient will
-explode exponentially in depth
+546
+00:54:48,947 --> 00:54:55,061
+Where now this gradient will explode exponentially in depth
+with the number of time steps that we backpropagate through.
 
-999
-00:54:52,047 --> 00:54:53,427
-with the number of time steps
+547
+00:54:55,061 --> 00:55:05,349
+And if the largest singular value is less than one, then we get the opposite problem, where now our gradients will
+shrink and shrink and shrink exponentially, as we backpropagate and pick up more and more factors of this weight matrix.
 
-1000
-00:54:53,427 --> 00:54:55,061
-that we backpropagate through.
-
-1001
-00:54:55,061 --> 00:54:57,643
-And if the largest singular
-value is less than one,
-
-1002
-00:54:57,643 --> 00:54:59,123
-then we get the opposite problem,
-
-1003
-00:54:59,123 --> 00:55:00,036
-where now our gradients will shrink
-
-1004
-00:55:00,036 --> 00:55:01,563
-and shrink and shrink exponentially,
-
-1005
-00:55:01,563 --> 00:55:03,945
-as we backpropagate and pick
-up more and more factors
-
-1006
-00:55:03,945 --> 00:55:05,349
-of this weight matrix.
-
-1007
+548
 00:55:05,349 --> 00:55:08,863
 That's called the
 vanishing gradient problem.
 
-1008
-00:55:08,863 --> 00:55:11,172
-THere's a bit of a hack
-that people sometimes do
+549
+00:55:08,863 --> 00:55:14,208
+THere's a bit of a hack that people sometimes do to fix
+the exploding gradient problem called gradient clipping,
 
-1009
-00:55:11,172 --> 00:55:12,836
-to fix the exploding gradient problem
+550
+00:55:14,208 --> 00:55:19,713
+which is just this simple heuristic saying that
+after we compute our gradient, if that gradient,
 
-1010
-00:55:12,836 --> 00:55:14,208
-called gradient clipping,
+551
+00:55:19,713 --> 00:55:27,955
+if it's L2 norm is above some threshold, then just clamp it down
+and divide, just clamp it down so it has this maximum threshold.
 
-1011
-00:55:14,208 --> 00:55:16,264
-which is just this simple heuristic
+552
+00:55:27,955 --> 00:55:32,645
+This is kind of a nasty hack, but it actually gets used in
+practice quite a lot when training recurrent neural networks.
 
-1012
-00:55:16,264 --> 00:55:18,660
-saying that after we compute our gradient,
+553
+00:55:32,645 --> 00:55:39,034
+And it's a relatively useful tool for
+attacking this exploding gradient problem.
 
-1013
-00:55:18,660 --> 00:55:19,713
-if that gradient,
+554
+00:55:39,034 --> 00:55:46,207
+But now for the vanishing gradient problem, what we typically do
+is we might need to move to a more complicated RNN architecture.
 
-1014
-00:55:19,713 --> 00:55:22,156
-if it's L2 norm is above some threshold,
+555
+00:55:46,207 --> 00:55:53,524
+So that motivates this idea of an LSTM. An
+LSTM, which stands for Long Short Term Memory,
 
-1015
-00:55:22,156 --> 00:55:24,112
-then just clamp it down and divide,
-
-1016
-00:55:24,112 --> 00:55:27,955
-just clamp it down so it
-has this maximum threshold.
-
-1017
-00:55:27,955 --> 00:55:29,271
-This is kind of a nasty hack,
-
-1018
-00:55:29,271 --> 00:55:30,964
-but it actually gets used
-in practice quite a lot
-
-1019
-00:55:30,964 --> 00:55:32,645
-when training recurrent neural networks.
-
-1020
-00:55:32,645 --> 00:55:34,517
-And it's a relatively useful tool
-
-1021
-00:55:34,517 --> 00:55:39,034
-for attacking this
-exploding gradient problem.
-
-1022
-00:55:39,034 --> 00:55:40,994
-But now for the vanishing
-gradient problem,
-
-1023
-00:55:40,994 --> 00:55:42,254
-what we typically do
-
-1024
-00:55:42,254 --> 00:55:43,640
-is we might need to move to
-
-1025
-00:55:43,640 --> 00:55:46,207
-a more complicated RNN architecture.
-
-1026
-00:55:46,207 --> 00:55:48,939
-So that motivates this idea of an LSTM.
-
-1027
-00:55:48,939 --> 00:55:53,524
-An LSTM, which stands for
-Long Short Term Memory,
-
-1028
-00:55:53,524 --> 00:55:55,700
-is this slightly fancier
-recurrence relation
-
-1029
-00:55:55,700 --> 00:55:58,316
+556
+00:55:53,524 --> 00:55:58,316
+is this slightly fancier recurrence relation
 for these recurrent neural networks.
 
-1030
-00:55:58,316 --> 00:55:59,984
-It's really designed to help alleviate
+557
+00:55:58,316 --> 00:56:03,330
+It's really designed to help alleviate this
+problem of vanishing and exploding gradients.
 
-1031
-00:55:59,984 --> 00:56:03,330
-this problem of vanishing
-and exploding gradients.
+558
+00:56:03,330 --> 00:56:10,193
+So that rather than kind of hacking on top of it, we just kind of
+design the architecture to have better gradient flow properties.
 
-1032
-00:56:03,330 --> 00:56:05,591
-So that rather than kind
-of hacking on top of it,
-
-1033
-00:56:05,591 --> 00:56:07,794
-we just kind of design the architecture
-
-1034
-00:56:07,794 --> 00:56:10,193
-to have better gradient flow properties.
-
-1035
-00:56:10,193 --> 00:56:13,566
-Kind of an analogy to those
-fancier CNN architectures
-
-1036
-00:56:13,566 --> 00:56:16,556
+559
+00:56:10,193 --> 00:56:16,556
+Kind of an analogy to those fancier CNN architectures
 that we saw at the top of the lecture.
 
-1037
-00:56:16,556 --> 00:56:17,389
-Another thing to point out
+560
+00:56:16,556 --> 00:56:20,807
+Another thing to point out is that the
+LSTM cell actually comes from 1997.
 
-1038
-00:56:17,389 --> 00:56:20,807
-is that the LSTM cell
-actually comes from 1997.
-
-1039
-00:56:20,807 --> 00:56:22,337
+561
+00:56:20,807 --> 00:56:24,073
 So this idea of an LSTM
-
-1040
-00:56:22,337 --> 00:56:24,073
 has been around for quite a while,
 
-1041
-00:56:24,073 --> 00:56:26,108
-and these folks were
-working on these ideas
+562
+00:56:24,073 --> 00:56:28,852
+and these folks were working on these ideas way back
+in the 90s, were definitely ahead of the curve.
 
-1042
-00:56:26,108 --> 00:56:27,110
-way back in the 90s,
+563
+00:56:28,852 --> 00:56:32,475
+Because these models are kind of
+used everywhere now 20 years later.
 
-1043
-00:56:27,110 --> 00:56:28,852
-were definitely ahead of the curve.
-
-1044
-00:56:28,852 --> 00:56:31,225
-Because these models are
-kind of used everywhere now
-
-1045
-00:56:31,225 --> 00:56:32,475
-20 years later.
-
-1046
+564
 00:56:33,864 --> 00:56:37,921
 And LSTMs kind of have
 this funny functional form.
 
-1047
-00:56:37,921 --> 00:56:39,814
-So remember when we had this vanilla
+565
+00:56:37,921 --> 00:56:46,397
+So remember when we had this vanilla recurrent neural network, it had this hidden state.
+And we used this recurrence relation to update the hidden state at every time step.
 
-1048
-00:56:39,814 --> 00:56:41,198
-recurrent neural network,
+566
+00:56:46,397 --> 00:56:51,462
+Well, now in an LSTM, we actually have two, we
+maintain two hidden states at every time step.
 
-1049
-00:56:41,198 --> 00:56:42,538
-it had this hidden state.
+567
+00:56:51,462 --> 00:56:59,305
+One is this h t, which is called the hidden state, which is kind
+of an analogy to the hidden state that we had in the vanilla RNN.
 
-1050
-00:56:42,538 --> 00:56:44,056
-And we used this recurrence relation
+568
+00:56:59,305 --> 00:57:03,604
+But an LSTM also maintains the second
+vector, c t, called the cell state.
 
-1051
-00:56:44,056 --> 00:56:46,397
-to update the hidden
-state at every time step.
+569
+00:57:03,604 --> 00:57:12,240
+And the cell state is this vector which is kind of internal, kept inside
+the LSTM, and it does not really get exposed to the outside world.
 
-1052
-00:56:46,397 --> 00:56:47,570
-Well, now in an LSTM,
+570
+00:57:12,240 --> 00:57:15,260
+And we'll see, and you can kind of see
+that through this update equation,
 
-1053
-00:56:47,570 --> 00:56:48,842
-we actually have two,
+571
+00:57:15,260 --> 00:57:20,803
+where you can see that when we, first when
+we compute these, we take our two inputs,
 
-1054
-00:56:48,842 --> 00:56:51,462
-we maintain two hidden
-states at every time step.
-
-1055
-00:56:51,462 --> 00:56:52,931
-One is this h t,
-
-1056
-00:56:52,931 --> 00:56:54,439
-which is called the hidden state,
-
-1057
-00:56:54,439 --> 00:56:57,334
-which is kind of an
-analogy to the hidden state
-
-1058
-00:56:57,334 --> 00:56:59,305
-that we had in the vanilla RNN.
-
-1059
-00:56:59,305 --> 00:57:02,524
-But an LSTM also maintains
-the second vector, c t,
-
-1060
-00:57:02,524 --> 00:57:03,604
-called the cell state.
-
-1061
-00:57:03,604 --> 00:57:06,459
-And the cell state is this
-vector which is kind of internal,
-
-1062
-00:57:06,459 --> 00:57:08,546
-kept inside the LSTM,
-
-1063
-00:57:08,546 --> 00:57:12,240
-and it does not really get
-exposed to the outside world.
-
-1064
-00:57:12,240 --> 00:57:13,170
-And we'll see,
-
-1065
-00:57:13,170 --> 00:57:15,260
-and you can kind of see that
-through this update equation,
-
-1066
-00:57:15,260 --> 00:57:17,371
-where you can see that when we,
-
-1067
-00:57:17,371 --> 00:57:19,235
-first when we compute these,
-
-1068
-00:57:19,235 --> 00:57:20,803
-we take our two inputs,
-
-1069
-00:57:20,803 --> 00:57:23,966
+572
+00:57:20,803 --> 00:57:25,485
 we use them to compute these four gates
-
-1070
-00:57:23,966 --> 00:57:25,485
 called i, f, o, n, g.
 
-1071
-00:57:25,485 --> 00:57:28,634
-We use those gates to
-update our cell states, c t,
+573
+00:57:25,485 --> 00:57:33,802
+We use those gates to update our cell states, c t, and then we expose
+part of our cell state as the hidden state at the next time step.
 
-1072
-00:57:28,634 --> 00:57:30,302
-and then we expose part of our cell state
+574
+00:57:36,704 --> 00:57:44,014
+This is kind of a funny functional form, and I want to walk through for a couple
+slides exactly why do we use this architecture and why does it make sense,
 
-1073
-00:57:30,302 --> 00:57:33,802
-as the hidden state at the next time step.
-
-1074
-00:57:36,704 --> 00:57:38,282
-This is kind of a funny functional form,
-
-1075
-00:57:38,282 --> 00:57:40,227
-and I want to walk through
-for a couple slides
-
-1076
-00:57:40,227 --> 00:57:42,407
-exactly why do we use this architecture
-
-1077
-00:57:42,407 --> 00:57:44,014
-and why does it make sense,
-
-1078
-00:57:44,014 --> 00:57:45,418
+575
+00:57:44,014 --> 00:57:47,731
 especially in the context
-
-1079
-00:57:45,418 --> 00:57:47,731
 of vanishing or exploding gradients.
 
-1080
-00:57:47,731 --> 00:57:51,044
-This first thing that we do in an LSTM
+576
+00:57:47,731 --> 00:57:57,213
+This first thing that we do in an LSTM is that we're given this previous
+hidden state, h t, and we're given our current input vector, x t,
 
-1081
-00:57:51,044 --> 00:57:54,534
-is that we're given this
-previous hidden state, h t,
-
-1082
-00:57:54,534 --> 00:57:57,213
-and we're given our
-current input vector, x t,
-
-1083
+577
 00:57:57,213 --> 00:57:58,611
 and just like the vanilla RNN.
 
-1084
-00:57:58,611 --> 00:58:00,251
-In the vanilla RNN, remember,
+578
+00:57:58,611 --> 00:58:08,663
+In the vanilla RNN, remember, we took those two input vectors. We concatenated them.
+Then we did a matrix multiply to directly compute the next hidden state in the RNN.
 
-1085
-00:58:00,251 --> 00:58:02,617
-we took those two input vectors.
+579
+00:58:08,663 --> 00:58:15,315
+Now, the LSTM does something a little bit different. We're going to
+take our previous hidden state and our current input, stack them,
 
-1086
-00:58:02,617 --> 00:58:03,908
-We concatenated them.
+580
+00:58:15,315 --> 00:58:21,926
+and now multiply by a very big weight
+matrix, w, to compute four different gates,
 
-1087
-00:58:03,908 --> 00:58:05,098
-Then we did a matrix multiply
-
-1088
-00:58:05,098 --> 00:58:08,663
-to directly compute the next
-hidden state in the RNN.
-
-1089
-00:58:08,663 --> 00:58:10,751
-Now, the LSTM does something
-a little bit different.
-
-1090
-00:58:10,751 --> 00:58:13,055
-We're going to take our
-previous hidden state
-
-1091
-00:58:13,055 --> 00:58:14,429
-and our current input,
-
-1092
-00:58:14,429 --> 00:58:15,315
-stack them,
-
-1093
-00:58:15,315 --> 00:58:18,748
-and now multiply by a
-very big weight matrix, w,
-
-1094
-00:58:18,748 --> 00:58:21,926
-to compute four different gates,
-
-1095
+581
 00:58:21,926 --> 00:58:24,391
 Which all have the same
 size as the hidden state.
 
-1096
-00:58:24,391 --> 00:58:26,193
-Sometimes, you'll see this
-written in different ways.
+582
+00:58:24,391 --> 00:58:30,808
+Sometimes, you'll see this written in different ways. Some
+authors will write a different weight matrix for each gate.
 
-1097
-00:58:26,193 --> 00:58:29,549
-Some authors will write
-a different weight matrix
-
-1098
-00:58:29,549 --> 00:58:30,808
-for each gate.
-
-1099
-00:58:30,808 --> 00:58:31,793
+583
+00:58:30,808 --> 00:58:33,160
 Some authors will combine them all
-
-1100
-00:58:31,793 --> 00:58:33,160
 into one big weight matrix.
 
-1101
+584
 00:58:33,160 --> 00:58:34,677
 But it's all really the same thing.
 
-1102
-00:58:34,677 --> 00:58:36,334
-The ideas is that we
-take our hidden state,
+585
+00:58:34,677 --> 00:58:40,288
+The ideas is that we take our hidden state, our current
+input, and then we use those to compute these four gates.
 
-1103
-00:58:36,334 --> 00:58:37,282
-our current input,
+586
+00:58:40,288 --> 00:58:47,768
+These four gates are the, you often see this written as i, f, o,
+g, ifog, which makes it pretty easy to remember what they are.
 
-1104
-00:58:37,282 --> 00:58:40,288
-and then we use those to
-compute these four gates.
+587
+00:58:47,768 --> 00:58:53,655
+I is the input gate. It says how much
+do we want to input into our cell.
 
-1105
-00:58:40,288 --> 00:58:42,163
-These four gates are the,
+588
+00:58:53,655 --> 00:59:00,194
+F is the forget gate. How much do we want to forget the
+cell memory at the previous, from the previous time step.
 
-1106
-00:58:42,163 --> 00:58:45,725
-you often see this written
-as i, f, o, g, ifog,
+589
+00:59:00,194 --> 00:59:04,653
+O is the output gate, which is how much do we
+want to reveal ourself to the outside world.
 
-1107
-00:58:45,725 --> 00:58:47,768
-which makes it pretty easy
-to remember what they are.
-
-1108
-00:58:47,768 --> 00:58:49,435
-I is the input gate.
-
-1109
-00:58:50,324 --> 00:58:53,655
-It says how much do we want
-to input into our cell.
-
-1110
-00:58:53,655 --> 00:58:55,431
-F is the forget gate.
-
-1111
-00:58:55,431 --> 00:58:57,860
-How much do we want to
-forget the cell memory
-
-1112
-00:58:57,860 --> 00:59:00,194
-at the previous, from
-the previous time step.
-
-1113
-00:59:00,194 --> 00:59:01,333
-O is the output gate,
-
-1114
-00:59:01,333 --> 00:59:03,327
-which is how much do we
-want to reveal ourself
-
-1115
-00:59:03,327 --> 00:59:04,653
-to the outside world.
-
-1116
-00:59:04,653 --> 00:59:07,092
+590
+00:59:04,653 --> 00:59:10,130
 And G really doesn't have a nice name,
-
-1117
-00:59:07,092 --> 00:59:10,130
 so I usually call it the gate gate.
 
-1118
-00:59:10,130 --> 00:59:13,109
-G, it tells us how much
-do we want to write
+591
+00:59:10,130 --> 00:59:14,626
+G, it tells us how much do we want
+to write into our input cell.
 
-1119
-00:59:13,109 --> 00:59:14,626
-into our input cell.
+592
+00:59:14,626 --> 00:59:19,665
+And then you notice that each of these four
+gates are using a different non linearity.
 
-1120
-00:59:14,626 --> 00:59:16,665
-And then you notice that
-each of these four gates
-
-1121
-00:59:16,665 --> 00:59:19,665
-are using a different non linearity.
-
-1122
-00:59:21,724 --> 00:59:23,809
+593
+00:59:21,724 --> 00:59:25,047
 The input, forget and output gate
-
-1123
-00:59:23,809 --> 00:59:25,047
 are all using sigmoids,
 
-1124
+594
 00:59:25,047 --> 00:59:28,571
 which means that their values
 will be between zero and one.
 
-1125
-00:59:28,571 --> 00:59:31,109
-Whereas the gate gate uses a tanh,
+595
+00:59:28,571 --> 00:59:34,316
+Whereas the gate gate uses a tanh, which means
+it's output will be between minus one and one.
 
-1126
-00:59:31,109 --> 00:59:34,316
-which means it's output will
-be between minus one and one.
+596
+00:59:34,316 --> 00:59:41,725
+So, these are kind of weird, but it makes a little bit
+more sense if you imagine them all as binary values.
 
-1127
-00:59:34,316 --> 00:59:36,810
-So, these are kind of weird,
-
-1128
-00:59:36,810 --> 00:59:38,551
-but it makes a little bit more sense
-
-1129
-00:59:38,551 --> 00:59:41,725
-if you imagine them all as binary values.
-
-1130
-00:59:41,725 --> 00:59:43,077
+597
+00:59:41,725 --> 00:59:44,744
 Right, like what happens at the extremes
-
-1131
-00:59:43,077 --> 00:59:44,744
 of these two values?
 
-1132
-00:59:46,033 --> 00:59:46,866
-It's kind of what happens,
+598
+00:59:46,033 --> 00:59:53,926
+It's kind of what happens, if you look after we compute these gates if you look at this next
+equation, you can see that our cell state is being multiplied element wise by the forget gate.
 
-1133
-00:59:46,866 --> 00:59:48,490
-if you look after we compute these gates
+599
+00:59:53,926 --> 01:00:00,350
+Sorry, our cell state from the previous time step is being multiplied
+element wise by this forget gate. And now if this forget gate,
 
-1134
-00:59:48,490 --> 00:59:50,200
-if you look at this next equation,
-
-1135
-00:59:50,200 --> 00:59:51,423
-you can see that our cell state
-
-1136
-00:59:51,423 --> 00:59:53,926
-is being multiplied element
-wise by the forget gate.
-
-1137
-00:59:53,926 --> 00:59:56,269
-Sorry, our cell state from
-the previous time step
-
-1138
-00:59:56,269 --> 00:59:59,305
-is being multiplied element
-wise by this forget gate.
-
-1139
-00:59:59,305 --> 01:00:00,350
-And now if this forget gate,
-
-1140
+600
 01:00:00,350 --> 01:00:03,861
 you can think of it as being
 a vector of zeros and ones,
 
-1141
-01:00:03,861 --> 01:00:06,162
-that's telling us for each
-element in the cell state,
+601
+01:00:03,861 --> 01:00:10,644
+that's telling us for each element in the cell state, do we want to
+forget that element of the cell in the case if the forget gate was zero?
 
-1142
-01:00:06,162 --> 01:00:08,416
-do we want to forget
-that element of the cell
+602
+01:00:10,644 --> 01:00:14,935
+Or do we want to remember that element of the
+cell in the case if the forget gate was one.
 
-1143
-01:00:08,416 --> 01:00:10,644
-in the case if the forget gate was zero?
-
-1144
-01:00:10,644 --> 01:00:12,819
-Or do we want to remember
-that element of the cell
-
-1145
-01:00:12,819 --> 01:00:14,935
-in the case if the forget gate was one.
-
-1146
-01:00:14,935 --> 01:00:17,258
+603
+01:00:14,935 --> 01:00:19,767
 Now, once we've used the forget gate
-
-1147
-01:00:17,258 --> 01:00:19,767
 to gate off the part of the cell state,
 
-1148
-01:00:19,767 --> 01:00:21,088
-then we have the second term,
+604
+01:00:19,767 --> 01:00:24,814
+then we have the second term, which is
+the element wise product of i and g.
 
-1149
-01:00:21,088 --> 01:00:24,814
-which is the element
-wise product of i and g.
-
-1150
-01:00:24,814 --> 01:00:27,431
-So now, i is this vector
-of zeros and ones,
-
-1151
-01:00:27,431 --> 01:00:28,824
+605
+01:00:24,814 --> 01:00:28,824
+So now, i is this vector of zeros and ones,
 cause it's coming through a sigmoid,
 
-1152
-01:00:28,824 --> 01:00:31,480
-telling us for each
-element of the cell state,
+606
+01:00:28,824 --> 01:00:35,728
+telling us for each element of the cell state, do we want to write
+to that element of the cell state in the case that i is one,
 
-1153
-01:00:31,480 --> 01:00:33,909
-do we want to write to that
-element of the cell state
+607
+01:00:35,728 --> 01:00:41,719
+or do we not want to write to that element of the cell
+state at this time step in the case that i is zero.
 
-1154
-01:00:33,909 --> 01:00:35,728
-in the case that i is one,
+608
+01:00:41,719 --> 01:00:46,031
+And now the gate gate, because it's coming
+through a tanh, will be either one or minus one.
 
-1155
-01:00:35,728 --> 01:00:37,771
-or do we not want to write to
-that element of the cell state
+609
+01:00:46,031 --> 01:00:54,022
+So that is the value that we want, the candidate value that we might
+consider writing to each element of the cell state at this time step.
 
-1156
-01:00:37,771 --> 01:00:38,687
-at this time step
+610
+01:00:54,022 --> 01:01:02,499
+Then if you look at the cell state equation, you can see that at every time step,
+the cell state has these kind of these different, independent scaler values,
 
-1157
-01:00:38,687 --> 01:00:41,719
-in the case that i is zero.
-
-1158
-01:00:41,719 --> 01:00:42,585
-And now the gate gate,
-
-1159
-01:00:42,585 --> 01:00:44,254
-because it's coming through a tanh,
-
-1160
-01:00:44,254 --> 01:00:46,031
-will be either one or minus one.
-
-1161
-01:00:46,031 --> 01:00:47,495
-So that is the value that we want,
-
-1162
-01:00:47,495 --> 01:00:50,500
-the candidate value that
-we might consider writing
-
-1163
-01:00:50,500 --> 01:00:54,022
-to each element of the cell
-state at this time step.
-
-1164
-01:00:54,022 --> 01:00:56,098
-Then if you look at the
-cell state equation,
-
-1165
-01:00:56,098 --> 01:00:58,157
-you can see that at every time step,
-
-1166
-01:00:58,157 --> 01:00:59,963
-the cell state has these kind of
-
-1167
-01:00:59,963 --> 01:01:02,499
-these different,
-independent scaler values,
-
-1168
+611
 01:01:02,499 --> 01:01:05,230
 and they're all being incremented
 or decremented by one.
 
-1169
-01:01:05,230 --> 01:01:07,466
-So there's kind of like,
+612
+01:01:05,230 --> 01:01:11,028
+So there's kind of like, inside the cell state, we
+can either remember or forget our previous state,
 
-1170
-01:01:07,466 --> 01:01:09,560
-inside the cell state,
-we can either remember
+613
+01:01:11,028 --> 01:01:16,535
+and then we can either increment or decrement each element
+of that cell state by up to one at each time step.
 
-1171
-01:01:09,560 --> 01:01:11,028
-or forget our previous state,
+614
+01:01:16,535 --> 01:01:25,708
+So you can kind of think of these elements of the cell state as being little
+scaler integer counters that can be incremented and decremented at each time step.
 
-1172
-01:01:11,028 --> 01:01:13,480
-and then we can either
-increment or decrement
+615
+01:01:25,708 --> 01:01:36,513
+And now, after we've computed our cell state, then we use our now updated cell
+state to compute a hidden state, which we will reveal to the outside world.
 
-1173
-01:01:13,480 --> 01:01:14,765
-each element of that cell state
+616
+01:01:36,513 --> 01:01:43,353
+So because this cell state has this interpretation of being counters,
+and sort of counting up by one or minus one at each time step,
 
-1174
-01:01:14,765 --> 01:01:16,535
-by up to one at each time step.
+617
+01:01:43,353 --> 01:01:51,826
+we want to squash that counter value into a nice zero to one range
+using a tanh. And now, we multiply element wise, by this output gate.
 
-1175
-01:01:16,535 --> 01:01:19,430
-So you can kind of think of
-these elements of the cell state
+618
+01:01:51,826 --> 01:01:57,597
+And the output gate is again coming through a sigmoid,
+so you can think of it as being mostly zeros and ones,
 
-1176
-01:01:19,430 --> 01:01:22,189
-as being little scaler integer counters
+619
+01:01:57,597 --> 01:02:08,577
+and the output gate tells us for each element of our cell state, do we want to reveal or not reveal
+that element of our cell state when we're computing the external hidden state for this time step.
 
-1177
-01:01:22,189 --> 01:01:24,061
-that can be incremented and decremented
+620
+01:02:09,736 --> 01:02:17,132
+And then, I think there's kind of a tradition in people trying to explain LSTMs,
+that everyone needs to come up with their own potentially confusing LSTM diagram.
 
-1178
-01:01:24,061 --> 01:01:25,708
-at each time step.
-
-1179
-01:01:25,708 --> 01:01:28,489
-And now, after we've
-computed our cell state,
-
-1180
-01:01:28,489 --> 01:01:31,624
-then we use our now updated cell state
-
-1181
-01:01:31,624 --> 01:01:32,874
-to compute a hidden state,
-
-1182
-01:01:32,874 --> 01:01:36,513
-which we will reveal to the outside world.
-
-1183
-01:01:36,513 --> 01:01:38,832
-So because this cell state
-has this interpretation
-
-1184
-01:01:38,832 --> 01:01:39,884
-of being counters,
-
-1185
-01:01:39,884 --> 01:01:41,280
-and sort of counting up by one
-
-1186
-01:01:41,280 --> 01:01:43,353
-or minus one at each time step,
-
-1187
-01:01:43,353 --> 01:01:45,518
-we want to squash that counter value
-
-1188
-01:01:45,518 --> 01:01:48,895
-into a nice zero to
-one range using a tanh.
-
-1189
-01:01:48,895 --> 01:01:50,483
-And now, we multiply element wise,
-
-1190
-01:01:50,483 --> 01:01:51,826
-by this output gate.
-
-1191
-01:01:51,826 --> 01:01:54,441
-And the output gate is again
-coming through a sigmoid,
-
-1192
-01:01:54,441 --> 01:01:57,597
-so you can think of it as
-being mostly zeros and ones,
-
-1193
-01:01:57,597 --> 01:01:58,947
-and the output gate tells us
-
-1194
-01:01:58,947 --> 01:02:00,826
-for each element of our cell state,
-
-1195
-01:02:00,826 --> 01:02:02,773
-do we want to reveal or not reveal
-
-1196
-01:02:02,773 --> 01:02:04,614
-that element of our cell state
-
-1197
-01:02:04,614 --> 01:02:06,994
-when we're computing the
-external hidden state
-
-1198
-01:02:06,994 --> 01:02:08,577
-for this time step.
-
-1199
-01:02:09,736 --> 01:02:11,609
-And then, I think there's
-kind of a tradition
-
-1200
-01:02:11,609 --> 01:02:13,479
-in people trying to explain LSTMs,
-
-1201
-01:02:13,479 --> 01:02:14,524
-that everyone needs to come up
-
-1202
-01:02:14,524 --> 01:02:17,132
-with their own potentially
-confusing LSTM diagram.
-
-1203
+621
 01:02:17,132 --> 01:02:18,882
 So here's my attempt.
 
-1204
+622
 01:02:20,380 --> 01:02:23,866
 Here, we can see what's going
 on inside this LSTM cell,
 
-1205
-01:02:23,866 --> 01:02:24,865
-is that we take our,
+623
+01:02:23,866 --> 01:02:31,266
+is that we take our, we're taking as input on the left our previous cell
+state and the previous hidden state, as well as our current input, x t.
 
-1206
-01:02:24,865 --> 01:02:27,566
-we're taking as input on the
-left our previous cell state
+624
+01:02:31,266 --> 01:02:37,346
+Now we're going to take our current, our previous
+hidden state, as well as our current input, stack them,
 
-1207
-01:02:27,566 --> 01:02:28,937
-and the previous hidden state,
+625
+01:02:37,346 --> 01:02:41,166
+and then multiply with this weight
+matrix, w, to produce our four gates.
 
-1208
-01:02:28,937 --> 01:02:31,266
-as well as our current input, x t.
-
-1209
-01:02:31,266 --> 01:02:32,537
-Now we're going to take our current,
-
-1210
-01:02:32,537 --> 01:02:34,985
-our previous hidden state,
-
-1211
-01:02:34,985 --> 01:02:36,453
-as well as our current input,
-
-1212
-01:02:36,453 --> 01:02:37,346
-stack them,
-
-1213
-01:02:37,346 --> 01:02:39,526
-and then multiply with
-this weight matrix, w,
-
-1214
-01:02:39,526 --> 01:02:41,166
-to produce our four gates.
-
-1215
-01:02:41,166 --> 01:02:42,627
-And here, I've left
-out the non linearities
-
-1216
-01:02:42,627 --> 01:02:44,836
+626
+01:02:41,166 --> 01:02:44,836
+And here, I've left out the non linearities
 because we saw those on a previous slide.
 
-1217
-01:02:44,836 --> 01:02:47,294
-And now the forget gate
-multiplies element wise
+627
+01:02:44,836 --> 01:02:48,143
+And now the forget gate multiplies
+element wise with the cell state.
 
-1218
-01:02:47,294 --> 01:02:48,143
-with the cell state.
+628
+01:02:48,143 --> 01:02:54,524
+The input and gate gate are multiplied element wise and
+added to the cell state. And that gives us our next cell.
 
-1219
-01:02:48,143 --> 01:02:51,174
-The input and gate gate
-are multiplied element wise
+629
+01:02:54,524 --> 01:03:01,366
+The next cell gets squashed through a tanh, and multiplied element
+wise with this output gate to produce our next hidden state.
 
-1220
-01:02:51,174 --> 01:02:52,689
-and added to the cell state.
-
-1221
-01:02:52,689 --> 01:02:54,524
-And that gives us our next cell.
-
-1222
-01:02:54,524 --> 01:02:56,533
-The next cell gets
-squashed through a tanh,
-
-1223
-01:02:56,533 --> 01:02:58,616
-and multiplied element
-wise with this output gate
-
-1224
-01:02:58,616 --> 01:03:01,366
-to produce our next hidden state.
-
-1225
+630
 01:03:02,417 --> 01:03:03,250
 Question?
 
-1226
-01:03:13,116 --> 01:03:14,587
-No, So they're coming through this,
+631
+01:03:13,116 --> 01:03:17,878
+No, So they're coming through this, they're coming
+from different parts of this weight matrix.
 
-1227
-01:03:14,587 --> 01:03:17,878
-they're coming from different
-parts of this weight matrix.
+632
+01:03:17,878 --> 01:03:26,415
+So if our hidden, if our x and our h all have this dimension
+h, then after we stack them, they'll be a vector size two h,
 
-1228
-01:03:17,878 --> 01:03:19,147
-So if our hidden,
+633
+01:03:26,415 --> 01:03:30,393
+and now our weight matrix will be this
+matrix of size four h times two h.
 
-1229
-01:03:19,147 --> 01:03:23,343
-if our x and our h all
-have this dimension h,
+634
+01:03:30,393 --> 01:03:41,511
+So you can think of that as sort of having four chunks of this weight matrix. And each of
+these four chunks of the weight matrix is going to compute a different one of these gates.
 
-1230
-01:03:23,343 --> 01:03:24,300
-then after we stack them,
+635
+01:03:42,404 --> 01:03:51,109
+You'll often see this written for clarity, kind of combining all four of those different
+weight matrices into a single large matrix, w, just for notational convenience.
 
-1231
-01:03:24,300 --> 01:03:26,415
-they'll be a vector size two h,
+636
+01:03:51,109 --> 01:03:56,067
+But they're all computed using
+different parts of the weight matrix.
 
-1232
-01:03:26,415 --> 01:03:28,718
-and now our weight matrix
-will be this matrix
+637
+01:03:57,080 --> 01:04:04,574
+But you're correct in that they're all computed using the same functional
+form of just stacking the two things and taking the matrix multiplication.
 
-1233
-01:03:28,718 --> 01:03:30,393
-of size four h times two h.
+638
+01:04:04,574 --> 01:04:11,196
+Now that we have this picture, we can think about what
+happens to an LSTM cell during the backwards pass?
 
-1234
-01:03:30,393 --> 01:03:31,873
-So you can think of that as sort of having
+639
+01:04:11,196 --> 01:04:18,999
+We saw, in the context of vanilla recurrent neural network, that some bad things happened
+during the backwards pass, where we were continually multiplying by that weight matrix, w.
 
-1235
-01:03:31,873 --> 01:03:34,076
-four chunks of this weight matrix.
-
-1236
-01:03:34,076 --> 01:03:37,344
-And each of these four
-chunks of the weight matrix
-
-1237
-01:03:37,344 --> 01:03:41,511
-is going to compute a
-different one of these gates.
-
-1238
-01:03:42,404 --> 01:03:44,673
-You'll often see this written for clarity,
-
-1239
-01:03:44,673 --> 01:03:46,449
-kind of combining all
-four of those different
-
-1240
-01:03:46,449 --> 01:03:49,161
-weight matrices into a
-single large matrix, w,
-
-1241
-01:03:49,161 --> 01:03:51,109
-just for notational convenience.
-
-1242
-01:03:51,109 --> 01:03:52,484
-But they're all computed
-
-1243
-01:03:52,484 --> 01:03:56,067
-using different parts
-of the weight matrix.
-
-1244
-01:03:57,080 --> 01:03:58,645
-But you're correct in
-that they're all computed
-
-1245
-01:03:58,645 --> 01:04:00,458
-using the same functional form
-
-1246
-01:04:00,458 --> 01:04:01,658
-of just stacking the two things
-
-1247
-01:04:01,658 --> 01:04:04,574
-and taking the matrix multiplication.
-
-1248
-01:04:04,574 --> 01:04:06,393
-Now that we have this picture,
-
-1249
-01:04:06,393 --> 01:04:09,519
-we can think about what
-happens to an LSTM cell
-
-1250
-01:04:09,519 --> 01:04:11,196
-during the backwards pass?
-
-1251
-01:04:11,196 --> 01:04:12,795
-We saw, in the context of vanilla
-
-1252
-01:04:12,795 --> 01:04:13,738
-recurrent neural network,
-
-1253
-01:04:13,738 --> 01:04:15,803
-that some bad things happened
-during the backwards pass,
-
-1254
-01:04:15,803 --> 01:04:16,958
-where we were continually multiplying
-
-1255
-01:04:16,958 --> 01:04:18,999
-by that weight matrix, w.
-
-1256
-01:04:18,999 --> 01:04:20,555
+640
+01:04:18,999 --> 01:04:23,238
 But now, the situation looks much,
-
-1257
-01:04:20,555 --> 01:04:23,238
 quite a bit different in the LSTM.
 
-1258
-01:04:23,238 --> 01:04:26,468
-If you imagine this path backwards
+641
+01:04:23,238 --> 01:04:29,952
+If you imagine this path backwards of computing the
+gradients of the cell state, we get quite a nice picture.
 
-1259
-01:04:26,468 --> 01:04:28,323
-of computing the gradients
-of the cell state,
-
-1260
-01:04:28,323 --> 01:04:29,952
-we get quite a nice picture.
-
-1261
-01:04:29,952 --> 01:04:32,266
+642
+01:04:29,952 --> 01:04:33,320
 Now, when we have our upstream gradient
-
-1262
-01:04:32,266 --> 01:04:33,320
 from the cell coming in,
 
-1263
-01:04:33,320 --> 01:04:36,281
+643
+01:04:33,320 --> 01:04:37,737
 then once we backpropagate backwards
-
-1264
-01:04:36,281 --> 01:04:37,737
 through this addition operation,
 
-1265
-01:04:37,737 --> 01:04:40,572
-remember that this addition just copies
+644
+01:04:37,737 --> 01:04:43,663
+remember that this addition just copies that
+upstream gradient into the two branches,
 
-1266
-01:04:40,572 --> 01:04:43,663
-that upstream gradient
-into the two branches,
+645
+01:04:43,663 --> 01:04:50,435
+so our upstream gradient gets copied directly and passed
+directly to backpropagating through this element wise multiply.
 
-1267
-01:04:43,663 --> 01:04:45,641
-so our upstream gradient
-gets copied directly
+646
+01:04:50,435 --> 01:04:56,455
+So then our upstream gradient ends up getting
+multiplied element wise by the forget gate.
 
-1268
-01:04:45,641 --> 01:04:47,954
-and passed directly to backpropagating
+647
+01:04:56,455 --> 01:05:07,171
+As we backpropagate backwards through this cell state, the only thing that happens to our upstream
+cell state gradient is that it ends up getting multiplied element wise by the forget gate.
 
-1269
-01:04:47,954 --> 01:04:50,435
-through this element wise multiply.
-
-1270
-01:04:50,435 --> 01:04:52,192
-So then our upstream
-gradient ends up getting
-
-1271
-01:04:52,192 --> 01:04:56,455
-multiplied element wise
-by the forget gate.
-
-1272
-01:04:56,455 --> 01:05:00,364
-As we backpropagate backwards
-through this cell state,
-
-1273
-01:05:00,364 --> 01:05:01,397
-the only thing that happens
-
-1274
-01:05:01,397 --> 01:05:03,818
-to our upstream cell state gradient
-
-1275
-01:05:03,818 --> 01:05:05,935
-is that it ends up getting
-multiplied element wise
-
-1276
-01:05:05,935 --> 01:05:07,171
-by the forget gate.
-
-1277
-01:05:07,171 --> 01:05:09,939
+648
+01:05:07,171 --> 01:05:12,640
 This is really a lot nicer
-
-1278
-01:05:09,939 --> 01:05:12,640
 than the vanilla RNN for two reasons.
 
-1279
-01:05:12,640 --> 01:05:14,318
-One is that this forget gate
+649
+01:05:12,640 --> 01:05:18,498
+One is that this forget gate is now an element wise
+multiplication rather than a full matrix multiplication.
 
-1280
-01:05:14,318 --> 01:05:16,488
-is now an element wise multiplication
+650
+01:05:18,498 --> 01:05:24,964
+So element wise multiplication is going to be a
+little bit nicer than full matrix multiplication.
 
-1281
-01:05:16,488 --> 01:05:18,498
-rather than a full matrix multiplication.
+651
+01:05:24,964 --> 01:05:31,354
+Second is that element wise multiplication will potentially
+be multiplying by a different forget gate at every time step.
 
-1282
-01:05:18,498 --> 01:05:19,923
-So element wise multiplication
+652
+01:05:31,354 --> 01:05:36,660
+So remember, in the vanilla RNN, we were continually
+multiplying by that same weight matrix over and over again,
 
-1283
-01:05:19,923 --> 01:05:23,205
-is going to be a little bit nicer
-
-1284
-01:05:23,205 --> 01:05:24,964
-than full matrix multiplication.
-
-1285
-01:05:24,964 --> 01:05:27,208
-Second is that element wise multiplication
-
-1286
-01:05:27,208 --> 01:05:29,710
-will potentially be
-multiplying by a different
-
-1287
-01:05:29,710 --> 01:05:31,354
-forget gate at every time step.
-
-1288
-01:05:31,354 --> 01:05:33,087
-So remember, in the vanilla RNN,
-
-1289
-01:05:33,087 --> 01:05:35,638
-we were continually multiplying
-by that same weight matrix
-
-1290
-01:05:35,638 --> 01:05:36,660
-over and over again,
-
-1291
-01:05:36,660 --> 01:05:38,305
+653
+01:05:36,660 --> 01:05:40,563
 which led very explicitly
-
-1292
-01:05:38,305 --> 01:05:40,563
 to these exploding or vanishing gradients.
 
-1293
-01:05:40,563 --> 01:05:41,943
-But now in the LSTM case,
+654
+01:05:40,563 --> 01:05:45,161
+But now in the LSTM case, this forget
+gate can vary from each time step.
 
-1294
-01:05:41,943 --> 01:05:45,161
-this forget gate can
-vary from each time step.
+655
+01:05:45,161 --> 01:05:51,670
+Now, it's much easier for the model to avoid these
+problems of exploding and vanishing gradients.
 
-1295
-01:05:45,161 --> 01:05:47,463
-Now, it's much easier for the model
+656
+01:05:51,670 --> 01:05:58,438
+Finally, because this forget gate is coming out from a sigmoid, this
+element wise multiply is guaranteed to be between zero and one,
 
-1296
-01:05:47,463 --> 01:05:49,560
-to avoid these problems
+657
+01:05:58,438 --> 01:06:04,278
+which again, leads to sort of nicer numerical properties if
+you imagine multiplying by these things over and over again.
 
-1297
-01:05:49,560 --> 01:05:51,670
-of exploding and vanishing gradients.
+658
+01:06:04,278 --> 01:06:14,273
+Another thing to notice is that in the context of the vanilla recurrent neural network, we saw
+that during the backward pass, our gradients were flowing through also a tanh at every time step.
 
-1298
-01:05:51,670 --> 01:05:53,377
-Finally, because this forget gate
+659
+01:06:14,273 --> 01:06:24,110
+But now, in an LSTM, our outputs are, in an LSTM, our
+hidden state is used to compute those outputs, y t,
 
-1299
-01:05:53,377 --> 01:05:54,902
-is coming out from a sigmoid,
+660
+01:06:24,110 --> 01:06:33,024
+so now, each hidden state, if you imagine backpropagating from the final
+hidden state back to the first cell state, then through that backward path,
 
-1300
-01:05:54,902 --> 01:05:56,178
-this element wise multiply
+661
+01:06:33,024 --> 01:06:42,044
+we only backpropagate through a single tanh non linearity
+rather than through a separate tanh at every time step.
 
-1301
-01:05:56,178 --> 01:05:58,438
-is guaranteed to be between zero and one,
+662
+01:06:42,044 --> 01:06:50,483
+So kind of when you put all these things together, you can see this backwards
+pass backpropagating through the cell state is kind of a gradient super highway
 
-1302
-01:05:58,438 --> 01:06:00,868
-which again, leads to sort
-of nicer numerical properties
+663
+01:06:50,483 --> 01:06:59,172
+that lets gradients pass relatively unimpeded from the loss at the very end of the
+model all the way back to the initial cell state at the beginning of the model.
 
-1303
-01:06:00,868 --> 01:06:02,457
-if you imagine multiplying by these things
-
-1304
-01:06:02,457 --> 01:06:04,278
-over and over again.
-
-1305
-01:06:04,278 --> 01:06:07,063
-Another thing to notice
-is that in the context
-
-1306
-01:06:07,063 --> 01:06:08,909
-of the vanilla recurrent neural network,
-
-1307
-01:06:08,909 --> 01:06:10,239
-we saw that during the backward pass,
-
-1308
-01:06:10,239 --> 01:06:13,146
-our gradients were flowing
-through also a tanh
-
-1309
-01:06:13,146 --> 01:06:14,273
-at every time step.
-
-1310
-01:06:14,273 --> 01:06:15,940
-But now, in an LSTM,
-
-1311
-01:06:17,459 --> 01:06:18,792
-our outputs are,
-
-1312
-01:06:20,790 --> 01:06:22,452
-in an LSTM, our hidden state is used
-
-1313
-01:06:22,452 --> 01:06:24,110
-to compute those outputs, y t,
-
-1314
-01:06:24,110 --> 01:06:26,141
-so now, each hidden state,
-
-1315
-01:06:26,141 --> 01:06:29,229
-if you imagine backpropagating
-from the final hidden state
-
-1316
-01:06:29,229 --> 01:06:31,290
-back to the first cell state,
-
-1317
-01:06:31,290 --> 01:06:33,024
-then through that backward path,
-
-1318
-01:06:33,024 --> 01:06:37,396
-we only backpropagate through
-a single tanh non linearity
-
-1319
-01:06:37,396 --> 01:06:42,044
-rather than through a separate
-tanh at every time step.
-
-1320
-01:06:42,044 --> 01:06:44,059
-So kind of when you put
-all these things together,
-
-1321
-01:06:44,059 --> 01:06:45,927
-you can see this backwards pass
-
-1322
-01:06:45,927 --> 01:06:48,646
-backpropagating through the cell state
-
-1323
-01:06:48,646 --> 01:06:50,483
-is kind of a gradient super highway
-
-1324
-01:06:50,483 --> 01:06:53,205
-that lets gradients pass
-relatively unimpeded
-
-1325
-01:06:53,205 --> 01:06:55,047
-from the loss at the very end of the model
-
-1326
-01:06:55,047 --> 01:06:56,765
-all the way back to the initial cell state
-
-1327
-01:06:56,765 --> 01:06:59,172
-at the beginning of the model.
-
-1328
+664
 01:06:59,172 --> 01:07:00,922
 Was there a question?
 
-1329
-01:07:02,901 --> 01:07:04,693
-Yeah, what about the
-gradient in respect to w?
+665
+01:07:02,901 --> 01:07:06,792
+Yeah, what about the gradient in respect to w? 'Cause
+that's ultimately the thing that we care about.
 
-1330
-01:07:04,693 --> 01:07:06,792
-'Cause that's ultimately the
-thing that we care about.
+666
+01:07:06,792 --> 01:07:19,848
+So, the gradient with respect to w will come through, at every time step, will take our current cell state as well as our
+current hidden state and that will give us an element, that will give us our local gradient on w for that time step.
 
-1331
-01:07:06,792 --> 01:07:08,752
-So, the gradient with respect to w
+667
+01:07:19,848 --> 01:07:29,587
+So because our cell state, and just in the vanilla RNN case, we'll end up
+adding those first time step w gradients to compute our final gradient on w.
 
-1332
-01:07:08,752 --> 01:07:10,252
-will come through,
+668
+01:07:29,587 --> 01:07:37,280
+But now, if you imagine the situation where we have a very long sequence,
+and we're only getting gradients to the very end of the sequence.
 
-1333
-01:07:11,737 --> 01:07:12,570
-at every time step,
+669
+01:07:37,280 --> 01:07:43,219
+Now, as you backpropagate through, we'll get
+a local gradient on w for each time step,
 
-1334
-01:07:12,570 --> 01:07:13,771
-will take our current cell state
+670
+01:07:43,219 --> 01:07:48,506
+and that local gradient on w will be
+coming through these gradients on c and h.
 
-1335
-01:07:13,771 --> 01:07:15,059
-as well as our current hidden state
+671
+01:07:48,506 --> 01:07:52,751
+So because we're maintaining the gradients
+on c much more nicely in the LSTM case,
 
-1336
-01:07:15,059 --> 01:07:16,272
-and that will give us an element,
+672
+01:07:52,751 --> 01:07:59,804
+those local gradients on w at each time step will also be
+carried forward and backward through time much more cleanly.
 
-1337
-01:07:16,272 --> 01:07:18,480
-that will give us our local gradient on w
-
-1338
-01:07:18,480 --> 01:07:19,848
-for that time step.
-
-1339
-01:07:19,848 --> 01:07:21,340
-So because our cell state,
-
-1340
-01:07:21,340 --> 01:07:23,791
-and just in the vanilla RNN case,
-
-1341
-01:07:23,791 --> 01:07:27,307
-we'll end up adding those
-first time step w gradients
-
-1342
-01:07:27,307 --> 01:07:29,587
-to compute our final gradient on w.
-
-1343
-01:07:29,587 --> 01:07:33,139
-But now, if you imagine the situation
-
-1344
-01:07:33,139 --> 01:07:34,961
-where we have a very long sequence,
-
-1345
-01:07:34,961 --> 01:07:36,405
-and we're only getting
-gradients to the very end
-
-1346
-01:07:36,405 --> 01:07:37,280
-of the sequence.
-
-1347
-01:07:37,280 --> 01:07:38,945
-Now, as you backpropagate through,
-
-1348
-01:07:38,945 --> 01:07:40,978
-we'll get a local gradient on w
-
-1349
-01:07:40,978 --> 01:07:43,219
-for each time step,
-
-1350
-01:07:43,219 --> 01:07:44,484
-and that local gradient on w
-
-1351
-01:07:44,484 --> 01:07:48,506
-will be coming through
-these gradients on c and h.
-
-1352
-01:07:48,506 --> 01:07:50,994
-So because we're maintaining
-the gradients on c
-
-1353
-01:07:50,994 --> 01:07:52,751
-much more nicely in the LSTM case,
-
-1354
-01:07:52,751 --> 01:07:54,988
-those local gradients
-on w at each time step
-
-1355
-01:07:54,988 --> 01:07:57,221
-will also be carried forward and backward
-
-1356
-01:07:57,221 --> 01:07:59,804
-through time much more cleanly.
-
-1357
+673
 01:08:01,627 --> 01:08:03,044
 Another question?
 
-1358
-01:08:17,428 --> 01:08:18,645
-Yeah, so the question is
+674
+01:08:17,428 --> 01:08:22,088
+Yeah, so the question is due to the non linearities,
+could this still be susceptible to vanishing gradients?
 
-1359
-01:08:18,645 --> 01:08:19,886
-due to the non linearities,
+675
+01:08:22,089 --> 01:08:34,103
+And that could be the case. Actually, so one problem you might imagine is that maybe if these forget gates are always less
+than zero, or always less than one, you might get vanishing gradients as you continually go through these forget gates.
 
-1360
-01:08:19,886 --> 01:08:22,088
-could this still be susceptible
-to vanishing gradients?
+676
+01:08:34,103 --> 01:08:42,746
+Well, one sort of trick that people do in practice is that they will,
+sometimes, initialize the biases of the forget gate to be somewhat positive.
 
-1361
-01:08:22,089 --> 01:08:24,077
-And that could be the case.
+677
+01:08:42,746 --> 01:08:46,305
+So that at the beginning of training, those
+forget gates are always very close to one.
 
-1362
-01:08:24,077 --> 01:08:26,176
-Actually, so one problem you might imagine
+678
+01:08:46,305 --> 01:08:56,631
+So that at least at the beginning of training, then we have not so, relatively clean
+gradient flow through these forget gates, since they're all initialized to be near one.
 
-1363
-01:08:26,176 --> 01:08:27,560
-is that maybe if these forget gates
+679
+01:08:56,631 --> 01:09:02,741
+And then throughout the course of training, then the model can
+learn those biases and kind of learn to forget where it needs to.
 
-1364
-01:08:27,560 --> 01:08:29,322
-are always less than zero,
+680
+01:09:02,742 --> 01:09:09,182
+You're right that there still could be some potential for vanishing
+gradients here. But it's much less extreme than the vanilla RNN case,
 
-1365
-01:08:29,323 --> 01:08:30,252
-or always less than one,
-
-1366
-01:08:30,252 --> 01:08:31,411
-you might get vanishing gradients
-
-1367
-01:08:31,411 --> 01:08:34,103
-as you continually go
-through these forget gates.
-
-1368
-01:08:34,103 --> 01:08:35,960
-Well, one sort of trick
-that people do in practice
-
-1369
-01:08:35,960 --> 01:08:38,513
-is that they will, sometimes,
-
-1370
-01:08:38,513 --> 01:08:40,689
-initialize the biases of the forget gate
-
-1371
-01:08:40,689 --> 01:08:42,746
-to be somewhat positive.
-
-1372
-01:08:42,746 --> 01:08:44,004
-So that at the beginning of training,
-
-1373
-01:08:44,004 --> 01:08:46,305
-those forget gates are
-always very close to one.
-
-1374
-01:08:46,305 --> 01:08:48,118
-So that at least at the
-beginning of training,
-
-1375
-01:08:48,118 --> 01:08:52,285
-then we have not so,
-relatively clean gradient flow
-
-1376
-01:08:53,265 --> 01:08:54,381
-through these forget gates,
-
-1377
-01:08:54,381 --> 01:08:56,631
-since they're all
-initialized to be near one.
-
-1378
-01:08:56,631 --> 01:08:58,934
-And then throughout
-the course of training,
-
-1379
-01:08:58,935 --> 01:09:00,308
-then the model can learn those biases
-
-1380
-01:09:00,308 --> 01:09:02,742
-and kind of learn to
-forget where it needs to.
-
-1381
-01:09:02,742 --> 01:09:04,886
-You're right that there
-still could be some potential
-
-1382
-01:09:04,886 --> 01:09:06,246
-for vanishing gradients here.
-
-1383
-01:09:06,246 --> 01:09:07,569
-But it's much less extreme
-
-1384
-01:09:07,569 --> 01:09:09,182
-than the vanilla RNN case,
-
-1385
+681
 01:09:09,182 --> 01:09:12,126
 both because those fs can
 vary at each time step,
 
-1386
-01:09:12,126 --> 01:09:14,590
-and also because we're doing
+682
+01:09:12,126 --> 01:09:19,126
+and also because we're doing this element wise
+multiplication rather than a full matrix multiplication.
 
-1387
-01:09:14,590 --> 01:09:15,620
-this element wise multiplication
-
-1388
-01:09:15,620 --> 01:09:19,126
-rather than a full matrix multiplication.
-
-1389
-01:09:19,126 --> 01:09:20,801
+683
+01:09:19,126 --> 01:09:23,048
 So you can see that this LSTM
-
-1390
-01:09:20,801 --> 01:09:23,048
 actually looks quite similar to ResNet.
 
-1391
-01:09:23,048 --> 01:09:24,510
-In this residual network,
+684
+01:09:23,048 --> 01:09:28,069
+In this residual network, we had this path of identity
+connections going backward through the network
 
-1392
-01:09:24,510 --> 01:09:26,732
-we had this path of identity connections
-
-1393
-01:09:26,732 --> 01:09:28,069
-going backward through the network
-
-1394
-01:09:28,069 --> 01:09:30,362
-and that gave, sort of
-a gradient super highway
-
-1395
-01:09:30,363 --> 01:09:32,303
+685
+01:09:28,069 --> 01:09:32,303
+and that gave, sort of a gradient super highway
 for gradients to flow backward in ResNet.
 
-1396
+686
 01:09:32,303 --> 01:09:34,924
 And now it's kind of the
 same intuition in LSTM
 
-1397
-01:09:34,924 --> 01:09:37,944
-where these additive and element wise
+687
+01:09:34,924 --> 01:09:45,244
+where these additive and element wise multiplicative interactions of the cell state can give a
+similar gradient super highway for gradients to flow backwards through the cell state in an LSTM.
 
-1398
-01:09:37,944 --> 01:09:40,226
-multiplicative interactions
-of the cell state
+688
+01:09:46,343 --> 01:09:55,558
+And by the way, there's this other kind of nice paper called highway networks, which
+is kind of in between this idea of this LSTM cell and these residual networks.
 
-1399
-01:09:40,227 --> 01:09:42,305
-can give a similar gradient super highway
-
-1400
-01:09:42,305 --> 01:09:44,328
-for gradients to flow backwards
-through the cell state
-
-1401
-01:09:44,328 --> 01:09:45,245
-in an LSTM.
-
-1402
-01:09:46,343 --> 01:09:48,593
-And by the way, there's this
-other kind of nice paper
-
-1403
-01:09:48,593 --> 01:09:49,682
-called highway networks,
-
-1404
-01:09:49,682 --> 01:09:51,808
-which is kind of in between this idea
-
-1405
-01:09:51,808 --> 01:09:53,225
-of this LSTM cell
-
-1406
-01:09:54,138 --> 01:09:56,471
-and these residual networks.
-
-1407
-01:09:57,796 --> 01:09:58,697
+689
+01:09:57,796 --> 01:10:01,165
 So these highway networks
-
-1408
-01:09:58,697 --> 01:10:01,165
 actually came before residual networks,
 
-1409
-01:10:01,165 --> 01:10:03,008
-and they had this idea where
+690
+01:10:01,165 --> 01:10:08,804
+and they had this idea where at every layer of the highway network, we're
+going to compute sort of a candidate activation, as well as a gating function
 
-1410
-01:10:03,008 --> 01:10:04,541
-at every layer of the highway network,
+691
+01:10:08,804 --> 01:10:17,017
+that tells us that interpolates between our previous input at that layer, and
+that candidate activation that came through our convolutions or what not.
 
-1411
-01:10:04,541 --> 01:10:05,984
-we're going to compute
+692
+01:10:17,017 --> 01:10:20,472
+So there's actually a lot of architectural
+similarities between these things,
 
-1412
-01:10:05,984 --> 01:10:07,373
-sort of a candidate activation,
+693
+01:10:20,472 --> 01:10:27,688
+and people take a lot of inspiration from training very deep
+CNNs and very deep RNNs and there's a lot of crossover here.
 
-1413
-01:10:07,373 --> 01:10:08,804
-as well as a gating function
+694
+01:10:27,688 --> 01:10:34,675
+Very briefly, you'll see a lot of other types of variance of
+recurrent neural network architectures out there in the wild.
 
-1414
-01:10:08,804 --> 01:10:10,792
-that tells us that interprelates
+695
+01:10:34,675 --> 01:10:40,853
+Probably the most common, apart from the LSTM,
+is this GRU, called the gated recurrent unit.
 
-1415
-01:10:10,792 --> 01:10:13,045
-between our previous input at that layer,
+696
+01:10:40,853 --> 01:10:45,701
+And you can see those update equations here, and
+it kind of has this similar flavor of the LSTM,
 
-1416
-01:10:13,045 --> 01:10:14,676
-and that candidate activation
+697
+01:10:45,701 --> 01:10:53,828
+where it uses these multiplicative element wise gates together with
+these additive interactions to avoid this vanishing gradient problem.
 
-1417
-01:10:14,676 --> 01:10:17,017
-that came through our
-convolutions or what not.
+698
+01:10:53,828 --> 01:10:59,734
+There's also this cool paper called LSTM: a
+search based oddysey, very inventive title,
 
-1418
-01:10:17,017 --> 01:10:19,455
-So there's actually a lot of
-architectural similarities
+699
+01:10:59,734 --> 01:11:04,980
+where they tried to play around with the LSTM equations
+and swap out the non linearities at one point,
 
-1419
-01:10:19,455 --> 01:10:20,472
-between these things,
-
-1420
-01:10:20,472 --> 01:10:21,821
-and people take a lot of inspiration
-
-1421
-01:10:21,821 --> 01:10:24,363
-from training very deep CNNs
-
-1422
-01:10:24,363 --> 01:10:25,196
-and very deep RNNs
-
-1423
-01:10:25,196 --> 01:10:27,688
-and there's a lot of crossover here.
-
-1424
-01:10:27,688 --> 01:10:31,682
-Very briefly, you'll see a
-lot of other types of variance
-
-1425
-01:10:31,682 --> 01:10:33,777
-of recurrent neural network
-architectures out there
-
-1426
-01:10:33,777 --> 01:10:34,675
-in the wild.
-
-1427
-01:10:34,675 --> 01:10:36,760
-Probably the most common,
-apart from the LSTM,
-
-1428
-01:10:36,760 --> 01:10:40,853
-is this GRU, called the
-gated recurrent unit.
-
-1429
-01:10:40,853 --> 01:10:42,665
-And you can see those
-update equations here,
-
-1430
-01:10:42,665 --> 01:10:45,701
-and it kind of has this
-similar flavor of the LSTM,
-
-1431
-01:10:45,701 --> 01:10:49,318
-where it uses these
-multiplicative element wise gates
-
-1432
-01:10:49,318 --> 01:10:51,417
-together with these additive interactions
-
-1433
-01:10:51,417 --> 01:10:53,828
-to avoid this vanishing gradient problem.
-
-1434
-01:10:53,828 --> 01:10:55,584
-There's also this cool paper
-
-1435
-01:10:55,584 --> 01:10:57,679
-called LSTM: a search based oddysey,
-
-1436
-01:10:57,679 --> 01:10:59,734
-very inventive title,
-
-1437
-01:10:59,734 --> 01:11:02,853
-where they tried to play
-around with the LSTM equations
-
-1438
-01:11:02,853 --> 01:11:04,980
-and swap out the non
-linearities at one point,
-
-1439
-01:11:04,980 --> 01:11:06,329
+700
+01:11:04,980 --> 01:11:07,343
 like do we really need that tanh
-
-1440
-01:11:06,329 --> 01:11:07,343
 for exposing the output gate,
 
-1441
-01:11:07,343 --> 01:11:09,756
-and they tried to answer a lot
-of these different questions
+701
+01:11:07,343 --> 01:11:14,017
+and they tried to answer a lot of these different questions about each of
+those non linearities, each of those pieces of the LSTM update equations.
 
-1442
-01:11:09,756 --> 01:11:11,367
-about each of those non linearities,
+702
+01:11:14,017 --> 01:11:18,068
+What happens if we change the model and
+tweak those LSTM equations a little bit.
 
-1443
-01:11:11,367 --> 01:11:14,017
-each of those pieces of
-the LSTM update equations.
+703
+01:11:18,068 --> 01:11:24,521
+And kind of the conclusion is that they all work about the same Some of
+them work a little bit better than others for one problem or another.
 
-1444
-01:11:14,017 --> 01:11:15,374
-What happens if we change the model
+704
+01:11:24,521 --> 01:11:32,148
+But generally, none of the things, none of the tweaks of LSTM that they
+tried were significantly better that the original LSTM for all problems.
 
-1445
-01:11:15,374 --> 01:11:18,068
-and tweak those LSTM
-equations a little bit.
+705
+01:11:32,148 --> 01:11:41,084
+So that gives you a little bit more faith that the LSTM update equations seem kind of
+magical but they're useful anyway. You should probably consider them for your problem.
 
-1446
-01:11:18,068 --> 01:11:19,038
-And kind of the conclusion is
-
-1447
-01:11:19,038 --> 01:11:20,260
-that they all work about the same
-
-1448
-01:11:20,260 --> 01:11:22,414
-Some of them work a little
-bit better than others
-
-1449
-01:11:22,414 --> 01:11:24,521
-for one problem or another.
-
-1450
-01:11:24,521 --> 01:11:25,735
-But generally, none of the things,
-
-1451
-01:11:25,735 --> 01:11:28,036
-none of the tweaks of LSTM that they tried
-
-1452
-01:11:28,036 --> 01:11:30,911
-were significantly better
-that the original LSTM
-
-1453
-01:11:30,911 --> 01:11:32,148
-for all problems.
-
-1454
-01:11:32,148 --> 01:11:33,647
-So that gives you a little bit more faith
-
-1455
-01:11:33,647 --> 01:11:36,505
-that the LSTM update
-equations seem kind of magical
-
-1456
-01:11:36,505 --> 01:11:38,889
-but they're useful anyway.
-
-1457
-01:11:38,889 --> 01:11:41,084
-You should probably consider
-them for your problem.
-
-1458
+706
 01:11:41,084 --> 01:11:43,692
 There's also this cool paper
 from Google a couple years ago
 
-1459
-01:11:43,692 --> 01:11:44,575
-where they tried to use,
+707
+01:11:43,692 --> 01:11:52,605
+where they tried to use, where they did kind of an evolutionary search and did
+a search over many, over a very large number of random RNN architectures,
 
-1460
-01:11:44,575 --> 01:11:46,520
-where they did kind of
-an evolutionary search
+708
+01:11:52,605 --> 01:12:00,860
+they kind of randomly premute these update equations and try putting the additions and the
+multiplications and the gates and the non linearities in different kinds of combinations.
 
-1461
-01:11:46,520 --> 01:11:48,117
-and did a search over many,
+709
+01:12:00,860 --> 01:12:08,570
+They blasted this out over their huge Google cluster and just tried
+a whole bunch of these different weigh updates in various flavors.
 
-1462
-01:11:48,117 --> 01:11:52,605
-over a very large number of
-random RNN architectures,
+710
+01:12:08,570 --> 01:12:15,446
+And again, it was the same story that they didn't really find anything
+that was significantly better than these existing GRU or LSTM styles.
 
-1463
-01:11:52,605 --> 01:11:55,694
-they kind of randomly premute
-these update equations
+711
+01:12:15,446 --> 01:12:19,518
+Although there were some variations that worked maybe
+slightly better or worse for certain problems.
 
-1464
-01:11:55,694 --> 01:11:57,936
-and try putting the additions
-and the multiplications
+712
+01:12:19,518 --> 01:12:27,080
+But kind of the take away is that probably and using an
+LSTM or GRU is not so much magic in those equations,
 
-1465
-01:11:57,936 --> 01:11:59,332
-and the gates and the non linearities
+713
+01:12:27,080 --> 01:12:33,356
+but this idea of managing gradient flow properly through these
+additive connections and these multiplicative gates is super useful.
 
-1466
-01:11:59,332 --> 01:12:00,860
-in different kinds of combinations.
+714
+01:12:34,888 --> 01:12:40,103
+So yeah, the summary is that RNNs are super cool. They
+can allow you to attack tons of new types of problems.
 
-1467
-01:12:00,860 --> 01:12:03,288
-They blasted this out over
-their huge Google cluster
+715
+01:12:40,103 --> 01:12:43,431
+They sometimes are susceptible to
+vanishing or exploding gradients.
 
-1468
-01:12:03,288 --> 01:12:04,351
-and just tried a whole bunch
+716
+01:12:43,431 --> 01:12:47,412
+But we can address that with weight
+clipping and with fancier architectures.
 
-1469
-01:12:04,351 --> 01:12:08,570
-of these different weigh
-updates in various flavors.
+717
+01:12:47,412 --> 01:12:52,043
+And there's a lot of cool overlap between
+CNN architectures and RNN architectures.
 
-1470
-01:12:08,570 --> 01:12:09,742
-And again, it was the same story
-
-1471
-01:12:09,742 --> 01:12:11,299
-that they didn't really find anything
-
-1472
-01:12:11,299 --> 01:12:12,607
-that was significantly better
-
-1473
-01:12:12,607 --> 01:12:15,446
-than these existing GRU or LSTM styles.
-
-1474
-01:12:15,446 --> 01:12:16,978
-Although there were some
-variations that worked
-
-1475
-01:12:16,978 --> 01:12:19,518
-maybe slightly better or
-worse for certain problems.
-
-1476
-01:12:19,518 --> 01:12:21,304
-But kind of the take away is that
-
-1477
-01:12:21,304 --> 01:12:24,252
-probably and using an LSTM or GRU
-
-1478
-01:12:24,252 --> 01:12:27,080
-is not so much magic in those equations,
-
-1479
-01:12:27,080 --> 01:12:29,292
-but this idea of managing
-gradient flow properly
-
-1480
-01:12:29,292 --> 01:12:30,633
-through these additive connections
-
-1481
-01:12:30,633 --> 01:12:32,023
-and these multiplicative gates
-
-1482
-01:12:32,023 --> 01:12:33,356
-is super useful.
-
-1483
-01:12:34,888 --> 01:12:37,286
-So yeah, the summary is
-that RNNs are super cool.
-
-1484
-01:12:37,286 --> 01:12:40,103
-They can allow you to attack
-tons of new types of problems.
-
-1485
-01:12:40,103 --> 01:12:42,024
-They sometimes are
-susceptible to vanishing
-
-1486
-01:12:42,024 --> 01:12:43,431
-or exploding gradients.
-
-1487
-01:12:43,431 --> 01:12:44,740
-But we can address that
-with weight clipping
-
-1488
-01:12:44,740 --> 01:12:47,412
-and with fancier architectures.
-
-1489
-01:12:47,412 --> 01:12:48,899
-And there's a lot of cool overlap
-
-1490
-01:12:48,899 --> 01:12:52,043
-between CNN architectures
-and RNN architectures.
-
-1491
-01:12:52,043 --> 01:12:53,856
-So next time, you'll
-be taking the midterm.
-
-1492
-01:12:53,856 --> 01:12:57,856
-But after that, we'll
-have a, sorry, a question?
-
-1493
-01:12:59,525 --> 01:13:00,801
-Midterm is after this lecture
-
-1494
-01:13:00,801 --> 01:13:04,142
-so anything up to this point is fair game.
-
-1495
-01:13:04,142 --> 00:00:00,000
+718
+01:12:52,043 --> 01:13:02,801
+- So next time, you'll be taking the midterm. - But after that, we'll have a, sorry,
+a question? Midterm is after this lecture so anything up to this point is fair game.
