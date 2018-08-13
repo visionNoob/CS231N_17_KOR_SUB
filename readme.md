@@ -1,8 +1,8 @@
-# Korean Subtitles for CS231N Spring 2017 
-# CS231N 한글번역
+# Korean Subtitles for CS231n Spring 2017 
+# CS231n 한글번역
 
-Translation project of [CS231N 2017 lecture video](https://www.youtube.com/playlist?list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk)  
-Also see [CS231N Website](http://cs231n.stanford.edu/)
+Translation project of [CS231n 2017 lecture video](https://www.youtube.com/playlist?list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk)  
+Also see [CS231n Website](http://cs231n.stanford.edu/)
 
 ---------
 ## Announcements
@@ -10,7 +10,7 @@ Also see [CS231N Website](http://cs231n.stanford.edu/)
   Stanford의 CS231n는 CNN(Convolutional Neural Network)을 중심으로 Deep Learning을 배우는 현존하는 가장 좋은 강의 중 하나로 손꼽습니다. 이 프로젝트는 CS231n을 수강하기에 언어의 장벽으로 힘든 분들을 위한 한글 번역 프로젝트입니다. 많은 분들이 이 강의를 듣고 행복했으면 좋겠습니다. 하지만 CS231n 정도의 수준 그리고 그 이상을 위해서라면 영어실력이 뒷받침해 줘야 하는 것은 명백한 사실입니다.  
 > [도올 김용옥 선생의 "영어 수학을 왜 공부해야 하는가?](https://youtu.be/fZk67qnUo3M)
     
-    > CS231N에 의 대상은 다음과 같습니다. 
+    > CS231n에 의 대상
     1) Deep Learning을 처음 접하는 초급자
     2) Deep Learning을 어느정도 알지만 심도깊게 배우고 싶은 중급자
     3) Deep Learning의 트렌드를 살펴 보고자 하는 상급자 
@@ -86,7 +86,7 @@ Also see [CS231N Website](http://cs231n.stanford.edu/)
     Lecture 13 : Not Yet
     ...
 ----------
-## Table of Contents (CS231N 2017)
+## Table of Contents (CS231n 2017)
 
 
  Please see also
