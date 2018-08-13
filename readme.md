@@ -6,17 +6,16 @@ Also see [CS231N Website](http://cs231n.stanford.edu/)
 
 ---------
 ## Announcements
-    CS231N 한글번역 프로젝트입니다. 
-    Stanford의 CS231N는 Convolutional Neural Network를 중심으로 Deep Learning를 배울 수 있는 
-    현존하는 가장 좋은 강의입니다. 이 좋은 강의를 언어의 장벽으로 듣지 못하는 한국 분들이 많다는
-    소식이 너무 안타까워서 프로젝트를 시작했습니다. 많은 분들이 이 강의를 듣고 행복했으면 좋겠습니다.
+> CS231n 한글번역 프로젝트입니다. 
+  Stanford의 CS231n는 CNN(Convolutional Neural Network)을 중심으로 을 배우는 현존하는 가장 좋은 강의들 중 하나입니다. 이 프로젝트는 언어의 장벽으로 힘들어하시는 분들을 위한 한글 번역 프로젝트입니다. 많은 분들이 이 강의를 듣고 행복했으면 좋겠습니다. 하지만 CS231n 정도의 수준 그리고 그 이상을 위해서라면 영어실력이 뒷받침해 줘야 하는 것은 명백한 사실입니다.  
+> [도올 김용옥 선생의 "영어 수학을 왜 공부해야 하는가?](https://youtu.be/fZk67qnUo3M)
     
-    CS231N에 의 대상은 다음과 같습니다. 
+    > CS231N에 의 대상은 다음과 같습니다. 
     1) Deep Learning을 처음 접하는 초급자
     2) Deep Learning을 어느정도 알지만 심도깊게 배우고 싶은 중급자
     3) Deep Learning의 트렌드를 살펴 보고자 하는 상급자 
 
-    자세한 Prerequisites은 Lecture 1을 참고하시기 바랍니다. 
+    > 자세한 Prerequisites은 Lecture 1을 참고하시기 바랍니다. 
     
     많은 분들의 관심과 격려로 힘내고 있습니다. 감사합니다 :D
     그리고 또한 많은 분들께서 오역, 오타관련 Issues, Pull requests, Email 등을 
@@ -70,6 +69,7 @@ Also see [CS231N Website](http://cs231n.stanford.edu/)
     2018 07 09 - Complete Lecture 9(draft) 
     2018 07 16 - Complete Lecture 2(1st Revision) 
     2018 07 30 - Complete Lecture 10(draft) 
+    2018 03 13 - Complete Lecture 11(draft) 
 
     Lecture 01 : Complete(draft + 1st Revision) 
     Lecture 02 : Complete(draft + 1st Revision)
@@ -81,8 +81,8 @@ Also see [CS231N Website](http://cs231n.stanford.edu/)
     Lecture 08 : Complete(draft)
     Lecture 09 : Complete(draft)
     Lecture 10 : Complete(draft)
-    Lecture 11 : ****Now Here!****
-    Lecture 12 : Not Yet
+    Lecture 11 : Complete(draft)
+    Lecture 12 : ****Now Here!****
     Lecture 13 : Not Yet
     ...
 ----------
@@ -112,7 +112,7 @@ Also see [CS231N Website](http://cs231n.stanford.edu/)
 | 8        |Deep Learning Software|[video](https://www.youtube.com/watch?v=6SlgtELqOWc&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk&index=7)|[slide](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture8.pdf)|[english](https://github.com/insurgent92/cs231n_spring_2017/blob/master/eng/Lecture%208%20_%20Deep%20Learning%20Software.srt)<p>[korean](https://github.com/insurgent92/CS231N_17_KOR_SUB/blob/master/kor/Lecture%208%20%20%20Deep%20Learning%20Software.ko.srt)|draft|
 | 9        |CNN Architectures|[video](https://www.youtube.com/watch?v=DAOcjicFr1Y&index=8&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk)|[slide](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture9.pdf)|[english](https://github.com/insurgent92/cs231n_spring_2017/blob/master/eng/Lecture%209%20_%20CNN%20Architectures.srt)<p>[korean](https://github.com/insurgent92/CS231N_17_KOR_SUB/blob/master/kor/Lecture%209%20%20%20CNN%20Architectures.ko.srt)|draft|
 | 10       |Recurrent Neural Networks|[video](https://www.youtube.com/watch?v=6niqTuYFZLQ&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk&index=9)|[slide](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture10.pdf)|[english](https://github.com/insurgent92/cs231n_spring_2017/blob/master/eng/Lecture%2010%20_%20Recurrent%20Neural%20Networks.srt)<p>[korean](https://github.com/insurgent92/CS231N_17_KOR_SUB/blob/master/kor/Lecture%2010%20%20%20Recurrent%20Neural%20Networks.ko.srt)|draft|
-| 11       |Detection and Segmentation|[video](https://www.youtube.com/watch?v=nDPWywWRIRo&index=10&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk)|[slide](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture11.pdf)|[english](https://github.com/insurgent92/cs231n_spring_2017/blob/master/eng/Lecture%2011%20_%20Detection%20and%20Segmentation.srt)<p>[korean]
+| 11       |Detection and Segmentation|[video](https://www.youtube.com/watch?v=nDPWywWRIRo&index=10&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk)|[slide](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture11.pdf)|[english](https://github.com/insurgent92/cs231n_spring_2017/blob/master/eng/Lecture%2011%20_%20Detection%20and%20Segmentation.srt)<p>[korean](https://github.com/insurgent92/CS231N_17_KOR_SUB/blob/master/kor/Lecture%2011%20%20%20Detection%20and%20Segmentation.ko.srt)|draft|
 | 12       | Visualizing and Understanding|[video](https://www.youtube.com/watch?v=6wcs6szJWMY&index=11&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk)|[slide](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture12.pdf)|[english](https://github.com/insurgent92/cs231n_spring_2017/blob/master/eng/Lecture%2012%20_%20Visualizing%20and%20Understanding.srt)<p>[korean]
 | 13       |Generative Models|[video](https://www.youtube.com/watch?v=5WoItGTWV54&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk&index=12)|[slide](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture13.pdf)|[english](https://github.com/insurgent92/cs231n_spring_2017/blob/master/eng/Lecture%2013%20_%20Generative%20Models.srt)<p>[korean]
 | 14       |Deep Reinforcement Learning|[video](https://www.youtube.com/watch?v=lvoHnicueoE&index=13&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk)|[slide](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture14.pdf)|[english](https://github.com/insurgent92/cs231n_spring_2017/blob/master/eng/Lecture%2014%20_%20Deep%20Reinforcement%20Learning.srt)<p>[korean]
