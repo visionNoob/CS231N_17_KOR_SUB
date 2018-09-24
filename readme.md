@@ -106,11 +106,16 @@ Also see [CS231n Website](http://cs231n.stanford.edu/)
 [[2017]](https://www.youtube.com/playlist?list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk) 
 [2018 is not in public] 
 
-Status info  
-draft : :pencil2:  
-draft && 1st_revision : :pencil2: :scissors:  
-draft && 1st && 2nd_revision : :pencil2: :scissors: :scissors:   
-not yet : :no_bell:
+
+## Status info
+| *Status info*  | Symbol       |
+|:--------:|:---------------:|
+|**Draft** |:pencil2:  |
+|**1st_revision** | :pencil2: :scissors:  |
+|**2nd_revision** | :pencil2: :scissors: :scissors:   |
+|**not yet** | :no_bell:|
+
+----
 
 | Event Type  | Description       |Videos(youtube)      |Slides      | Subtitles| Status |
 |:--------:|:-----------------:|:-----------:|:--------:|:--------:|:----:|
