@@ -106,6 +106,12 @@ Also see [CS231n Website](http://cs231n.stanford.edu/)
 [[2017]](https://www.youtube.com/playlist?list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk) 
 [2018 is not in public] 
 
+Status info  
+draft : :pencil2:  
+draft && 1st_revision : :pencil2: :scissors:  
+draft && 1st && 2nd_revision : :pencil2: :scissors: :scissors:   
+not yet : :no_bell:
+
 | Event Type  | Description       |Videos(youtube)      |Slides      | Subtitles| Status |
 |:--------:|:-----------------:|:-----------:|:--------:|:--------:|:----:|
 |Lecture 1        |Introduction to Convolutional Neural Networks for Visual Recognition|[video](https://www.youtube.com/watch?v=vT1JzLTH4G4&t=0s&index=1&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk)|[slide](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture1.pdf)|[english](https://github.com/insurgent92/cs231n_spring_2017/blob/master/eng/Lecture%201%20_%20Introduction%20to%20Convolutional%20Neural%20Networks%20for%20Visual%20Recognition.srt)<p>[korean](https://github.com/insurgent92/CS231N_17_KOR_SUB/blob/master/kor/Lecture%201%20%20%20Introduction%20to%20Convolutional%20Neural%20Networks%20for%20Visual%20Recognition.ko.srt)|First Revision|
