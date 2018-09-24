@@ -107,13 +107,12 @@ Also see [CS231n Website](http://cs231n.stanford.edu/)
 [2018 is not in public] 
 
 
-## Status info
-| *Status info*  | Symbol       |
-|:--------:|:---------------:|
-|**Draft** |:pencil2:  |
-|**1st_revision** | :pencil2: :scissors:  |
-|**2nd_revision** | :pencil2: :scissors: :scissors:   |
-|**not yet** | :no_bell:|
+#### Status info
+| *Status info* | Symbol  |*Status info*   |Symbol                           |
+|:-------------:|:-------:|:--------------:|:-------------------------------:|
+|**Draft**      |:pencil2:|**1st_revision**|:pencil2: :scissors:             |
+|**not yet**    |:no_bell:|**2nd_revision**|:pencil2: :scissors: :scissors:  |
+
 
 ----
 
