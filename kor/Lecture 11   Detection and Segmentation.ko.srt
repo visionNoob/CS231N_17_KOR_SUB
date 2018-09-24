@@ -1,4 +1,9 @@
-﻿1
+﻿0
+00:00:00,000 --> 00:00:06,000
+Translated by visionNoob, KNU
+https://github.com/insurgent92/CS231N_17_KOR_SUB
+
+1
 00:00:08,691 --> 00:00:15,429
 안녕하세요. 진행하도록 하겠습니다.
 CS231N 11강입니다.
