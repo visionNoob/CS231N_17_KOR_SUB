@@ -3031,652 +3031,269 @@ Okay so this year, 2017 has really been
 the year of the GAN.
 
 617
-01:10:24,842 --> 01:10:28,309
-There's been tons and tons of work on GANs
+01:10:24,842 --> 01:10:33,261
+There's been tons and tons of work on GANs and it's really
+sort of exploded and gotten some really cool results.
 
 618
-01:10:28,309 --> 01:10:31,737
-and it's really sort of
-exploded and gotten some really
+01:10:33,261 --> 01:10:38,680
+So on the left here you can see people
+working on better training and generation.
 
 619
-01:10:31,737 --> 01:10:33,261
-cool results.
+01:10:38,680 --> 01:10:45,621
+So we talked about improving the loss functions, more
+stable training and this was able to get really nice
 
 620
-01:10:33,261 --> 01:10:37,017
-So on the left here you
-can see people working on
-
-621
-01:10:37,017 --> 01:10:38,680
-better training and generation.
-
-622
-01:10:38,680 --> 01:10:41,454
-So we talked about improving
-the loss functions,
-
-623
-01:10:41,454 --> 01:10:45,621
-more stable training and this
-was able to get really nice
-
-624
 01:10:47,216 --> 01:10:50,173
 generations here of different
 types of architectures
 
-625
+621
 01:10:50,173 --> 01:10:54,326
 on the bottom here really
 crisp high resolution faces.
 
+622
+01:10:54,326 --> 01:11:01,742
+With GANs you can also do, there's also been models on
+source to try to domain transfer and conditional GANs.
+
+623
+01:11:01,742 --> 01:11:08,363
+And so here, this is an example of source to try to get
+domain transfer where, for example in the upper part
+
+624
+01:11:08,363 --> 01:11:14,703
+here we are trying to go from source domain
+of horses to an output domain of zebras.
+
+625
+01:11:14,703 --> 01:11:25,813
+So we can take an image of horses and train a GAN such that the output is going
+to be the same thing but now zebras in the same image setting as the horses
+
 626
-01:10:54,326 --> 01:10:58,918
-With GANs you can also do,
-there's also been models on
-
-627
-01:10:58,918 --> 01:11:01,742
-source to try to domain
-transfer and conditional GANs.
-
-628
-01:11:01,742 --> 01:11:04,394
-And so here, this is an
-example of source to try to
-
-629
-01:11:04,394 --> 01:11:08,363
-get domain transfer where,
-for example in the upper part
-
-630
-01:11:08,363 --> 01:11:12,540
-here we are trying to go
-from source domain of horses
-
-631
-01:11:12,540 --> 01:11:14,703
-to an output domain of zebras.
-
-632
-01:11:14,703 --> 01:11:18,692
-So we can take an image
-of horses and train a GAN
-
-633
-01:11:18,692 --> 01:11:21,646
-such that the output is
-going to be the same thing
-
-634
-01:11:21,646 --> 01:11:25,813
-but now zebras in the same
-image setting as the horses
-
-635
-01:11:28,408 --> 01:11:29,915
+01:11:28,408 --> 01:11:33,124
 and go the other way around.
-
-636
-01:11:29,915 --> 01:11:33,124
 We can transform apples into oranges.
 
-637
-01:11:33,124 --> 01:11:35,128
-And also the other way around.
+627
+01:11:33,124 --> 01:11:38,608
+And also the other way around. We can
+also use this to do photo enhancement.
 
-638
-01:11:35,128 --> 01:11:38,608
-We can also use this to
-do photo enhancement.
+628
+01:11:38,608 --> 01:11:52,379
+So producing these, really taking a standard photo and trying to make really nice, as if you had,
+pretending that you have a really nice expensive camera. That you can get the nice blur effects.
 
-639
-01:11:38,608 --> 01:11:41,676
-So producing these, really
-taking a standard photo
+629
+01:11:52,379 --> 01:12:03,750
+On the bottom here we have scene changing, so transforming an image of
+Yosemite from the image in winter time to the image in summer time.
 
-640
-01:11:41,676 --> 01:11:46,218
-and trying to make really
-nice, as if you had,
-
-641
-01:11:46,218 --> 01:11:48,717
-pretending that you have a
-really nice expensive camera.
-
-642
-01:11:48,717 --> 01:11:52,379
-That you can get the nice blur effects.
-
-643
-01:11:52,379 --> 01:11:55,987
-On the bottom here we have scene changing,
-
-644
-01:11:55,987 --> 01:11:59,733
-so transforming an image
-of Yosemite from the image
-
-645
-01:11:59,733 --> 01:12:03,750
-in winter time to the
-image in summer time.
-
-646
+630
 01:12:03,750 --> 01:12:05,753
 And there's really tons of applications.
 
+631
+01:12:05,753 --> 01:12:16,373
+So on the right here there's more. There's also going from a text description and
+having a GAN that's now conditioned on this text description and producing an image.
+
+632
+01:12:18,343 --> 01:12:26,421
+So there's something here about a small bird with a pink breast
+and crown and now we're going to generate images of this.
+
+633
+01:12:26,421 --> 01:12:37,383
+And there's also examples down here of filling in edges. So given conditions on some
+sketch that we have, can we fill in a color version of what this would look like.
+
+634
+01:12:40,848 --> 01:12:50,416
+Can we take a Google, a map grid and put something that looks like Google
+Earth on, and turn it into something that looks like Google Earth.
+
+635
+01:12:52,528 --> 01:12:56,767
+Go in and hallucinate all of these
+buildings and trees and so on.
+
+636
+01:12:56,767 --> 01:13:07,061
+And so there's lots of really cool examples of this. And there's also this website
+for pics to pics which did a lot of these kind of conditional GAN type examples.
+
+637
+01:13:08,077 --> 01:13:17,549
+I encourage you to go look at for more interesting
+applications that people have done with GANs.
+
+638
+01:13:17,549 --> 01:13:24,640
+And in terms of research papers there's also there's
+a huge number of papers about GANs this year now.
+
+639
+01:13:26,047 --> 01:13:31,365
+There's a website called the GAN Zoo that kind
+of is trying to compile a whole list of these.
+
+640
+01:13:31,365 --> 01:13:44,794
+And so here this has only taken me from A through C on the left here and through like L on the right. So
+it won't even fit on the slide. There's tons of papers as well that you can look at if you're interested.
+
+641
+01:13:44,794 --> 01:13:57,376
+And then one last pointer is also for tips and tricks for training GANs, here's a nice
+little website that has pointers if you're trying to train these GANs in practice.
+
+642
+01:14:01,313 --> 01:14:06,915
+Okay, so summary of GANs. GANs don't
+work with an explicit density function.
+
+643
+01:14:06,915 --> 01:14:13,989
+Instead we're going to represent this implicitly through
+samples and they take a game-theoretic approach to training
+
+644
+01:14:13,989 --> 01:14:18,973
+so we're going to learn to generate from our training
+distribution through a two player game setup.
+
+645
+01:14:18,973 --> 01:14:26,212
+And the pros of GANs are that they're really having gorgeous
+state of the art samples and you can do a lot with these.
+
+646
+01:14:26,212 --> 01:14:33,247
+The cons are that they are trickier and more unstable
+to train, we're not just directly optimizing
+
 647
-01:12:05,753 --> 01:12:08,430
-So on the right here there's more.
+01:14:36,499 --> 01:14:41,830
+a one objective function that we can
+just do backpop and train easily.
 
 648
-01:12:08,430 --> 01:12:11,930
-There's also going from a text description
+01:14:41,830 --> 01:14:47,710
+Instead we have these two networks that we're trying to
+balance training with so it can be a bit more unstable.
 
 649
-01:12:13,900 --> 01:12:15,839
-and having a GAN that's now
-conditioned on this text
+01:14:47,710 --> 01:14:57,629
+And we also can lose out on not being able to do some of the inference
+queries, P of X, P of Z given X that we had for example in our VAE.
 
 650
-01:12:15,839 --> 01:12:18,343
-description and producing an image.
+01:14:57,629 --> 01:15:07,040
+And GANs are still an active area of research, this is a relatively new type of
+model that we're starting to see a lot of and you'll be seeing a lot more of.
 
 651
-01:12:18,343 --> 01:12:21,572
-So there's something
-here about a small bird
+01:15:07,040 --> 01:15:20,633
+And so people are still working now on better loss functions more stable training, so Wasserstein
+GAN for those of you who are interested is basically an improvement in this direction.
 
 652
-01:12:21,572 --> 01:12:25,094
-with a pink breast and crown
-and now we're going to generate
+01:15:22,224 --> 01:15:31,489
+That now a lot of people are also using and basing models off of. There's also
+other works like LSGAN, Least Square's GAN, Least Square's GAN and others.
 
 653
-01:12:25,094 --> 01:12:26,421
-images of this.
+01:15:31,489 --> 01:15:39,307
+So you can look into this more. And a lot of times for these new models in
+terms of actually implementing this, they're not necessarily big changes.
 
 654
-01:12:26,421 --> 01:12:30,588
-And there's also examples
-down here of filling in edges.
+01:15:39,307 --> 01:15:44,279
+They're different loss functions that you can change a
+little bit and get like a big improvement in training.
 
 655
-01:12:31,808 --> 01:12:34,436
-So given conditions on some sketch that we have,
+01:15:44,279 --> 01:15:51,500
+And so this is, some of these are worth looking into and
+you'll also get some practice on your homework assignment.
 
 656
-01:12:34,436 --> 01:12:38,603
-can we fill in a color version
-of what this would look like.
+01:15:51,500 --> 01:15:59,946
+And there's also a lot of work on different types of conditional GANs
+and GANs for all kinds of different problem setups and applications.
 
 657
-01:12:40,848 --> 01:12:45,015
-Can we take a Google, a
-map grid and put something
-
-658
-01:12:47,127 --> 01:12:49,033
-that looks like Google Earth on,
-
-659
-01:12:49,033 --> 01:12:52,528
-and turn it into something
-that looks like Google Earth.
-
-660
-01:12:52,528 --> 01:12:55,492
-Go in and hallucinate all
-of these buildings and trees
-
-661
-01:12:55,492 --> 01:12:56,767
-and so on.
-
-662
-01:12:56,767 --> 01:12:59,825
-And so there's lots of
-really cool examples of this.
-
-663
-01:12:59,825 --> 01:13:03,575
-And there's also this
-website for pics to pics
-
-664
-01:13:04,591 --> 01:13:06,869
-which did a lot of these
-kind of conditional GAN type
-
-665
-01:13:06,869 --> 01:13:08,077
-examples.
-
-666
-01:13:08,077 --> 01:13:12,244
-I encourage you to go look
-at for more interesting
-
-667
-01:13:13,450 --> 01:13:17,549
-applications that people
-have done with GANs.
-
-668
-01:13:17,549 --> 01:13:20,473
-And in terms of research
-papers there's also
-
-669
-01:13:20,473 --> 01:13:24,640
-there's a huge number of papers
-about GANs this year now.
-
-670
-01:13:26,047 --> 01:13:29,528
-There's a website called
-the GAN Zoo that kind of is
-
-671
-01:13:29,528 --> 01:13:31,365
-trying to compile a whole list of these.
-
-672
-01:13:31,365 --> 01:13:35,036
-And so here this has only
-taken me from A through C
-
-673
-01:13:35,036 --> 01:13:37,690
-on the left here and
-through like L on the right.
-
-674
-01:13:37,690 --> 01:13:40,076
-So it won't even fit on the slide.
-
-675
-01:13:40,076 --> 01:13:42,446
-There's tons of papers as
-well that you can look at
-
-676
-01:13:42,446 --> 01:13:44,794
-if you're interested.
-
-677
-01:13:44,794 --> 01:13:48,961
-And then one last pointer
-is also for tips and tricks
-
-678
-01:13:49,927 --> 01:13:53,348
-for training GANs, here's
-a nice little website
-
-679
-01:13:53,348 --> 01:13:57,259
-that has pointers if you're
-trying to train these GANs
-
-680
-01:13:57,259 --> 01:13:58,342
-in practice.
-
-681
-01:14:01,313 --> 01:14:03,396
-Okay, so summary of GANs.
-
-682
-01:14:04,336 --> 01:14:06,915
-GANs don't work with an
-explicit density function.
-
-683
-01:14:06,915 --> 01:14:10,036
-Instead we're going to represent
-this implicitly through
-
-684
-01:14:10,036 --> 01:14:13,989
-samples and they take a
-game-theoretic approach to training
-
-685
-01:14:13,989 --> 01:14:16,092
-so we're going to learn to
-generate from our training
-
-686
-01:14:16,092 --> 01:14:18,973
-distribution through a
-two player game setup.
-
-687
-01:14:18,973 --> 01:14:21,947
-And the pros of GANs are
-that they're really having
-
-688
-01:14:21,947 --> 01:14:24,934
-gorgeous state of the art
-samples and you can do a lot
-
-689
-01:14:24,934 --> 01:14:26,212
-with these.
-
-690
-01:14:26,212 --> 01:14:29,580
-The cons are that they are
-trickier and more unstable
-
-691
-01:14:29,580 --> 01:14:33,247
-to train, we're not
-just directly optimizing
-
-692
-01:14:36,499 --> 01:14:40,054
-a one objective function
-that we can just do backpop
-
-693
-01:14:40,054 --> 01:14:41,830
-and train easily.
-
-694
-01:14:41,830 --> 01:14:44,648
-Instead we have these two
-networks that we're trying
-
-695
-01:14:44,648 --> 01:14:47,710
-to balance training with so
-it can be a bit more unstable.
-
-696
-01:14:47,710 --> 01:14:50,979
-And we also can lose out
-on not being able to do
-
-697
-01:14:50,979 --> 01:14:54,915
-some of the inference queries,
-P of X, P of Z given X
-
-698
-01:14:54,915 --> 01:14:57,629
-that we had for example in our VAE.
-
-699
-01:14:57,629 --> 01:15:00,051
-And GANs are still an
-active area of research,
-
-700
-01:15:00,051 --> 01:15:04,427
-this is a relatively new type
-of model that we're starting
-
-701
-01:15:04,427 --> 01:15:07,040
-to see a lot of and you'll
-be seeing a lot more of.
-
-702
-01:15:07,040 --> 01:15:11,556
-And so people are still working
-now on better loss functions
-
-703
-01:15:11,556 --> 01:15:14,994
-more stable training, so Wasserstein GAN
-
-704
-01:15:14,994 --> 01:15:18,994
-for those of you who are
-interested is basically
-
-705
-01:15:20,585 --> 01:15:22,224
-an improvement in this direction.
-
-706
-01:15:22,224 --> 01:15:25,099
-That now a lot of people are
-also using and basing models
-
-707
-01:15:25,099 --> 01:15:26,387
-off of.
-
-708
-01:15:26,387 --> 01:15:29,759
-There's also other works
-like LSGAN, Least Square's GAN,
-
-709
-01:15:29,759 --> 01:15:31,489
-Least Square's GAN and others.
-
-710
-01:15:31,489 --> 01:15:32,871
-So you can look into this more.
-
-711
-01:15:32,871 --> 01:15:35,285
-And a lot of times for these new models
-
-712
-01:15:35,285 --> 01:15:37,108
-in terms of actually implementing this,
-
-713
-01:15:37,108 --> 01:15:39,307
-they're not necessarily big changes.
-
-714
-01:15:39,307 --> 01:15:41,622
-They're different loss
-functions that you can change
-
-715
-01:15:41,622 --> 01:15:43,407
-a little bit and get
-like a big improvement
-
-716
-01:15:43,407 --> 01:15:44,279
-in training.
-
-717
-01:15:44,279 --> 01:15:47,159
-And so this is, some of
-these are worth looking into
-
-718
-01:15:47,159 --> 01:15:50,115
-and you'll also get some
-practice on your homework
-
-719
-01:15:50,115 --> 01:15:51,500
-assignment.
-
-720
-01:15:51,500 --> 01:15:54,410
-And there's also a lot of
-work on different types of
-
-721
-01:15:54,410 --> 01:15:57,279
-conditional GANs and GANs
-for all kinds of different
-
-722
-01:15:57,279 --> 01:15:59,946
-problem setups and applications.
-
-723
-01:16:01,648 --> 01:16:03,507
+01:16:01,648 --> 01:16:05,807
 Okay so a recap of today.
-
-724
-01:16:03,507 --> 01:16:05,807
 We talked about generative models.
 
-725
-01:16:05,807 --> 01:16:08,538
-We talked about three of the
-most common kinds of generative
+658
+01:16:05,807 --> 01:16:12,329
+We talked about three of the most common kinds of generative
+models that people are using and doing research on today.
 
-726
-01:16:08,538 --> 01:16:12,329
-models that people are using
-and doing research on today.
+659
+01:16:12,329 --> 01:16:17,588
+So we talked first about pixelRNN and
+pixelCNN, which is an explicit density model.
 
-727
-01:16:12,329 --> 01:16:15,098
-So we talked first about
-pixelRNN and pixelCNN,
+660
+01:16:17,588 --> 01:16:26,981
+It optimizes the exact likelihood and it produces good samples but
+it's pretty inefficient because of the sequential generation.
 
-728
-01:16:15,098 --> 01:16:17,588
-which is an explicit density model.
+661
+01:16:26,981 --> 01:16:35,090
+We looked at VAE which optimizes a variational or lower bound on the
+likelihood and this also produces useful a latent representation.
 
-729
-01:16:17,588 --> 01:16:20,710
-It optimizes the exact
-likelihood and it produces good
+662
+01:16:35,090 --> 01:16:40,305
+You can do inference queries. But the
+example quality is still not the best.
 
-730
-01:16:20,710 --> 01:16:24,607
-samples but it's pretty
-inefficient because of the
+663
+01:16:40,305 --> 01:16:47,657
+So even though it has a lot of promise, it's still a very
+active area of research and has a lot of open problems.
 
-731
-01:16:24,607 --> 01:16:26,981
-sequential generation.
+664
+01:16:47,657 --> 01:16:57,375
+And then GANs we talked about is a game-theoretic approach for training
+and it's what currently achieves the best state of the art examples.
 
-732
-01:16:26,981 --> 01:16:29,902
-We looked at VAE which
-optimizes a variational or lower
+665
+01:16:57,375 --> 01:17:05,047
+But it can also be tricky and unstable to train
+and it loses out a bit on the inference queries.
 
-733
-01:16:29,902 --> 01:16:32,696
-bound on the likelihood
-and this also produces
+666
+01:17:05,047 --> 01:17:10,239
+And so what you'll also see is a lot of recent
+work on combinations of these kinds of models.
 
-734
-01:16:32,696 --> 01:16:35,090
-useful a latent representation.
-
-735
-01:16:35,090 --> 01:16:36,890
-You can do inference queries.
-
-736
-01:16:36,890 --> 01:16:40,305
-But the example quality
-is still not the best.
-
-737
-01:16:40,305 --> 01:16:42,715
-So even though it has a
-lot of promise, it's still
-
-738
-01:16:42,715 --> 01:16:46,583
-a very active area of
-research and has a lot of
-
-739
-01:16:46,583 --> 01:16:47,657
-open problems.
-
-740
-01:16:47,657 --> 01:16:51,654
-And then GANs we talked
-about is a game-theoretic
-
-741
-01:16:51,654 --> 01:16:55,089
-approach for training and
-it's what currently achieves
-
-742
-01:16:55,089 --> 01:16:57,375
-the best state of the art examples.
-
-743
-01:16:57,375 --> 01:17:00,253
-But it can also be tricky
-and unstable to train
-
-744
-01:17:00,253 --> 01:17:05,047
-and it loses out a bit
-on the inference queries.
-
-745
-01:17:05,047 --> 01:17:08,108
-And so what you'll also
-see is a lot of recent work
-
-746
-01:17:08,108 --> 01:17:10,239
-on combinations of these kinds of models.
-
-747
+667
 01:17:10,239 --> 01:17:12,733
 So for example adversarial autoencoders.
 
-748
-01:17:12,733 --> 01:17:14,865
-Something like a VAE
-trained with an additional
+668
+01:17:12,733 --> 01:17:18,478
+Something like a VAE trained with an additional adversarial
+loss on top which improves the sample quality.
 
-749
-01:17:14,865 --> 01:17:18,478
-adversarial loss on top which
-improves the sample quality.
+669
+01:17:18,478 --> 01:17:32,444
+There's also things like pixelVAE is now a combination of pixelCNN and VAE so there's a lot
+of combinations basically trying to take the best of all these worlds and put them together.
 
-750
-01:17:18,478 --> 01:17:21,517
-There's also things like
-pixelVAE is now a combination
-
-751
-01:17:21,517 --> 01:17:23,848
-of pixelCNN and VAE so
-there's a lot of combinations
-
-752
-01:17:23,848 --> 01:17:28,015
-basically trying to take
-the best of all these worlds
-
-753
-01:17:29,808 --> 01:17:32,444
-and put them together.
-
-754
-01:17:32,444 --> 01:17:35,000
-Okay so today we talked
-about generative models
-
-755
-01:17:35,000 --> 01:17:38,449
-and next time we'll talk
-about reinforcement learning.
-
-756
-01:17:38,449 --> 01:17:40,449
-Thanks.
+670
+01:17:32,444 --> 01:17:40,449
+Okay so today we talked about generative models and next
+time we'll talk about reinforcement learning. Thanks.
