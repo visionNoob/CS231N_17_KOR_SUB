@@ -762,4459 +762,3709 @@ where we're going to use this Bellman
 equation as an iterative update.
 
 157
-00:14:29,527 --> 00:14:33,830
-So at each step, we're going
-to refine our approximation
+00:14:29,527 --> 00:14:37,997
+So at each step, we're going to refine our approximation
+of Q star by trying to enforce the Bellman equation.
 
 158
-00:14:33,830 --> 00:14:37,997
-of Q star by trying to
-enforce the Bellman equation.
+00:14:39,347 --> 00:14:50,830
+And so, under some mathematical conditions, we also know that this sequence Q, i of
+our Q-function is going to converge to our optimal Q star as i approaches infinity.
 
 159
-00:14:39,347 --> 00:14:42,602
-And so, under some
-mathematical conditions,
-
-160
-00:14:42,602 --> 00:14:45,602
-we also know that this sequence Q, i
-
-161
-00:14:47,008 --> 00:14:49,569
-of our Q-function is going
-to converge to our optimal
-
-162
-00:14:49,569 --> 00:14:52,236
-Q star as i approaches infinity.
-
-163
-00:14:54,257 --> 00:14:55,579
+00:14:54,257 --> 00:14:58,329
 And so this, this works well,
-
-164
-00:14:55,579 --> 00:14:58,329
 but what's the problem with this?
 
-165
+160
 00:14:59,184 --> 00:15:01,887
 Well, an important problem
 is that this is not scalable.
 
-166
+161
 00:15:01,887 --> 00:15:02,720
 Right?
 
-167
-00:15:02,720 --> 00:15:03,553
-We have to compute
+162
+00:15:02,720 --> 00:15:08,596
+We have to compute Q of s, a here for every state,
+action pair in order to make our iterative updates.
 
-168
-00:15:03,553 --> 00:15:05,793
-Q of s, a here for
-every state, action pair
+163
+00:15:08,597 --> 00:15:18,932
+Right, but then this is a problem if, for example, if we look at these the state of, for
+example, an Atari game that we had earlier, it's going to be your screen of pixels.
 
-169
-00:15:05,793 --> 00:15:08,597
-in order to make our iterative updates.
+164
+00:15:18,933 --> 00:15:28,724
+And this is a huge state space, and it's basically computationally
+infeasible to compute this for the entire state space.
 
-170
-00:15:08,597 --> 00:15:10,382
-Right, but then this is a problem if,
+165
+00:15:28,725 --> 00:15:35,907
+Okay, so what's the solution to this? Well, we can
+use a function approximator to estimate Q of s, a
 
-171
-00:15:10,382 --> 00:15:13,049
-for example, if we look at these
-
-172
-00:15:14,021 --> 00:15:15,865
-the state of, for example, an Atari game
-
-173
-00:15:15,865 --> 00:15:17,519
-that we had earlier, it's going to be
-
-174
-00:15:17,519 --> 00:15:18,933
-your screen of pixels.
-
-175
-00:15:18,933 --> 00:15:22,229
-And this is a huge state
-space, and it's basically
-
-176
-00:15:22,229 --> 00:15:23,865
-computationally infeasible
-
-177
-00:15:23,865 --> 00:15:27,448
-to compute this for
-the entire state space.
-
-178
-00:15:28,725 --> 00:15:31,200
-Okay, so what's the solution to this?
-
-179
-00:15:31,200 --> 00:15:33,141
-Well, we can use a function approximator
-
-180
-00:15:33,141 --> 00:15:35,908
-to estimate Q of s, a
-
-181
+166
 00:15:35,908 --> 00:15:37,620
 so, for example, a neural network, right.
 
-182
-00:15:37,620 --> 00:15:40,400
-So, we've seen before that
-any time, if we have some
+167
+00:15:37,620 --> 00:15:48,471
+So, we've seen before that any time, if we have some really complex function that don't
+know, that we want to estimate, a neural network is a good way to estimate this.
 
-183
-00:15:40,400 --> 00:15:42,367
-really complex function that
-don't know, that we want
+168
+00:15:48,472 --> 00:15:54,242
+Okay, so this is going to take us to our formulation
+of Q-learning that we're going to look at.
 
-184
-00:15:42,367 --> 00:15:44,360
-to estimate, a neural network is
+169
+00:15:54,242 --> 00:16:02,950
+And so, what we're going to do is we're going to use a function
+approximator in order to estimate our action value function.
 
-185
-00:15:44,360 --> 00:15:46,693
-a good way to estimate this.
-
-186
-00:15:48,472 --> 00:15:51,458
-Okay, so this is going to take us to our
-
-187
-00:15:51,458 --> 00:15:54,242
-formulation of Q-learning
-that we're going to look at.
-
-188
-00:15:54,242 --> 00:15:56,646
-And so, what we're going
-to do is we're going
-
-189
-00:15:56,646 --> 00:15:58,906
-to use a function approximator
-
-190
-00:15:58,906 --> 00:16:02,118
-in order to estimate our
-action value function.
-
-191
+170
 00:16:02,118 --> 00:16:02,951
 Right?
 
-192
-00:16:02,951 --> 00:16:04,502
-And if this function approximator
+171
+00:16:02,951 --> 00:16:08,141
+And if this function approximator is a deep neural
+network, which is what's been used recently,
 
-193
-00:16:04,502 --> 00:16:06,013
-is a deep neural network, which is
-
-194
-00:16:06,013 --> 00:16:08,142
-what's been used recently,
-
-195
+172
 00:16:08,142 --> 00:16:10,782
 then this is going to be
 called deep Q-learning.
 
-196
-00:16:10,782 --> 00:16:12,322
-And so this is something that
+173
+00:16:10,782 --> 00:16:20,149
+And so this is something that you'll hear around as one of the
+common approaches to deep reinforcement learning that's in use.
 
-197
-00:16:12,322 --> 00:16:15,742
-you'll hear around as one
-of the common approaches
+174
+00:16:20,150 --> 00:16:30,765
+Right, and so in this case, we also have our function parameters theta here, so our
+Q-value function is determined by these weights, theta, of our neural network.
 
-198
-00:16:15,742 --> 00:16:20,150
-to deep reinforcement
-learning that's in use.
-
-199
-00:16:20,150 --> 00:16:21,259
-Right, and so in this case,
-
-200
-00:16:21,259 --> 00:16:23,474
-we also have our function parameters
-
-201
-00:16:23,474 --> 00:16:26,134
-theta here, so our Q-value function
-
-202
-00:16:26,134 --> 00:16:28,348
-is determined by these weights,
-
-203
-00:16:28,348 --> 00:16:30,765
-theta, of our neural network.
-
-204
-00:16:33,050 --> 00:16:35,425
-Okay, so given this
-function approximation,
-
-205
-00:16:35,425 --> 00:16:37,970
+175
+00:16:33,050 --> 00:16:37,970
+Okay, so given this function approximation,
 how do we solve for our optimal policy?
 
-206
-00:16:37,970 --> 00:16:39,814
-So remember that we want to find
+176
+00:16:37,970 --> 00:16:44,744
+So remember that we want to find a Q-function
+that's satisfying the Bellman equation.
 
-207
-00:16:39,814 --> 00:16:44,744
-a Q-function that's satisfying
-the Bellman equation.
+177
+00:16:44,744 --> 00:16:54,712
+Right, and so we want to enforce this Bellman equation to happen, so what we
+can do when we have this neural network approximating our Q-function is that
 
-208
-00:16:44,744 --> 00:16:47,017
-Right, and so we want to
-enforce this Bellman equation
+178
+00:16:54,713 --> 00:17:00,239
+we can train this where our loss function is going to try
+and minimize the error of our Bellman equation, right?
 
-209
-00:16:47,017 --> 00:16:50,452
-to happen, so what we
-can do when we have this
-
-210
-00:16:50,452 --> 00:16:54,713
-neural network approximating
-our Q-function is that
-
-211
-00:16:54,713 --> 00:16:56,811
-we can train this where our loss function
-
-212
-00:16:56,811 --> 00:16:58,169
-is going to try and minimize
-
-213
-00:16:58,169 --> 00:17:00,240
-the error of our Bellman equation, right?
-
-214
+179
 00:17:00,240 --> 00:17:03,689
 Or how far q of s, a is from its target,
 
-215
-00:17:03,689 --> 00:17:06,454
-which is the Y_i here,
-the right hand side
+180
+00:17:03,689 --> 00:17:09,853
+which is the Y_i here, the right hand side
+of the Bellman equation that we saw earlier.
 
-216
-00:17:06,454 --> 00:17:09,853
-of the Bellman equation
-that we saw earlier.
+181
+00:17:09,853 --> 00:17:16,928
+So, we're basically going to take these forward passes
+of our loss function, trying to minimize this error
 
-217
-00:17:09,853 --> 00:17:12,103
-So, we're basically going to take these
+182
+00:17:16,929 --> 00:17:28,182
+and then our backward pass, our gradient update, is just going to be you just
+take the gradient of this loss, with respect to our network parameter's theta.
 
-218
-00:17:12,103 --> 00:17:13,994
-forward passes of our
+183
+00:17:28,183 --> 00:17:38,435
+Right, and so our goal is again to have this effect as we're taking gradient
+steps of iteratively trying to make our Q-function closer to our target value.
 
-219
-00:17:13,994 --> 00:17:16,928
-loss function, trying
-to minimize this error
-
-220
-00:17:16,929 --> 00:17:19,332
-and then our backward
-pass, our gradient update,
-
-221
-00:17:19,332 --> 00:17:20,863
-is just going to be
-
-222
-00:17:20,863 --> 00:17:23,243
-you just take the gradient of this
-
-223
-00:17:23,243 --> 00:17:28,182
-loss, with respect to our
-network parameter's theta.
-
-224
-00:17:28,183 --> 00:17:31,568
-Right, and so our goal is again to
-
-225
-00:17:31,568 --> 00:17:33,752
-have this effect as we're
-taking gradient steps
-
-226
-00:17:33,752 --> 00:17:36,107
-of iteratively trying
-to make our Q-function
-
-227
-00:17:36,107 --> 00:17:38,436
-closer to our target value.
-
-228
-00:17:38,436 --> 00:17:40,853
+184
+00:17:38,436 --> 00:17:43,524
 So, any questions about this?
-
-229
-00:17:42,691 --> 00:17:43,524
 Okay.
 
-230
-00:17:44,537 --> 00:17:48,719
-So let's look at a case
-study of an example where
+185
+00:17:44,537 --> 00:17:53,369
+So let's look at a case study of an example where one of the classic
+examples of deep reinforcement learning where this approach was applied.
 
-231
-00:17:48,719 --> 00:17:50,824
-one of the classic examples
-of deep reinforcement learning
+186
+00:17:53,370 --> 00:18:01,745
+And so we're going to look at this problem that we saw earlier of playing Atari
+games, where our objective was to complete the game with the highest score
 
-232
-00:17:50,824 --> 00:17:53,370
-where this approach was applied.
+187
+00:18:01,746 --> 00:18:05,460
+and remember our state is going to be
+the raw pixel inputs of the game state,
 
-233
-00:17:53,370 --> 00:17:56,174
-And so we're going to look at
-this problem that we saw earlier
+188
+00:18:05,460 --> 00:18:12,963
+and we can take these actions of moving left, right,
+up, down, or whatever actions of the particular game.
 
-234
-00:17:56,174 --> 00:17:59,744
-of playing Atari games,
-where our objective was
+189
+00:18:12,964 --> 00:18:21,182
+And our reward at each time step, we're going to get a reward of our score
+increase or decrease that we got at this time step, and so our cumulative total
 
-235
-00:17:59,744 --> 00:18:01,746
-to complete the game
-with the highest score
+190
+00:18:21,183 --> 00:18:27,095
+reward is this total reward that we'll
+usually see at the top of the screen.
 
-236
-00:18:01,746 --> 00:18:04,150
-and remember our state is
-going to be the raw pixel
+191
+00:18:27,095 --> 00:18:32,955
+Okay, so the network that we're going to use for our
+Q-function is going to look something like this,
 
-237
-00:18:04,150 --> 00:18:05,460
-inputs of the game state,
-
-238
-00:18:05,460 --> 00:18:07,064
-and we can take these actions
-
-239
-00:18:07,064 --> 00:18:09,308
-of moving left, right, up, down,
-
-240
-00:18:09,308 --> 00:18:12,964
-or whatever actions of
-the particular game.
-
-241
-00:18:12,964 --> 00:18:15,210
-And our reward at each time
-step, we're going to get
-
-242
-00:18:15,210 --> 00:18:18,509
-a reward of our score
-increase or decrease that we
-
-243
-00:18:18,509 --> 00:18:21,183
-got at this time step, and
-so our cumulative total
-
-244
-00:18:21,183 --> 00:18:24,435
-reward is this total reward
-that we'll usually see
-
-245
-00:18:24,435 --> 00:18:27,095
-at the top of the screen.
-
-246
-00:18:27,095 --> 00:18:30,135
-Okay, so the network that
-we're going to use for our
-
-247
-00:18:30,135 --> 00:18:32,955
-Q-function is going to
-look something like this,
-
-248
+192
 00:18:32,955 --> 00:18:37,355
 right, where we have our
 Q-network, with weight's theta.
 
-249
-00:18:37,355 --> 00:18:41,272
-And then our input, our
-state s, is going to be
+193
+00:18:37,355 --> 00:18:43,791
+And then our input, our state s, is
+going to be our current game screen.
 
-250
-00:18:42,259 --> 00:18:43,791
-our current game screen.
+194
+00:18:43,791 --> 00:18:49,509
+And in practice we're going to take a stack of
+the last four frames, so we have some history.
 
-251
-00:18:43,791 --> 00:18:45,377
-And in practice we're going to take
+195
+00:18:49,509 --> 00:18:58,608
+And so we'll take these raw pixel values, we'll do some, you know, RGB to
+gray-scale conversions, some down-sampling, some cropping, so, some pre-processing.
 
-252
-00:18:45,377 --> 00:18:49,509
-a stack of the last four
-frames, so we have some history.
+196
+00:18:58,609 --> 00:19:04,631
+And what we'll get out of this is this 84 by
+84 by four stack of the last four frames.
 
-253
-00:18:49,509 --> 00:18:52,340
-And so we'll take these raw pixel values,
-
-254
-00:18:52,340 --> 00:18:55,609
-we'll do some, you know, RGB
-to gray-scale conversions,
-
-255
-00:18:55,609 --> 00:18:57,053
-some down-sampling, some cropping,
-
-256
-00:18:57,053 --> 00:18:58,609
-so, some pre-processing.
-
-257
-00:18:58,609 --> 00:19:02,543
-And what we'll get out of
-this is this 84 by 84 by four
-
-258
-00:19:02,543 --> 00:19:04,631
-stack of the last four frames.
-
-259
+197
 00:19:04,631 --> 00:19:05,464
 Yeah, question.
 
-260
+198
 00:19:05,464 --> 00:19:09,631
 [inaudible question from audience]
 
-261
-00:19:12,792 --> 00:19:14,768
-Okay, so the question
-is, are we saying here
+199
+00:19:12,792 --> 00:19:20,808
+Okay, so the question is, are we saying here that our network is going
+to approximate our Q-value function for different state, action pairs,
 
-262
-00:19:14,768 --> 00:19:18,067
-that our network is
-going to approximate our
-
-263
-00:19:18,067 --> 00:19:20,809
-Q-value function for
-different state, action pairs,
-
-264
-00:19:20,809 --> 00:19:22,491
+200
+00:19:20,809 --> 00:19:24,765
 for example, four of these?
-
-265
-00:19:22,491 --> 00:19:24,765
 Yeah, that's correct.
 
-266
-00:19:24,765 --> 00:19:25,598
+201
+00:19:24,765 --> 00:19:27,551
 We'll see,
-
-267
-00:19:25,598 --> 00:19:27,551
 we'll talk about that in a few slides.
 
-268
+202
 00:19:27,551 --> 00:19:29,935
 [inaudible question from audience]
 
-269
-00:19:29,935 --> 00:19:30,768
-So, no.
+203
+00:19:29,935 --> 00:19:36,815
+So, no. So, we don't have a Softmax layer after the connected,
+because here our goal is to directly predict our Q-value functions.
 
-270
-00:19:30,768 --> 00:19:32,883
-So, we don't have a Softmax
-layer after the connected,
-
-271
-00:19:32,883 --> 00:19:35,535
-because here our goal
-is to directly predict
-
-272
-00:19:35,535 --> 00:19:36,816
-our Q-value functions.
-
-273
-00:19:36,816 --> 00:19:37,712
+204
+00:19:36,816 --> 00:19:40,582
+[inaudible question from audience] Q-values.
 [inaudible question from audience]
 
-274
-00:19:37,712 --> 00:19:38,545
-Q-values.
-
-275
-00:19:38,545 --> 00:19:40,583
-[inaudible question from audience]
-
-276
+205
 00:19:40,583 --> 00:19:44,014
 Yes, so it's more doing
 regression to our Q-values.
 
-277
-00:19:44,014 --> 00:19:47,549
-Okay, so we have our input to this network
+206
+00:19:44,014 --> 00:19:54,083
+Okay, so we have our input to this network and then on top of this, we're going
+to have a couple of familiar convolutional layers, and a fully-connected layer,
 
-278
-00:19:47,549 --> 00:19:51,007
-and then on top of this,
-we're going to have
+207
+00:19:54,084 --> 00:19:59,610
+so here we have an eight-by-eight convolutions
+and we have some four-by-four convolutions.
 
-279
-00:19:51,007 --> 00:19:52,847
-a couple of familiar convolutional layers,
+208
+00:19:59,611 --> 00:20:05,673
+Then we have a FC 256 layer, so this is just a
+standard kind of networK that you've seen before.
 
-280
-00:19:52,847 --> 00:19:54,084
-and a fully-connected layer,
+209
+00:20:05,674 --> 00:20:17,414
+And then, finally, our last fully-connected layer has a vector of outputs, which is
+corresponding to your Q-value for each action, right, given the state that you've input.
 
-281
-00:19:54,084 --> 00:19:55,334
-so here we have
+210
+00:20:17,415 --> 00:20:21,770
+And so, for example, if you have four actions,
+then here we have this four-dimensional output
 
-282
-00:19:56,191 --> 00:19:58,036
-an eight-by-eight
-convolutions and we have some
+211
+00:20:21,770 --> 00:20:28,685
+corresponding to Q of current s, as well as
+a-one, and then a-two, a-three, and a-four.
 
-283
-00:19:58,036 --> 00:19:59,611
-four-by-four convolutions.
+212
+00:20:28,685 --> 00:20:33,179
+Right so this is going to be one
+scalar value for each of our actions.
 
-284
-00:19:59,611 --> 00:20:01,861
-Then we have a FC 256 layer,
+213
+00:20:33,179 --> 00:20:43,072
+And then the number of actions that we have can vary
+between, for example, 4 to 18, depending on the Atari game.
 
-285
-00:20:01,861 --> 00:20:03,458
-so this is just a standard kind of networK
-
-286
-00:20:03,458 --> 00:20:05,674
-that you've seen before.
-
-287
-00:20:05,674 --> 00:20:10,382
-And then, finally, our last
-fully-connected layer has
-
-288
-00:20:10,382 --> 00:20:13,470
-a vector of outputs, which
-is corresponding to your
-
-289
-00:20:13,470 --> 00:20:16,074
-Q-value for each action, right, given
-
-290
-00:20:16,074 --> 00:20:17,415
-the state that you've input.
-
-291
-00:20:17,415 --> 00:20:19,565
-And so, for example, if
-you have four actions,
-
-292
-00:20:19,565 --> 00:20:21,770
-then here we have this
-four-dimensional output
-
-293
-00:20:21,770 --> 00:20:25,570
-corresponding to Q of
-current s, as well as a-one,
-
-294
-00:20:25,570 --> 00:20:28,685
-and then a-two, a-three, and a-four.
-
-295
-00:20:28,685 --> 00:20:30,857
-Right so this is going
-to be one scalar value
-
-296
-00:20:30,857 --> 00:20:33,179
-for each of our actions.
-
-297
-00:20:33,179 --> 00:20:35,610
-And then the number of
-actions that we have
-
-298
-00:20:35,610 --> 00:20:36,955
-can vary between,
-
-299
-00:20:36,955 --> 00:20:41,122
-for example, 4 to 18,
-depending on the Atari game.
-
-300
-00:20:43,073 --> 00:20:44,839
+214
+00:20:43,073 --> 00:20:46,709
 And one nice thing here is that
-
-301
-00:20:44,839 --> 00:20:46,709
 using this network structure,
 
-302
-00:20:46,709 --> 00:20:49,931
-a single feedforward
-pass is able to compute
+215
+00:20:46,709 --> 00:20:54,650
+a single feedforward pass is able to compute the
+Q-values for all functions from the current state.
 
-303
-00:20:49,931 --> 00:20:52,810
-the Q-values for all functions
-
-304
-00:20:52,810 --> 00:20:54,651
-from the current state.
-
-305
+216
 00:20:54,651 --> 00:20:56,117
 And so this is really efficient.
 
-306
-00:20:56,117 --> 00:20:59,158
-Right, so basically we
-take our current state
+217
+00:20:56,117 --> 00:21:05,945
+Right, so basically we take our current state in and then because we have this
+output of an action for each, or Q-value for each action, as our output layer,
 
-307
-00:20:59,158 --> 00:21:03,121
-in and then because we have
-this output of an action
-
-308
-00:21:03,121 --> 00:21:05,946
-for each, or Q-value for each
-action, as our output layer,
-
-309
+218
 00:21:05,946 --> 00:21:10,259
 we're able to do one pass and
 get all of these values out.
 
-310
-00:21:10,259 --> 00:21:12,235
-And then in order to train this,
+219
+00:21:10,259 --> 00:21:15,078
+And then in order to train this, we're just
+going to use our loss function from before.
 
-311
-00:21:12,235 --> 00:21:15,078
-we're just going to use our
-loss function from before.
-
-312
+220
 00:21:15,078 --> 00:21:17,661
 Remember, we're trying to
 enforce this Bellman equation
 
-313
-00:21:17,661 --> 00:21:21,329
-and so, on our forward
-pass, our loss function
+221
+00:21:17,661 --> 00:21:29,314
+and so, on our forward pass, our loss function we're going to try and
+iteratively make our Q-value close to our target value, that it should have.
 
-314
-00:21:21,329 --> 00:21:25,193
-we're going to try and
-iteratively make our Q-value
+222
+00:21:29,315 --> 00:21:40,705
+And then our backward pass is just directly taking the gradient of this
+loss function that we have and then taking a gradient step based on that.
 
-315
-00:21:25,193 --> 00:21:27,987
-close to our target value,
+223
+00:21:40,706 --> 00:21:45,639
+So one other thing that's used here that I want
+to mention is something called experience replay.
 
-316
-00:21:27,987 --> 00:21:29,315
-that it should have.
+224
+00:21:45,639 --> 00:21:53,440
+And so this addresses a problem with just using
+the plain two network that I just described,
 
-317
-00:21:29,315 --> 00:21:31,281
-And then our backward pass is just
-
-318
-00:21:31,281 --> 00:21:34,235
-directly taking the gradient of this
-
-319
-00:21:34,235 --> 00:21:37,277
-loss function that we have and then taking
-
-320
-00:21:37,277 --> 00:21:39,777
-a gradient step based on that.
-
-321
-00:21:40,706 --> 00:21:42,948
-So one other thing that's used
-here that I want to mention
-
-322
-00:21:42,948 --> 00:21:45,639
-is something called experience replay.
-
-323
-00:21:45,639 --> 00:21:49,556
-And so this addresses a
-problem with just using
-
-324
-00:21:50,579 --> 00:21:53,440
-the plain two network
-that I just described,
-
-325
-00:21:53,440 --> 00:21:55,416
+225
+00:21:53,440 --> 00:21:58,134
 which is that learning from batches
-
-326
-00:21:55,416 --> 00:21:58,134
 of consecutive samples is bad.
 
-327
-00:21:58,134 --> 00:21:58,967
-And so the reason
+226
+00:21:58,134 --> 00:22:09,409
+And so the reason because of this, right, is so for just playing the game, taking samples of state
+action rewards that we have and just taking consecutive samples of these and training with these,
 
-328
-00:21:58,967 --> 00:22:01,268
-because of this, right, is so for just
+227
+00:22:09,410 --> 00:22:16,117
+well all of these samples are correlated and so
+this leads to inefficient learning, first of all,
 
-329
-00:22:01,268 --> 00:22:03,578
-playing the game, taking samples
+228
+00:22:16,118 --> 00:22:24,841
+and also, because of this, our current Q-network parameters, right, this
+determines the policy that we're going to follow, it determines our next
 
-330
-00:22:03,578 --> 00:22:06,074
-of state action rewards that we have
-
-331
-00:22:06,074 --> 00:22:08,222
-and just taking consecutive
-samples of these
-
-332
-00:22:08,222 --> 00:22:09,410
-and training with these,
-
-333
-00:22:09,410 --> 00:22:11,814
-well all of these samples are correlated
-
-334
-00:22:11,814 --> 00:22:14,218
-and so this leads to
-
-335
-00:22:14,218 --> 00:22:16,118
-inefficient learning, first of all,
-
-336
-00:22:16,118 --> 00:22:19,014
-and also, because of this,
-our current Q-network
-
-337
-00:22:19,014 --> 00:22:21,456
-parameters, right, this
-determines the policy
-
-338
-00:22:21,456 --> 00:22:24,842
-that we're going to follow,
-it determines our next
-
-339
-00:22:24,842 --> 00:22:25,798
+229
+00:22:24,842 --> 00:22:27,394
 samples that we're going to get that
-
-340
-00:22:25,798 --> 00:22:27,394
 we're going to use for training.
 
-341
-00:22:27,394 --> 00:22:29,578
+230
+00:22:27,394 --> 00:22:30,832
 And so this leads to problems where
-
-342
-00:22:29,578 --> 00:22:30,832
 you can have bad feedback loops.
 
-343
-00:22:30,832 --> 00:22:33,920
-So, for example, if
-currently the maximizing
-
-344
-00:22:33,920 --> 00:22:35,468
+231
+00:22:30,832 --> 00:22:35,468
+So, for example, if currently the maximizing
 action that's going to take left,
 
-345
-00:22:35,468 --> 00:22:37,588
-well this is going to bias all of my
+232
+00:22:35,468 --> 00:22:43,305
+well this is going to bias all of my upcoming training
+examples to be dominated by samples from the left-hand side.
 
-346
-00:22:37,588 --> 00:22:39,380
-upcoming training examples to be dominated
-
-347
-00:22:39,380 --> 00:22:42,297
-by samples from the left-hand side.
-
-348
+233
 00:22:43,306 --> 00:22:45,406
 And so this is a problem, right?
 
-349
-00:22:45,406 --> 00:22:47,875
-And so the way that we
-are going to address these
+234
+00:22:45,406 --> 00:22:53,097
+And so the way that we are going to address these problems is by using
+something called experience replay, where we're going to keep this
 
-350
-00:22:47,875 --> 00:22:49,808
-problems is by using something called
+235
+00:22:53,098 --> 00:23:01,352
+replay memory table of transitions of state, as state, action,
+reward, next state, transitions that we have, and we're going
 
-351
-00:22:49,808 --> 00:22:53,098
-experience replay, where
-we're going to keep this
+236
+00:23:01,353 --> 00:23:08,772
+to continuously update this table with new transitions that we're
+getting as game episodes are played, as we're getting more experience.
 
-352
-00:22:53,098 --> 00:22:56,469
-replay memory table of
-transitions of state,
+237
+00:23:08,773 --> 00:23:16,334
+Right, and so now what we can do is that we can now train our Q-network
+on random, mini-batches of transitions from the replay memory.
 
-353
-00:22:56,469 --> 00:22:59,345
-as state, action, reward, next state,
+238
+00:23:16,335 --> 00:23:24,826
+Right, so instead of using consecutive samples, we're now going to sample
+across these transitions that we've accumulated random samples of these,
 
-354
-00:22:59,345 --> 00:23:01,353
-transitions that we have, and we're going
+239
+00:23:24,827 --> 00:23:31,007
+and this breaks all of the, these
+correlation problems that we had earlier.
 
-355
-00:23:01,353 --> 00:23:04,279
-to continuously update this
-table with new transitions
+240
+00:23:31,007 --> 00:23:39,206
+And then also, as another side benefit is that each of these transitions
+can also contribute to potentially multiple weight updates.
 
-356
-00:23:04,279 --> 00:23:07,185
-that we're getting as
-game episodes are played,
-
-357
-00:23:07,185 --> 00:23:08,773
-as we're getting more experience.
-
-358
-00:23:08,773 --> 00:23:10,653
-Right, and so now what we can do
-
-359
-00:23:10,653 --> 00:23:13,207
-is that we can now train
-our Q-network on random,
-
-360
-00:23:13,207 --> 00:23:16,335
-mini-batches of transitions
-from the replay memory.
-
-361
-00:23:16,335 --> 00:23:19,261
-Right, so instead of
-using consecutive samples,
-
-362
-00:23:19,261 --> 00:23:21,815
-we're now going to sample across these
-
-363
-00:23:21,815 --> 00:23:24,827
-transitions that we've accumulated
-random samples of these,
-
-364
-00:23:24,827 --> 00:23:27,573
-and this breaks all of the,
-
-365
-00:23:27,573 --> 00:23:31,007
-these correlation problems
-that we had earlier.
-
-366
-00:23:31,007 --> 00:23:33,425
-And then also, as another
-
-367
-00:23:33,425 --> 00:23:36,370
-side benefit is that
-each of these transitions
-
-368
-00:23:36,370 --> 00:23:39,207
-can also contribute to potentially
-multiple weight updates.
-
-369
-00:23:39,207 --> 00:23:41,440
+241
+00:23:39,207 --> 00:23:43,652
 We're just sampling from this table and so
-
-370
-00:23:41,440 --> 00:23:43,652
 we could sample one multiple times.
 
-371
-00:23:43,652 --> 00:23:44,918
+242
+00:23:43,652 --> 00:23:47,585
 And so, this is going to lead
-
-372
-00:23:44,918 --> 00:23:47,585
 also to greater data efficiency.
 
-373
-00:23:50,580 --> 00:23:52,442
-Okay, so let's put this all together
+243
+00:23:50,580 --> 00:23:59,165
+Okay, so let's put this all together and let's look at the
+full algorithm for deep Q-learning with experience replay.
 
-374
-00:23:52,442 --> 00:23:54,000
-and let's look at the full algorithm
-
-375
-00:23:54,000 --> 00:23:57,583
-for deep Q-learning
-with experience replay.
-
-376
+244
 00:23:59,166 --> 00:24:03,940
 So we're going to start off with
 initializing our replay memory
 
-377
-00:24:03,940 --> 00:24:07,383
-to some capacity that we
-choose, N, and then we're also
+245
+00:24:03,940 --> 00:24:14,829
+to some capacity that we choose, N, and then we're also going to
+initialize our Q-network, just with our random weights or initial weights.
 
-378
-00:24:07,383 --> 00:24:09,703
-going to initialize our
+246
+00:24:14,830 --> 00:24:21,832
+And then we're going to play M episodes, or full
+games. This is going to be our training episodes.
 
-379
-00:24:09,703 --> 00:24:13,075
-Q-network, just with our random weights
+247
+00:24:21,832 --> 00:24:31,264
+And then what we're going to do is we're going to initialize our state,
+using the starting game screen pixels at the beginning of each episode.
 
-380
-00:24:13,075 --> 00:24:14,830
-or initial weights.
+248
+00:24:31,265 --> 00:24:37,814
+And remember, we go through the pre-processing
+step to get to our actual input state.
 
-381
-00:24:14,830 --> 00:24:18,688
-And then we're going to play
-M episodes, or full games.
-
-382
-00:24:18,688 --> 00:24:21,832
-This is going to be our training episodes.
-
-383
-00:24:21,832 --> 00:24:22,998
-And then what we're going to do
-
-384
-00:24:22,998 --> 00:24:26,574
-is we're going to initialize our state,
-
-385
-00:24:26,574 --> 00:24:29,526
-using the starting game screen pixels
-
-386
-00:24:29,526 --> 00:24:31,265
-at the beginning of each episode.
-
-387
-00:24:31,265 --> 00:24:33,555
-And remember, we go through
-the pre-processing step
-
-388
-00:24:33,555 --> 00:24:37,814
-to get to our actual input state.
-
-389
-00:24:37,814 --> 00:24:39,313
+249
+00:24:37,814 --> 00:24:41,584
 And then for each time step
-
-390
-00:24:39,313 --> 00:24:41,584
 of a game that we're currently playing,
 
-391
-00:24:41,584 --> 00:24:44,236
+250
+00:24:41,584 --> 00:24:46,268
 we're going to, with a small probability,
-
-392
-00:24:44,236 --> 00:24:46,268
 select a random action,
 
-393
-00:24:46,268 --> 00:24:49,819
-so one thing that's
-important in these algorithms
+251
+00:24:46,268 --> 00:24:53,141
+so one thing that's important in these
+algorithms is to have sufficient exploration,
 
-394
-00:24:49,819 --> 00:24:53,141
-is to have sufficient exploration,
+252
+00:24:53,141 --> 00:24:58,559
+so we want to make sure that we are sampling
+different parts of the state space.
 
-395
-00:24:53,141 --> 00:24:54,957
-so we want to make sure that
+253
+00:24:58,559 --> 00:25:03,613
+And then otherwise, we're going to select from
+the greedy action from the current policy.
 
-396
-00:24:54,957 --> 00:24:58,559
-we are sampling different
-parts of the state space.
+254
+00:25:03,614 --> 00:25:13,579
+Right, so most of the time we'll take the greedy action that we think is a good policy of the
+type of actions that we want to take and states that we want to see, and with a small probability
 
-397
-00:24:58,559 --> 00:25:00,353
-And then otherwise, we're going
-
-398
-00:25:00,353 --> 00:25:02,405
-to select from the greedy action
-
-399
-00:25:02,405 --> 00:25:03,614
-from the current policy.
-
-400
-00:25:03,614 --> 00:25:05,564
-Right, so most of the time
-we'll take the greedy action
-
-401
-00:25:05,564 --> 00:25:07,443
-that we think is
-
-402
-00:25:07,443 --> 00:25:11,083
-a good policy of the type of
-actions that we want to take
-
-403
-00:25:11,083 --> 00:25:13,580
-and states that we want to see,
-and with a small probability
-
-404
+255
 00:25:13,580 --> 00:25:16,300
 we'll sample something random.
 
-405
-00:25:16,300 --> 00:25:18,429
-Okay, so then we'll take this action,
+256
+00:25:16,300 --> 00:25:26,069
+Okay, so then we'll take this action, a, t, and we'll observe
+the next reward and the next state. So r, t and s, t plus one.
 
-406
-00:25:18,429 --> 00:25:23,076
-a, t, and we'll observe the
-next reward and the next state.
+257
+00:25:26,070 --> 00:25:32,771
+And then we'll take this and we'll store this
+transition in our replay memory that we're building up.
 
-407
-00:25:23,076 --> 00:25:26,070
-So r, t and s, t plus one.
+258
+00:25:32,771 --> 00:25:35,577
+And then we're going to take, we're
+going to train a network a little bit.
 
-408
-00:25:26,070 --> 00:25:28,385
-And then we'll take this and
-we'll store this transition
-
-409
-00:25:28,385 --> 00:25:32,771
-in our replay memory
-that we're building up.
-
-410
-00:25:32,771 --> 00:25:34,354
-And then we're going to take,
-
-411
-00:25:34,354 --> 00:25:35,577
-we're going to train a
-network a little bit.
-
-412
+259
 00:25:35,577 --> 00:25:37,550
 So we're going to do experience replay
 
-413
+260
 00:25:37,550 --> 00:25:47,213
 and we'll take a sample of a random mini-batches of transitions that we have
 from the replay memory, and then we'll perform a gradient descent step on this.
 
-414
+261
 00:25:47,214 --> 00:25:49,635
 Right, so this is going to
 be our full training loop.
 
-415
-00:25:49,635 --> 00:25:52,561
-We're going to be
-continuously playing this game
+262
+00:25:49,635 --> 00:26:03,886
+We're going to be continuously playing this game and then also sampling minibatches, using
+experienced replay to update our weights of our Q-network and then continuing in this fashion.
 
-416
-00:25:52,561 --> 00:25:55,774
-and then also sampling
-
-417
-00:25:55,774 --> 00:25:58,431
-minibatches, using
-experienced replay to update
-
-418
-00:25:58,431 --> 00:26:00,100
-our weights of our Q-network and then
-
-419
-00:26:00,100 --> 00:26:02,350
-continuing in this fashion.
-
-420
+263
 00:26:03,887 --> 00:26:20,910
 Okay, so let's see. Let's see if I can, is this playing? Okay, so let's take a look at
 this deep Q-learning algorithm from Google DeepMind, trained on an Atari game of Breakout.
 
-421
+264
 00:26:20,911 --> 00:26:26,185
 Alright, so it's saying here that our input is
 just going to be our state are raw game pixels.
 
-422
+265
 00:26:26,185 --> 00:26:29,520
 And so here we're looking at what's
 happening at the beginning of training.
 
-423
+266
 00:26:29,520 --> 00:26:40,302
 So we've just started training a bit. And right, so it's going to look to it's learned
 to kind of hit the ball, but it's not doing a very good job of sustaining it.
 
-424
+267
 00:26:40,303 --> 00:26:42,886
 But it is looking for the ball.
 
-425
+268
 00:26:50,969 --> 00:26:55,737
 Okay, so now after some more training,
 it looks like a couple hours.
 
-426
+269
 00:27:00,946 --> 00:27:05,113
 Okay, so now it's learning
 to do a pretty good job here.
 
-427
+270
 00:27:06,190 --> 00:27:16,592
 So it's able to continuously follow this ball
 and be able to to remove most of the blocks.
 
-428
+271
 00:27:16,593 --> 00:27:36,203
 Right, so after 240 minutes. Okay, so
 here it's found the pro strategy, right?
 
-429
+272
 00:27:36,203 --> 00:27:42,795
 You want to get all the way to the top
 and then have it go by itself. Okay, so
 
-430
+273
 00:27:42,796 --> 00:27:49,500
 this is an example of using deep Q-learning in order
 to train an agent to be able to play Atari games.
 
-431
+274
 00:27:49,501 --> 00:27:56,418
 It's able to do this on many Atari games and
 so you can check out some more of this online.
 
-432
+275
 00:27:56,419 --> 00:28:01,149
 Okay, so we've talked about Q-learning. But
 there is a problem with Q-learning, right?
 
-433
+276
 00:28:01,149 --> 00:28:07,225
 It can be challenging and what's the problem? Well, the
 problem can be that the Q-function is very complicated.
 
-434
+277
 00:28:07,226 --> 00:28:12,335
 Right, so we have to, we're saying that we want
 to learn the value of every state action pair.
 
-435
+278
 00:28:12,335 --> 00:28:17,275
 So, if, let's say you have something, for example,
 a robot grasping, wanting to grasp an object.
 
-436
+279
 00:28:17,275 --> 00:28:19,576
 Right, you're going to have a
 really high dimensional state.
 
-437
+280
 00:28:19,576 --> 00:28:26,225
 You have, I mean, let's say you have all of your
 even just joint, joint positions, and angles.
 
-438
+281
 00:28:26,225 --> 00:28:35,492
 Right, and so learning the exact value of every state action
 pair that you have, right, can be really, really hard to do.
 
-439
+282
 00:28:35,493 --> 00:28:38,724
 But on the other hand, your
 policy can be much simpler.
 
-440
+283
 00:28:38,724 --> 00:28:44,555
 Right, like what you want this robot to do maybe just to
 have this simple motion of just closing your hand, right?
 
-441
+284
 00:28:44,556 --> 00:28:48,252
 Just, move your fingers in this
 particular direction and keep going.
 
-442
+285
 00:28:48,252 --> 00:28:54,142
 And so, that leads to the question of
 can we just learn this policy directly?
 
-443
+286
 00:28:54,142 --> 00:28:58,306
 Right, is it possible, maybe, to just find the
 best policy from a collection of policies,
 
-444
+287
 00:28:58,306 --> 00:29:06,789
 without trying to go through this process of estimating
 your Q-value and then using that to infer your policy.
 
-445
+288
 00:29:06,790 --> 00:29:15,937
 So, this is an approach that oh, so, okay, this is an
 approach that we're going to call policy gradients.
 
-446
+289
 00:29:15,938 --> 00:29:20,858
 And so, formally, let's define a
 class of parametrized policies.
 
-447
+290
 00:29:20,858 --> 00:29:24,146
 Parametrized by weights theta,
 
-448
+291
 00:29:24,146 --> 00:29:27,791
 and so for each policy
 let's define the value of the policy.
 
-449
+292
 00:29:27,791 --> 00:29:35,722
 So, J, our value J, given parameters theta, is going to be, or
 expected some cumulative sum of future rewards that we care about.
 
-450
+293
 00:29:35,723 --> 00:29:38,971
 So, the same reward that we've been using.
 
-451
+294
 00:29:38,971 --> 00:29:41,879
 And so our goal then, under this setup
 
-452
+295
 00:29:41,879 --> 00:29:51,547
 is that we want to find an optimal policy, theta star, which
 is the maximum, right, arg max over theta of J of theta.
 
-453
+296
 00:29:51,548 --> 00:29:56,917
 So we want to find the policy, the policy
 parameters that gives our best expected reward.
 
-454
+297
 00:29:56,917 --> 00:30:01,011
 So, how can we do this?
 Any ideas?
 
-455
+298
 00:30:04,993 --> 00:30:10,155
 Okay, well, what we can do is just a gradient
 assent on our policy parameters, right?
 
-456
+299
 00:30:10,155 --> 00:30:15,460
 We've learned that given some objective that we have,
 some parameters we can just use gradient asscent
 
-457
+300
 00:30:15,460 --> 00:30:20,762
 and gradient assent in order
 to continuously improve our parameters.
 
-458
+301
 00:30:23,202 --> 00:30:29,196
 And so let's talk more specifically about how we can do this,
 which we're going to call here the reinforce algorithm.
 
-459
+302
 00:30:29,196 --> 00:30:36,781
 So, mathematically, we can write out our expected future
 reward over trajectories, and so we're going to sample
 
-460
+303
 00:30:36,781 --> 00:30:41,902
 these trajectories of experience, right, like for example
 episodes of game play that we talked about earlier.
 
-461
+304
 00:30:41,902 --> 00:30:47,411
 S-zero, a-zero, r-zero, s-one,
 a-one, r-one, and so on.
 
-462
+305
 00:30:47,411 --> 00:30:51,723
 Using some policy pi of theta.
 
-463
+306
 00:30:51,723 --> 00:30:57,739
 Right, and then so, for each trajectory we
 can compute a reward for that trajectory.
 
-464
+307
 00:30:57,739 --> 00:31:01,245
 It's the cumulative reward that we
 got from following this trajectory.
 
-465
+308
 00:31:01,245 --> 00:31:10,570
 And then the value of a policy, pi sub theta, is going to be just the expected
 reward of these trajectories that we can get from the following pi sub theta.
 
-466
+309
 00:31:10,570 --> 00:31:16,868
 So that's here, this expectation over trajectories that
 we can get, sampling trajectories from our policy.
 
-467
+310
 00:31:18,563 --> 00:31:21,288
 Okay.
 So, we want to do gradient ascent, right?
 
-468
+311
 00:31:21,288 --> 00:31:22,961
 So let's differentiate this.
 
-469
+312
 00:31:22,961 --> 00:31:27,356
 Once we differentiate this, then we can
 just take gradient steps, like normal.
 
-470
+313
 00:31:28,535 --> 00:31:34,300
 So, the problem is that now if we try and just
 differentiate this exactly, this is intractable, right?
 
-471
+314
 00:31:34,300 --> 00:31:41,319
 So, the gradient of an expectation is problematic
 when p is dependent on theta here, because here
 
-472
+315
 00:31:41,319 --> 00:31:47,661
 we want to take this gradient
 of p of tau, given theta,
 
-473
+316
 00:31:47,661 --> 00:31:53,033
 but this is going to be, we want to take this
 integral over tau. Right, so this is intractable.
 
-474
+317
 00:31:53,033 --> 00:31:57,327
 However, we can use a trick
 here to get around this.
 
-475
+318
 00:31:57,327 --> 00:32:04,941
 And this trick is taking this gradient that we want, of
 p. We can rewrite this by just multiplying this by one,
 
-476
+319
 00:32:04,941 --> 00:32:10,286
 by multiplying top and bottom,
 both by p of tau given theta.
 
-477
+320
 00:32:10,286 --> 00:32:26,170
 Right, and then if we look at these terms that we have now here, in the way that I've written this, on the left and the
 right, this is actually going to be equivalent to p of tau times our gradient with respect to theta, of log, of p.
 
-478
+321
 00:32:26,170 --> 00:32:32,741
 Right, because the gradient of the log of p is
 just going to be one over p times gradient of p.
 
-479
+322
 00:32:33,808 --> 00:32:41,385
 Okay, so if we then inject this back into our
 expression that we had earlier for this gradient,
 
-480
+323
 00:32:41,385 --> 00:32:43,426
 we can see that, what this
 will actually look like,
 
-481
+324
 00:32:43,426 --> 00:32:52,187
 right, because now we have a gradient of log p times our probabilities of
 all of these trajectories and then taking this integral here, over tau.
 
-482
-00:32:52,187 --> 00:32:54,495
-This is now going to be an expectation
+325
+00:32:52,187 --> 00:32:58,586
+This is now going to be an expectation over our
+trajectories tau, and so what we've done here
 
-483
-00:32:54,495 --> 00:32:58,586
-over our trajectories tau,
-and so what we've done here
-
-484
+326
 00:32:58,586 --> 00:33:02,751
 is that we've taken a
 gradient of an expectation
 
-485
+327
 00:33:02,751 --> 00:33:06,823
 and we've transformed it into
 an expectation of gradients.
 
-486
-00:33:06,823 --> 00:33:09,156
-Right, and so now we can use
+328
+00:33:06,823 --> 00:33:13,817
+Right, and so now we can use sample trajectories
+that we can get in order to estimate our gradient.
 
-487
-00:33:10,051 --> 00:33:12,404
-sample trajectories that we can get
-
-488
-00:33:12,404 --> 00:33:14,712
-in order to estimate our gradient.
-
-489
+329
 00:33:14,712 --> 00:33:21,260
 And so we do this using Monte Carlo sampling,
 and this is one of the core ideas of reinforce.
 
-490
-00:33:23,624 --> 00:33:25,846
+330
+00:33:23,624 --> 00:33:28,180
 Okay, so looking at this
-
-491
-00:33:25,846 --> 00:33:28,180
 expression that we want to compute,
 
-492
-00:33:28,180 --> 00:33:30,421
-can we compute these
-quantities that we had here
+331
+00:33:28,180 --> 00:33:33,071
+can we compute these quantities that we had here
+without knowing the transition probabilities?
 
-493
-00:33:30,421 --> 00:33:33,071
-without knowing the
-transition probabilities?
+332
+00:33:33,071 --> 00:33:38,466
+Alright, so we have that p of tau is going
+to be the probability of a trajectory.
 
-494
-00:33:33,071 --> 00:33:36,643
-Alright, so we have that
-p of tau is going to be
+333
+00:33:38,466 --> 00:33:45,821
+It's going to be the product of all of our transition probabilities
+of the next state that we get, given our current state and action
 
-495
-00:33:36,643 --> 00:33:38,466
-the probability of a trajectory.
+334
+00:33:45,821 --> 00:33:52,232
+as well as our probability of the actions
+that we've taken under our policy pi.
 
-496
-00:33:38,466 --> 00:33:40,387
-It's going to be the product of
+335
+00:33:52,232 --> 00:33:58,441
+Right, so we're going to multiply all of these
+together, and get our probability of our trajectory.
 
-497
-00:33:40,387 --> 00:33:43,379
-all of our transition
-probabilities of the next state
+336
+00:33:58,441 --> 00:34:10,389
+So this log of p of tau that we want to compute is going to be we just take
+this log and this will separate this out into a sum of pushing the logs inside.
 
-498
-00:33:43,379 --> 00:33:45,821
-that we get, given our
-current state and action
+337
+00:34:10,389 --> 00:34:18,161
+And then here, when we differentiate this, we can see we want to
+differentiate with respect to theta, but this first term that we have here,
 
-499
-00:33:45,821 --> 00:33:49,051
-as well as our probability
-of the actions that
-
-500
-00:33:49,051 --> 00:33:52,232
-we've taken under our policy pi.
-
-501
-00:33:52,232 --> 00:33:54,743
-Right, so we're going to
-multiply all of these together,
-
-502
-00:33:54,743 --> 00:33:58,441
-and get our probability of our trajectory.
-
-503
-00:33:58,441 --> 00:34:03,059
-So this log of p of tau
-that we want to compute
-
-504
-00:34:03,059 --> 00:34:06,334
-is going to be we just
-take this log and this will
-
-505
-00:34:06,334 --> 00:34:08,326
-separate this out into a sum
-
-506
-00:34:08,326 --> 00:34:10,389
-of pushing the logs inside.
-
-507
-00:34:10,389 --> 00:34:12,383
-And then here, when we differentiate this,
-
-508
-00:34:12,384 --> 00:34:14,237
-we can see we want to
-differentiate with respect
-
-509
-00:34:14,237 --> 00:34:18,162
-to theta, but this first
-term that we have here,
-
-510
-00:34:18,163 --> 00:34:20,911
-log p of the state
-transition probabilities
-
-511
-00:34:20,911 --> 00:34:22,850
+338
+00:34:18,163 --> 00:34:22,850
+log p of the state transition probabilities
 there's no theta term here, and so
 
-512
-00:34:22,850 --> 00:34:25,292
-the only place where we have
-theta is the second term
+339
+00:34:22,850 --> 00:34:28,709
+the only place where we have theta is the second
+term that we have, of log of pi sub theta,
 
-513
-00:34:25,292 --> 00:34:28,709
-that we have, of log of pi sub theta,
+340
+00:34:29,675 --> 00:34:39,669
+of our action, given our state, and so this is the only term that we keep in our gradient
+estimate, and so we can see here that this doesn't depend on the transition probabilities,
 
-514
-00:34:29,675 --> 00:34:32,914
-of our action, given our
-state, and so this is the only
+341
+00:34:39,670 --> 00:34:46,421
+right, so we actually don't need to know our transition
+probabilities in order to computer our gradient estimate.
 
-515
-00:34:32,914 --> 00:34:34,139
-term that we keep
+342
+00:34:47,257 --> 00:34:57,264
+And then, so, therefore when we're sampling these, for any given
+trajectory tau, we can estimate J of theta using this gradient estimate.
 
-516
-00:34:34,139 --> 00:34:37,368
-in our gradient estimate,
-and so we can see here that
-
-517
-00:34:37,369 --> 00:34:39,670
-this doesn't depend on the
-transition probabilities,
-
-518
-00:34:39,670 --> 00:34:41,293
-right, so we actually don't need to know
-
-519
-00:34:41,293 --> 00:34:44,588
-our transition probabilities
-in order to computer
-
-520
-00:34:44,589 --> 00:34:46,422
-our gradient estimate.
-
-521
-00:34:47,257 --> 00:34:50,879
-And then, so, therefore
-when we're sampling these,
-
-522
-00:34:50,880 --> 00:34:55,047
-for any given trajectory tau,
-we can estimate J of theta
-
-523
-00:34:56,306 --> 00:34:58,524
-using this gradient estimate.
-
-524
-00:34:58,524 --> 00:35:00,472
+343
+00:34:58,524 --> 00:35:02,220
 This is here shown for a single trajectory
-
-525
-00:35:00,472 --> 00:35:02,220
 from what we had earlier,
 
-526
-00:35:02,220 --> 00:35:05,271
-and then we can also sample
-over multiple trajectories
+344
+00:35:02,220 --> 00:35:07,188
+and then we can also sample over multiple
+trajectories to get the expectation.
 
-527
-00:35:05,271 --> 00:35:07,188
-to get the expectation.
-
-528
+345
 00:35:09,248 --> 00:35:12,974
 Okay, so given this gradient
 estimator that we've derived,
 
-529
+346
 00:35:12,974 --> 00:35:17,141
 the interpretation that we can
 make from this here, is that
 
-530
+347
 00:35:18,217 --> 00:35:21,931
 if our reward for a trajectory
 is high, if the reward that
 
-531
+348
 00:35:21,931 --> 00:35:25,226
 we got from taking the
 sequence of actions was good,
 
-532
+349
 00:35:25,226 --> 00:35:27,517
 then let's push up the
 probabilities of all
 
-533
+350
 00:35:27,517 --> 00:35:29,434
 the actions that we've seen.
 
-534
+351
 00:35:29,434 --> 00:35:31,458
 Right, we're just going to say that
 
-535
+352
 00:35:31,458 --> 00:35:33,141
 these were good actions that we took.
 
-536
+353
 00:35:33,141 --> 00:35:35,287
 And then if the reward is low,
 
-537
+354
 00:35:35,287 --> 00:35:37,186
 we want to push down these probabilities.
 
-538
+355
 00:35:37,186 --> 00:35:38,629
 We want to say these were bad actions,
 
-539
+356
 00:35:38,629 --> 00:35:40,747
 let's try and not sample these so much.
 
-540
+357
 00:35:40,747 --> 00:35:43,568
 Right and so we can see
 that's what's happening here,
 
-541
+358
 00:35:43,568 --> 00:35:47,392
 where we have pi of a, given s.
 
-542
+359
 00:35:47,392 --> 00:35:50,980
 This is the likelihood of
 the actions that we've taken
 
-543
+360
 00:35:50,980 --> 00:35:53,163
 and then we're going to scale
 this, we're going to take the
 
-544
+361
 00:35:53,163 --> 00:35:56,621
 gradient and the gradient
 is going to tell us how much
 
-545
+362
 00:35:56,621 --> 00:36:00,555
 should we change the
 parameters in order to increase
 
-546
+363
 00:36:00,555 --> 00:36:03,575
 our likelihood of our action, a, right?
 
-547
+364
 00:36:03,575 --> 00:36:06,501
 And then we're going to
 take this and scale it by
 
-548
+365
 00:36:06,501 --> 00:36:09,019
 how much reward we actually got from it,
 
-549
+366
 00:36:09,019 --> 00:36:12,602
 so how good were these
 actions, in reality.
 
-550
+367
 00:36:14,561 --> 00:36:16,209
 Okay, so
 
-551
+368
 00:36:16,209 --> 00:36:18,454
 this might seem simplistic to say that,
 
-552
+369
 00:36:18,454 --> 00:36:21,124
 you know, if a trajectory
 is good, then we're saying
 
-553
+370
 00:36:21,124 --> 00:36:22,965
 here that all of its actions were good.
 
-554
+371
 00:36:22,965 --> 00:36:23,798
 Right?
 
-555
+372
 00:36:23,798 --> 00:36:26,356
 But, in expectation, this
 actually averages out.
 
-556
+373
 00:36:26,356 --> 00:36:30,125
 So we have an unbiased estimator here,
 
-557
+374
 00:36:30,125 --> 00:36:32,580
 and so if you have many samples of this,
 
-558
+375
 00:36:32,580 --> 00:36:35,622
 then we will get an accurate
 estimate of our gradient.
 
-559
+376
 00:36:35,622 --> 00:36:38,510
 And this is nice because we can just take
 
-560
+377
 00:36:38,510 --> 00:36:40,666
 gradient steps and we know
 that we're going to be
 
-561
+378
 00:36:40,666 --> 00:36:42,994
 improving our loss
 function and getting closer
 
-562
+379
 00:36:42,994 --> 00:36:45,976
 to, at least some local optimum of our
 
-563
+380
 00:36:45,976 --> 00:36:48,602
 policy parameters theta.
 
-564
+381
 00:36:48,602 --> 00:36:50,690
 Alright, but there is a problem with this,
 
-565
+382
 00:36:50,690 --> 00:36:52,789
 and the problem is that this also suffers
 
-566
+383
 00:36:52,789 --> 00:36:54,884
 from high variance.
 
-567
+384
 00:36:54,884 --> 00:36:57,201
 Because this credit
 assignment is really hard.
 
-568
+385
 00:36:57,201 --> 00:36:58,902
 Right, we're saying that
 
-569
+386
 00:36:58,902 --> 00:37:02,283
 given a reward that we
 got, we're going to say
 
-570
+387
 00:37:02,283 --> 00:37:04,412
 all of the actions were good,
 we're just going to hope
 
-571
+388
 00:37:04,412 --> 00:37:06,537
 that this assignment of
 which actions were actually
 
-572
+389
 00:37:06,537 --> 00:37:08,395
 the best actions, that mattered,
 
-573
+390
 00:37:08,395 --> 00:37:11,080
 are going to average out over time.
 
-574
+391
 00:37:11,080 --> 00:37:14,598
 And so this is really hard
 and we need a lot of samples
 
-575
+392
 00:37:14,598 --> 00:37:17,190
 in order to have a good estimate.
 
-576
+393
 00:37:17,190 --> 00:37:19,406
 Alright, so this leads to the
 question of, is there anything
 
-577
+394
 00:37:19,406 --> 00:37:21,684
 that we can do to reduce the variance
 
-578
+395
 00:37:21,684 --> 00:37:23,851
 and improve the estimator?
 
-579
+396
 00:37:26,540 --> 00:37:29,123
 And so variance reduction is
 
-580
+397
 00:37:30,164 --> 00:37:33,323
 an important area of research
 in policy gradients,
 
-581
+398
 00:37:33,323 --> 00:37:36,467
 and in coming up with
 ways in order to improve
 
-582
+399
 00:37:36,467 --> 00:37:39,756
 the estimator and require fewer samples.
 
-583
+400
 00:37:39,756 --> 00:37:41,445
 Alright, so let's look
 at a couple of ideas
 
-584
+401
 00:37:41,445 --> 00:37:43,278
 of how we can do this.
 
-585
+402
 00:37:44,202 --> 00:37:46,764
 So given our gradient estimator,
 
-586
+403
 00:37:46,764 --> 00:37:49,017
 so the first idea is that we can
 
-587
+404
 00:37:49,017 --> 00:37:52,610
 push up the probabilities of an action
 
-588
+405
 00:37:52,610 --> 00:37:56,258
 only by it's affect on future rewards
 
-589
+406
 00:37:56,258 --> 00:37:57,091
 from that state, right?
 
-590
+407
 00:37:57,091 --> 00:37:59,312
 So, now with instead of scaling
 
-591
+408
 00:37:59,312 --> 00:38:02,066
 this likelihood, or
 pushing up this likelihood
 
-592
+409
 00:38:02,066 --> 00:38:04,736
 of this action by the total
 reward of its trajectory,
 
-593
+410
 00:38:04,736 --> 00:38:07,320
 let's look more
 specifically at just the sum
 
-594
+411
 00:38:07,320 --> 00:38:09,876
 of rewards coming from this time step
 
-595
+412
 00:38:09,876 --> 00:38:12,108
 on to the end, right?
 
-596
+413
 00:38:12,108 --> 00:38:14,224
 And so, this is basically saying that
 
-597
+414
 00:38:14,224 --> 00:38:17,441
 how good an action is, is
 only specified by how much
 
-598
+415
 00:38:17,441 --> 00:38:18,999
 future reward it generates.
 
-599
+416
 00:38:18,999 --> 00:38:20,499
 Which makes sense.
 
-600
+417
 00:38:21,811 --> 00:38:24,251
 Okay, so a second idea
 that we can also use
 
-601
+418
 00:38:24,251 --> 00:38:26,931
 is using a discount factor in order
 
-602
+419
 00:38:26,931 --> 00:38:29,448
 to ignore delayed effects.
 
-603
+420
 00:38:29,448 --> 00:38:33,133
 Alright so here we've added
 back in this discount factor,
 
-604
+421
 00:38:33,133 --> 00:38:36,774
 that we've seen before,
 which is saying that
 
-605
+422
 00:38:36,774 --> 00:38:39,991
 we are, you know, our discount
 factor's going to tell us
 
-606
+423
 00:38:39,991 --> 00:38:41,841
 how much we care about just the
 
-607
+424
 00:38:41,841 --> 00:38:44,510
 rewards that are coming up soon,
 
-608
+425
 00:38:44,510 --> 00:38:47,276
 versus rewards that came much later on.
 
-609
+426
 00:38:47,276 --> 00:38:49,462
 Right, so we were going to now
 
-610
+427
 00:38:49,462 --> 00:38:51,438
 say how good or bad an action is,
 
-611
+428
 00:38:51,438 --> 00:38:54,071
 looking more at the local neighborhood
 
-612
+429
 00:38:54,071 --> 00:38:57,489
 of action set it generates
 in the immediate near future
 
-613
+430
 00:38:57,489 --> 00:39:00,880
 and down weighting the the
 ones that come later on.
 
-614
+431
 00:39:00,880 --> 00:39:02,471
 Okay so
 
-615
+432
 00:39:02,471 --> 00:39:05,194
 these are some straightforward ideas
 
-616
+433
 00:39:05,194 --> 00:39:07,730
 that are generally used in practice.
 
-617
+434
 00:39:07,730 --> 00:39:11,529
 So, a third idea is this idea of using
 
-618
+435
 00:39:11,529 --> 00:39:14,597
 a baseline in order to
 reduce your variance.
 
-619
+436
 00:39:14,597 --> 00:39:18,273
 And so, a problem with
 just using the raw value
 
-620
+437
 00:39:18,273 --> 00:39:20,690
 of your trajectories, is that
 
-621
+438
 00:39:21,675 --> 00:39:23,869
 this isn't necessarily meaningful, right?
 
-622
+439
 00:39:23,869 --> 00:39:26,653
 So, for example, if your
 rewards are all positive,
 
-623
+440
 00:39:26,653 --> 00:39:27,973
 then you're just going to keep pushing
 
-624
+441
 00:39:27,973 --> 00:39:29,835
 up the probabilities of all your actions.
 
-625
+442
 00:39:29,835 --> 00:39:32,039
 And of course, you'll push
 them up to various degrees,
 
-626
+443
 00:39:32,039 --> 00:39:35,448
 but what's really important
 is whether a reward is better
 
-627
+444
 00:39:35,448 --> 00:39:39,753
 or worse than what you're
 expecting to be getting.
 
-628
+445
 00:39:39,753 --> 00:39:42,993
 Alright, so in order to
 address this, we can introduce
 
-629
+446
 00:39:42,993 --> 00:39:46,071
 a baseline function that's
 dependent on the state.
 
-630
+447
 00:39:46,071 --> 00:39:47,598
 Right, so this baseline function tell us
 
-631
+448
 00:39:47,598 --> 00:39:51,219
 what's, how much we, what's
 our guess and what we expect
 
-632
+449
 00:39:51,219 --> 00:39:53,886
 to get from this state, and then
 
-633
+450
 00:39:55,515 --> 00:39:58,031
 our reward or our scaling
 factor that we're going to use
 
-634
+451
 00:39:58,031 --> 00:39:59,837
 to be pushing up or
 down our probabilities,
 
-635
+452
 00:39:59,837 --> 00:40:02,592
 can now just be our expected
 sum of future rewards,
 
-636
+453
 00:40:02,592 --> 00:40:05,508
 minus this baseline, so now
 it's the relative of how
 
-637
+454
 00:40:05,508 --> 00:40:08,939
 much better or worse is
 the reward that we got
 
-638
+455
 00:40:08,939 --> 00:40:10,772
 from what we expected.
 
-639
+456
 00:40:11,870 --> 00:40:14,971
 And so how can we choose this baseline?
 
-640
+457
 00:40:14,971 --> 00:40:16,099
 Well,
 
-641
+458
 00:40:16,099 --> 00:40:19,168
 a very simple baseline, the
 most simple you can use,
 
-642
+459
 00:40:19,168 --> 00:40:21,065
 is just taking a moving average
 
-643
+460
 00:40:21,065 --> 00:40:23,013
 of rewards that you've experienced so far.
 
-644
+461
 00:40:23,013 --> 00:40:25,027
 So you can even do this
 overall trajectories,
 
-645
+462
 00:40:25,027 --> 00:40:28,863
 and this is just an
 average of what rewards
 
-646
+463
 00:40:28,863 --> 00:40:31,431
 have I been seeing as I've been training,
 
-647
+464
 00:40:31,431 --> 00:40:34,765
 and as I've been playing these episodes?
 
-648
+465
 00:40:34,765 --> 00:40:37,549
 Right, and so this gives
 some idea of whether the
 
-649
+466
 00:40:37,549 --> 00:40:41,716
 reward that I currently get
 was relatively better or worse.
 
-650
+467
 00:40:42,821 --> 00:40:45,737
 And so there's some variance
 on this that you can use
 
-651
+468
 00:40:45,737 --> 00:40:49,215
 but so far the variance
 reductions that we've seen so far
 
-652
+469
 00:40:49,215 --> 00:40:51,588
 are all used in what's typically
 
-653
+470
 00:40:51,588 --> 00:40:54,452
 called "vanilla REINFORCE" algorithm.
 
-654
+471
 00:40:54,452 --> 00:40:56,787
 Right, so looking at the
 cumulative future reward,
 
-655
+472
 00:40:56,787 --> 00:41:00,954
 having a discount factor,
 and some simple baselines.
 
-656
+473
 00:41:02,601 --> 00:41:05,081
 Now let's talk about how we can
 
-657
+474
 00:41:05,081 --> 00:41:06,547
 think about this idea of baseline
 
-658
+475
 00:41:06,547 --> 00:41:08,769
 and potentially choose better baselines.
 
-659
+476
 00:41:08,769 --> 00:41:12,084
 Right, so if we're going to
 think about what's a better
 
-660
+477
 00:41:12,084 --> 00:41:13,567
 baseline that we can choose,
 
-661
+478
 00:41:13,567 --> 00:41:16,569
 what we want to do is we want
 to push up the probability
 
-662
+479
 00:41:16,569 --> 00:41:19,931
 of an action from a state,
 if the action was better than
 
-663
+480
 00:41:19,931 --> 00:41:24,255
 the expected value of what we
 should get from that state.
 
-664
+481
 00:41:24,255 --> 00:41:27,655
 So, thinking about the value
 of what we're going to expect
 
-665
+482
 00:41:27,655 --> 00:41:30,163
 from the state, what
 does this remind you of?
 
-666
+483
 00:41:30,163 --> 00:41:31,189
 Does this remind you of anything
 
-667
+484
 00:41:31,189 --> 00:41:34,939
 that we talked about
 earlier in this lecture?
 
-668
+485
 00:41:37,023 --> 00:41:37,856
 Yes.
 
-669
+486
 00:41:37,856 --> 00:41:39,266
 [inaudible from audience]
 
-670
+487
 00:41:39,266 --> 00:41:41,297
 Yeah, so the value functions, right?
 
-671
+488
 00:41:41,297 --> 00:41:45,201
 The value functions that we
 talked about with Q-learning.
 
-672
+489
 00:41:45,201 --> 00:41:46,034
 So, exactly.
 
-673
+490
 00:41:46,034 --> 00:41:47,871
 So Q-functions and value functions
 
-674
+491
 00:41:47,871 --> 00:41:50,895
 and so, the intuition is that
 
-675
+492
 00:41:50,895 --> 00:41:52,347
 well,
 
-676
+493
 00:41:52,347 --> 00:41:54,704
 we're happy with an action,
 
-677
+494
 00:41:54,704 --> 00:41:58,173
 taking an action in a state s, if
 
-678
+495
 00:41:58,173 --> 00:42:00,248
 our Q-value of taking
 
-679
+496
 00:42:00,248 --> 00:42:04,752
 a specific action from
 this state is larger than
 
-680
+497
 00:42:04,752 --> 00:42:06,999
 the value function or expected value
 
-681
+498
 00:42:06,999 --> 00:42:08,406
 of the cumulative future reward
 
-682
+499
 00:42:08,406 --> 00:42:09,698
 that we can get from this state.
 
-683
+500
 00:42:09,698 --> 00:42:11,842
 Right, so this means that
 this action was better than
 
-684
+501
 00:42:11,842 --> 00:42:14,416
 other actions that we could've taken.
 
-685
+502
 00:42:14,416 --> 00:42:17,896
 And on the contrary, we're
 unhappy if this action,
 
-686
+503
 00:42:17,896 --> 00:42:22,063
 if this value or this
 difference is negative or small.
 
-687
+504
 00:42:23,917 --> 00:42:27,299
 Right, so now if we plug
 this in, in order to,
 
-688
+505
 00:42:27,299 --> 00:42:29,269
 as our scaling factor of how much we want
 
-689
+506
 00:42:29,269 --> 00:42:32,692
 to push up or down, our
 probabilities of our actions,
 
-690
+507
 00:42:32,692 --> 00:42:34,868
 then we can get this estimator here.
 
-691
+508
 00:42:34,868 --> 00:42:37,452
 Right, so, it's going to be
 
-692
+509
 00:42:37,452 --> 00:42:40,168
 exactly the same as before, but now where
 
-693
+510
 00:42:40,168 --> 00:42:43,993
 we've had before our
 cumulative expected reward,
 
-694
+511
 00:42:43,993 --> 00:42:46,708
 with our various reduction,
 variance reduction
 
-695
+512
 00:42:46,708 --> 00:42:50,514
 techniques and baselines in,
 here we can just plug in now
 
-696
+513
 00:42:50,514 --> 00:42:53,297
 this difference of how much better our
 
-697
+514
 00:42:53,297 --> 00:42:57,113
 current action was,
 based on our Q-function
 
-698
+515
 00:42:57,113 --> 00:43:00,530
 minus our value function from that state.
 
-699
+516
 00:43:01,771 --> 00:43:04,148
 Right, but what we talked
 about so far with our
 
-700
+517
 00:43:04,148 --> 00:43:06,993
 REINFORCE algorithm, we don't know
 
-701
+518
 00:43:06,993 --> 00:43:09,413
 what Q and V actually are.
 
-702
+519
 00:43:09,413 --> 00:43:11,313
 So can we learn these?
 
-703
+520
 00:43:11,313 --> 00:43:14,479
 And the answer is yes, using Q-learning.
 
-704
+521
 00:43:14,479 --> 00:43:16,465
 What we've already talked about before.
 
-705
+522
 00:43:16,465 --> 00:43:19,828
 So we can combine policy gradients
 
-706
+523
 00:43:19,828 --> 00:43:22,210
 while we've just been talking
 about, with Q-learning,
 
-707
+524
 00:43:22,210 --> 00:43:25,982
 by training both an actor,
 which is the policy,
 
-708
+525
 00:43:25,982 --> 00:43:28,784
 as well as a critic, right, a Q-function,
 
-709
+526
 00:43:28,784 --> 00:43:32,366
 which is going to tell us
 how good we think a state is,
 
-710
+527
 00:43:32,366 --> 00:43:34,380
 and an action in a state.
 
-711
+528
 00:43:34,380 --> 00:43:36,964
 Right, so using this in approach,
 
-712
+529
 00:43:36,964 --> 00:43:40,633
 an actor is going to
 decide which action to take
 
-713
+530
 00:43:40,633 --> 00:43:43,716
 and then the critic, or
 Q-function, is going to tell
 
-714
+531
 00:43:43,716 --> 00:43:47,708
 the actor how good its action
 was and how it should adjust.
 
-715
+532
 00:43:47,708 --> 00:43:51,072
 And so, and this also alleviates
 a little bit of the task
 
-716
+533
 00:43:51,072 --> 00:43:53,636
 of this critic compared
 to the Q-learning problems
 
-717
+534
 00:43:53,636 --> 00:43:56,694
 that we talked about earlier
 of having to have this
 
-718
+535
 00:43:56,694 --> 00:43:59,958
 learning a Q-value for
 every state, action pair,
 
-719
+536
 00:43:59,958 --> 00:44:01,784
 because here it only has to learn this
 
-720
+537
 00:44:01,784 --> 00:44:04,762
 for the state-action pairs that
 are generated by the policy.
 
-721
+538
 00:44:04,762 --> 00:44:06,103
 It only needs to know this
 
-722
+539
 00:44:06,103 --> 00:44:10,512
 where it matters for
 computing this scaling factor.
 
-723
+540
 00:44:10,512 --> 00:44:12,830
 Right, and then we can also,
 as we're learning this,
 
-724
+541
 00:44:12,830 --> 00:44:15,196
 incorporate all of the
 Q-learning tricks that we saw
 
-725
+542
 00:44:15,196 --> 00:44:18,188
 earlier, such as experience replay.
 
-726
+543
 00:44:18,188 --> 00:44:20,972
 And so, now I'm also going to just
 
-727
+544
 00:44:20,972 --> 00:44:24,610
 define this term that we saw earlier,
 
-728
+545
 00:44:24,610 --> 00:44:28,248
 Q of s of a, how much,
 how good was an action
 
-729
+546
 00:44:28,248 --> 00:44:30,831
 in a given state, minus V of s?
 
-730
+547
 00:44:32,199 --> 00:44:35,533
 Our expected value of
 how good the state is
 
-731
+548
 00:44:35,533 --> 00:44:38,172
 by this term advantage function.
 
-732
+549
 00:44:38,172 --> 00:44:41,498
 Right, so the advantage
 function is how much advantage
 
-733
+550
 00:44:41,498 --> 00:44:43,568
 did we get from playing this action?
 
-734
+551
 00:44:43,568 --> 00:44:48,100
 How much better the
 action was than expected.
 
-735
+552
 00:44:48,100 --> 00:44:51,709
 So, using this, we can
 put together our full
 
-736
+553
 00:44:51,709 --> 00:44:53,457
 actor-critic algorithm.
 
-737
+554
 00:44:53,457 --> 00:44:56,279
 And so what this looks like,
 is that we're going to start
 
-738
+555
 00:44:56,279 --> 00:45:00,326
 off with by initializing
 our policy parameters theta,
 
-739
+556
 00:45:00,326 --> 00:45:03,689
 and our critic parameters
 that we'll call phi.
 
-740
+557
 00:45:03,689 --> 00:45:07,522
 And then for each, for
 iterations of training,
 
-741
+558
 00:45:08,401 --> 00:45:11,149
 we're going to sample M trajectories,
 
-742
+559
 00:45:11,149 --> 00:45:12,185
 under the current policy.
 
-743
+560
 00:45:12,185 --> 00:45:13,734
 Right, we're going to play
 our policy and get these
 
-744
+561
 00:45:13,734 --> 00:45:18,725
 trajectories as s-zero, a-zero,
 r-zero, s-one and so on.
 
-745
+562
 00:45:18,725 --> 00:45:20,359
 Okay, and then we're going to compute
 
-746
+563
 00:45:20,359 --> 00:45:21,671
 the gradients that we want.
 
-747
+564
 00:45:21,671 --> 00:45:24,977
 Right, so for each of these trajectories
 
-748
+565
 00:45:24,977 --> 00:45:26,017
 and in each time step, we're going
 
-749
+566
 00:45:26,017 --> 00:45:28,901
 to compute this advantage function,
 
-750
+567
 00:45:28,901 --> 00:45:30,818
 and then we're going to
 
-751
+568
 00:45:31,701 --> 00:45:33,465
 use this advantage function, right?
 
-752
+569
 00:45:33,465 --> 00:45:37,131
 And then we're going to use
 that in our gradient estimator
 
-753
+570
 00:45:37,131 --> 00:45:40,533
 that we showed earlier, and accumulate our
 
-754
+571
 00:45:40,533 --> 00:45:42,894
 gradient estimate that we have for here.
 
-755
+572
 00:45:42,894 --> 00:45:46,017
 And then we're also going to train our
 
-756
+573
 00:45:46,017 --> 00:45:50,837
 critic parameters phi
 by exactly the same way,
 
-757
+574
 00:45:50,837 --> 00:45:54,193
 so as we saw earlier,
 basically trying to enforce
 
-758
+575
 00:45:54,193 --> 00:45:57,557
 this value function, right,
 to learn our value function,
 
-759
+576
 00:45:57,557 --> 00:46:01,640
 which is going to be pulled
 into, just minimizing
 
-760
+577
 00:46:02,638 --> 00:46:05,467
 this advantage function and this will
 
-761
+578
 00:46:05,467 --> 00:46:08,324
 encourage it to be closer
 to this Bellman equation
 
-762
+579
 00:46:08,324 --> 00:46:10,347
 that we saw earlier, right?
 
-763
+580
 00:46:10,347 --> 00:46:14,347
 And so, this is basically
 just iterating between
 
-764
+581
 00:46:15,197 --> 00:46:17,733
 learning and optimizing
 our policy function,
 
-765
+582
 00:46:17,733 --> 00:46:20,211
 as well as our critic function.
 
-766
+583
 00:46:20,211 --> 00:46:22,311
 And so then we're going to update the
 
-767
+584
 00:46:22,311 --> 00:46:23,977
 gradients and then we're
 going to go through and just
 
-768
+585
 00:46:23,977 --> 00:46:26,727
 continuously repeat this process.
 
-769
+586
 00:46:29,271 --> 00:46:31,827
 Okay, so now let's look at
 some examples of REINFORCE
 
-770
+587
 00:46:31,827 --> 00:46:36,027
 in action, and let's look
 first here at something called
 
-771
+588
 00:46:36,027 --> 00:46:39,464
 the Recurrent Attention Model,
 which is something that,
 
-772
+589
 00:46:39,464 --> 00:46:42,805
 which is a model also
 referred to as hard attention,
 
-773
+590
 00:46:42,805 --> 00:46:46,876
 but you'll see a lot in,
 recently, in computer vision
 
-774
+591
 00:46:46,876 --> 00:46:49,146
 tasks for various purposes.
 
-775
+592
 00:46:49,146 --> 00:46:51,806
 Right, and so the idea behind this is
 
-776
+593
 00:46:51,806 --> 00:46:55,122
 here, I've talked about the
 original work on hard attention,
 
-777
+594
 00:46:55,122 --> 00:46:59,167
 which is on image
 classification, and your goal is
 
-778
+595
 00:46:59,167 --> 00:47:02,504
 to still predict the image class,
 
-779
+596
 00:47:02,504 --> 00:47:04,822
 but now you're going to do
 this by taking a sequence
 
-780
+597
 00:47:04,822 --> 00:47:06,494
 of glimpses around the image.
 
-781
+598
 00:47:06,494 --> 00:47:10,300
 You're going to look at local
 regions around the image
 
-782
+599
 00:47:10,300 --> 00:47:12,754
 and you're basically going
 to selectively focus on these
 
-783
+600
 00:47:12,754 --> 00:47:17,141
 parts and build up information
 as you're looking around.
 
-784
+601
 00:47:17,141 --> 00:47:19,382
 Right, and so the reason
 that we want to do this
 
-785
+602
 00:47:19,382 --> 00:47:21,638
 is, well, first of all it
 has some nice inspiration
 
-786
+603
 00:47:21,638 --> 00:47:24,551
 from human perception in eye movement.
 
-787
+604
 00:47:24,551 --> 00:47:26,869
 Let's say we're looking at a complex image
 
-788
+605
 00:47:26,869 --> 00:47:29,225
 and we want to determine
 what's in the image.
 
-789
+606
 00:47:29,225 --> 00:47:31,594
 Well, you know, we might,
 maybe look at a low-resolution
 
-790
+607
 00:47:31,594 --> 00:47:34,013
 of it first, and then
 look specifically at parts
 
-791
+608
 00:47:34,013 --> 00:47:36,913
 of the image that will give us clues about
 
-792
+609
 00:47:36,913 --> 00:47:39,168
 what's in this image.
 
-793
+610
 00:47:39,168 --> 00:47:40,001
 And then,
 
-794
+611
 00:47:41,160 --> 00:47:45,703
 this approach of just looking
 at, looking around at an image
 
-795
+612
 00:47:45,703 --> 00:47:48,533
 at local regions, is also
 going to help you save
 
-796
+613
 00:47:48,533 --> 00:47:50,435
 computational resources, right?
 
-797
+614
 00:47:50,435 --> 00:47:53,293
 You don't need to process the full image.
 
-798
+615
 00:47:53,293 --> 00:47:55,366
 In practice, what usually
 happens is you look at a
 
-799
+616
 00:47:55,366 --> 00:47:57,511
 low-resolution image
 first, of a full image,
 
-800
+617
 00:47:57,511 --> 00:48:01,678
 to decide how to get started,
 and then you look at high-res
 
-801
+618
 00:48:02,773 --> 00:48:04,671
 portions of the image after that.
 
-802
+619
 00:48:04,671 --> 00:48:06,979
 And so this saves a lot
 of computational resources
 
-803
+620
 00:48:06,979 --> 00:48:09,725
 and you can think about,
 then, benefits of this
 
-804
+621
 00:48:09,725 --> 00:48:11,927
 to scalability, right,
 being able to, let's say
 
-805
+622
 00:48:11,927 --> 00:48:15,177
 process larger images more efficiently.
 
-806
+623
 00:48:16,164 --> 00:48:17,780
 And then, finally, this
 could also actually help
 
-807
+624
 00:48:17,780 --> 00:48:20,099
 with actual classification performance,
 
-808
+625
 00:48:20,099 --> 00:48:21,855
 because now you're able to
 
-809
+626
 00:48:21,855 --> 00:48:24,760
 ignore clutter and irrelevant
 parts of the image.
 
-810
+627
 00:48:24,760 --> 00:48:25,593
 Right?
 
-811
+628
 00:48:25,593 --> 00:48:27,678
 Like, you know, instead
 of always putting through
 
-812
+629
 00:48:27,678 --> 00:48:29,931
 your ConvNet, all the parts of your image,
 
-813
+630
 00:48:29,931 --> 00:48:32,846
 you can use this to, maybe,
 first prune out what are the
 
-814
+631
 00:48:32,846 --> 00:48:34,936
 relevant parts that I
 actually want to process,
 
-815
+632
 00:48:34,936 --> 00:48:36,353
 using my ConvNet.
 
-816
+633
 00:48:37,237 --> 00:48:39,849
 Okay, so what's the reinforcement learning
 
-817
+634
 00:48:39,849 --> 00:48:41,531
 formulation of this problem?
 
-818
+635
 00:48:41,531 --> 00:48:44,711
 Well, our state is going to be
 
-819
+636
 00:48:44,711 --> 00:48:46,889
 the glimpses that we've
 seen so far, right?
 
-820
+637
 00:48:46,889 --> 00:48:47,722
 Our
 
-821
+638
 00:48:48,881 --> 00:48:51,117
 what's the information that we've seen?
 
-822
+639
 00:48:51,117 --> 00:48:53,643
 Our action is then going to be where
 
-823
+640
 00:48:53,643 --> 00:48:55,228
 to look next in the image.
 
-824
+641
 00:48:55,228 --> 00:48:57,090
 Right, so in practice,
 this can be something like
 
-825
+642
 00:48:57,090 --> 00:48:59,113
 the x, y-coordinates,
 maybe centered around some
 
-826
+643
 00:48:59,113 --> 00:49:02,842
 fixed-sized glimpse that
 you want to look at next.
 
-827
+644
 00:49:02,842 --> 00:49:05,664
 And then the reward for
 the classification problem
 
-828
+645
 00:49:05,664 --> 00:49:08,256
 is going to be one, at
 the final time step,
 
-829
+646
 00:49:08,256 --> 00:49:12,423
 if our image is correctly
 classified, and zero otherwise.
 
-830
+647
 00:49:14,495 --> 00:49:16,162
 And so, because this
 
-831
+648
 00:49:17,373 --> 00:49:20,016
 glimpsing, taking these
 glimpses around the image
 
-832
+649
 00:49:20,016 --> 00:49:21,932
 is a non-differentiable operation,
 
-833
+650
 00:49:21,932 --> 00:49:24,006
 this is why we need to use
 
-834
+651
 00:49:24,006 --> 00:49:25,761
 reinforcement learning formulation,
 
-835
+652
 00:49:25,761 --> 00:49:29,088
 and learn policies for how
 to take these glimpse actions
 
-836
+653
 00:49:29,088 --> 00:49:31,792
 and we can train this using REINFORCE.
 
-837
+654
 00:49:31,792 --> 00:49:35,105
 So, given the state of glimpses so far,
 
-838
+655
 00:49:35,105 --> 00:49:37,537
 the core of our model is going to be
 
-839
+656
 00:49:37,537 --> 00:49:40,891
 this RNN that we're going
 to use to model the state,
 
-840
+657
 00:49:40,891 --> 00:49:44,501
 and then we're going to
 use our policy parameters
 
-841
+658
 00:49:44,501 --> 00:49:47,418
 in order to output the next action.
 
-842
+659
 00:49:49,354 --> 00:49:53,248
 Okay, so what this model looks
 like is we're going to take
 
-843
+660
 00:49:53,248 --> 00:49:54,571
 an input image.
 
-844
+661
 00:49:54,571 --> 00:49:57,655
 Right, and then we're going to
 take a glimpse at this image.
 
-845
+662
 00:49:57,655 --> 00:50:00,068
 So here, this glimpse is the red box here,
 
-846
+663
 00:50:00,068 --> 00:50:03,184
 and this is all blank, zeroes.
 
-847
+664
 00:50:03,184 --> 00:50:06,966
 And so we'll pass what
 we see so far into some
 
-848
+665
 00:50:06,966 --> 00:50:09,388
 neural network, and this can be any
 
-849
+666
 00:50:09,388 --> 00:50:12,193
 kind of network depending on your task.
 
-850
+667
 00:50:12,193 --> 00:50:14,276
 In the original experiments
 that I'm showing here,
 
-851
+668
 00:50:14,276 --> 00:50:16,138
 on MNIST, this is very
 simple, so you can just
 
-852
+669
 00:50:16,138 --> 00:50:18,758
 use a couple of small,
 fully-connected layers,
 
-853
+670
 00:50:18,758 --> 00:50:21,724
 but you can imagine
 for more complex images
 
-854
+671
 00:50:21,724 --> 00:50:26,105
 and other tasks you may want
 to use fancier ConvNets.
 
-855
+672
 00:50:26,105 --> 00:50:28,775
 Right, so you've passed this
 into some neural network,
 
-856
+673
 00:50:28,775 --> 00:50:31,065
 and then, remember I said
 we're also going to be
 
-857
+674
 00:50:31,065 --> 00:50:34,102
 integrating our state of,
 glimpses that we've seen
 
-858
+675
 00:50:34,102 --> 00:50:36,115
 so far, using a recurrent network.
 
-859
+676
 00:50:36,115 --> 00:50:38,057
 So, I'm just going to
 
-860
+677
 00:50:38,057 --> 00:50:40,265
 we'll see that later on, but
 this is going to go through that,
 
-861
+678
 00:50:40,265 --> 00:50:42,646
 and then it's going to output my
 
-862
+679
 00:50:42,646 --> 00:50:46,094
 x, y-coordinates, of where
 I'm going to see next.
 
-863
+680
 00:50:46,094 --> 00:50:48,435
 And in practice, this is going to be
 
-864
+681
 00:50:48,435 --> 00:50:50,766
 We want to output a
 distribution over actions,
 
-865
+682
 00:50:50,766 --> 00:50:53,385
 right, and so, what this is
 going to be it's going to be
 
-866
+683
 00:50:53,385 --> 00:50:57,282
 a gaussian distribution and
 we're going to output the mean.
 
-867
+684
 00:50:57,282 --> 00:50:59,084
 You can also output a mean and variance
 
-868
+685
 00:50:59,084 --> 00:51:00,545
 of this distribution in practice.
 
-869
+686
 00:51:00,545 --> 00:51:03,944
 The variance can also be fixed.
 
-870
+687
 00:51:03,944 --> 00:51:07,172
 Okay, so we're going to take this
 
-871
+688
 00:51:07,172 --> 00:51:08,496
 action that we're now going to sample
 
-872
+689
 00:51:08,496 --> 00:51:11,854
 a specific x, y location
 from our action distribution
 
-873
+690
 00:51:11,854 --> 00:51:15,457
 and then we're going to put
 this in to get the next,
 
-874
+691
 00:51:15,457 --> 00:51:17,777
 extract the next glimpse from our image.
 
-875
+692
 00:51:17,777 --> 00:51:19,297
 Right, so here we've moved
 
-876
+693
 00:51:19,297 --> 00:51:23,385
 to the end of the two,
 this tail part of the two.
 
-877
+694
 00:51:23,385 --> 00:51:25,465
 And so now we're actually
 starting to get some signal
 
-878
+695
 00:51:25,465 --> 00:51:26,745
 of what we want to see, right?
 
-879
+696
 00:51:26,745 --> 00:51:29,065
 Like, what we want to do is we
 want to look at the relevant
 
-880
+697
 00:51:29,065 --> 00:51:32,724
 parts of the image that are
 useful for classification.
 
-881
+698
 00:51:32,724 --> 00:51:35,354
 So we pass this through, again,
 our neural network layers,
 
-882
+699
 00:51:35,354 --> 00:51:37,104
 and then also through
 
-883
+700
 00:51:38,153 --> 00:51:40,362
 our recurrent network, right,
 that's taking this input
 
-884
+701
 00:51:40,362 --> 00:51:43,642
 as well as this previous hidden
 state, and we're going to
 
-885
+702
 00:51:43,642 --> 00:51:45,524
 use this to get a,
 
-886
+703
 00:51:45,524 --> 00:51:47,343
 so this is representing our policy,
 
-887
+704
 00:51:47,343 --> 00:51:49,565
 and then we're going to use this to output
 
-888
+705
 00:51:49,565 --> 00:51:51,354
 our distribution for the next
 
-889
+706
 00:51:51,354 --> 00:51:54,095
 location that we want to glimpse at.
 
-890
+707
 00:51:54,095 --> 00:51:55,874
 So we can continue doing this,
 
-891
+708
 00:51:55,874 --> 00:51:57,303
 you can see in this next glimpse here,
 
-892
+709
 00:51:57,303 --> 00:51:59,903
 we've moved a little bit more
 toward the center of the two.
 
-893
+710
 00:51:59,903 --> 00:52:01,723
 Alright, so it's probably learning that,
 
-894
+711
 00:52:01,723 --> 00:52:05,005
 you know, once I've seen
 this tail part of the two,
 
-895
+712
 00:52:05,005 --> 00:52:08,093
 that looks like this,
 maybe moving in this upper
 
-896
+713
 00:52:08,093 --> 00:52:10,794
 left-hand direction will
 get you more towards
 
-897
+714
 00:52:10,794 --> 00:52:12,631
 a center, which will also have a value,
 
-898
+715
 00:52:12,631 --> 00:52:14,543
 valuable information.
 
-899
+716
 00:52:14,543 --> 00:52:17,473
 And then we can keep doing this.
 
-900
+717
 00:52:17,473 --> 00:52:20,612
 And then finally, at the
 end, at our last time step,
 
-901
+718
 00:52:20,612 --> 00:52:23,412
 so we can have a fixed
 number of time steps here,
 
-902
+719
 00:52:23,412 --> 00:52:26,795
 in practice something like six or eight.
 
-903
+720
 00:52:26,795 --> 00:52:29,359
 And then at the final time
 step, since we want to do
 
-904
+721
 00:52:29,359 --> 00:52:33,350
 classification, we'll have our standard
 
-905
+722
 00:52:33,350 --> 00:52:36,100
 Softmax layer that will produce a
 
-906
+723
 00:52:37,376 --> 00:52:39,363
 distribution of
 probabilities for each class.
 
-907
+724
 00:52:39,363 --> 00:52:42,111
 And then here the max class was a two,
 
-908
+725
 00:52:42,111 --> 00:52:44,108
 so we can predict that this was a two.
 
-909
+726
 00:52:44,108 --> 00:52:46,558
 Right, and so this is going
 to be the set up of our
 
-910
+727
 00:52:46,558 --> 00:52:50,428
 model and our policy, and then we have our
 
-911
+728
 00:52:50,428 --> 00:52:53,079
 estimate for the gradient
 of this policy that we've
 
-912
+729
 00:52:53,079 --> 00:52:54,420
 said earlier we could compute by taking
 
-913
+730
 00:52:54,420 --> 00:52:56,695
 trajectories from here
 
-914
+731
 00:52:56,695 --> 00:52:59,569
 and using those to do back prop.
 
-915
+732
 00:52:59,569 --> 00:53:02,819
 And so we can just do this
 in order to train this model
 
-916
+733
 00:53:02,819 --> 00:53:05,281
 and learn the parameters
 of our policy, right?
 
-917
+734
 00:53:05,281 --> 00:53:08,698
 All of the weights that you can see here.
 
-918
+735
 00:53:09,953 --> 00:53:10,786
 Okay, so
 
-919
+736
 00:53:12,239 --> 00:53:14,270
 here's an example of a
 
-920
+737
 00:53:14,270 --> 00:53:16,710
 policies trained on MNIST,
 
-921
+738
 00:53:16,710 --> 00:53:19,016
 and so you can see that, in general,
 
-922
+739
 00:53:19,016 --> 00:53:20,808
 from wherever it's
 starting, usually learns
 
-923
+740
 00:53:20,808 --> 00:53:22,942
 to go closer to where the digit is,
 
-924
+741
 00:53:22,942 --> 00:53:25,260
 and then looking at the relevant
 parts of the digit, right?
 
-925
+742
 00:53:25,260 --> 00:53:27,685
 So this is pretty cool and
 
-926
+743
 00:53:27,685 --> 00:53:28,744
 this
 
-927
+744
 00:53:28,744 --> 00:53:30,460
 you know, follows kind of
 what you would expect, right,
 
-928
+745
 00:53:30,460 --> 00:53:31,627
 if you were to
 
-929
+746
 00:53:33,335 --> 00:53:34,967
 choose places to look next
 
-930
+747
 00:53:34,967 --> 00:53:38,186
 in order to most efficiently determine
 
-931
+748
 00:53:38,186 --> 00:53:40,108
 what digit this is.
 
-932
+749
 00:53:40,108 --> 00:53:43,491
 Right, and so this idea of hard attention,
 
-933
+750
 00:53:43,491 --> 00:53:45,862
 of recurrent attention
 models, has also been used
 
-934
+751
 00:53:45,862 --> 00:53:49,758
 in a lot of tasks in
 computer vision in the last
 
-935
+752
 00:53:49,758 --> 00:53:52,687
 couple of years, so you'll
 see this, used, for example,
 
-936
+753
 00:53:52,687 --> 00:53:54,790
 fine-grained image recognition.
 
-937
+754
 00:53:54,790 --> 00:53:57,869
 So, I mentioned earlier that
 
-938
+755
 00:53:57,869 --> 00:54:00,596
 one of the useful benefits of this
 
-939
+756
 00:54:00,596 --> 00:54:01,763
 can be also to
 
-940
+757
 00:54:02,975 --> 00:54:05,198
 both save on computational efficiency
 
-941
+758
 00:54:05,198 --> 00:54:08,009
 as well as to ignore
 clutter and irrelevant
 
-942
+759
 00:54:08,009 --> 00:54:10,180
 parts of the image, and
 when you have fine-grained
 
-943
+760
 00:54:10,180 --> 00:54:11,750
 image classification problems,
 
-944
+761
 00:54:11,750 --> 00:54:13,092
 you usually want both of these.
 
-945
+762
 00:54:13,092 --> 00:54:17,307
 You want to keep high-resolution,
 so that you can look
 
-946
+763
 00:54:17,307 --> 00:54:19,447
 at, you know, important differences.
 
-947
+764
 00:54:19,447 --> 00:54:23,327
 And then you also want to
 focus on these differences
 
-948
+765
 00:54:23,327 --> 00:54:25,777
 and ignore irrelevant parts.
 
-949
+766
 00:54:25,777 --> 00:54:27,359
 Yeah, question.
 
-950
+767
 00:54:27,359 --> 00:54:31,526
 [inaudible question from audience]
 
-951
+768
 00:54:35,061 --> 00:54:36,789
 Okay, so yeah, so the question is
 
-952
+769
 00:54:36,789 --> 00:54:39,061
 how is there is
 computational efficiency,
 
-953
+770
 00:54:39,061 --> 00:54:41,482
 because we also have this
 recurrent neural network in place.
 
-954
+771
 00:54:41,482 --> 00:54:45,842
 So that's true, it depends
 on exactly what's your,
 
-955
+772
 00:54:45,842 --> 00:54:47,761
 what is your problem, what
 is your network, and so on,
 
-956
+773
 00:54:47,761 --> 00:54:50,151
 but you can imagine that
 if you had some really
 
-957
+774
 00:54:50,151 --> 00:54:52,512
 hi- resolution image
 
-958
+775
 00:54:52,512 --> 00:54:54,773
 and you don't want to process
 the entire parts of this
 
-959
+776
 00:54:54,773 --> 00:54:58,477
 image with some huge ConvNet
 or some huge, you know,
 
-960
+777
 00:54:58,477 --> 00:55:01,900
 network, now you can
 get some savings by just
 
-961
+778
 00:55:01,900 --> 00:55:04,669
 focusing on specific
 smaller parts of the image.
 
-962
+779
 00:55:04,669 --> 00:55:06,589
 You only process those parts of the image.
 
-963
+780
 00:55:06,589 --> 00:55:08,507
 But, you're right, that
 it depends on exactly
 
-964
+781
 00:55:08,507 --> 00:55:10,924
 what problem set-up you have.
 
-965
+782
 00:55:12,210 --> 00:55:14,530
 This has also been used
 in image captioning,
 
-966
+783
 00:55:14,530 --> 00:55:17,138
 so if we're going to produce
 an caption for an image,
 
-967
+784
 00:55:17,138 --> 00:55:20,421
 we can choose, you know,
 we can have the image
 
-968
+785
 00:55:20,421 --> 00:55:23,197
 use this attention model
 to generate this caption
 
-969
+786
 00:55:23,197 --> 00:55:26,120
 and what it usually ends up
 learning is these policies
 
-970
+787
 00:55:26,120 --> 00:55:28,999
 where it'll focus on
 specific parts of the image,
 
-971
+788
 00:55:28,999 --> 00:55:31,850
 in sequence, and as it
 focuses on each part,
 
-972
+789
 00:55:31,850 --> 00:55:34,629
 it'll generate some words
 or the part of the caption
 
-973
+790
 00:55:34,629 --> 00:55:38,341
 referring to that part of the image.
 
-974
+791
 00:55:38,341 --> 00:55:40,170
 And then it's also been used,
 
-975
+792
 00:55:40,170 --> 00:55:42,948
 also tasks such as visual
 question answering,
 
-976
+793
 00:55:42,948 --> 00:55:45,509
 where we ask a question about the image
 
-977
+794
 00:55:45,509 --> 00:55:48,981
 and you want the model
 to output some answer
 
-978
+795
 00:55:48,981 --> 00:55:51,786
 to your question, for
 example, I don't know,
 
-979
+796
 00:55:51,786 --> 00:55:53,840
 how many chairs are around the table?
 
-980
+797
 00:55:53,840 --> 00:55:58,229
 And so you can see how
 this attention mechanism
 
-981
+798
 00:55:58,229 --> 00:55:59,457
 might be a good type of model
 
-982
+799
 00:55:59,457 --> 00:56:03,040
 for learning how to
 answer these questions.
 
-983
+800
 00:56:05,707 --> 00:56:08,475
 Okay, so that was an
 example of policy gradients
 
-984
+801
 00:56:08,475 --> 00:56:10,564
 in these hard attention models.
 
-985
+802
 00:56:10,564 --> 00:56:13,524
 And so, now I'm going to
 talk about one more example,
 
-986
+803
 00:56:13,524 --> 00:56:16,430
 that also uses policy gradients,
 
-987
+804
 00:56:16,430 --> 00:56:18,465
 which is learning how to play Go.
 
-988
+805
 00:56:18,465 --> 00:56:22,006
 Right, so DeepMind had this agent
 
-989
+806
 00:56:22,006 --> 00:56:24,497
 for playing Go, called AlphGo,
 
-990
+807
 00:56:24,497 --> 00:56:27,297
 that's been in the news a lot
 
-991
+808
 00:56:27,297 --> 00:56:30,708
 in the past, last year and this year.
 
-992
+809
 00:56:30,708 --> 00:56:31,541
 So, sorry?
 
-993
+810
 00:56:31,541 --> 00:56:32,374
 [inaudible comment from audience]
 
-994
+811
 00:56:32,374 --> 00:56:35,291
 And yesterday, yes, that's correct.
 
-995
+812
 00:56:36,172 --> 00:56:39,258
 So this is very exciting,
 recent news as well.
 
-996
+813
 00:56:39,258 --> 00:56:40,987
 So last year,
 
-997
+814
 00:56:40,987 --> 00:56:43,234
 a first version of AlphaGo
 
-998
+815
 00:56:43,234 --> 00:56:44,817
 was put into a
 
-999
+816
 00:56:46,678 --> 00:56:49,539
 competition against one
 of the best Go players
 
-1000
+817
 00:56:49,539 --> 00:56:52,609
 of recent years, Lee Sedol, and the agent
 
-1001
+818
 00:56:52,609 --> 00:56:54,927
 was able to beat him
 
-1002
+819
 00:56:54,927 --> 00:56:57,886
 four to one, in a game of five matches.
 
-1003
+820
 00:56:57,886 --> 00:57:00,541
 And actually, right now, just
 
-1004
+821
 00:57:00,541 --> 00:57:03,788
 there's another match with
 Ke Jie, which is current
 
-1005
+822
 00:57:03,788 --> 00:57:07,855
 world number one, and
 so it's best of three
 
-1006
+823
 00:57:07,855 --> 00:57:09,348
 in China right now.
 
-1007
+824
 00:57:09,348 --> 00:57:12,236
 And so the first game was yesterday.
 
-1008
+825
 00:57:12,236 --> 00:57:13,436
 AlphaGo won.
 
-1009
+826
 00:57:13,436 --> 00:57:16,596
 I think it was by just
 half a point, and so,
 
-1010
+827
 00:57:16,596 --> 00:57:18,606
 so there's two more games to watch.
 
-1011
+828
 00:57:18,606 --> 00:57:20,657
 These are all live-stream, so
 
-1012
+829
 00:57:20,657 --> 00:57:24,276
 you guys, should also go
 online and watch these games.
 
-1013
+830
 00:57:24,276 --> 00:57:28,193
 It's pretty interesting
 to hear the commentary.
 
-1014
+831
 00:57:29,225 --> 00:57:32,577
 But, so what is this AlphaGo
 agent, right, from DeepMind?
 
-1015
+832
 00:57:32,577 --> 00:57:34,868
 And it's based on a lot
 of what we've talked
 
-1016
+833
 00:57:34,868 --> 00:57:36,466
 about so far in this lecture.
 
-1017
+834
 00:57:36,466 --> 00:57:39,687
 And what it is it's a mixed
 of supervised learning
 
-1018
+835
 00:57:39,687 --> 00:57:42,045
 and reinforcement learning,
 
-1019
+836
 00:57:42,045 --> 00:57:44,657
 as well as a mix of some older
 
-1020
+837
 00:57:44,657 --> 00:57:48,573
 methods for Go, Monte Carlo Tree Search,
 
-1021
+838
 00:57:48,573 --> 00:57:51,656
 as well as recent deep RL approaches.
 
-1022
+839
 00:57:52,579 --> 00:57:56,986
 So, okay, so how does AlphaGo
 beat the Go world champion?
 
-1023
+840
 00:57:56,986 --> 00:57:59,363
 Well, what it first does is
 
-1024
+841
 00:57:59,363 --> 00:58:02,449
 to train AlphaGo, what it
 takes as input is going to be
 
-1025
+842
 00:58:02,449 --> 00:58:04,089
 a few featurization of the board.
 
-1026
+843
 00:58:04,089 --> 00:58:06,470
 So it's basically, right,
 your board and the positions
 
-1027
+844
 00:58:06,470 --> 00:58:08,739
 of the pieces on the board.
 
-1028
+845
 00:58:08,739 --> 00:58:10,739
 That's your natural state representation.
 
-1029
+846
 00:58:10,739 --> 00:58:13,819
 And what they do in order
 to improve performance
 
-1030
+847
 00:58:13,819 --> 00:58:16,638
 a little bit is that
 they featurize this into
 
-1031
+848
 00:58:16,638 --> 00:58:17,958
 some
 
-1032
+849
 00:58:17,958 --> 00:58:20,510
 more channels of one is all
 the different stone colors,
 
-1033
+850
 00:58:20,510 --> 00:58:21,956
 so this is kind of like your
 
-1034
+851
 00:58:21,956 --> 00:58:23,790
 configuration of your board.
 
-1035
+852
 00:58:23,790 --> 00:58:27,270
 Also some channels, for
 example, where, which moves
 
-1036
+853
 00:58:27,270 --> 00:58:31,138
 are legal, some bias
 channels, some various things
 
-1037
+854
 00:58:31,138 --> 00:58:33,125
 and then, given this state, right,
 
-1038
+855
 00:58:33,125 --> 00:58:35,117
 it's going to first
 
-1039
+856
 00:58:35,117 --> 00:58:36,518
 train a network
 
-1040
+857
 00:58:36,518 --> 00:58:38,867
 that's initialized with
 supervised training
 
-1041
+858
 00:58:38,867 --> 00:58:40,897
 from professional Go games.
 
-1042
+859
 00:58:40,897 --> 00:58:43,147
 So, given the current board configuration
 
-1043
+860
 00:58:43,147 --> 00:58:45,627
 or features, featurization of this,
 
-1044
+861
 00:58:45,627 --> 00:58:48,495
 what's the correct next action to take?
 
-1045
+862
 00:58:48,495 --> 00:58:50,678
 Alright, so given
 
-1046
+863
 00:58:50,678 --> 00:58:52,787
 examples of professional games played,
 
-1047
+864
 00:58:52,787 --> 00:58:55,608
 you know, just collected over time,
 
-1048
+865
 00:58:55,608 --> 00:58:57,635
 we can just take all of
 these professional Go moves,
 
-1049
+866
 00:58:57,635 --> 00:58:59,815
 train a standard, supervised mapping,
 
-1050
+867
 00:58:59,815 --> 00:59:02,605
 from board state to action to take.
 
-1051
+868
 00:59:02,605 --> 00:59:05,365
 Alright, so they take this,
 which is a pretty good start,
 
-1052
+869
 00:59:05,365 --> 00:59:07,637
 and then they're going
 to use this to initialize
 
-1053
+870
 00:59:07,637 --> 00:59:09,227
 a policy network.
 
-1054
+871
 00:59:09,227 --> 00:59:10,844
 Right, so policy network,
 it's just going to take
 
-1055
+872
 00:59:10,844 --> 00:59:14,985
 the exact same structure of input is your
 
-1056
+873
 00:59:14,985 --> 00:59:16,389
 board state and your output is the
 
-1057
+874
 00:59:16,389 --> 00:59:17,778
 actions that you're going to take.
 
-1058
+875
 00:59:17,778 --> 00:59:20,887
 And this was the set-up
 for the policy gradients
 
-1059
+876
 00:59:20,887 --> 00:59:21,978
 that we just saw, right?
 
-1060
+877
 00:59:21,978 --> 00:59:25,156
 So now we're going to just
 continue training this
 
-1061
+878
 00:59:25,156 --> 00:59:27,130
 using policy gradients.
 
-1062
+879
 00:59:27,130 --> 00:59:30,831
 And it's going to do this
 reinforcement learning training
 
-1063
+880
 00:59:30,831 --> 00:59:35,123
 by playing against itself for
 random, previous iterations.
 
-1064
+881
 00:59:35,123 --> 00:59:37,384
 So self play, and the
 reward it's going to get
 
-1065
+882
 00:59:37,384 --> 00:59:42,243
 is one, if it wins, and a
 negative one if it loses.
 
-1066
+883
 00:59:42,243 --> 00:59:44,624
 And what we're also going to
 do is we're also going to learn
 
-1067
+884
 00:59:44,624 --> 00:59:47,573
 a value network, so,
 something like a critic.
 
-1068
+885
 00:59:47,573 --> 00:59:51,235
 And then, the final AlphaGo
 is going to be combining
 
-1069
+886
 00:59:51,235 --> 00:59:53,982
 all of these together, so
 policy and value networks
 
-1070
+887
 00:59:53,982 --> 00:59:56,075
 as well as with
 
-1071
+888
 00:59:56,075 --> 00:59:59,043
 a Monte Carlo Tree Search
 algorithm, in order to select
 
-1072
+889
 00:59:59,043 --> 01:00:01,475
 actions by look ahead search.
 
-1073
+890
 01:00:01,475 --> 01:00:04,743
 Right, so after putting all this together,
 
-1074
+891
 01:00:04,743 --> 01:00:08,853
 a value of a node, of
 where you are in play,
 
-1075
+892
 01:00:08,853 --> 01:00:11,590
 and what you do next, is
 going to be a combination
 
-1076
+893
 01:00:11,590 --> 01:00:13,811
 of your value function, as well as
 
-1077
+894
 01:00:13,811 --> 01:00:16,552
 roll at outcome that you're
 computing from standard
 
-1078
+895
 01:00:16,552 --> 01:00:19,891
 Monte Carlo Tree Search roll outs.
 
-1079
+896
 01:00:19,891 --> 01:00:22,891
 Okay, so, yeah, so this is basically
 
-1080
+897
 01:00:24,203 --> 01:00:27,453
 the various, the components of AlphaGo.
 
-1081
+898
 01:00:28,397 --> 01:00:30,314
 If you're interested in
 reading more about this,
 
-1082
+899
 01:00:30,314 --> 01:00:33,814
 there's a nature paper about this in 2016,
 
-1083
+900
 01:00:34,664 --> 01:00:37,656
 and they trained this, I think, over,
 
-1084
+901
 01:00:37,656 --> 01:00:40,765
 the version of AlphaGo
 that's being used in these
 
-1085
+902
 01:00:40,765 --> 01:00:45,016
 matches is, like, I think
 a couple thousand CPUs
 
-1086
+903
 01:00:45,016 --> 01:00:47,953
 plus a couple hundred GPUs,
 putting all of this together,
 
-1087
+904
 01:00:47,953 --> 01:00:52,120
 so it's a huge amount of
 training that's going on, right.
 
-1088
+905
 01:00:55,659 --> 01:00:57,514
 And yeah, so you guys should,
 
-1089
+906
 01:00:57,514 --> 01:00:59,681
 follow the game this week.
 
-1090
+907
 01:01:01,643 --> 01:01:03,491
 It's pretty exciting.
 
-1091
+908
 01:01:03,491 --> 01:01:07,524
 Okay, so in summary,
 today we've talked about
 
-1092
+909
 01:01:07,524 --> 01:01:10,858
 policy gradients, right,
 which are general.
 
-1093
+910
 01:01:10,858 --> 01:01:13,025
 They, you're just directly
 
-1094
+911
 01:01:14,456 --> 01:01:18,855
 taking gradient descent or
 ascent on your policy parameters,
 
-1095
+912
 01:01:18,855 --> 01:01:21,942
 so this works well for a
 large class of problems,
 
-1096
+913
 01:01:21,942 --> 01:01:23,947
 but it also suffers from high variance,
 
-1097
+914
 01:01:23,947 --> 01:01:25,938
 so it requires a lot of samples,
 
-1098
+915
 01:01:25,938 --> 01:01:28,669
 and your challenge here
 is sample efficiency.
 
-1099
+916
 01:01:28,669 --> 01:01:32,608
 We also talked about
 Q-learning, which doesn't always
 
-1100
+917
 01:01:32,608 --> 01:01:35,349
 work, it's harder to
 sometimes get it to work
 
-1101
+918
 01:01:35,349 --> 01:01:37,536
 because of this problem
 that we talked earlier where
 
-1102
+919
 01:01:37,536 --> 01:01:39,702
 you are trying to compute this
 
-1103
+920
 01:01:39,702 --> 01:01:42,285
 exact state, action value
 
-1104
+921
 01:01:43,324 --> 01:01:47,769
 for many, for very high
 dimensions, but when it does work,
 
-1105
+922
 01:01:47,769 --> 01:01:51,342
 for problems, for example,
 the Atari we saw earlier,
 
-1106
+923
 01:01:51,342 --> 01:01:53,092
 then it's usually more sample efficient
 
-1107
+924
 01:01:53,092 --> 01:01:54,322
 than policy gradients.
 
-1108
+925
 01:01:54,322 --> 01:01:56,540
 Right, and one of the
 challenges in Q-learning is that
 
-1109
+926
 01:01:56,540 --> 01:01:57,484
 you want to make sure that you're
 
-1110
+927
 01:01:57,484 --> 01:01:59,902
 doing sufficient exploration.
 
-1111
+928
 01:01:59,902 --> 01:02:00,735
 Yeah?
 
-1112
+929
 01:02:00,735 --> 01:02:04,902
 [inaudible question from audience]
 
-1113
+930
 01:02:14,313 --> 01:02:17,764
 Oh, so for Q-learning can
 you do this process where
 
-1114
+931
 01:02:17,764 --> 01:02:20,684
 you're, okay, where you're
 trying to start this off by
 
-1115
+932
 01:02:20,684 --> 01:02:21,753
 some supervised training?
 
-1116
+933
 01:02:21,753 --> 01:02:24,924
 So, I guess the direct
 approach for Q-learning doesn't
 
-1117
+934
 01:02:24,924 --> 01:02:27,532
 do that because you're
 trying to regress to these
 
-1118
+935
 01:02:27,532 --> 01:02:29,972
 Q-values, right, instead of
 policy gradients over this
 
-1119
+936
 01:02:29,972 --> 01:02:32,732
 distribution, but I think there
 are ways in which you can,
 
-1120
+937
 01:02:32,732 --> 01:02:34,232
 like, massage this
 
-1121
+938
 01:02:35,938 --> 01:02:37,985
 type of thing to also bootstrap.
 
-1122
+939
 01:02:37,985 --> 01:02:40,393
 Because I think bootstrapping
 in general or like
 
-1123
+940
 01:02:40,393 --> 01:02:43,854
 behavior cloning is a good way to
 
-1124
+941
 01:02:43,854 --> 01:02:46,021
 warm start these policies.
 
-1125
+942
 01:02:47,454 --> 01:02:50,284
 Okay, so, right, so we've
 talked about policy gradients
 
-1126
+943
 01:02:50,284 --> 01:02:54,213
 and Q-learning, and just
 another look at some of these,
 
-1127
+944
 01:02:54,213 --> 01:02:55,413
 some of the guarantees that you have,
 
-1128
+945
 01:02:55,413 --> 01:02:56,752
 right, with policy gradients.
 
-1129
+946
 01:02:56,752 --> 01:02:58,622
 One thing we do know
 that's really nice is that
 
-1130
+947
 01:02:58,622 --> 01:03:02,789
 this will always converge to
 a local minimum of J of theta,
 
-1131
+948
 01:03:04,339 --> 01:03:06,592
 because we're just directly
 doing gradient ascent,
 
-1132
+949
 01:03:06,592 --> 01:03:09,043
 and so this is often,
 
-1133
+950
 01:03:09,043 --> 01:03:12,131
 and this local minimum is
 often just pretty good, right.
 
-1134
+951
 01:03:12,131 --> 01:03:14,931
 And in Q-learning, on the
 other hand, we don't have any
 
-1135
+952
 01:03:14,931 --> 01:03:17,041
 guarantees because here
 we're trying to approximate
 
-1136
+953
 01:03:17,041 --> 01:03:20,277
 this Bellman equation with
 a complicated function
 
-1137
+954
 01:03:20,277 --> 01:03:23,358
 approximator and so, in this
 case, this is the problem
 
-1138
+955
 01:03:23,358 --> 01:03:25,787
 with Q-learning being a
 little bit trickier to train
 
-1139
+956
 01:03:25,787 --> 01:03:29,954
 in terms of applicability
 to a wide range of problems.
 
-1140
+957
 01:03:31,849 --> 01:03:34,737
 Alright, so today you got basically very,
 
-1141
+958
 01:03:34,737 --> 01:03:37,907
 brief, kind of high-level
 overview of reinforcement learning
 
-1142
+959
 01:03:37,907 --> 01:03:41,546
 and some major classes
 of algorithms in RL.
 
-1143
+960
 01:03:41,546 --> 01:03:44,419
 And next time we're going to have a
 
-1144
+961
 01:03:44,419 --> 01:03:47,577
 guest lecturer from, Song
 Han, who's done a lot
 
-1145
+962
 01:03:47,577 --> 01:03:51,276
 of pioneering work in model compression
 
-1146
+963
 01:03:51,276 --> 01:03:52,569
 and energy efficient deep learning,
 
-1147
+964
 01:03:52,569 --> 01:03:56,459
 and so he's going to talk some
 of this, about some of this.
 
-1148
+965
 01:03:56,459 --> 01:03:58,459
 Thank you.
 
