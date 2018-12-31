@@ -74,6 +74,7 @@ Also see [CS231n Website](http://cs231n.stanford.edu/)
     2018 08 13 - Complete Lecture 11(draft) 
     2018 09 24 - Complete Lecture 12(draft)
     2018 10 06 - Complete Lecture 13(draft)
+    2018 12 31 - Complete Lecture 14(draft)
 
     1. Milestone
     Lecture 01 : Complete(draft + 1st Revision) 
@@ -89,7 +90,7 @@ Also see [CS231n Website](http://cs231n.stanford.edu/)
     Lecture 11 : Complete(draft)
     Lecture 12 : Complete(draft)
     Lecture 13 : Complete(draft)
-    Lecture 14 : ****Now Here!****
+    Lecture 14 : Complete(draft)
     Invited Talk 1 : not yet :(
     Invited Talk 2 : not yet :(
 ----------
@@ -132,7 +133,7 @@ Also see [CS231n Website](http://cs231n.stanford.edu/)
 | Lecture 11       |Detection and Segmentation|[video](https://www.youtube.com/watch?v=nDPWywWRIRo&index=10&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk)|[slide](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture11.pdf)|[english](https://github.com/insurgent92/cs231n_spring_2017/blob/master/eng/Lecture%2011%20_%20Detection%20and%20Segmentation.srt)<p>[korean](https://github.com/insurgent92/CS231N_17_KOR_SUB/blob/master/kor/Lecture%2011%20%20%20Detection%20and%20Segmentation.ko.srt)|:pencil2: |
 | Lecture 12       | Visualizing and Understanding|[video](https://www.youtube.com/watch?v=6wcs6szJWMY&index=11&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk)|[slide](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture12.pdf)|[english](https://github.com/insurgent92/cs231n_spring_2017/blob/master/eng/Lecture%2012%20_%20Visualizing%20and%20Understanding.srt)<p>[korean](https://github.com/insurgent92/CS231N_17_KOR_SUB/blob/master/kor/Lecture%2012%20%20%20Visualizing%20and%20Understanding.ko.srt)|:pencil2: |
 | Lecture 13       |Generative Models|[video](https://www.youtube.com/watch?v=5WoItGTWV54&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk&index=12)|[slide](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture13.pdf)|[english](https://github.com/insurgent92/cs231n_spring_2017/blob/master/eng/Lecture%2013%20_%20Generative%20Models.srt)<p>[korean](https://github.com/insurgent92/CS231N_17_KOR_SUB/blob/master/kor/Lecture%2013%20%20%20Generative%20Models.ko.srt)|:pencil2:|
-| Lecture 14       |Deep Reinforcement Learning|[video](https://www.youtube.com/watch?v=lvoHnicueoE&index=13&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk)|[slide](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture14.pdf)|[english](https://github.com/insurgent92/cs231n_spring_2017/blob/master/eng/Lecture%2014%20_%20Deep%20Reinforcement%20Learning.srt)<p>[korean]|:no_bell:|
+| Lecture 14       |Deep Reinforcement Learning|[video](https://www.youtube.com/watch?v=lvoHnicueoE&index=13&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk)|[slide](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture14.pdf)|[english](https://github.com/insurgent92/cs231n_spring_2017/blob/master/eng/Lecture%2014%20_%20Deep%20Reinforcement%20Learning.srt)<p>[korean](https://github.com/insurgent92/CS231N_17_KOR_SUB/blob/master/kor/Lecture%2014%20%20%20Deep%20Reinforcement%20Learning.ko.srt)|:pencil2:|
 | Guest Lecture       |Invited Talk: [Song Han](https://stanford.edu/~songhan/) <br> Efficient Methods and Hardware for Deep Learning|[video](https://www.youtube.com/watch?v=eZdOkDtYMoo&index=14&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk)|[slide](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture15.pdf)|[english](https://github.com/insurgent92/cs231n_spring_2017/blob/master/eng/Lecture%2015%20_%20Efficient%20Methods%20and%20Hardware%20for%20Deep%20Learning.srt)<p>[korean]|:no_bell:|
 | Guest Lecture       |Invited Talk: [Ian Goodfellow](http://www.iangoodfellow.com/) <br> Adversarial Examples and Adversarial Training|[video](https://www.youtube.com/watch?v=CIfsB_EYsVI&list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk&index=15)|[slide](http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture16.pdf)|[english](https://github.com/insurgent92/cs231n_spring_2017/blob/master/eng/Lecture%2016%20_%20Adversarial%20Examples%20and%20Adversarial%20Training.srt)<p>[korean]|:no_bell:|
 
