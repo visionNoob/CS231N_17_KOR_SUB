@@ -7,7 +7,7 @@ Also see [CS231n Website](http://cs231n.stanford.edu/)
 ---------
 ## Announcements
 > CS231n 한글번역 프로젝트입니다. 
-  Stanford의 CS231n는 CNN(Convolutional Neural Network)을 중심으로 Deep Learning을 배우는 현존하는 가장 좋은 강의 중 하나로 손꼽습니다. 이 프로젝트는 CS231n을 수강하기에 언어의 장벽으로 힘든 분들을 위한 한글 번역 프로젝트입니다. 많은 분들이 이 강의를 듣고 행복했으면 좋겠습니다. 하지만 CS231n 정도의 수준 그리고 그 이상을 위해서라면 영어실력이 뒷받침해 줘야 하는 것은 명백한 사실입니다.  
+  Stanford의 CS231n는 CNN(Convolutional Neural Network)을 중심으로 Deep Learning을 배우는 현존하는 가장 좋은 강의 중 하나. 이 프로젝트는 CS231n을 수강하기에 언어의 장벽으로 힘든 분들을 위한 한글 번역 프로젝트입니다. 많은 분들이 이 강의를 듣고 행복했으면 좋겠습니다. 하지만 CS231n 정도의 수준 그리고 그 이상을 위해서라면 영어실력이 뒷받침해 줘야 하는 것은 명백한 사실입니다.  
 > [도올 김용옥 선생의 "영어 수학을 왜 공부해야 하는가?](https://youtu.be/fZk67qnUo3M)
     
     > CS231n에 의 대상
