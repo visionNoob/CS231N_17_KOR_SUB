@@ -59,8 +59,7 @@ Also see [CS231n Website](http://cs231n.stanford.edu/)
 ----------
 
 ## Update Note
-    Pull Request는 1st Revision 버전부터 해주시면 감사하겠습니다! 
-    draft 버전은 제가 밑바닥부터 수정하기 때문에 Pull Request받기 어렵습니다. :( 
+    Welcome to Pull Request
 
     1. Update News
     ...
